@@ -1,426 +1,682 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KMRL SUBSTATION DASHBOARD</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;700&display=swap');
+
         :root {
-            --bg-body: #0b0e14;
-            --bg-card: #1c2128;
-            --bg-header: #161b22;
-            --text-main: #e0e0e0;
-            --border: #30363d;
-            --accent: #58a6ff;
-            --green: #00ff41;
-            --red: #ff4444;
-            --orange: #ffae42;
+            --bg-color: #0d1117;
+            --panel-bg: #161b22;
+            --accent-blue: #58a6ff;
+            --accent-green: #00ff41;
+            --accent-red: #ff4444;
+            --accent-orange: #ffae42;
+            --accent-purple: #df00ff; /* Neon Purple */
+            --border-color: #30363d;
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+            --ash-bg: #21262d;
+            --ash-text: #8b949e;
         }
 
-        body.light-mode {
-            --bg-body: #f0f2f5;
-            --bg-card: #ffffff;
-            --bg-header: #ffffff;
-            --text-main: #1c2128;
-            --border: #d0d7de;
-            --accent: #0969da;
-            --green: #1a7f37;
-            --red: #cf222e;
-            --orange: #9a6700;
-        }
-        
-        body { background: var(--bg-body); color: var(--text-main); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 5px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; transition: background 0.3s; }
-        
-        /* TOP BAR */
-        .top-bar { display: flex; align-items: center; justify-content: center; background: var(--bg-header); padding: 0 15px; border-bottom: 2px solid var(--accent); flex-shrink: 0; height: 75px; margin-bottom: 5px; position: relative; overflow: hidden; transition: background 0.3s; }
-        .logo-box { position: absolute; left: 10px; z-index: 50; display: flex; align-items: center; height: 100%; }
-        .logo-box img { height: 45px; width: auto; animation: logo-glow 3s infinite ease-in-out; }
-        @keyframes logo-glow { 0%, 100% { filter: drop-shadow(0 0 2px rgba(88, 166, 255, 0.3)); } 50% { filter: drop-shadow(0 0 12px rgba(88, 166, 255, 0.8)); } }
+        * { box-sizing: border-box; }
 
-        /* RETRO FLIP CLOCK */
-        .flip-clock { display: flex; gap: 8px; align-items: center; z-index: 100; }
-        .flip-unit { background: var(--bg-card); color: var(--green); padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border); position: relative; font-family: 'Orbitron'; font-size: 2.2rem; font-weight: 900; min-width: 60px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-        .flip-unit::after { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 2px; background: rgba(0,0,0,0.4); z-index: 2; }
-        .flip-label { font-size: 0.6rem; color: var(--accent); position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%); text-transform: uppercase; letter-spacing: 1px; }
-
-        .checklist-scroll-wrap { position: absolute; width: 100%; white-space: nowrap; z-index: 10; display: flex; align-items: center; }
-        .checklist-move-text { display: inline-block; font-size: 1.1rem; font-weight: 900; animation: scroll-checklist 25s linear infinite; }
-        @keyframes scroll-checklist { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
-
-        .controls { position: absolute; right: 10px; top: 10px; display: flex; gap: 8px; z-index: 110; }
-        .btn { background: rgba(48, 54, 61, 0.6); color: var(--accent); border: 1px solid var(--accent); padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: 900; font-size: 0.7rem; font-family: 'Orbitron'; text-transform: uppercase; transition: all 0.2s; }
-        .btn-off { border-color: var(--red); color: var(--red); }
-        .btn-light { border-color: #ffeb3b; color: #ffeb3b; }
-        body.light-mode .btn-light { border-color: #555; color: #555; }
-
-        /* ANALOG STANDBY */
-        #blackout { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 9999; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
-        .analog-clock { width: 70vh; height: 70vh; border: 10px solid #222; border-radius: 50%; position: relative; background: radial-gradient(circle, #0b0e14, #000); }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; z-index: 5; }
-        .hour-hand { width: 10px; height: 25%; background: white; transform: translate(-50%); }
-        .min-hand { width: 7px; height: 38%; background: #aaa; transform: translate(-50%); }
-        .sec-hand { width: 3px; height: 42%; background: var(--red); transform: translate(-50%); }
-        .number { position: absolute; width: 100%; height: 100%; text-align: center; font-size: 2.5rem; font-weight: 900; color: #333; font-family: 'Orbitron'; padding: 15px; box-sizing: border-box; }
-
-        /* STATION GRID */
-        .station-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 4px; margin-bottom: 5px; flex-shrink: 0; }
-        
-        /* 3D FLIP CONTAINER */
-        .station-card-container { height: 50px; perspective: 1000px; }
-        .station-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
-        
-        /* State Mapping */
-        .state-1 .station-card-inner { transform: rotateX(0deg); }
-        .state-2 .station-card-inner { transform: rotateX(-180deg); }
-        .state-3 .station-card-inner { transform: rotateX(-90deg); } 
-
-        .station-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: var(--bg-card); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; box-sizing: border-box; }
-        
-        /* Face Positioning */
-        .station-front { transform: translateZ(25px); }
-        .station-back  { transform: rotateX(180deg) translateZ(25px); }
-        .station-top   { transform: rotateX(90deg) translateZ(25px); }
-
-        /* ALARM STYLING - EXCLUDING FRONT FACE */
-        .st-alarm .station-back,
-        .st-alarm .station-top { 
-            border-color: var(--red) !important; 
-            border-top: 3px solid var(--red) !important; 
+        body {
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 8px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
         }
 
-        .st-name { font-weight: 900; font-size: 0.8rem; color: var(--text-main); display: block; white-space: nowrap; }
-        .st-date { font-size: 0.5rem; color: var(--accent); display: block; }
-        .st-temp-val-wrap { display: flex; justify-content: center; gap: 4px; font-weight: 900; font-size: 0.7rem; border-top: 1px solid var(--border); width: 90%; }
-        
-        .val-safe { color: var(--green); }
-        .val-alarm { color: var(--red); }
+        /* --- TOP BAR --- */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--panel-bg);
+            padding: 0 20px;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 80px;
+            margin-bottom: 8px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
 
-        /* FULL SIZE READABILITY */
-        .full-readability { display: flex; flex-direction: column; line-height: 1; text-align: center; }
-        .full-temp-main { font-family: 'Orbitron'; font-weight: 900; font-size: 1.1rem; }
-        
-        .full-name-main { 
-            font-family: 'Segoe UI'; 
-            font-weight: 900; 
-            font-size: 1.8rem; 
-            color: var(--yellow); 
-            text-align: center; 
-            line-height: 0.9; 
-            padding: 2px; 
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 50; /* Above checklist */
+            position: absolute;
+            left: 0;
+            padding-left: 20px;
+            height: 100%;
+            background: var(--panel-bg); /* Opaque background to hide text passing behind */
+        }
+
+        .logo-section img {
+            height: 50px;
+            filter: drop-shadow(0 0 5px rgba(88, 166, 255, 0.4));
+        }
+
+        /* SCROLLING CHECKLIST */
+        .checklist-container {
+            position: absolute;
+            left: 0;
             width: 100%;
-            word-wrap: break-word;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 10; /* Lower than logo/clock/buttons */
         }
 
-        /* ROSTER SECTION */
-        .master-roster { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 5px; }
-        .section-header { text-align: center; color: var(--orange); font-weight: 900; font-size: 1rem; margin-bottom: 5px; background: var(--bg-header); padding: 4px; border: 2px solid var(--orange); border-radius: 5px; }
-        .shift-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .card { background: var(--bg-card); border: 1px solid rgba(128,128,128,0.2); padding: 6px; border-radius: 6px; min-height: 100px; }
-        .active-shift { border: 2px solid var(--green) !important; box-shadow: 0 0 15px rgba(0,255,65,0.3); }
-        .staff-row { display: flex; justify-content: space-between; align-items: center; color: var(--green); font-weight: 700; font-size: 0.8rem; margin-bottom: 4px; }
-        .arrow-box { color: #ffeb3b; font-weight: 900; font-size: 1rem; margin: 0 5px; animation: arrow-slide 1s infinite ease-in-out; }
-        @keyframes arrow-slide { 0%, 100% { transform: translateX(0px); opacity: 0.3; } 50% { transform: translateX(-6px); opacity: 1; } }
-        .duty-tag { padding: 0 4px; border-radius: 3px; font-size: 0.7rem; border: 1px solid; }
-        .tag-m-tpc { color: #00d4ff; border-color: #00d4ff; box-shadow: 0 0 5px #00d4ff; }
-        .tag-e-tpc { color: #ff9100; border-color: #ff9100; box-shadow: 0 0 5px #ff9100; }
-        .tag-n-tpc { color: #cc00ff; border-color: #cc00ff; box-shadow: 0 0 5px #cc00ff; }
-        .tag-default { color: #ffeb3b; border-color: #ffeb3b; }
+        .checklist-marquee {
+            white-space: nowrap;
+            font-family: 'Orbitron';
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            animation: scroll-text 30s linear infinite;
+        }
 
-        .schedule-wrap { background: var(--bg-header); border: 1px dashed var(--orange); border-radius: 6px; padding: 6px; margin-bottom: 50px; opacity: 0.9; }
-        .sch-item { font-size: 0.8rem; color: var(--text-main); margin-bottom: 3px; border-left: 4px solid var(--orange); padding-left: 10px; font-weight: 600; }
+        @keyframes scroll-text {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
 
-        /* DRIVER CARD */
-        .driver-container { position: fixed; bottom: 65px; left: 15px; z-index: 1000; transition: all 0.5s ease; }
-        .driver-card { background: var(--bg-header); border: 2px solid var(--accent); border-left: 5px solid var(--green); padding: 8px 15px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transition: all 0.5s ease; position: relative; }
-        .driver-card img { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent); object-fit: cover; background: #000; }
+        /* FLIP CLOCK AESTHETIC */
+        .clock-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 60; /* Highest priority */
+            background: var(--panel-bg);
+            padding: 0 10px;
+        }
+
+        .clock-unit {
+            background: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            min-width: 70px;
+            text-align: center;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,255,65,0.1);
+        }
+
+        .clock-val {
+            font-family: 'Orbitron';
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(0,255,65,0.5);
+        }
+
+        .clock-label {
+            font-size: 0.6rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .top-controls {
+            position: absolute;
+            right: 0;
+            padding-right: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            z-index: 50; /* Above checklist */
+            background: var(--panel-bg); /* Opaque background to hide text passing behind */
+        }
+
+        /* --- STANDBY / BLACKOUT --- */
+        #blackout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .analog-clock {
+            width: 60vh;
+            height: 60vh;
+            border: 15px solid #1a1a1a;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle, #111, #000);
+            box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 30px rgba(255,255,255,0.05);
+        }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 5px;
+        }
+
+        .h-hr { width: 8px; height: 25%; background: #fff; transform: translateX(-50%); }
+        .h-min { width: 6px; height: 35%; background: #bbb; transform: translateX(-50%); }
+        .h-sec { width: 2px; height: 42%; background: var(--accent-red); transform: translateX(-50%); }
+
+        /* --- STATION GRID --- */
+        .station-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+            margin-bottom: 8px;
+            padding: 5px;
+        }
+
+        .station-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 6px;
+            padding: 6px 4px;
+            text-align: center;
+            transition: border-top-color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .station-card.card-alarm { border-top: 3px solid var(--accent-red); }
+
+        .card-alarm .st-name {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 900;
+            text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red);
+            animation: pulse-glow 0.8s infinite alternate;
+            transform: scale(1.15);
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        @keyframes pulse-glow {
+            from { text-shadow: 0 0 5px var(--accent-red); transform: scale(1.1); }
+            to { text-shadow: 0 0 20px var(--accent-red), 0 0 30px var(--accent-red); transform: scale(1.2); }
+        }
+
+        .st-name { 
+            font-weight: 900; 
+            font-size: 0.85rem; 
+            color: #ffffff; 
+            display: block; 
+            margin-bottom: 2px; 
+            overflow: visible; 
+            white-space: nowrap; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .st-date { font-size: 0.6rem; color: var(--accent-blue); display: block; margin-bottom: 4px; }
+        .st-data-row {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--border-color);
+            padding-top: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .temp-safe { color: var(--accent-green); }
+        .temp-warn { color: var(--accent-red); text-shadow: 0 0 5px rgba(255,68,68,0.5); font-weight: 900; }
+
+        /* --- ROSTER SECTION --- */
+        .roster-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            flex-grow: 0;
+            margin-bottom: 8px;
+        }
+
+        .roster-container { display: flex; flex-direction: column; gap: 6px; }
+
+        .section-title {
+            background: #1c2128;
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            text-align: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            padding: 5px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .shift-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+        .shift-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            min-height: 90px;
+        }
+
+        .shift-active {
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 10px rgba(0,255,65,0.2);
+        }
+
+        .shift-label {
+            color: var(--accent-blue);
+            font-weight: 900;
+            font-size: 0.75rem;
+            display: block;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            margin-bottom: 6px;
+            padding-bottom: 2px;
+        }
+
+        .staff-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #aff5b4;
+            margin-bottom: 4px;
+        }
+
+        .arrow-box {
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 1rem;
+            margin: 0 5px;
+            display: inline-block;
+            animation: arrow-slide 1.2s infinite ease-in-out;
+        }
+
+        @keyframes arrow-slide {
+            0%, 100% { transform: translateX(0px); opacity: 0.4; }
+            50% { transform: translateX(-5px); opacity: 1; }
+        }
+
+        .duty-badge {
+            font-size: 0.65rem;
+            padding: 1px 4px;
+            border: 1px solid;
+            border-radius: 3px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .badge-tpc-m { color: #00d4ff; border-color: #00d4ff; box-shadow: 0 0 5px #00d4ff; }
+        .badge-tpc-e { color: #ff9100; border-color: #ff9100; box-shadow: 0 0 5px #ff9100; }
+        .badge-tpc-n { color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+
+        /* --- MAINTENANCE & BLOCKS --- */
+        .bottom-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 12px;
+            flex-grow: 1;
+            min-height: 0;
+            margin-bottom: 50px;
+            align-items: start;
+        }
+
+        .maint-wrap {
+            background: rgba(22, 27, 34, 0.6);
+            border: 1px dashed var(--accent-orange);
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        .maint-title {
+            color: var(--accent-orange);
+            font-weight: 900;
+            border-bottom: 1px solid #444;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .sch-item {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            border-left: 4px solid var(--accent-orange);
+            background: rgba(255, 174, 66, 0.05);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .status-blocks { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+        .ops-static-box {
+            width: 100%;
+            height: 45px;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-blue);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron';
+            font-weight: 900;
+            font-size: 0.9rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        .ops-static-box.alert { border-color: var(--accent-red); color: var(--accent-red); text-shadow: 0 0 5px var(--accent-red); }
+        .ops-static-box.ok { border-color: var(--accent-green); color: var(--accent-green); text-shadow: 0 0 5px var(--accent-green); }
+
+        /* --- DRIVER CARD --- */
+        .driver-overlay {
+            position: fixed;
+            bottom: 60px;
+            left: 20px;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-blue);
+            border-left: 6px solid var(--accent-green);
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.5s ease;
+        }
+
+        /* OUTDATED STATE (ASH COLOUR) */
+        .driver-overlay.outdated {
+            background: var(--ash-bg);
+            border-color: #484f58;
+            border-left-color: var(--ash-text);
+            box-shadow: none;
+        }
+
+        .driver-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .outdated .driver-img { border-color: var(--ash-text); filter: grayscale(1); opacity: 0.5; }
+
+        .driver-badge {
+            background: var(--accent-orange);
+            color: black;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 1px 5px;
+            border-radius: 3px;
+            display: inline-block;
+            transition: all 0.5s ease;
+        }
+
+        .outdated .driver-badge { background: #484f58; color: var(--ash-text); }
+        .outdated #driver-name { color: var(--ash-text) !important; }
         
-        .d-update-tag { font-size: 0.6rem; color: var(--accent); background: rgba(88, 166, 255, 0.1); padding: 1px 4px; border-radius: 3px; border: 1px solid rgba(88, 166, 255, 0.3); font-family: 'Orbitron'; margin-top: 4px; display: inline-block; }
+        /* Updated Driver Phone Font for Readability */
+        #driver-phone { 
+            color: var(--accent-green); 
+            font-family: 'Inter', sans-serif; 
+            font-size: 0.95rem; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
         
-        .outdated-alert { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--red); color: white; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 900; padding: 2px 10px; border-radius: 4px; box-shadow: 0 0 10px rgba(255, 68, 68, 0.6); z-index: 10; display: none; }
+        .outdated #driver-phone { color: #6e7681 !important; }
 
-        .driver-container.outdated { opacity: 0.45; filter: grayscale(1); }
-        .driver-container.outdated .driver-card { border-color: var(--red); border-left-color: var(--red); }
-        .driver-container.outdated .outdated-alert { display: block; }
-        .driver-container.outdated .d-update-tag { color: var(--red); border-color: var(--red); }
+        /* --- TICKER --- */
+        .ticker-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45px;
+            background: var(--panel-bg);
+            border-top: 2px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            z-index: 1001;
+        }
 
-        /* RECTANGULAR ROTATING DISKS */
-        .block-roller-container { position: fixed; bottom: 55px; right: 15px; z-index: 1005; display: flex; flex-direction: column; gap: 10px; perspective: 1000px; }
-        .rect-disk { width: 320px; height: 45px; position: relative; transform-style: preserve-3d; animation: rect-rotate 8s infinite linear; }
-        @keyframes rect-rotate { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(360deg); } }
-        
-        .disk-face { position: absolute; width: 100%; height: 100%; background: var(--bg-card); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 900; backface-visibility: hidden; border-radius: 4px; box-sizing: border-box; }
-        .f-front  { transform: translateZ(22px); }
-        .f-back   { transform: rotateX(180deg) translateZ(22px); }
-        .f-top    { transform: rotateX(90deg) translateZ(22px); background: var(--bg-header); height: 44px; }
-        .f-bottom { transform: rotateX(270deg) translateZ(22px); background: var(--bg-header); height: 44px; }
+        .ticker-head { background: var(--accent-blue); color: #000; padding: 0 20px; height: 100%; display: flex; align-items: center; font-weight: 900; }
+        .ticker-body { flex-grow: 1; overflow: hidden; }
+        .ticker-scroll { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker-move 40s linear infinite; font-size: 1.2rem; font-weight: 900; color: var(--accent-green); }
 
-        .block-energised { border-color: var(--red) !important; color: var(--red) !important; }
-        .block-ib { border-color: var(--green) !important; color: var(--green) !important; }
+        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* FLOATING AB BUTTON */
-        .floating-ab { position: fixed; bottom: 15px; right: 15px; width: 50px; height: 50px; background: var(--accent); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-weight: 900; text-decoration: none; box-shadow: 0 4px 15px rgba(88, 166, 255, 0.4); z-index: 2000; transition: transform 0.2s; border: 2px solid #fff; }
-        .floating-ab:hover { transform: scale(1.1); background: #fff; }
+        .btn-control { background: transparent; color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; text-transform: uppercase; }
+        .btn-off { color: var(--accent-red); border-color: var(--accent-red); }
 
-        /* TICKER */
-        .bottom-ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--bg-header); border-top: 2px solid var(--accent); height: 45px; display: flex; align-items: center; z-index: 1001; }
-        .ticker-label { background: var(--accent); color: white; font-weight: 900; padding: 0 15px; line-height: 45px; z-index: 1002; position: relative; }
-        .ticker-marquee { flex-grow: 1; overflow: hidden; white-space: nowrap; position: relative; }
-        .ticker-text { display: inline-block; font-size: 1.25rem; font-weight: 900; color: var(--green); padding-left: 100%; animation: scroll-tech 35s linear infinite; }
-        @keyframes scroll-tech { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body onclick="wakeUp()">
-    <div id="blackout" onclick="wakeUp()">
+
+    <div id="blackout">
         <div class="analog-clock">
-            <div class="number" style="transform:rotate(0deg)"><span>12</span></div>
-            <div class="number" style="transform:rotate(90deg)"><span>3</span></div>
-            <div class="number" style="transform:rotate(180deg)"><span>6</span></div>
-            <div class="number" style="transform:rotate(270deg)"><span>9</span></div>
-            <div id="hr-h" class="hand hour-hand"></div>
-            <div id="min-h" class="hand min-hand"></div>
-            <div id="sec-h" class="hand sec-hand"></div>
+            <div id="ana-h" class="hand h-hr"></div>
+            <div id="ana-m" class="hand h-min"></div>
+            <div id="ana-s" class="hand h-sec"></div>
+            <div style="position:absolute; top:10%; left:50%; transform:translateX(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">12</div>
+            <div style="position:absolute; top:50%; right:10%; transform:translateY(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">3</div>
+            <div style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">6</div>
+            <div style="position:absolute; top:50%; left:10%; transform:translateY(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">9</div>
         </div>
     </div>
 
-    <div class="top-bar">
-        <div class="logo-box"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png"></div>
-        <div class="checklist-scroll-wrap"><div id="moving-checklist" class="checklist-move-text">MTRS DAILY CHECKLIST: SYNCING...</div></div>
+    <header class="top-bar">
+        <div class="logo-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
+        </div>
         
-        <div class="flip-clock">
-            <div class="flip-unit" id="f-hr">00<span class="flip-label">HR</span></div>
-            <div style="font-size: 1.5rem; color: var(--accent);">:</div>
-            <div class="flip-unit" id="f-min">00<span class="flip-label">MIN</span></div>
-            <div style="font-size: 1.5rem; color: var(--accent);">:</div>
-            <div class="flip-unit" id="f-sec">00<span class="flip-label">SEC</span></div>
+        <div class="checklist-container">
+            <div id="checklist-text" class="checklist-marquee">SYSTEM INITIALIZING... CONNECTING TO DATA SOURCE...</div>
         </div>
 
-        <div class="controls">
-            <button class="btn btn-light" onclick="toggleLightMode(event)">Light/Dark</button>
-            <button class="btn" onclick="toggleFullScreen(event)">Full Screen</button>
-            <button class="btn btn-off" onclick="manualBlackout(event)">Off</button>
+        <div class="clock-container">
+            <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">Hours</div></div>
+            <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">Min</div></div>
+            <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">Sec</div></div>
         </div>
-    </div>
 
-    <div id="station-data" class="station-grid"></div>
-
-    <div class="master-roster">
-        <div><div class="section-header">TODAY'S DUTY</div><div id="today-roster" class="shift-grid"></div></div>
-        <div><div class="section-header">TOMORROW'S DUTY</div><div id="tomorrow-roster" class="shift-grid"></div></div>
-    </div>
-
-    <div class="schedule-wrap">
-        <div style="text-align: center; color: var(--orange); font-weight: 900; font-size: 0.85rem; margin-bottom: 3px; border-bottom: 1px solid var(--orange);">MAINTENANCE SCHEDULE</div>
-        <div id="schedule-list"></div>
-    </div>
-
-    <div id="driver-container" class="driver-container">
-        <div class="driver-card">
-            <div class="outdated-alert">OUTDATED</div>
-            <img id="d-img" src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png">
-            <div style="display:flex; flex-direction:column; margin-left:10px;">
-                <div id="d-shift-val" style="background:#ffeb3b; color:#000; font-size:0.7rem; font-weight:900; padding:1px 4px; border-radius:3px; width:fit-content;">SHIFT: ---</div>
-                <div id="d-name" style="font-weight:900; color:var(--text-main); font-size:0.9rem;">Loading...</div>
-                <div id="d-phone" style="color:var(--green); font-weight:bold; font-size: 0.8rem;">---</div>
-                <div id="d-update-wrap" style="line-height: 1;">
-                    <span id="d-update-time" class="d-update-tag">REFRESHING...</span>
-                </div>
-            </div>
+        <div class="top-controls">
+            <button class="btn-control" onclick="goFullscreen(event)">FS</button>
+            <button class="btn-control btn-off" onclick="manualOff(event)">OFF</button>
         </div>
-    </div>
+    </header>
 
-    <div class="block-roller-container">
-        <div id="mainline-disk" class="rect-disk">
-            <div class="disk-face f-front" id="m-val-f">---</div>
-            <div class="disk-face f-top">---</div>
-            <div class="disk-face f-back" id="m-val-b">---</div>
-            <div class="disk-face f-bottom">---</div>
+    <main id="station-grid" class="station-grid"></main>
+
+    <section class="roster-section">
+        <div class="roster-container">
+            <div class="section-title">Today's Deployment</div>
+            <div id="roster-today" class="shift-cards"></div>
         </div>
-        <div id="depot-disk" class="rect-disk">
-            <div class="disk-face f-front" id="d-val-f">---</div>
-            <div class="disk-face f-top">---</div>
-            <div class="disk-face f-back" id="d-val-b">---</div>
-            <div class="disk-face f-bottom">---</div>
+        <div class="roster-container">
+            <div class="section-title">Tomorrow's Deployment</div>
+            <div id="roster-tomorrow" class="shift-cards"></div>
+        </div>
+    </section>
+
+    <section class="bottom-layout">
+        <div class="maint-wrap">
+            <div class="maint-title">TODAY'S MAINTENANCE</div>
+            <div id="maint-list"></div>
+        </div>
+        <div class="status-blocks">
+            <div id="box-mainline" class="ops-static-box">MAINLINE: ---</div>
+            <div id="box-depot" class="ops-static-box">DEPOT: ---</div>
+        </div>
+    </section>
+
+    <div id="driver-card" class="driver-overlay">
+        <img id="driver-img" src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png" class="driver-img">
+        <div>
+            <div id="driver-shift" class="driver-badge">SHIFT: ---</div>
+            <div id="driver-name" style="font-weight:900; color:white; font-size:1rem; margin:2px 0;">Loading...</div>
+            <div id="driver-phone">---</div>
         </div>
     </div>
 
-    <a href="absub.html" class="floating-ab">AB</a>
-
-    <div class="bottom-ticker">
-        <div id="tech-count-label" class="ticker-label">TECHNICIANS (0)</div>
-        <div class="ticker-marquee"><div id="tech-ticker" class="ticker-text">Fetching...</div></div>
-    </div>
+    <footer class="ticker-bar">
+        <div id="ticker-head" class="ticker-head">TECHNICIANS (0)</div>
+        <div class="ticker-body">
+            <div id="ticker-text" class="ticker-scroll">FETCHING LATEST SYSTEM STATUS AND STAFF DATA...</div>
+        </div>
+    </footer>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
         
-        // Global variables for sync
-        let currentSeconds = 0;
-
-        function toggleLightMode(e) { e.stopPropagation(); document.body.classList.toggle('light-mode'); }
-        function toggleFullScreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function manualBlackout(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
+        function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
 
-        function formatStaff(val) {
-            if(!val || val === "") return "";
-            return val.split('\n').map(line => {
-                if(line.includes("|")) {
-                    let p = line.split("|"), code = p[1].toUpperCase();
-                    let isSpecial = (code.includes("TPC") || code.includes("2"));
-                    let glowClass = code === "M TPC" ? "tag-m-tpc" : code === "E TPC" ? "tag-e-tpc" : code === "N TPC" ? "tag-n-tpc" : "tag-default";
-                    return `<div class="staff-row"><span>${p[0]}</span>${isSpecial ? '<span class="arrow-box">⟸</span>' : '<span></span>'}<span class="duty-tag ${glowClass}">${p[1]}</span></div>`;
+        function parseStaff(raw) {
+            if(!raw) return '';
+            return raw.split('\n').map(line => {
+                if(line.includes('|')) {
+                    const [name, duty] = line.split('|');
+                    const dCode = duty.trim().toUpperCase();
+                    let badgeClass = '';
+                    if(dCode.includes('M TPC') || dCode === 'MTPC') badgeClass = 'badge-tpc-m';
+                    else if(dCode.includes('E TPC') || dCode === 'ETPC') badgeClass = 'badge-tpc-e';
+                    else if(dCode.includes('N TPC') || dCode === 'NTPC') badgeClass = 'badge-tpc-n';
+                    const isSpecial = (dCode.includes("TPC") || dCode.includes("2"));
+                    return `<div class="staff-entry"><span>${name}</span>${isSpecial ? '<span class="arrow-box">⟸</span>' : '<span></span>'}<span class="duty-badge ${badgeClass}">${duty}</span></div>`;
                 }
-                return `<div class="staff-row">${line}</div>`;
+                return `<div class="staff-entry"><span>${line}</span></div>`;
             }).join('');
         }
 
-        function draw(data) {
-            let stH = '', tdH = '', tmH = '';
+        window.draw = function(data) {
+            let stHtml = '', tdHtml = '', tmHtml = '';
             data.forEach(item => {
                 if (item.Parameter === "ChecklistStatus") {
-                    document.getElementById('moving-checklist').innerText = `MTRS DAILY CHECKLIST: ${item.Value}`;
-                    document.getElementById('moving-checklist').style.color = (item.Value === "FULLY FILLED") ? "var(--green)" : "var(--red)";
+                    const el = document.getElementById('checklist-text');
+                    el.innerText = `MTRS DAILY CHECKLIST: ${item.Value}`;
+                    el.style.color = (item.Value === "FULLY FILLED") ? "var(--accent-green)" : "var(--accent-red)";
                 }
                 if (item.Unit === "StationTemp") {
-                    const p = item.Value.split("|");
-                    let ambVal = parseFloat(p[0]) || 0, trfoVal = parseFloat(p[1]) || 0;
-                    let isAlarm = (item.Limit === "ALARM");
-                    
-                    // Determine current state based on alarm status and time
-                    let cardState = 1; // Default
-                    if (isAlarm) {
-                        if (currentSeconds >= 45 && currentSeconds < 50) cardState = 2;
-                        else if (currentSeconds >= 50 && currentSeconds < 55) cardState = 3;
-                    }
-
-                    stH += `<div class="station-card-container state-${cardState} ${isAlarm ? 'st-alarm' : ''}">
-                                <div class="station-card-inner">
-                                    <div class="station-face station-front">
-                                        <span class="st-name">${item.Parameter}</span>
-                                        <span class="st-date">${p[2]}</span>
-                                        <div class="st-temp-val-wrap">
-                                            <span class="${ambVal > 34 ? 'val-alarm' : 'val-safe'}">AMB:${p[0]}°</span>
-                                            <span class="${trfoVal > 80 ? 'val-alarm' : 'val-safe'}">TRFO:${p[1]}°</span>
-                                        </div>
-                                    </div>
-                                    <div class="station-face station-back">
-                                        <div class="full-readability">
-                                            <div class="full-temp-main ${ambVal > 34 ? 'val-alarm' : 'val-safe'}">${p[0]}°</div>
-                                            <div class="full-temp-main ${trfoVal > 80 ? 'val-alarm' : 'val-safe'}">${p[1]}°</div>
-                                        </div>
-                                    </div>
-                                    <div class="station-face station-top">
-                                        <div class="full-name-main">${item.Parameter}</div>
-                                    </div>
-                                </div>
-                            </div>`;
+                    const parts = item.Value.split("|");
+                    const amb = parseFloat(parts[0]) || 0;
+                    const trfo = parseFloat(parts[1]) || 0;
+                    const isAlarm = (amb > 34 || trfo > 80);
+                    stHtml += `<div class="station-card ${isAlarm ? 'card-alarm' : ''}"><span class="st-name">${item.Parameter}</span><span class="st-date">${parts[2] || '--:--'}</span><div class="st-data-row"><span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span><span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span></div></div>`;
                 }
-                if (item.Unit === "Staff-Today") tdH += `<div class="card ${item.Limit==='ACTIVE'?'active-shift':''}"><span style="color:var(--accent); font-weight:900; font-size:0.8rem; text-align:center; border-bottom:1px solid #555; margin-bottom:5px; display:block;">${item.Parameter}</span>${formatStaff(item.Value)}</div>`;
-                if (item.Unit === "Staff-Tomorrow") tmH += `<div class="card"><span style="color:var(--accent); font-weight:900; font-size:0.8rem; text-align:center; border-bottom:1px solid #555; margin-bottom:5px; display:block;">${item.Parameter}</span>${formatStaff(item.Value)}</div>`;
-                
+                if (item.Unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${item.Parameter}</span>${parseStaff(item.Value)}</div>`;
+                if (item.Unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${item.Parameter}</span>${parseStaff(item.Value)}</div>`;
                 if (item.Unit === "OpsBlock") {
-                    const b = item.Value.split("|");
-                    const mVal = (b[0] || "N/A").toUpperCase(), dVal = (b[1] || "N/A").toUpperCase();
-                    
-                    const mFaces = document.querySelectorAll('#mainline-disk .disk-face');
-                    mFaces.forEach(el => {
-                        el.innerText = "MAINLINE: " + mVal;
-                        el.classList.remove("block-energised", "block-ib");
-                        if(mVal.includes("ENERGISED")) el.classList.add("block-energised"); 
-                        else if(mVal.includes("IB")) el.classList.add("block-ib");
-                    });
-
-                    const dFaces = document.querySelectorAll('#depot-disk .disk-face');
-                    dFaces.forEach(el => {
-                        el.innerText = "DEPOT: " + dVal;
-                        el.classList.remove("block-energised", "block-ib");
-                        if(dVal.includes("ENERGISED")) el.classList.add("block-energised"); 
-                        else if(dVal.includes("IB")) el.classList.add("block-ib");
-                    });
+                    const [m, d] = item.Value.split('|');
+                    const mVal = (m || '---').toUpperCase();
+                    const dVal = (d || '---').toUpperCase();
+                    const mEl = document.getElementById('box-mainline');
+                    const dEl = document.getElementById('box-depot');
+                    mEl.innerText = `MAINLINE: ${mVal}`;
+                    dEl.innerText = `DEPOT: ${dVal}`;
+                    mEl.classList.remove('alert', 'ok');
+                    if(mVal.includes('ENERGISED')) mEl.classList.add('alert'); else if(mVal.includes('IB')) mEl.classList.add('ok');
+                    dEl.classList.remove('alert', 'ok');
+                    if(dVal.includes('ENERGISED')) dEl.classList.add('alert'); else if(dVal.includes('IB')) dEl.classList.add('ok');
                 }
                 if (item.Unit === "OpsSchedule") {
-                    document.getElementById('schedule-list').innerHTML = item.Value.split('\n').map(l => `<div class="sch-item">${l}</div>`).join('');
+                    const now = new Date();
+                    const todayStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+                    const lines = item.Value.split('\n');
+                    const filtered = lines.filter(l => l.includes(todayStr)).map(l => {
+                        let clean = l.replace(/Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/g, '').trim();
+                        return clean.replace(/^[\s\-→|•*]+/, '').replace(/[\s\-→|•*]+$/, '').trim();
+                    }).filter(l => l.length > 5);
+                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance tasks for today</div>` : filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
                 if (item.Unit === "TechTicker") {
-                    const t = item.Value.split("|");
-                    document.getElementById('tech-count-label').innerText = t[0];
-                    document.getElementById('tech-ticker').innerText = t[1];
+                    const [head, body] = item.Value.split('|');
+                    document.getElementById('ticker-head').innerText = head || "TECHNICIANS";
+                    document.getElementById('ticker-text').innerText = body || "---";
                 }
                 if (item.Unit === "DriverPopup") {
-                    const d = item.Value.split("|");
-                    document.getElementById('d-name').innerText = d[0];
-                    document.getElementById('d-phone').innerText = d[1];
-                    document.getElementById('d-shift-val').innerText = "SHIFT: " + (d[2] || "N/A");
-                    document.getElementById('d-img').src = (d[3] && d[3].includes("http")) ? d[3] : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png";
-                }
-                
-                if (item.Parameter === "sheetab_R2C1") {
-                    const fullDateStr = item.Value || "";
-                    const updateTime = new Date(fullDateStr);
-                    const now = new Date();
-                    const diffMs = now - updateTime;
-                    const isOutdated = diffMs > (12 * 60 * 60 * 1000);
+                    const [name, phone, shift, img] = item.Value.split('|');
+                    const card = document.getElementById('driver-card');
+                    const nameEl = document.getElementById('driver-name');
+                    const phoneEl = document.getElementById('driver-phone');
+                    const shiftEl = document.getElementById('driver-shift');
                     
-                    const container = document.getElementById('driver-container');
-                    const timeLabel = document.getElementById('d-update-time');
-                    const timeMatch = fullDateStr.match(/\d{2}:\d{2}:\d{2}/);
-                    const displayTime = timeMatch ? timeMatch[0] : "--:--";
+                    const isUpdated = name && name.trim() !== "" && name.trim().toUpperCase() !== "N/A" && name.trim().toUpperCase() !== "PENDING";
                     
-                    if (isOutdated) {
-                        container.classList.add('outdated');
-                        timeLabel.innerText = "LOGGED AT: " + updateTime;
+                    if (!isUpdated) {
+                        card.classList.add('outdated');
+                        nameEl.innerText = "NOT UPDATED";
+                        phoneEl.innerText = "---";
+                        shiftEl.innerText = "SHIFT: ---";
                     } else {
-                        container.classList.remove('outdated');
-                        timeLabel.innerText = "UPDATED ON: " + displayTime;
+                        card.classList.remove('outdated');
+                        nameEl.innerText = name;
+                        phoneEl.innerText = phone || '---';
+                        shiftEl.innerText = 'SHIFT: ' + (shift || '---');
+                        document.getElementById('driver-img').src = (img && img.startsWith('http')) ? img : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png";
                     }
                 }
             });
-            document.getElementById('station-data').innerHTML = stH; 
-            document.getElementById('today-roster').innerHTML = tdH; 
-            document.getElementById('tomorrow-roster').innerHTML = tmH;
-        }
+            document.getElementById('station-grid').innerHTML = stHtml;
+            document.getElementById('roster-today').innerHTML = tdHtml;
+            document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+        };
 
-        // Clock and Flip Management
-        setInterval(() => {
+        function updateClocks() {
             const now = new Date();
-            const s = now.getSeconds();
-            const m = now.getMinutes(), h = now.getHours();
-            
-            currentSeconds = s; // Sync for data drawing
+            const s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
+            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
+            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
+            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
+        }
+        setInterval(updateClocks, 1000);
+        updateClocks();
 
-            // Update Clocks
-            document.getElementById('f-hr').innerHTML = (h < 10 ? "0"+h : h) + '<span class="flip-label">HR</span>';
-            document.getElementById('f-min').innerHTML = (m < 10 ? "0"+m : m) + '<span class="flip-label">MIN</span>';
-            document.getElementById('f-sec').innerHTML = (s < 10 ? "0"+s : s) + '<span class="flip-label">SEC</span>';
-            document.getElementById('sec-h').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
-            document.getElementById('min-h').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
-            document.getElementById('hr-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
-
-            // Update flipping only for alarm-triggered cards
-            const cards = document.querySelectorAll('.station-card-container');
-            cards.forEach(card => {
-                const isAlarmCard = card.classList.contains('st-alarm');
-                let targetState = 1;
-
-                if (isAlarmCard) {
-                    if (s >= 45 && s < 50) targetState = 2;
-                    else if (s >= 50 && s < 55) targetState = 3;
-                }
-
-                // Smooth transition management
-                card.classList.remove('state-1', 'state-2', 'state-3');
-                card.classList.add('state-' + targetState);
-            });
-        }, 1000);
-
-        function refresh() {
+        function refreshData() {
+            const old = document.getElementById('api-script');
+            if(old) old.remove();
             const s = document.createElement('script');
-            s.src = `${API_URL}?callback=draw&t=${new Date().getTime()}`;
+            s.id = 'api-script';
+            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
             document.body.appendChild(s);
         }
-        setInterval(refresh, 15000); refresh();
+        refreshData();
+        setInterval(refreshData, 15000);
     </script>
 </body>
 </html>
