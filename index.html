@@ -29,7 +29,7 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 8px;
+            padding: 8px; /* Standard Page Padding */
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -184,11 +184,11 @@
         .h-min { width: 6px; height: 35%; background: #bbb; transform: translateX(-50%); }
         .h-sec { width: 2px; height: 42%; background: var(--accent-red); transform: translateX(-50%); }
 
-        /* --- STATION GRID --- */
+        /* --- STATION GRID (FIXED 13x2 LAYOUT) --- */
         .station-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(13, 1fr);
+            gap: 6px;
             margin-bottom: 8px;
             padding: 5px;
         }
@@ -198,7 +198,7 @@
             border: 1px solid var(--border-color);
             border-top: 3px solid var(--accent-blue);
             border-radius: 6px;
-            padding: 6px 4px;
+            padding: 4px 2px;
             text-align: center;
             transition: border-top-color 0.3s;
             position: relative;
@@ -209,38 +209,39 @@
 
         .card-alarm .st-name {
             color: #ffffff;
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 900;
             text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red);
             animation: pulse-glow 0.8s infinite alternate;
             transform: scale(1.15);
             display: inline-block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         @keyframes pulse-glow {
             from { text-shadow: 0 0 5px var(--accent-red); transform: scale(1.1); }
-            to { text-shadow: 0 0 20px var(--accent-red), 0 0 30px var(--accent-red); transform: scale(1.2); }
+            to { text-shadow: 0 0 15px var(--accent-red), 0 0 20px var(--accent-red); transform: scale(1.2); }
         }
 
         .st-name { 
             font-weight: 900; 
-            font-size: 0.85rem; 
+            font-size: 0.72rem; /* Adjusted for 13 columns */
             color: #ffffff; 
             display: block; 
             margin-bottom: 2px; 
-            overflow: visible; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
             white-space: nowrap; 
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
-        .st-date { font-size: 0.6rem; color: var(--accent-blue); display: block; margin-bottom: 4px; }
+        .st-date { font-size: 0.55rem; color: var(--accent-blue); display: block; margin-bottom: 4px; }
         .st-data-row {
             display: flex;
             justify-content: space-around;
             border-top: 1px solid var(--border-color);
             padding-top: 4px;
-            font-size: 0.75rem;
+            font-size: 0.68rem;
             font-weight: 700;
         }
 
@@ -397,8 +398,8 @@
         /* --- DRIVER CARD --- */
         .driver-overlay {
             position: fixed;
-            bottom: 60px;
-            left: 20px;
+            bottom: 53px; /* Aligned with ticker height (45) + margin (8) */
+            left: 8px;  /* Aligned with page padding (8) */
             background: var(--panel-bg);
             border: 2px solid var(--accent-blue);
             border-left: 6px solid var(--accent-green);
