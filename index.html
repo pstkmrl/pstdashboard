@@ -279,7 +279,11 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 8px;
-            min-height: 90px;
+            height: 135px; /* FIXED HEIGHT FOR ALL 8 BOXES */
+            display: flex;
+            flex-direction: column;
+            overflow-y: hidden;
+            transition: all 0.3s ease;
         }
 
         .shift-active {
@@ -296,6 +300,7 @@
             border-bottom: 1px solid #333;
             margin-bottom: 6px;
             padding-bottom: 2px;
+            flex-shrink: 0;
         }
 
         .staff-entry {
@@ -345,33 +350,66 @@
             align-items: start;
         }
 
+        /* Fixed size maintenance box - matched to the height of the two status boxes (45+45+10 = 100px) */
         .maint-wrap {
             background: rgba(22, 27, 34, 0.6);
             border: 1px dashed var(--accent-orange);
             border-radius: 8px;
-            padding: 10px;
-            overflow-y: auto;
-            max-height: 100%;
+            padding: 6px 10px;
+            height: 100px; /* MATCHED TO COMBINED STATUS BOXES HEIGHT */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+            position: relative;
         }
 
         .maint-title {
             color: var(--accent-orange);
             font-weight: 900;
             border-bottom: 1px solid #444;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            font-size: 0.8rem;
+            margin-bottom: 5px;
+            padding-bottom: 3px;
+            font-size: 0.75rem;
             text-transform: uppercase;
             text-align: center;
+            z-index: 10;
+            background: var(--panel-bg);
+            flex-shrink: 0;
+        }
+
+        .maint-scroll-viewport {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        #maint-list {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            animation: maint-flow-up 18s linear infinite; /* Adjusted speed for shorter box */
+        }
+
+        /* Hover to pause scrolling */
+        .maint-wrap:hover #maint-list {
+            animation-play-state: paused;
+        }
+
+        @keyframes maint-flow-up {
+            0% { transform: translateY(80px); }
+            100% { transform: translateY(-100%); }
         }
 
         .sch-item {
-            font-size: 0.85rem;
-            padding: 5px 10px;
-            border-left: 4px solid var(--accent-orange);
+            font-size: 0.78rem;
+            padding: 4px 8px;
+            border-left: 3px solid var(--accent-orange);
             background: rgba(255, 174, 66, 0.05);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: 500;
+            line-height: 1.3;
         }
 
         .status-blocks { display: flex; flex-direction: column; gap: 10px; width: 100%; }
@@ -533,8 +571,10 @@
 
     <section class="bottom-layout">
         <div class="maint-wrap">
-            <div class="maint-title">TODAY'S MAINTENANCE</div>
-            <div id="maint-list"></div>
+            <div id="maint-header" class="maint-title">TODAY & TOMORROW MAINTENANCE</div>
+            <div class="maint-scroll-viewport">
+                <div id="maint-list"></div>
+            </div>
         </div>
         <div class="status-blocks">
             <div id="box-mainline" class="ops-static-box">MAINLINE: ---</div>
@@ -615,12 +655,17 @@
                 if (item.Unit === "OpsSchedule") {
                     const now = new Date();
                     const todayStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(now.getDate() + 1);
+                    const tomorrowStr = `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
+                    
                     const lines = item.Value.split('\n');
-                    const filtered = lines.filter(l => l.includes(todayStr)).map(l => {
+                    const filtered = lines.filter(l => l.includes(todayStr) || l.includes(tomorrowStr)).map(l => {
                         let clean = l.replace(/Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/g, '').trim();
                         return clean.replace(/^[\s\-→|•*]+/, '').replace(/[\s\-→|•*]+$/, '').trim();
                     }).filter(l => l.length > 5);
-                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance tasks for today</div>` : filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
+                    
+                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance tasks for today or tomorrow</div>` : filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
                 if (item.Unit === "TechTicker") {
                     const [head, body] = item.Value.split('|');
