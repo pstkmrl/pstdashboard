@@ -665,24 +665,28 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
         </div>
         
-        <div id="checklist-container" class="checklist-container">
+        <!-- HIDDEN BY DEFAULT -->
+        <div id="checklist-container" class="checklist-container" style="display: none;">
             <div id="checklist-text" class="checklist-marquee">SYSTEM INITIALIZING... CONNECTING TO DATA SOURCE...</div>
         </div>
 
-        <div id="clock-container" class="clock-container">
+        <!-- HIDDEN BY DEFAULT -->
+        <div id="clock-container" class="clock-container" style="display: none;">
             <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">Hours</div></div>
             <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">Min</div></div>
             <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">Sec</div></div>
         </div>
 
         <div class="top-controls">
-            <button id="btn-grid" class="btn-control" onclick="toggleGrid(event)">GRID</button>
+            <!-- STARTS AS ACTIVE (PRESSED) -->
+            <button id="btn-grid" class="btn-control btn-grid-active" onclick="toggleGrid(event)">GRID</button>
             <button class="btn-control" onclick="goFullscreen(event)">FS</button>
             <button class="btn-control btn-off" onclick="manualOff(event)">OFF</button>
         </div>
     </header>
 
-    <main id="station-grid" class="station-grid"></main>
+    <!-- HIDDEN BY DEFAULT -->
+    <main id="station-grid" class="station-grid" style="display: none;"></main>
 
     <section class="roster-section">
         <div class="roster-container">
@@ -741,7 +745,6 @@
             if(e) e.stopPropagation();
             const phoneText = document.getElementById('driver-phone').innerText;
             if (phoneText && phoneText !== "---") {
-                // Remove any non-numeric characters for the tel: link
                 const cleanPhone = phoneText.replace(/\D/g, '');
                 window.location.href = `tel:${cleanPhone}`;
             }
