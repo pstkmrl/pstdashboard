@@ -185,7 +185,7 @@
             padding: 10px; 
             display: flex; 
             flex-direction: column; 
-            overflow: hidden; /* Ensure container itself doesn't scroll */
+            overflow: hidden; 
         }
         
         .maint-title { 
@@ -205,7 +205,7 @@
             overflow-y: auto; 
             flex-grow: 1;
             padding-right: 8px;
-            scrollbar-gutter: stable; /* Prevent layout shift */
+            scrollbar-gutter: stable;
         }
         
         .sch-item { 
@@ -251,14 +251,21 @@
             gap: 5px;
             flex-shrink: 0;
         }
+        .notice-content-wrapper {
+            flex-grow: 1;
+            overflow: hidden; /* This hides the scrollbar and clips the content for the auto-scroll effect */
+            position: relative;
+        }
         .notice-content {
             font-size: 0.85rem;
             color: #d1d9e1;
             line-height: 1.4;
-            overflow-y: auto;
-            flex-grow: 1;
-            padding-right: 5px;
             font-style: italic;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: transform 0.1s linear;
         }
 
         /* --- DRIVER CARD --- */
@@ -388,7 +395,9 @@
             <div id="box-depot" class="ops-static-box">DEPOT: ---</div>
             <div class="notice-board">
                 <div class="notice-title">📢 IMPORTANT NOTICE</div>
-                <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+                <div class="notice-content-wrapper" id="notice-wrapper">
+                    <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+                </div>
             </div>
             <div id="refresh-indicator" style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 5px;">LAST UPDATED: ---</div>
         </div>
@@ -415,6 +424,9 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
         
+        let noticeScrollInterval = null;
+        let noticeScrollPos = 0;
+
         function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
@@ -480,6 +492,47 @@
             });
         }
 
+        function startNoticeAutoScroll() {
+            const wrapper = document.getElementById('notice-wrapper');
+            const content = document.getElementById('notice-text-content');
+            
+            if (noticeScrollInterval) clearInterval(noticeScrollInterval);
+            
+            noticeScrollPos = 0;
+            content.style.transform = `translateY(0)`;
+
+            // Small delay to allow layout calculation
+            setTimeout(() => {
+                const diff = content.scrollHeight - wrapper.offsetHeight;
+                
+                if (diff > 0) {
+                    let waitCounter = 0;
+                    noticeScrollInterval = setInterval(() => {
+                        // Pause at top for 3 seconds
+                        if (noticeScrollPos === 0 && waitCounter < 30) {
+                            waitCounter++;
+                            return;
+                        }
+
+                        noticeScrollPos -= 0.5; // Scroll speed
+                        
+                        if (Math.abs(noticeScrollPos) >= diff + 20) {
+                            // Pause at bottom for 3 seconds
+                            if (waitCounter < 60) {
+                                waitCounter++;
+                                return;
+                            }
+                            // Reset
+                            noticeScrollPos = 0;
+                            waitCounter = 0;
+                        }
+                        
+                        content.style.transform = `translateY(${noticeScrollPos}px)`;
+                    }, 50);
+                }
+            }, 500);
+        }
+
         window.draw = function(data) {
             document.getElementById('refresh-indicator').innerText = `LAST UPDATED: ${new Date().toLocaleTimeString()}`;
             let stHtml = '', tdHtml = '', tmHtml = '';
@@ -488,7 +541,11 @@
                 const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
 
                 if (param === "sheetab_R2C2" && unit === "sheetab") {
-                    document.getElementById('notice-text-content').innerText = val;
+                    const el = document.getElementById('notice-text-content');
+                    if (el.innerText !== val) {
+                        el.innerText = val;
+                        startNoticeAutoScroll();
+                    }
                 }
 
                 if (param === "TechTicker" || unit === "TechTicker") {
@@ -571,6 +628,7 @@
             const val = text.innerText;
             const head = document.getElementById('ticker-head').innerText;
             updateTickerBar(head, val);
+            startNoticeAutoScroll(); // Recalculate notice scroll on resize
         };
     </script>
 </body>
