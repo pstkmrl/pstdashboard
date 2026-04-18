@@ -591,6 +591,7 @@
             border: 2px solid var(--accent-blue);
             object-fit: cover;
             transition: all 0.5s ease;
+            cursor: pointer; /* Added pointer cursor */
         }
 
         .outdated .driver-img { border-color: var(--ash-text); filter: grayscale(1); opacity: 0.5; }
@@ -710,7 +711,7 @@
     </section>
 
     <div id="driver-card" class="driver-overlay">
-        <img id="driver-img" src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png" class="driver-img">
+        <img id="driver-img" src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png" class="driver-img" onclick="initiateCall(event)">
         <div>
             <div id="driver-shift" class="driver-badge">SHIFT: ---</div>
             <div id="driver-name" style="font-weight:900; color:white; font-size:1rem; margin:2px 0;">Loading...</div>
@@ -731,6 +732,17 @@
         function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
+
+        // FUNCTION TO INITIATE CALL
+        function initiateCall(e) {
+            if(e) e.stopPropagation();
+            const phoneText = document.getElementById('driver-phone').innerText;
+            if (phoneText && phoneText !== "---") {
+                // Remove any non-numeric characters for the tel: link
+                const cleanPhone = phoneText.replace(/\D/g, '');
+                window.location.href = `tel:${cleanPhone}`;
+            }
+        }
 
         // TOGGLE STATION GRID, CHECKLIST, AND CLOCK VISIBILITY
         function toggleGrid(e) {
