@@ -67,8 +67,8 @@
             .top-bar {
                 flex-direction: column;
                 height: auto;
-                padding: 10px;
-                gap: 10px;
+                padding: 15px 10px;
+                gap: 15px;
             }
         }
 
@@ -167,15 +167,17 @@
             margin-top: 2px;
         }
 
+        /* TOP CONTROLS */
         .top-controls {
             position: absolute;
             right: 0;
             padding-right: 20px;
             height: 100%;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
+            flex-direction: row; 
+            align-items: center; 
+            justify-content: flex-end;
+            gap: 12px;
             z-index: 50;
             background: var(--panel-bg);
         }
@@ -183,10 +185,59 @@
         @media (max-width: 768px) {
             .top-controls {
                 position: static;
-                flex-direction: row;
                 height: auto;
                 padding-right: 0;
+                justify-content: center;
+                margin-bottom: 10px;
             }
+        }
+
+        /* 3D BUTTON STYLING */
+        .btn-control {
+            background: linear-gradient(180deg, #2d333b 0%, #161b22 100%);
+            color: var(--accent-blue);
+            border: 1px solid #444c56;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Orbitron';
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #0b0e14, 0 6px 10px rgba(0,0,0,0.5);
+            transition: all 0.1s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            min-width: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-control:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 0 #0b0e14, 0 7px 12px rgba(0,0,0,0.5);
+        }
+
+        .btn-control:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0b0e14, 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .btn-off {
+            color: var(--accent-red);
+            border-color: #6e2a2a;
+            background: linear-gradient(180deg, #442a2a 0%, #2a1616 100%);
+            box-shadow: 0 4px 0 #1a0a0a, 0 6px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Pressed state for the Grid Toggle */
+        .btn-grid-active {
+            background: linear-gradient(180deg, #1a2027 0%, #0d1117 100%);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+            transform: translateY(3px) !important;
+            color: var(--text-dim);
+            border-color: #21262d;
         }
 
         /* --- STANDBY / BLACKOUT --- */
@@ -226,7 +277,7 @@
         .h-min { width: 6px; height: 35%; background: #bbb; transform: translateX(-50%); }
         .h-sec { width: 2px; height: 42%; background: var(--accent-red); transform: translateX(-50%); }
 
-        /* --- STATION GRID (13x2 ON TV) --- */
+        /* --- STATION GRID --- */
         .station-grid {
             display: grid;
             grid-template-columns: repeat(13, 1fr); 
@@ -330,7 +381,7 @@
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
             gap: 8px; 
-            align-items: stretch; /* Ensures all cards in row have same height */
+            align-items: stretch;
         }
 
         @media (max-width: 600px) {
@@ -342,8 +393,8 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 10px 8px;
-            min-height: 145px; /* Minimum height to maintain consistency */
-            height: auto; /* Allow growth if many names */
+            min-height: 145px;
+            height: auto;
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
@@ -374,7 +425,7 @@
             color: #aff5b4;
             margin-bottom: 6px;
             line-height: 1.2;
-            word-break: break-word; /* Show names properly without cutting */
+            word-break: break-word;
         }
 
         .arrow-box {
@@ -426,10 +477,10 @@
             border: 1px dashed var(--accent-orange);
             border-radius: 8px;
             padding: 6px 10px;
-            height: 100px; 
+            min-height: 100px;
+            height: auto; 
             display: flex;
             flex-direction: column;
-            overflow: hidden; 
             position: relative;
         }
 
@@ -437,46 +488,49 @@
             color: var(--accent-orange);
             font-weight: 900;
             border-bottom: 1px solid #444;
-            margin-bottom: 5px;
-            padding-bottom: 3px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
             font-size: 0.75rem;
             text-transform: uppercase;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             z-index: 10;
             background: var(--panel-bg);
             flex-shrink: 0;
         }
 
+        .gear-icon {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent-orange);
+            animation: gear-rotate 4s linear infinite;
+        }
+
+        @keyframes gear-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .maint-scroll-viewport {
             flex-grow: 1;
-            position: relative;
-            overflow: hidden;
             width: 100%;
         }
 
         #maint-list {
-            position: absolute;
             width: 100%;
-            top: 0;
-            left: 0;
-            animation: maint-flow-up 18s linear infinite; 
-        }
-
-        .maint-wrap:hover #maint-list { animation-play-state: paused; }
-
-        @keyframes maint-flow-up {
-            0% { transform: translateY(80px); }
-            100% { transform: translateY(-100%); }
         }
 
         .sch-item {
-            font-size: 0.78rem;
-            padding: 4px 8px;
-            border-left: 3px solid var(--accent-orange);
-            background: rgba(255, 174, 66, 0.05);
-            margin-bottom: 6px;
-            font-weight: 500;
-            line-height: 1.3;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border-left: 4px solid var(--accent-orange);
+            background: rgba(255, 174, 66, 0.08);
+            margin-bottom: 10px;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-main);
         }
 
         .status-blocks { display: flex; flex-direction: column; gap: 10px; width: 100%; }
@@ -586,9 +640,6 @@
 
         @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        .btn-control { background: transparent; color: var(--accent-blue); border: 1px solid var(--accent-blue); padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; text-transform: uppercase; }
-        .btn-off { color: var(--accent-red); border-color: var(--accent-red); }
-
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -610,7 +661,7 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
         </div>
         
-        <div class="checklist-container">
+        <div id="checklist-container" class="checklist-container">
             <div id="checklist-text" class="checklist-marquee">SYSTEM INITIALIZING... CONNECTING TO DATA SOURCE...</div>
         </div>
 
@@ -621,6 +672,7 @@
         </div>
 
         <div class="top-controls">
+            <button id="btn-grid" class="btn-control" onclick="toggleGrid(event)">GRID</button>
             <button class="btn-control" onclick="goFullscreen(event)">FS</button>
             <button class="btn-control btn-off" onclick="manualOff(event)">OFF</button>
         </div>
@@ -641,7 +693,12 @@
 
     <section class="bottom-layout">
         <div class="maint-wrap">
-            <div id="maint-header" class="maint-title">TODAY & TOMORROW MAINTENANCE</div>
+            <div class="maint-title">
+                <svg class="gear-icon" viewBox="0 0 24 24">
+                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.47,2.44C14.44,2.21 14.25,2 14,2H10C9.75,2 9.56,2.21 9.53,2.44L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.04 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.53,21.56C9.56,21.79 9.75,22 10,22H14C14.25,22 14.44,21.79 14.47,21.56L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.04 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                </svg>
+                <span id="maint-header-text">SHIFT MAINTENANCE</span>
+            </div>
             <div class="maint-scroll-viewport">
                 <div id="maint-list"></div>
             </div>
@@ -675,6 +732,24 @@
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
 
+        // TOGGLE STATION GRID AND CHECKLIST VISIBILITY
+        function toggleGrid(e) {
+            if(e) e.stopPropagation();
+            const grid = document.getElementById('station-grid');
+            const checklist = document.getElementById('checklist-container');
+            const btn = document.getElementById('btn-grid');
+            
+            if (grid.style.display === 'none') {
+                grid.style.display = 'grid';
+                checklist.style.display = 'flex';
+                btn.classList.remove('btn-grid-active');
+            } else {
+                grid.style.display = 'none';
+                checklist.style.display = 'none';
+                btn.classList.add('btn-grid-active');
+            }
+        }
+
         function parseStaff(raw) {
             if(!raw) return '';
             return raw.split('\n').map(line => {
@@ -695,22 +770,26 @@
         window.draw = function(data) {
             let stHtml = '', tdHtml = '', tmHtml = '';
             data.forEach(item => {
-                if (item.Parameter === "ChecklistStatus") {
+                const unit = (item.Unit || "").trim();
+                const param = (item.Parameter || "").trim();
+                const val = (item.Value || "").trim();
+
+                if (param === "ChecklistStatus") {
                     const el = document.getElementById('checklist-text');
-                    el.innerText = `MTRS DAILY CHECKLIST: ${item.Value}`;
-                    el.style.color = (item.Value === "FULLY FILLED") ? "var(--accent-green)" : "var(--accent-red)";
+                    el.innerText = `MTRS DAILY CHECKLIST: ${val}`;
+                    el.style.color = (val.toUpperCase() === "FULLY FILLED") ? "var(--accent-green)" : "var(--accent-red)";
                 }
-                if (item.Unit === "StationTemp") {
-                    const parts = item.Value.split("|");
+                if (unit === "StationTemp") {
+                    const parts = val.split("|");
                     const amb = parseFloat(parts[0]) || 0;
                     const trfo = parseFloat(parts[1]) || 0;
                     const isAlarm = (amb > 34 || trfo > 80);
                     stHtml += `<div class="station-card ${isAlarm ? 'card-alarm' : ''}"><span class="st-name">${item.Parameter}</span><span class="st-date">${parts[2] || '--:--'}</span><div class="st-data-row"><span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span><span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span></div></div>`;
                 }
-                if (item.Unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${item.Parameter}</span>${parseStaff(item.Value)}</div>`;
-                if (item.Unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${item.Parameter}</span>${parseStaff(item.Value)}</div>`;
-                if (item.Unit === "OpsBlock") {
-                    const [m, d] = item.Value.split('|');
+                if (unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${item.Parameter}</span>${parseStaff(val)}</div>`;
+                if (unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${item.Parameter}</span>${parseStaff(val)}</div>`;
+                if (unit === "OpsBlock") {
+                    const [m, d] = val.split('|');
                     const mVal = (m || '---').toUpperCase();
                     const dVal = (d || '---').toUpperCase();
                     const mEl = document.getElementById('box-mainline');
@@ -722,28 +801,50 @@
                     dEl.classList.remove('alert', 'ok');
                     if(dVal.includes('ENERGISED')) dEl.classList.add('alert'); else if(dVal.includes('IB')) dEl.classList.add('ok');
                 }
-                if (item.Unit === "OpsSchedule") {
+                if (unit === "OpsSchedule") {
                     const now = new Date();
-                    const todayStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
-                    const tomorrow = new Date(now);
-                    tomorrow.setDate(now.getDate() + 1);
-                    const tomorrowStr = `${String(tomorrow.getDate()).padStart(2, '0')}/${String(tomorrow.getMonth() + 1).padStart(2, '0')}/${tomorrow.getFullYear()}`;
-                    
-                    const lines = item.Value.split('\n');
-                    const filtered = lines.filter(l => l.includes(todayStr) || l.includes(tomorrowStr)).map(l => {
+                    const hour = now.getHours();
+                    let targetShift = "";
+                    let targetDateObj = new Date(now);
+
+                    if (hour >= 6 && hour < 14) {
+                        targetShift = "a";
+                    } else if (hour >= 14 && hour < 22) {
+                        targetShift = "b";
+                    } else {
+                        targetShift = "c";
+                        if (hour < 6) {
+                            targetDateObj.setDate(targetDateObj.getDate() - 1);
+                        }
+                    }
+
+                    const targetDateStr = `${String(targetDateObj.getDate()).padStart(2, '0')}/${String(targetDateObj.getMonth() + 1).padStart(2, '0')}/${targetDateObj.getFullYear()}`;
+                    const headerTextEl = document.getElementById('maint-header-text');
+                    headerTextEl.innerText = `SHIFT ${targetShift.toUpperCase()} MAINTENANCE (${targetDateStr})`;
+
+                    const lines = val.split('\n');
+                    const filtered = lines.filter(l => {
+                        const cleanLine = l.toLowerCase();
+                        const matchString = targetDateStr + " " + targetShift;
+                        return cleanLine.includes(matchString);
+                    }).map(l => {
                         let clean = l.replace(/Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/g, '').trim();
-                        return clean.replace(/^[\s\-→|•*]+/, '').replace(/[\s\-→|•*]+$/, '').trim();
-                    }).filter(l => l.length > 5);
+                        const dateShiftRegex = new RegExp(targetDateStr + "\\s+" + targetShift, "gi");
+                        return clean.replace(dateShiftRegex, '').replace(/^[\s\-→|•*]+/, '').replace(/[\s\-→|•*]+$/, '').trim();
+                    }).filter(l => l.length > 2);
                     
-                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance tasks for today or tomorrow</div>` : filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
+                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? 
+                        `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance assigned for Shift ${targetShift.toUpperCase()}</div>` : 
+                        filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
-                if (item.Unit === "TechTicker") {
-                    const [head, body] = item.Value.split('|');
+                if (unit === "TechTicker") {
+                    const [head, body] = val.split('|');
                     document.getElementById('ticker-head').innerText = head || "TECH";
                     document.getElementById('ticker-text').innerText = body || "---";
                 }
-                if (item.Unit === "DriverPopup") {
-                    const [name, phone, shift, img] = item.Value.split('|');
+                
+                if (unit === "DriverPopup" || unit === "Technician" || unit === "Tech") {
+                    const [name, phone, shift, img] = val.split('|');
                     const card = document.getElementById('driver-card');
                     const nameEl = document.getElementById('driver-name');
                     const phoneEl = document.getElementById('driver-phone');
