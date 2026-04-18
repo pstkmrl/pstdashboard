@@ -43,11 +43,11 @@
             body { height: auto; overflow-y: auto; padding-bottom: 140px; }
         }
 
-        /* Custom Scrollbar for Maintenance List */
-        .maint-list::-webkit-scrollbar { width: 6px; }
-        .maint-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        .maint-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-        .maint-list::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; border: 1px solid rgba(88, 166, 255, 0.1); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
 
         /* --- TOP BAR --- */
         .top-bar {
@@ -176,7 +176,7 @@
 
         /* --- BOTTOM LAYOUT --- */
         .bottom-layout { display: grid; grid-template-columns: 1fr 300px; gap: 12px; flex-grow: 1; overflow: hidden; margin-bottom: 55px; min-height: 0; }
-        @media (max-width: 1024px) { .bottom-layout { grid-template-columns: 1fr; overflow: visible; } }
+        @media (max-width: 1024px) { .bottom-layout { grid-template-columns: 1fr; overflow: visible; height: 600px; } }
         
         .maint-wrap { 
             background: var(--panel-glass); 
@@ -185,7 +185,7 @@
             padding: 10px; 
             display: flex; 
             flex-direction: column; 
-            max-height: 100%; /* Ensure it respects grid constraints */
+            overflow: hidden; /* Ensure container itself doesn't scroll */
         }
         
         .maint-title { 
@@ -197,27 +197,69 @@
             align-items: center; 
             gap: 8px; 
             flex-shrink: 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 174, 66, 0.2);
         }
         
         .maint-list { 
             overflow-y: auto; 
             flex-grow: 1;
-            padding-right: 5px; /* Space for scrollbar */
+            padding-right: 8px;
+            scrollbar-gutter: stable; /* Prevent layout shift */
         }
         
         .sch-item { 
-            font-size: 0.95rem; 
-            padding: 10px; 
+            font-size: 0.85rem; 
+            padding: 12px; 
             border-left: 4px solid var(--accent-orange); 
             background: rgba(255, 174, 66, 0.05); 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             font-weight: 600; 
+            border-radius: 0 4px 4px 0;
+            transition: background 0.2s ease;
         }
+        .sch-item:hover { background: rgba(255, 174, 66, 0.1); }
 
         .status-blocks { display: flex; flex-direction: column; gap: 8px; }
         .ops-static-box { padding: 15px; background: #000; border: 1px solid var(--accent-blue); border-radius: 6px; text-align: center; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; }
         .ops-static-box.alert { border-color: var(--accent-red); color: var(--accent-red); }
         .ops-static-box.ok { border-color: var(--accent-green); color: var(--accent-green); }
+
+        /* Notice Board */
+        .notice-board {
+            flex-grow: 1;
+            background: rgba(88, 166, 255, 0.03);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(88, 166, 255, 0.1);
+            overflow: hidden;
+        }
+        .notice-title {
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            font-weight: 800;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(88, 166, 255, 0.2);
+            padding-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .notice-content {
+            font-size: 0.85rem;
+            color: #d1d9e1;
+            line-height: 1.4;
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 5px;
+            font-style: italic;
+        }
 
         /* --- DRIVER CARD --- */
         .driver-overlay { position: fixed; bottom: 60px; left: 15px; background: var(--panel-bg); border: 2px solid var(--accent-blue); border-left-width: 8px; border-left-color: var(--accent-green); padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
@@ -344,6 +386,10 @@
         <div class="status-blocks">
             <div id="box-mainline" class="ops-static-box">MAINLINE: ---</div>
             <div id="box-depot" class="ops-static-box">DEPOT: ---</div>
+            <div class="notice-board">
+                <div class="notice-title">📢 IMPORTANT NOTICE</div>
+                <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+            </div>
             <div id="refresh-indicator" style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 5px;">LAST UPDATED: ---</div>
         </div>
     </section>
@@ -441,6 +487,10 @@
             data.forEach(item => {
                 const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
 
+                if (param === "sheetab_R2C2" && unit === "sheetab") {
+                    document.getElementById('notice-text-content').innerText = val;
+                }
+
                 if (param === "TechTicker" || unit === "TechTicker") {
                     if (val.includes('|')) {
                         const pts = val.split('|');
@@ -472,7 +522,7 @@
                 }
 
                 if (unit === "OpsSchedule") {
-                    const lines = val.split('\n');
+                    const lines = val.split('\n').filter(l => l.trim() !== "");
                     document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
 
