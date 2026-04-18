@@ -39,14 +39,15 @@
             user-select: none;
         }
 
-        /* Responsive for mobile */
         @media (max-width: 1024px) {
-            body {
-                height: auto;
-                overflow-y: auto;
-                padding-bottom: 140px;
-            }
+            body { height: auto; overflow-y: auto; padding-bottom: 140px; }
         }
+
+        /* Custom Scrollbar for Maintenance List */
+        .maint-list::-webkit-scrollbar { width: 6px; }
+        .maint-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .maint-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .maint-list::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }
 
         /* --- TOP BAR --- */
         .top-bar {
@@ -66,12 +67,7 @@
         }
 
         @media (max-width: 768px) {
-            .top-bar {
-                flex-direction: column;
-                height: auto;
-                padding: 10px;
-                gap: 10px;
-            }
+            .top-bar { flex-direction: column; height: auto; padding: 10px; gap: 10px; }
         }
 
         .logo-section img {
@@ -79,7 +75,6 @@
             filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.4));
         }
 
-        /* SCROLLING CHECKLIST */
         .checklist-container {
             flex-grow: 1;
             margin: 0 40px;
@@ -108,43 +103,12 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* CLOCK AESTHETIC */
-        .clock-container {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
+        .clock-container { display: flex; gap: 5px; align-items: center; }
+        .clock-unit { background: #000; border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 8px; min-width: 55px; text-align: center; }
+        .clock-val { font-family: 'Orbitron'; font-size: 1.4rem; font-weight: 900; color: var(--accent-green); line-height: 1; text-shadow: 0 0 8px rgba(0,255,65,0.4); }
+        .clock-label { font-size: 0.5rem; color: var(--text-dim); text-transform: uppercase; }
 
-        .clock-unit {
-            background: #000;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 4px 8px;
-            min-width: 55px;
-            text-align: center;
-        }
-
-        .clock-val {
-            font-family: 'Orbitron';
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: var(--accent-green);
-            line-height: 1;
-            text-shadow: 0 0 8px rgba(0,255,65,0.4);
-        }
-
-        .clock-label {
-            font-size: 0.5rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-        }
-
-        /* TOP CONTROLS */
-        .top-controls {
-            display: flex;
-            gap: 8px;
-        }
-
+        .top-controls { display: flex; gap: 8px; }
         .btn-control {
             background: linear-gradient(180deg, #2d333b 0%, #161b22 100%);
             color: var(--accent-blue);
@@ -158,18 +122,8 @@
             box-shadow: 0 3px 0 #0b0e14;
             transition: all 0.1s ease;
         }
-
-        .btn-control:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #0b0e14;
-        }
-
-        .btn-grid-active {
-            background: #58a6ff;
-            color: #000;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-        }
-
+        .btn-control:active { transform: translateY(2px); box-shadow: 0 1px 0 #0b0e14; }
+        .btn-grid-active { background: #58a6ff; color: #000; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
         .btn-off { color: var(--accent-red); border-color: #6e2a2a; }
 
         /* --- STATION GRID --- */
@@ -198,227 +152,84 @@
             animation: card-pulse 1s infinite alternate;
         }
 
-        @keyframes card-pulse {
-            from { box-shadow: 0 0 5px rgba(255,68,68,0.2); }
-            to { box-shadow: 0 0 15px rgba(255,68,68,0.4); }
-        }
-
+        @keyframes card-pulse { from { box-shadow: 0 0 5px rgba(255,68,68,0.2); } to { box-shadow: 0 0 15px rgba(255,68,68,0.4); } }
         .st-name { font-weight: 700; font-size: 0.75rem; color: #fff; display: block; margin-bottom: 4px; }
         .st-date { font-size: 0.6rem; color: var(--text-dim); display: block; margin-bottom: 6px; }
-        .st-data-row {
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid var(--border-color);
-            padding-top: 6px;
-            font-size: 0.7rem;
-            font-family: 'Orbitron';
-        }
-
+        .st-data-row { display: flex; justify-content: space-around; border-top: 1px solid var(--border-color); padding-top: 6px; font-size: 0.7rem; font-family: 'Orbitron'; }
         .temp-safe { color: var(--accent-green); }
         .temp-warn { color: var(--accent-red); font-weight: 900; }
 
         /* --- ROSTER SECTION --- */
-        .roster-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 1024px) {
-            .roster-section { grid-template-columns: 1fr; }
-        }
-
+        .roster-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
+        @media (max-width: 1024px) { .roster-section { grid-template-columns: 1fr; } }
         .roster-container { display: flex; flex-direction: column; gap: 8px; }
-
-        .section-title {
-            background: #1c2128;
-            border: 1px solid var(--accent-orange);
-            color: var(--accent-orange);
-            text-align: center;
-            font-weight: 800;
-            font-size: 0.85rem;
-            padding: 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        .shift-cards { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
-            gap: 10px; 
-        }
-
-        .shift-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
+        .section-title { background: #1c2128; border: 1px solid var(--accent-orange); color: var(--accent-orange); text-align: center; font-weight: 800; font-size: 0.85rem; padding: 6px; border-radius: 4px; text-transform: uppercase; }
+        .shift-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+        .shift-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; min-height: 120px; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .shift-active { border: 1px solid var(--accent-green); box-shadow: 0 0 10px rgba(0,255,65,0.1); }
-
-        .shift-label {
-            color: var(--accent-blue);
-            font-weight: 700;
-            font-size: 0.8rem;
-            text-align: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-        }
-
-        .staff-entry {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            margin-bottom: 6px;
-            color: #aff5b4;
-        }
-
-        .duty-badge {
-            font-size: 0.6rem;
-            padding: 1px 4px;
-            border: 1px solid;
-            border-radius: 3px;
-        }
-
+        .shift-label { color: var(--accent-blue); font-weight: 700; font-size: 0.8rem; text-align: center; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+        .staff-entry { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 6px; color: #aff5b4; }
+        .duty-badge { font-size: 0.6rem; padding: 1px 4px; border: 1px solid; border-radius: 3px; }
         .badge-tpc-m { color: #00d4ff; border-color: #00d4ff; }
         .badge-tpc-e { color: #ff9100; border-color: #ff9100; }
         .badge-tpc-n { color: var(--accent-purple); border-color: var(--accent-purple); }
 
         /* --- BOTTOM LAYOUT --- */
-        .bottom-layout {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 12px;
+        .bottom-layout { display: grid; grid-template-columns: 1fr 300px; gap: 12px; flex-grow: 1; overflow: hidden; margin-bottom: 55px; min-height: 0; }
+        @media (max-width: 1024px) { .bottom-layout { grid-template-columns: 1fr; overflow: visible; } }
+        
+        .maint-wrap { 
+            background: var(--panel-glass); 
+            border: 1px dashed var(--accent-orange); 
+            border-radius: 8px; 
+            padding: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            max-height: 100%; /* Ensure it respects grid constraints */
+        }
+        
+        .maint-title { 
+            color: var(--accent-orange); 
+            font-weight: 800; 
+            font-size: 0.8rem; 
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            flex-shrink: 0;
+        }
+        
+        .maint-list { 
+            overflow-y: auto; 
             flex-grow: 1;
-            overflow: hidden;
-            margin-bottom: 55px;
+            padding-right: 5px; /* Space for scrollbar */
         }
-
-        @media (max-width: 1024px) {
-            .bottom-layout { grid-template-columns: 1fr; overflow: visible; }
-        }
-
-        .maint-wrap {
-            background: var(--panel-glass);
-            border: 1px dashed var(--accent-orange);
-            border-radius: 8px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .maint-title {
-            color: var(--accent-orange);
-            font-weight: 800;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .maint-list { overflow-y: auto; flex-grow: 1; }
-        .sch-item {
-            font-size: 0.95rem;
-            padding: 10px;
-            border-left: 4px solid var(--accent-orange);
-            background: rgba(255, 174, 66, 0.05);
-            margin-bottom: 8px;
-            font-weight: 600;
+        
+        .sch-item { 
+            font-size: 0.95rem; 
+            padding: 10px; 
+            border-left: 4px solid var(--accent-orange); 
+            background: rgba(255, 174, 66, 0.05); 
+            margin-bottom: 8px; 
+            font-weight: 600; 
         }
 
         .status-blocks { display: flex; flex-direction: column; gap: 8px; }
-        .ops-static-box {
-            padding: 15px;
-            background: #000;
-            border: 1px solid var(--accent-blue);
-            border-radius: 6px;
-            text-align: center;
-            font-family: 'Orbitron';
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-
+        .ops-static-box { padding: 15px; background: #000; border: 1px solid var(--accent-blue); border-radius: 6px; text-align: center; font-family: 'Orbitron'; font-size: 0.9rem; font-weight: 700; }
         .ops-static-box.alert { border-color: var(--accent-red); color: var(--accent-red); }
         .ops-static-box.ok { border-color: var(--accent-green); color: var(--accent-green); }
 
         /* --- DRIVER CARD --- */
-        .driver-overlay {
-            position: fixed;
-            bottom: 60px;
-            left: 15px;
-            background: var(--panel-bg);
-            border: 2px solid var(--accent-blue);
-            border-left-width: 8px;
-            border-left-color: var(--accent-green);
-            padding: 12px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            transition: opacity 0.5s ease, filter 0.5s ease;
-        }
-
-        .driver-card-outdated {
-            opacity: 0.4;
-            filter: grayscale(0.5);
-            border-left-color: var(--accent-red) !important;
-        }
-
+        .driver-overlay { position: fixed; bottom: 60px; left: 15px; background: var(--panel-bg); border: 2px solid var(--accent-blue); border-left-width: 8px; border-left-color: var(--accent-green); padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .driver-card-outdated { opacity: 0.4; filter: grayscale(0.5); border-left-color: var(--accent-red) !important; }
         .driver-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent-blue); object-fit: cover; cursor: pointer; }
         .driver-name { font-weight: 800; font-size: 1rem; color: #fff; }
         .driver-phone { color: var(--accent-green); font-weight: 700; font-family: 'Orbitron'; font-size: 0.9rem; margin-top: 4px; }
-        
-        .driver-update-badge {
-            font-size: 0.6rem;
-            margin-top: 6px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-            font-family: 'Inter';
-            font-weight: 600;
-            border: 1px solid;
-        }
-
-        .outdated-warning {
-            position: absolute;
-            top: -12px;
-            right: 10px;
-            background: var(--accent-red);
-            color: #fff;
-            font-size: 0.6rem;
-            font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 10px;
-            animation: warning-blink 0.8s infinite;
-            display: none;
-        }
-
-        @keyframes warning-blink {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .update-active { 
-            background: rgba(0, 255, 65, 0.1); 
-            color: var(--accent-green); 
-            border-color: rgba(0, 255, 65, 0.3); 
-        }
-        .update-outdated { 
-            background: rgba(255, 68, 68, 0.1); 
-            color: var(--accent-red); 
-            border-color: rgba(255, 68, 68, 0.3);
-        }
+        .driver-update-badge { font-size: 0.6rem; margin-top: 6px; padding: 2px 6px; border-radius: 4px; display: inline-block; font-family: 'Inter'; font-weight: 600; border: 1px solid; }
+        .outdated-warning { position: absolute; top: -12px; right: 10px; background: var(--accent-red); color: #fff; font-size: 0.6rem; font-weight: 900; padding: 2px 8px; border-radius: 10px; animation: warning-blink 0.8s infinite; display: none; }
+        @keyframes warning-blink { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        .update-active { background: rgba(0, 255, 65, 0.1); color: var(--accent-green); border-color: rgba(0, 255, 65, 0.3); }
+        .update-outdated { background: rgba(255, 68, 68, 0.1); color: var(--accent-red); border-color: rgba(255, 68, 68, 0.3); }
 
         /* --- TICKER --- */
         .ticker-bar {
@@ -434,43 +245,53 @@
             z-index: 1001;
         }
 
-        .ticker-head { background: var(--accent-blue); color: #000; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.75rem; }
-        .ticker-body { flex-grow: 1; overflow: hidden; position: relative; }
-        .ticker-scroll { 
-            position: absolute;
-            white-space: nowrap; 
-            animation: ticker-move 30s linear infinite; 
-            font-size: 1rem; 
-            font-weight: 700; 
-            color: var(--accent-green);
-            line-height: 43px;
+        .ticker-head { 
+            background: var(--accent-blue); 
+            color: #000; 
+            padding: 0 15px; 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            font-weight: 900; 
+            font-size: 0.7rem; 
+            white-space: nowrap;
+            font-family: 'Orbitron';
         }
 
-        @keyframes ticker-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        /* --- STANDBY --- */
-        #blackout {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            z-index: 9999;
-            display: none;
+        .ticker-body { 
+            flex-grow: 1; 
+            overflow: hidden; 
+            position: relative; 
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .analog-clock {
-            width: 300px; height: 300px;
-            border: 10px solid #222;
-            border-radius: 50%;
-            position: relative;
+        .ticker-scroll { 
+            white-space: nowrap; 
+            font-size: 1rem; 
+            font-weight: 700; 
+            color: var(--accent-green);
+            font-family: 'Inter';
+            letter-spacing: 1px;
+            padding: 0 20px;
         }
 
+        .scrolling-active {
+            position: absolute;
+            animation: ticker-move 30s linear infinite;
+        }
+
+        @keyframes ticker-move { 0% { transform: translateX(50%); } 100% { transform: translateX(-100%); } }
+
+        /* --- STANDBY --- */
+        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; }
+        .analog-clock { width: 300px; height: 300px; border: 10px solid #222; border-radius: 50%; position: relative; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 4px; }
         .h-hr { width: 6px; height: 25%; background: #fff; }
         .h-min { width: 4px; height: 35%; background: #999; }
         .h-sec { width: 2px; height: 40%; background: var(--accent-red); }
-
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -487,17 +308,14 @@
         <div class="logo-section">
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
         </div>
-        
         <div id="checklist-container" class="checklist-container" style="display: none;">
             <div id="checklist-text" class="checklist-marquee">CONNECTING TO KMRL DATA...</div>
         </div>
-
         <div id="clock-container" class="clock-container" style="display: none;">
             <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
             <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
             <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
         </div>
-
         <div class="top-controls">
             <button id="btn-grid" class="btn-control" onclick="toggleGrid(event)">GRID</button>
             <button class="btn-control" onclick="goFullscreen(event)">FS</button>
@@ -520,9 +338,7 @@
 
     <section class="bottom-layout">
         <div class="maint-wrap">
-            <div class="maint-title">
-                <span id="maint-header-text">MAINTENANCE SCHEDULE</span>
-            </div>
+            <div class="maint-title"><span id="maint-header-text">MAINTENANCE SCHEDULE</span></div>
             <div id="maint-list" class="maint-list"></div>
         </div>
         <div class="status-blocks">
@@ -544,9 +360,9 @@
     </div>
 
     <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">STATUS</div>
-        <div class="ticker-body">
-            <div id="ticker-text" class="ticker-scroll">FETCHING SYSTEM STATUS...</div>
+        <div id="ticker-head" class="ticker-head">TECHTICKER</div>
+        <div id="ticker-body" class="ticker-body">
+            <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
         </div>
     </footer>
 
@@ -558,19 +374,13 @@
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
 
         function initiateCall(e) {
-            if(e) e.stopPropagation();
             const phone = document.getElementById('driver-phone').innerText;
             if (phone && phone !== "---") window.location.href = `tel:${phone.replace(/\D/g, '')}`;
         }
 
         function toggleGrid(e) {
-            if(e) e.stopPropagation();
-            const grid = document.getElementById('station-grid');
-            const chk = document.getElementById('checklist-container');
-            const clk = document.getElementById('clock-container');
-            const btn = document.getElementById('btn-grid');
+            const grid = document.getElementById('station-grid'), chk = document.getElementById('checklist-container'), clk = document.getElementById('clock-container'), btn = document.getElementById('btn-grid');
             const isHidden = grid.style.display === 'none';
-            
             grid.style.display = isHidden ? 'grid' : 'none';
             chk.style.display = isHidden ? 'flex' : 'none';
             clk.style.display = isHidden ? 'flex' : 'none';
@@ -581,12 +391,9 @@
             if(!raw) return '';
             return raw.split('\n').map(line => {
                 if(line.includes('|')) {
-                    const [name, duty] = line.split('|');
-                    const dCode = duty.trim().toUpperCase();
+                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
                     let bCls = '';
-                    if(dCode.includes('M TPC')) bCls = 'badge-tpc-m';
-                    else if(dCode.includes('E TPC')) bCls = 'badge-tpc-e';
-                    else if(dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    if(dCode.includes('M TPC')) bCls = 'badge-tpc-m'; else if(dCode.includes('E TPC')) bCls = 'badge-tpc-e'; else if(dCode.includes('N TPC')) bCls = 'badge-tpc-n';
                     return `<div class="staff-entry"><span>${name}</span><span class="duty-badge ${bCls}">${duty}</span></div>`;
                 }
                 return `<div class="staff-entry"><span>${line}</span></div>`;
@@ -594,54 +401,37 @@
         }
 
         function evaluateUpdateBadge(rawTimestamp) {
-            const card = document.getElementById('driver-card');
-            const badge = document.getElementById('driver-update-badge');
-            const warning = document.getElementById('outdated-warning');
-            
-            if (!rawTimestamp || rawTimestamp === "---") {
-                badge.innerText = "UPDATE: N/A";
-                badge.className = "driver-update-badge update-outdated";
-                card.classList.add('driver-card-outdated');
-                warning.style.display = 'block';
-                return;
-            }
-
+            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge'), warning = document.getElementById('outdated-warning');
+            if (!rawTimestamp || rawTimestamp === "---") { badge.innerText = "UPDATE: N/A"; badge.className = "driver-update-badge update-outdated"; card.classList.add('driver-card-outdated'); warning.style.display = 'block'; return; }
             try {
-                const updateTime = new Date(rawTimestamp);
-                const now = new Date();
-                
-                const formatted = updateTime.toLocaleString('en-IN', { 
-                    day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false 
-                });
-                badge.innerText = `LAST UPDATE: ${formatted}`;
-
+                const updateTime = new Date(rawTimestamp), now = new Date();
+                badge.innerText = `LAST UPDATE: ${updateTime.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false })}`;
                 const currentHour = now.getHours();
                 let shiftStart = new Date(now);
-                
-                if (currentHour >= 8 && currentHour < 20) {
-                    // Day Shift: 08:00 Today
-                    shiftStart.setHours(8, 0, 0, 0);
-                } else {
-                    // Night Shift: 20:00 (Today if after 8pm, Yesterday if before 8am)
-                    if (currentHour < 8) shiftStart.setDate(now.getDate() - 1);
-                    shiftStart.setHours(20, 0, 0, 0);
-                }
+                if (currentHour >= 8 && currentHour < 20) shiftStart.setHours(8, 0, 0, 0);
+                else { if (currentHour < 8) shiftStart.setDate(now.getDate() - 1); shiftStart.setHours(20, 0, 0, 0); }
+                if (updateTime >= shiftStart) { badge.className = "driver-update-badge update-active"; card.classList.remove('driver-card-outdated'); warning.style.display = 'none'; }
+                else { badge.className = "driver-update-badge update-outdated"; card.classList.add('driver-card-outdated'); warning.style.display = 'block'; }
+            } catch (e) { badge.innerText = "UPDATE: ERR"; }
+        }
 
-                if (updateTime >= shiftStart) {
-                    badge.className = "driver-update-badge update-active";
-                    card.classList.remove('driver-card-outdated');
-                    warning.style.display = 'none';
+        function updateTickerBar(badge, names) {
+            const head = document.getElementById('ticker-head');
+            const text = document.getElementById('ticker-text');
+            const body = document.getElementById('ticker-body');
+            head.innerText = badge.toUpperCase();
+            text.innerText = names;
+            requestAnimationFrame(() => {
+                const textWidth = text.scrollWidth;
+                const containerWidth = body.offsetWidth;
+                if (textWidth > containerWidth - 40) {
+                    text.classList.add('scrolling-active');
+                    body.style.justifyContent = 'flex-start';
                 } else {
-                    badge.className = "driver-update-badge update-outdated";
-                    card.classList.add('driver-card-outdated');
-                    warning.style.display = 'block';
+                    text.classList.remove('scrolling-active');
+                    body.style.justifyContent = 'center';
                 }
-            } catch (e) {
-                badge.innerText = "UPDATE: ERR";
-                badge.className = "driver-update-badge update-outdated";
-                card.classList.add('driver-card-outdated');
-                warning.style.display = 'block';
-            }
+            });
         }
 
         window.draw = function(data) {
@@ -649,9 +439,16 @@
             let stHtml = '', tdHtml = '', tmHtml = '';
             
             data.forEach(item => {
-                const unit = (item.Unit || "").trim();
-                const param = (item.Parameter || "").trim();
-                const val = (item.Value || "").trim();
+                const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
+
+                if (param === "TechTicker" || unit === "TechTicker") {
+                    if (val.includes('|')) {
+                        const pts = val.split('|');
+                        updateTickerBar(pts[0], pts[1]);
+                    } else {
+                        updateTickerBar("TECHNICIANS", val);
+                    }
+                }
 
                 if (param === "ChecklistStatus") {
                     const el = document.getElementById('checklist-text');
@@ -660,28 +457,16 @@
                 }
 
                 if (unit === "StationTemp") {
-                    const parts = val.split("|");
-                    const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
-                    const isAlarm = amb > 34 || trfo > 80;
-                    stHtml += `
-                        <div class="station-card ${isAlarm ? 'card-alarm' : ''}">
-                            <span class="st-name">${param}</span>
-                            <span class="st-date">${parts[2] || '--:--'}</span>
-                            <div class="st-data-row">
-                                <span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span>
-                                <span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span>
-                            </div>
-                        </div>`;
+                    const parts = val.split("|"), amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0, isAlarm = amb > 34 || trfo > 80;
+                    stHtml += `<div class="station-card ${isAlarm ? 'card-alarm' : ''}"><span class="st-name">${param}</span><span class="st-date">${parts[2] || '--:--'}</span><div class="st-data-row"><span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span><span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span></div></div>`;
                 }
 
                 if (unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${param}</span>${parseStaff(val)}</div>`;
                 if (unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${param}</span>${parseStaff(val)}</div>`;
                 
                 if (unit === "OpsBlock") {
-                    const [m, d] = val.split('|');
-                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
-                    mEl.innerText = `MAINLINE: ${m || '---'}`;
-                    dEl.innerText = `DEPOT: ${d || '---'}`;
+                    const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---', mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
+                    mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
                     mEl.className = `ops-static-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                     dEl.className = `ops-static-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                 }
@@ -691,28 +476,20 @@
                     document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
 
-                if (unit === "TechTicker") {
-                    const [h, b] = val.split('|');
-                    document.getElementById('ticker-head').innerText = h || "STATUS";
-                    document.getElementById('ticker-text').innerText = b || "---";
-                }
-
                 if (unit === "DriverPopup" || unit === "Technician") {
-                    const [n, p, s, i] = val.split('|');
-                    document.getElementById('driver-name').innerText = n || "---";
-                    document.getElementById('driver-phone').innerText = p || "---";
-                    document.getElementById('driver-shift').innerText = `SHIFT: ${s || '---'}`;
-                    if(i) document.getElementById('driver-img').src = i;
+                    const parts = val.split('|');
+                    document.getElementById('driver-name').innerText = parts[0] || "---";
+                    document.getElementById('driver-phone').innerText = parts[1] || "---";
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
+                    if(parts[3]) document.getElementById('driver-img').src = parts[3];
                 }
 
-                if (unit === "sheetab" && param === "sheetab_R2C1") {
-                    evaluateUpdateBadge(val);
-                }
+                if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
             });
 
-            if(stHtml) document.getElementById('station-grid').innerHTML = stHtml;
-            if(tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
-            if(tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+            if (stHtml) document.getElementById('station-grid').innerHTML = stHtml;
+            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
+            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
         };
 
         function updateClocks() {
@@ -721,9 +498,9 @@
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            document.getElementById('ana-s').style.transform = `rotate(${s * 6}deg)`;
-            document.getElementById('ana-m').style.transform = `rotate(${m * 6}deg)`;
-            document.getElementById('ana-h').style.transform = `rotate(${h * 30 + m * 0.5}deg)`;
+            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
         }
         setInterval(updateClocks, 1000);
 
@@ -738,6 +515,13 @@
         setInterval(refreshData, 15000);
         refreshData();
         updateClocks();
+        
+        window.onresize = () => {
+            const text = document.getElementById('ticker-text');
+            const val = text.innerText;
+            const head = document.getElementById('ticker-head').innerText;
+            updateTickerBar(head, val);
+        };
     </script>
 </body>
 </html>
