@@ -665,7 +665,7 @@
             <div id="checklist-text" class="checklist-marquee">SYSTEM INITIALIZING... CONNECTING TO DATA SOURCE...</div>
         </div>
 
-        <div class="clock-container">
+        <div id="clock-container" class="clock-container">
             <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">Hours</div></div>
             <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">Min</div></div>
             <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">Sec</div></div>
@@ -732,20 +732,23 @@
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
 
-        // TOGGLE STATION GRID AND CHECKLIST VISIBILITY
+        // TOGGLE STATION GRID, CHECKLIST, AND CLOCK VISIBILITY
         function toggleGrid(e) {
             if(e) e.stopPropagation();
             const grid = document.getElementById('station-grid');
             const checklist = document.getElementById('checklist-container');
+            const clock = document.getElementById('clock-container');
             const btn = document.getElementById('btn-grid');
             
             if (grid.style.display === 'none') {
                 grid.style.display = 'grid';
                 checklist.style.display = 'flex';
+                clock.style.display = 'flex';
                 btn.classList.remove('btn-grid-active');
             } else {
                 grid.style.display = 'none';
                 checklist.style.display = 'none';
+                clock.style.display = 'none';
                 btn.classList.add('btn-grid-active');
             }
         }
