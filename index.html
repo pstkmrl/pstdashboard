@@ -5,45 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KMRL SUBSTATION DASHBOARD</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;700&display=swap');
 
         :root {
             --bg-color: #0d1117;
             --panel-bg: #161b22;
+            --panel-glass: rgba(22, 27, 34, 0.8);
             --accent-blue: #58a6ff;
             --accent-green: #00ff41;
             --accent-red: #ff4444;
             --accent-orange: #ffae42;
-            --accent-purple: #df00ff; /* Neon Purple */
+            --accent-purple: #df00ff;
             --border-color: #30363d;
             --text-main: #e6edf3;
             --text-dim: #8b949e;
             --ash-bg: #21262d;
             --ash-text: #8b949e;
+            --shadow-neon: 0 0 15px rgba(88, 166, 255, 0.3);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background: var(--bg-color);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 8px; /* Standard Page Padding */
+            padding: 10px;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Default for TV/Desktop */
+            overflow: hidden;
             user-select: none;
         }
 
-        /* Responsive height for mobile */
+        /* Responsive for mobile */
         @media (max-width: 1024px) {
             body {
                 height: auto;
                 overflow-y: auto;
-                overflow-x: hidden;
-                padding-bottom: 120px; /* Space for fixed ticker/driver */
+                padding-bottom: 140px;
             }
         }
 
@@ -51,247 +52,134 @@
         .top-bar {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             background: var(--panel-bg);
             padding: 0 20px;
             border-bottom: 2px solid var(--accent-blue);
-            height: 80px;
-            margin-bottom: 8px;
+            height: 70px;
+            margin-bottom: 10px;
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             z-index: 100;
             flex-shrink: 0;
+            border-radius: 8px;
         }
 
         @media (max-width: 768px) {
             .top-bar {
                 flex-direction: column;
                 height: auto;
-                padding: 15px 10px;
-                gap: 15px;
-            }
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 50; /* Above checklist */
-            position: absolute;
-            left: 0;
-            padding-left: 20px;
-            height: 100%;
-            background: var(--panel-bg);
-        }
-
-        @media (max-width: 768px) {
-            .logo-section {
-                position: static;
-                height: auto;
-                padding-left: 0;
+                padding: 10px;
+                gap: 10px;
             }
         }
 
         .logo-section img {
-            height: 50px;
-            filter: drop-shadow(0 0 5px rgba(88, 166, 255, 0.4));
+            height: 45px;
+            filter: drop-shadow(0 0 8px rgba(88, 166, 255, 0.4));
         }
 
         /* SCROLLING CHECKLIST */
         .checklist-container {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            flex-grow: 1;
+            margin: 0 40px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            height: 40px;
             display: flex;
             align-items: center;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 10;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            position: relative;
         }
 
         .checklist-marquee {
             white-space: nowrap;
             font-family: 'Orbitron';
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--accent-red);
-            animation: scroll-text 30s linear infinite;
+            position: absolute;
+            animation: scroll-text 25s linear infinite;
         }
 
         @keyframes scroll-text {
-            0% { transform: translateX(100vw); }
+            0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
 
         /* CLOCK AESTHETIC */
         .clock-container {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
-            z-index: 60;
-            background: var(--panel-bg);
-            padding: 0 10px;
         }
 
         .clock-unit {
             background: #000;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            min-width: 70px;
+            border-radius: 4px;
+            padding: 4px 8px;
+            min-width: 55px;
             text-align: center;
-            position: relative;
-            box-shadow: inset 0 0 10px rgba(0,255,65,0.1);
         }
 
         .clock-val {
             font-family: 'Orbitron';
-            font-size: 2.2rem;
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--accent-green);
             line-height: 1;
-            text-shadow: 0 0 10px rgba(0,255,65,0.5);
-        }
-
-        @media (max-width: 768px) {
-            .clock-val { font-size: 1.8rem; }
-            .clock-unit { min-width: 60px; padding: 6px 10px; }
+            text-shadow: 0 0 8px rgba(0,255,65,0.4);
         }
 
         .clock-label {
-            font-size: 0.6rem;
-            color: var(--accent-blue);
+            font-size: 0.5rem;
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 2px;
         }
 
         /* TOP CONTROLS */
         .top-controls {
-            position: absolute;
-            right: 0;
-            padding-right: 20px;
-            height: 100%;
             display: flex;
-            flex-direction: row; 
-            align-items: center; 
-            justify-content: flex-end;
-            gap: 12px;
-            z-index: 50;
-            background: var(--panel-bg);
+            gap: 8px;
         }
 
-        @media (max-width: 768px) {
-            .top-controls {
-                position: static;
-                height: auto;
-                padding-right: 0;
-                justify-content: center;
-                margin-bottom: 10px;
-            }
-        }
-
-        /* 3D BUTTON STYLING */
         .btn-control {
             background: linear-gradient(180deg, #2d333b 0%, #161b22 100%);
             color: var(--accent-blue);
             border: 1px solid #444c56;
-            padding: 8px 16px;
+            padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-family: 'Orbitron';
-            font-size: 0.75rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            box-shadow: 0 4px 0 #0b0e14, 0 6px 10px rgba(0,0,0,0.5);
+            font-size: 0.7rem;
+            font-weight: 700;
+            box-shadow: 0 3px 0 #0b0e14;
             transition: all 0.1s ease;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            min-width: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-control:hover {
-            filter: brightness(1.2);
-            transform: translateY(-1px);
-            box-shadow: 0 5px 0 #0b0e14, 0 7px 12px rgba(0,0,0,0.5);
         }
 
         .btn-control:active {
-            transform: translateY(3px);
-            box-shadow: 0 1px 0 #0b0e14, 0 2px 5px rgba(0,0,0,0.5);
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #0b0e14;
         }
 
-        .btn-off {
-            color: var(--accent-red);
-            border-color: #6e2a2a;
-            background: linear-gradient(180deg, #442a2a 0%, #2a1616 100%);
-            box-shadow: 0 4px 0 #1a0a0a, 0 6px 10px rgba(0,0,0,0.5);
-        }
-
-        /* Pressed state for the Grid Toggle */
         .btn-grid-active {
-            background: linear-gradient(180deg, #1a2027 0%, #0d1117 100%);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-            transform: translateY(3px) !important;
-            color: var(--text-dim);
-            border-color: #21262d;
+            background: #58a6ff;
+            color: #000;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* --- STANDBY / BLACKOUT --- */
-        #blackout {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #000;
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .analog-clock {
-            width: 60vh;
-            height: 60vh;
-            border: 15px solid #1a1a1a;
-            border-radius: 50%;
-            position: relative;
-            background: radial-gradient(circle, #111, #000);
-            box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 30px rgba(255,255,255,0.05);
-        }
-
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: bottom;
-            border-radius: 5px;
-        }
-
-        .h-hr { width: 8px; height: 25%; background: #fff; transform: translateX(-50%); }
-        .h-min { width: 6px; height: 35%; background: #bbb; transform: translateX(-50%); }
-        .h-sec { width: 2px; height: 42%; background: var(--accent-red); transform: translateX(-50%); }
+        .btn-off { color: var(--accent-red); border-color: #6e2a2a; }
 
         /* --- STATION GRID --- */
         .station-grid {
             display: grid;
-            grid-template-columns: repeat(13, 1fr); 
-            gap: 6px;
-            margin-bottom: 8px;
-            padding: 5px;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
             flex-shrink: 0;
-        }
-
-        @media (max-width: 1100px) {
-            .station-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        @media (max-width: 600px) {
-            .station-grid { grid-template-columns: repeat(2, 1fr); }
+            transition: opacity 0.3s ease;
         }
 
         .station-card {
@@ -299,330 +187,238 @@
             border: 1px solid var(--border-color);
             border-top: 3px solid var(--accent-blue);
             border-radius: 6px;
-            padding: 4px 2px;
+            padding: 8px 4px;
             text-align: center;
-            transition: border-top-color 0.3s;
             position: relative;
-            z-index: 1;
         }
 
-        .station-card.card-alarm { border-top: 3px solid var(--accent-red); }
-
-        .card-alarm .st-name {
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 900;
-            text-shadow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red);
-            animation: pulse-glow 0.8s infinite alternate;
-            transform: scale(1.1);
-            display: inline-block;
-            margin-bottom: 3px;
+        .station-card.card-alarm { 
+            border-top-color: var(--accent-red); 
+            background: rgba(255, 68, 68, 0.05);
+            animation: card-pulse 1s infinite alternate;
         }
 
-        @keyframes pulse-glow {
-            from { text-shadow: 0 0 5px var(--accent-red); transform: scale(1.05); }
-            to { text-shadow: 0 0 15px var(--accent-red), 0 0 20px var(--accent-red); transform: scale(1.1); }
+        @keyframes card-pulse {
+            from { box-shadow: 0 0 5px rgba(255,68,68,0.2); }
+            to { box-shadow: 0 0 15px rgba(255,68,68,0.4); }
         }
 
-        .st-name { 
-            font-weight: 900; 
-            font-size: 0.72rem; 
-            color: #ffffff; 
-            display: block; 
-            margin-bottom: 2px; 
-            overflow: hidden; 
-            text-overflow: ellipsis;
-            white-space: nowrap; 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        .st-date { font-size: 0.55rem; color: var(--accent-blue); display: block; margin-bottom: 4px; }
+        .st-name { font-weight: 700; font-size: 0.75rem; color: #fff; display: block; margin-bottom: 4px; }
+        .st-date { font-size: 0.6rem; color: var(--text-dim); display: block; margin-bottom: 6px; }
         .st-data-row {
             display: flex;
             justify-content: space-around;
             border-top: 1px solid var(--border-color);
-            padding-top: 4px;
-            font-size: 0.68rem;
-            font-weight: 700;
+            padding-top: 6px;
+            font-size: 0.7rem;
+            font-family: 'Orbitron';
         }
 
         .temp-safe { color: var(--accent-green); }
-        .temp-warn { color: var(--accent-red); text-shadow: 0 0 5px rgba(255,68,68,0.5); font-weight: 900; }
+        .temp-warn { color: var(--accent-red); font-weight: 900; }
 
         /* --- ROSTER SECTION --- */
         .roster-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            flex-grow: 0;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         @media (max-width: 1024px) {
             .roster-section { grid-template-columns: 1fr; }
         }
 
-        .roster-container { display: flex; flex-direction: column; gap: 6px; }
+        .roster-container { display: flex; flex-direction: column; gap: 8px; }
 
         .section-title {
             background: #1c2128;
             border: 1px solid var(--accent-orange);
             color: var(--accent-orange);
             text-align: center;
-            font-weight: 900;
-            font-size: 0.9rem;
-            padding: 5px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 6px;
             border-radius: 4px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .shift-cards { 
             display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 8px; 
-            align-items: stretch;
-        }
-
-        @media (max-width: 600px) {
-            .shift-cards { grid-template-columns: repeat(2, 1fr); }
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 10px; 
         }
 
         .shift-card {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px 8px;
-            min-height: 145px;
-            height: auto;
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
-            /* Added subtle neon effect towards inside */
-            box-shadow: inset 0 0 10px rgba(88, 166, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
-        .shift-active {
-            border: 2px solid var(--accent-green);
-            /* Enhanced active neon effect towards inside */
-            box-shadow: 0 0 10px rgba(0,255,65,0.2), inset 0 0 15px rgba(0,255,65,0.25);
-        }
+        .shift-active { border: 1px solid var(--accent-green); box-shadow: 0 0 10px rgba(0,255,65,0.1); }
 
         .shift-label {
             color: var(--accent-blue);
-            font-weight: 900;
-            font-size: 0.75rem;
-            display: block;
+            font-weight: 700;
+            font-size: 0.8rem;
             text-align: center;
-            border-bottom: 1px solid #333;
-            margin-bottom: 8px;
-            padding-bottom: 4px;
-            flex-shrink: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
         }
 
         .staff-entry {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             font-size: 0.75rem;
-            color: #aff5b4;
             margin-bottom: 6px;
-            line-height: 1.2;
-            word-break: break-word;
-        }
-
-        .arrow-box {
-            color: #ffffff;
-            font-weight: 900;
-            font-size: 1rem;
-            margin: 0 5px;
-            display: inline-block;
-            animation: arrow-slide 1.2s infinite ease-in-out;
-            flex-shrink: 0;
-        }
-
-        @keyframes arrow-slide {
-            0%, 100% { transform: translateX(0px); opacity: 0.4; }
-            50% { transform: translateX(-5px); opacity: 1; }
+            color: #aff5b4;
         }
 
         .duty-badge {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 1px 4px;
             border: 1px solid;
             border-radius: 3px;
-            min-width: 42px;
-            text-align: center;
-            flex-shrink: 0;
         }
 
-        .badge-tpc-m { color: #00d4ff; border-color: #00d4ff; box-shadow: 0 0 5px #00d4ff; }
-        .badge-tpc-e { color: #ff9100; border-color: #ff9100; box-shadow: 0 0 5px #ff9100; }
-        .badge-tpc-n { color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+        .badge-tpc-m { color: #00d4ff; border-color: #00d4ff; }
+        .badge-tpc-e { color: #ff9100; border-color: #ff9100; }
+        .badge-tpc-n { color: var(--accent-purple); border-color: var(--accent-purple); }
 
-        /* --- MAINTENANCE & BLOCKS --- */
+        /* --- BOTTOM LAYOUT --- */
         .bottom-layout {
             display: grid;
-            grid-template-columns: 1fr 350px;
+            grid-template-columns: 1fr 300px;
             gap: 12px;
             flex-grow: 1;
-            min-height: 0;
-            margin-bottom: 50px;
-            align-items: start;
+            overflow: hidden;
+            margin-bottom: 55px;
         }
 
         @media (max-width: 1024px) {
-            .bottom-layout { grid-template-columns: 1fr; margin-bottom: 150px; }
+            .bottom-layout { grid-template-columns: 1fr; overflow: visible; }
         }
 
         .maint-wrap {
-            background: rgba(22, 27, 34, 0.6);
+            background: var(--panel-glass);
             border: 1px dashed var(--accent-orange);
             border-radius: 8px;
-            padding: 6px 10px;
-            min-height: 100px;
-            height: auto; 
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .maint-title {
             color: var(--accent-orange);
-            font-weight: 900;
-            border-bottom: 1px solid #444;
+            font-weight: 800;
+            font-size: 0.8rem;
             margin-bottom: 10px;
-            padding-bottom: 5px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            z-index: 10;
-            background: var(--panel-bg);
-            flex-shrink: 0;
+            gap: 8px;
         }
 
-        .gear-icon {
-            width: 18px;
-            height: 18px;
-            fill: var(--accent-orange);
-            animation: gear-rotate 4s linear infinite;
-        }
-
-        @keyframes gear-rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .maint-scroll-viewport {
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        #maint-list {
-            width: 100%;
-        }
-
+        .maint-list { overflow-y: auto; flex-grow: 1; }
         .sch-item {
-            font-size: 1.1rem;
-            padding: 8px 12px;
+            font-size: 0.95rem;
+            padding: 10px;
             border-left: 4px solid var(--accent-orange);
-            background: rgba(255, 174, 66, 0.08);
-            margin-bottom: 10px;
-            font-weight: 700;
-            line-height: 1.5;
-            color: var(--text-main);
+            background: rgba(255, 174, 66, 0.05);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
-        .status-blocks { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-
+        .status-blocks { display: flex; flex-direction: column; gap: 8px; }
         .ops-static-box {
-            width: 100%;
-            height: 45px;
-            background: var(--panel-bg);
-            border: 2px solid var(--accent-blue);
+            padding: 15px;
+            background: #000;
+            border: 1px solid var(--accent-blue);
             border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
             font-family: 'Orbitron';
-            font-weight: 900;
             font-size: 0.9rem;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            font-weight: 700;
         }
 
-        .ops-static-box.alert { border-color: var(--accent-red); color: var(--accent-red); text-shadow: 0 0 5px var(--accent-red); }
-        .ops-static-box.ok { border-color: var(--accent-green); color: var(--accent-green); text-shadow: 0 0 5px var(--accent-green); }
+        .ops-static-box.alert { border-color: var(--accent-red); color: var(--accent-red); }
+        .ops-static-box.ok { border-color: var(--accent-green); color: var(--accent-green); }
 
         /* --- DRIVER CARD --- */
         .driver-overlay {
             position: fixed;
-            bottom: 53px; 
-            left: 8px;  
+            bottom: 60px;
+            left: 15px;
             background: var(--panel-bg);
             border: 2px solid var(--accent-blue);
-            border-left: 6px solid var(--accent-green);
-            padding: 10px;
+            border-left-width: 8px;
+            border-left-color: var(--accent-green);
+            padding: 12px;
             border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            transition: opacity 0.5s ease, filter 0.5s ease;
         }
 
-        @media (max-width: 480px) {
-            .driver-overlay { gap: 8px; padding: 6px; bottom: 50px; }
-            .driver-img { width: 45px; height: 45px; }
+        .driver-card-outdated {
+            opacity: 0.4;
+            filter: grayscale(0.5);
+            border-left-color: var(--accent-red) !important;
         }
 
-        .driver-overlay.outdated {
-            background: var(--ash-bg);
-            border-color: #484f58;
-            border-left-color: var(--ash-text);
-            box-shadow: none;
+        .driver-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent-blue); object-fit: cover; cursor: pointer; }
+        .driver-name { font-weight: 800; font-size: 1rem; color: #fff; }
+        .driver-phone { color: var(--accent-green); font-weight: 700; font-family: 'Orbitron'; font-size: 0.9rem; margin-top: 4px; }
+        
+        .driver-update-badge {
+            font-size: 0.6rem;
+            margin-top: 6px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            font-family: 'Inter';
+            font-weight: 600;
+            border: 1px solid;
         }
 
-        .driver-img {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-blue);
-            object-fit: cover;
-            transition: all 0.5s ease;
-            cursor: pointer; /* Added pointer cursor */
-        }
-
-        .outdated .driver-img { border-color: var(--ash-text); filter: grayscale(1); opacity: 0.5; }
-
-        .driver-badge {
-            background: var(--accent-orange);
-            color: black;
+        .outdated-warning {
+            position: absolute;
+            top: -12px;
+            right: 10px;
+            background: var(--accent-red);
+            color: #fff;
             font-size: 0.6rem;
             font-weight: 900;
-            padding: 1px 5px;
-            border-radius: 3px;
-            display: inline-block;
-            transition: all 0.5s ease;
+            padding: 2px 8px;
+            border-radius: 10px;
+            animation: warning-blink 0.8s infinite;
+            display: none;
         }
 
-        .outdated .driver-badge { background: #484f58; color: var(--ash-text); }
-        .outdated #driver-name { color: var(--ash-text) !important; }
-        
-        #driver-phone { 
-            color: var(--accent-green); 
-            font-family: 'Inter', sans-serif; 
-            font-size: 0.95rem; 
-            font-weight: 700; 
-            letter-spacing: 0.5px;
-            margin-top: 2px;
+        @keyframes warning-blink {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
         }
-        
-        .outdated #driver-phone { color: #6e7681 !important; }
+
+        .update-active { 
+            background: rgba(0, 255, 65, 0.1); 
+            color: var(--accent-green); 
+            border-color: rgba(0, 255, 65, 0.3); 
+        }
+        .update-outdated { 
+            background: rgba(255, 68, 68, 0.1); 
+            color: var(--accent-red); 
+            border-color: rgba(255, 68, 68, 0.3);
+        }
 
         /* --- TICKER --- */
         .ticker-bar {
@@ -638,11 +434,42 @@
             z-index: 1001;
         }
 
-        .ticker-head { background: var(--accent-blue); color: #000; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.8rem; }
-        .ticker-body { flex-grow: 1; overflow: hidden; }
-        .ticker-scroll { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker-move 40s linear infinite; font-size: 1.1rem; font-weight: 900; color: var(--accent-green); }
+        .ticker-head { background: var(--accent-blue); color: #000; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: 900; font-size: 0.75rem; }
+        .ticker-body { flex-grow: 1; overflow: hidden; position: relative; }
+        .ticker-scroll { 
+            position: absolute;
+            white-space: nowrap; 
+            animation: ticker-move 30s linear infinite; 
+            font-size: 1rem; 
+            font-weight: 700; 
+            color: var(--accent-green);
+            line-height: 43px;
+        }
 
-        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        @keyframes ticker-move { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        /* --- STANDBY --- */
+        #blackout {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .analog-clock {
+            width: 300px; height: 300px;
+            border: 10px solid #222;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 4px; }
+        .h-hr { width: 6px; height: 25%; background: #fff; }
+        .h-min { width: 4px; height: 35%; background: #999; }
+        .h-sec { width: 2px; height: 40%; background: var(--accent-red); }
 
     </style>
 </head>
@@ -653,10 +480,6 @@
             <div id="ana-h" class="hand h-hr"></div>
             <div id="ana-m" class="hand h-min"></div>
             <div id="ana-s" class="hand h-sec"></div>
-            <div style="position:absolute; top:10%; left:50%; transform:translateX(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">12</div>
-            <div style="position:absolute; top:50%; right:10%; transform:translateY(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">3</div>
-            <div style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">6</div>
-            <div style="position:absolute; top:50%; left:10%; transform:translateY(-50%); color:#333; font-family:'Orbitron'; font-weight:900; font-size:2rem;">9</div>
         </div>
     </div>
 
@@ -665,36 +488,32 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
         </div>
         
-        <!-- HIDDEN BY DEFAULT -->
         <div id="checklist-container" class="checklist-container" style="display: none;">
-            <div id="checklist-text" class="checklist-marquee">SYSTEM INITIALIZING... CONNECTING TO DATA SOURCE...</div>
+            <div id="checklist-text" class="checklist-marquee">CONNECTING TO KMRL DATA...</div>
         </div>
 
-        <!-- HIDDEN BY DEFAULT -->
         <div id="clock-container" class="clock-container" style="display: none;">
-            <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">Hours</div></div>
-            <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">Min</div></div>
-            <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">Sec</div></div>
+            <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
+            <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
+            <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
         </div>
 
         <div class="top-controls">
-            <!-- STARTS AS ACTIVE (PRESSED) -->
-            <button id="btn-grid" class="btn-control btn-grid-active" onclick="toggleGrid(event)">GRID</button>
+            <button id="btn-grid" class="btn-control" onclick="toggleGrid(event)">GRID</button>
             <button class="btn-control" onclick="goFullscreen(event)">FS</button>
             <button class="btn-control btn-off" onclick="manualOff(event)">OFF</button>
         </div>
     </header>
 
-    <!-- HIDDEN BY DEFAULT -->
     <main id="station-grid" class="station-grid" style="display: none;"></main>
 
     <section class="roster-section">
         <div class="roster-container">
-            <div class="section-title">Today's Deployment</div>
+            <div class="section-title">TODAY DEPLOYMENT</div>
             <div id="roster-today" class="shift-cards"></div>
         </div>
         <div class="roster-container">
-            <div class="section-title">Tomorrow's Deployment</div>
+            <div class="section-title">TOMORROW DEPLOYMENT</div>
             <div id="roster-tomorrow" class="shift-cards"></div>
         </div>
     </section>
@@ -702,34 +521,32 @@
     <section class="bottom-layout">
         <div class="maint-wrap">
             <div class="maint-title">
-                <svg class="gear-icon" viewBox="0 0 24 24">
-                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.08L14.47,2.44C14.44,2.21 14.25,2 14,2H10C9.75,2 9.56,2.21 9.53,2.44L9.14,5.08C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.04 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.92L9.53,21.56C9.56,21.79 9.75,22 10,22H14C14.25,22 14.44,21.79 14.47,21.56L14.86,18.92C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.04 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
-                </svg>
-                <span id="maint-header-text">SHIFT MAINTENANCE</span>
+                <span id="maint-header-text">MAINTENANCE SCHEDULE</span>
             </div>
-            <div class="maint-scroll-viewport">
-                <div id="maint-list"></div>
-            </div>
+            <div id="maint-list" class="maint-list"></div>
         </div>
         <div class="status-blocks">
             <div id="box-mainline" class="ops-static-box">MAINLINE: ---</div>
             <div id="box-depot" class="ops-static-box">DEPOT: ---</div>
+            <div id="refresh-indicator" style="font-size: 0.6rem; color: var(--text-dim); text-align: center; margin-top: 5px;">LAST UPDATED: ---</div>
         </div>
     </section>
 
     <div id="driver-card" class="driver-overlay">
+        <div id="outdated-warning" class="outdated-warning">OUTDATED</div>
         <img id="driver-img" src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png" class="driver-img" onclick="initiateCall(event)">
         <div>
-            <div id="driver-shift" class="driver-badge">SHIFT: ---</div>
-            <div id="driver-name" style="font-weight:900; color:white; font-size:1rem; margin:2px 0;">Loading...</div>
-            <div id="driver-phone">---</div>
+            <div id="driver-shift" style="font-size:0.6rem; background: var(--accent-orange); color: #000; padding: 1px 4px; border-radius: 3px; font-weight: 800; display: inline-block;">SHIFT: ---</div>
+            <div id="driver-name" class="driver-name">Loading...</div>
+            <div id="driver-phone" class="driver-phone">---</div>
+            <div id="driver-update-badge" class="driver-update-badge update-outdated">UPDATE: ---</div>
         </div>
     </div>
 
     <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">TECH (0)</div>
+        <div id="ticker-head" class="ticker-head">STATUS</div>
         <div class="ticker-body">
-            <div id="ticker-text" class="ticker-scroll">FETCHING LATEST SYSTEM STATUS AND STAFF DATA...</div>
+            <div id="ticker-text" class="ticker-scroll">FETCHING SYSTEM STATUS...</div>
         </div>
     </footer>
 
@@ -740,35 +557,24 @@
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
 
-        // FUNCTION TO INITIATE CALL
         function initiateCall(e) {
             if(e) e.stopPropagation();
-            const phoneText = document.getElementById('driver-phone').innerText;
-            if (phoneText && phoneText !== "---") {
-                const cleanPhone = phoneText.replace(/\D/g, '');
-                window.location.href = `tel:${cleanPhone}`;
-            }
+            const phone = document.getElementById('driver-phone').innerText;
+            if (phone && phone !== "---") window.location.href = `tel:${phone.replace(/\D/g, '')}`;
         }
 
-        // TOGGLE STATION GRID, CHECKLIST, AND CLOCK VISIBILITY
         function toggleGrid(e) {
             if(e) e.stopPropagation();
             const grid = document.getElementById('station-grid');
-            const checklist = document.getElementById('checklist-container');
-            const clock = document.getElementById('clock-container');
+            const chk = document.getElementById('checklist-container');
+            const clk = document.getElementById('clock-container');
             const btn = document.getElementById('btn-grid');
+            const isHidden = grid.style.display === 'none';
             
-            if (grid.style.display === 'none') {
-                grid.style.display = 'grid';
-                checklist.style.display = 'flex';
-                clock.style.display = 'flex';
-                btn.classList.remove('btn-grid-active');
-            } else {
-                grid.style.display = 'none';
-                checklist.style.display = 'none';
-                clock.style.display = 'none';
-                btn.classList.add('btn-grid-active');
-            }
+            grid.style.display = isHidden ? 'grid' : 'none';
+            chk.style.display = isHidden ? 'flex' : 'none';
+            clk.style.display = isHidden ? 'flex' : 'none';
+            btn.classList.toggle('btn-grid-active', isHidden);
         }
 
         function parseStaff(raw) {
@@ -777,19 +583,71 @@
                 if(line.includes('|')) {
                     const [name, duty] = line.split('|');
                     const dCode = duty.trim().toUpperCase();
-                    let badgeClass = '';
-                    if(dCode.includes('M TPC') || dCode === 'MTPC') badgeClass = 'badge-tpc-m';
-                    else if(dCode.includes('E TPC') || dCode === 'ETPC') badgeClass = 'badge-tpc-e';
-                    else if(dCode.includes('N TPC') || dCode === 'NTPC') badgeClass = 'badge-tpc-n';
-                    const isSpecial = (dCode.includes("TPC") || dCode.includes("2"));
-                    return `<div class="staff-entry"><span>${name}</span>${isSpecial ? '<span class="arrow-box">⟸</span>' : '<span></span>'}<span class="duty-badge ${badgeClass}">${duty}</span></div>`;
+                    let bCls = '';
+                    if(dCode.includes('M TPC')) bCls = 'badge-tpc-m';
+                    else if(dCode.includes('E TPC')) bCls = 'badge-tpc-e';
+                    else if(dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    return `<div class="staff-entry"><span>${name}</span><span class="duty-badge ${bCls}">${duty}</span></div>`;
                 }
                 return `<div class="staff-entry"><span>${line}</span></div>`;
             }).join('');
         }
 
+        function evaluateUpdateBadge(rawTimestamp) {
+            const card = document.getElementById('driver-card');
+            const badge = document.getElementById('driver-update-badge');
+            const warning = document.getElementById('outdated-warning');
+            
+            if (!rawTimestamp || rawTimestamp === "---") {
+                badge.innerText = "UPDATE: N/A";
+                badge.className = "driver-update-badge update-outdated";
+                card.classList.add('driver-card-outdated');
+                warning.style.display = 'block';
+                return;
+            }
+
+            try {
+                const updateTime = new Date(rawTimestamp);
+                const now = new Date();
+                
+                const formatted = updateTime.toLocaleString('en-IN', { 
+                    day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false 
+                });
+                badge.innerText = `LAST UPDATE: ${formatted}`;
+
+                const currentHour = now.getHours();
+                let shiftStart = new Date(now);
+                
+                if (currentHour >= 8 && currentHour < 20) {
+                    // Day Shift: 08:00 Today
+                    shiftStart.setHours(8, 0, 0, 0);
+                } else {
+                    // Night Shift: 20:00 (Today if after 8pm, Yesterday if before 8am)
+                    if (currentHour < 8) shiftStart.setDate(now.getDate() - 1);
+                    shiftStart.setHours(20, 0, 0, 0);
+                }
+
+                if (updateTime >= shiftStart) {
+                    badge.className = "driver-update-badge update-active";
+                    card.classList.remove('driver-card-outdated');
+                    warning.style.display = 'none';
+                } else {
+                    badge.className = "driver-update-badge update-outdated";
+                    card.classList.add('driver-card-outdated');
+                    warning.style.display = 'block';
+                }
+            } catch (e) {
+                badge.innerText = "UPDATE: ERR";
+                badge.className = "driver-update-badge update-outdated";
+                card.classList.add('driver-card-outdated');
+                warning.style.display = 'block';
+            }
+        }
+
         window.draw = function(data) {
+            document.getElementById('refresh-indicator').innerText = `LAST UPDATED: ${new Date().toLocaleTimeString()}`;
             let stHtml = '', tdHtml = '', tmHtml = '';
+            
             data.forEach(item => {
                 const unit = (item.Unit || "").trim();
                 const param = (item.Parameter || "").trim();
@@ -797,113 +655,77 @@
 
                 if (param === "ChecklistStatus") {
                     const el = document.getElementById('checklist-text');
-                    el.innerText = `MTRS DAILY CHECKLIST: ${val}`;
-                    el.style.color = (val.toUpperCase() === "FULLY FILLED") ? "var(--accent-green)" : "var(--accent-red)";
+                    el.innerText = `CHECKLIST STATUS: ${val}`;
+                    el.style.color = val.includes("FILLED") ? "var(--accent-green)" : "var(--accent-red)";
                 }
+
                 if (unit === "StationTemp") {
                     const parts = val.split("|");
-                    const amb = parseFloat(parts[0]) || 0;
-                    const trfo = parseFloat(parts[1]) || 0;
-                    const isAlarm = (amb > 34 || trfo > 80);
-                    stHtml += `<div class="station-card ${isAlarm ? 'card-alarm' : ''}"><span class="st-name">${item.Parameter}</span><span class="st-date">${parts[2] || '--:--'}</span><div class="st-data-row"><span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span><span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span></div></div>`;
+                    const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
+                    const isAlarm = amb > 34 || trfo > 80;
+                    stHtml += `
+                        <div class="station-card ${isAlarm ? 'card-alarm' : ''}">
+                            <span class="st-name">${param}</span>
+                            <span class="st-date">${parts[2] || '--:--'}</span>
+                            <div class="st-data-row">
+                                <span class="${amb > 34 ? 'temp-warn' : 'temp-safe'}">A:${parts[0]}°</span>
+                                <span class="${trfo > 80 ? 'temp-warn' : 'temp-safe'}">T:${parts[1]}°</span>
+                            </div>
+                        </div>`;
                 }
-                if (unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${item.Parameter}</span>${parseStaff(val)}</div>`;
-                if (unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${item.Parameter}</span>${parseStaff(val)}</div>`;
+
+                if (unit === "Staff-Today") tdHtml += `<div class="shift-card ${item.Limit === 'ACTIVE' ? 'shift-active' : ''}"><span class="shift-label">${param}</span>${parseStaff(val)}</div>`;
+                if (unit === "Staff-Tomorrow") tmHtml += `<div class="shift-card"><span class="shift-label">${param}</span>${parseStaff(val)}</div>`;
+                
                 if (unit === "OpsBlock") {
                     const [m, d] = val.split('|');
-                    const mVal = (m || '---').toUpperCase();
-                    const dVal = (d || '---').toUpperCase();
-                    const mEl = document.getElementById('box-mainline');
-                    const dEl = document.getElementById('box-depot');
-                    mEl.innerText = `MAINLINE: ${mVal}`;
-                    dEl.innerText = `DEPOT: ${dVal}`;
-                    mEl.classList.remove('alert', 'ok');
-                    if(mVal.includes('ENERGISED')) mEl.classList.add('alert'); else if(mVal.includes('IB')) mEl.classList.add('ok');
-                    dEl.classList.remove('alert', 'ok');
-                    if(dVal.includes('ENERGISED')) dEl.classList.add('alert'); else if(dVal.includes('IB')) dEl.classList.add('ok');
+                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
+                    mEl.innerText = `MAINLINE: ${m || '---'}`;
+                    dEl.innerText = `DEPOT: ${d || '---'}`;
+                    mEl.className = `ops-static-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-static-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                 }
+
                 if (unit === "OpsSchedule") {
-                    const now = new Date();
-                    const hour = now.getHours();
-                    let targetShift = "";
-                    let targetDateObj = new Date(now);
-
-                    if (hour >= 6 && hour < 14) {
-                        targetShift = "a";
-                    } else if (hour >= 14 && hour < 22) {
-                        targetShift = "b";
-                    } else {
-                        targetShift = "c";
-                        if (hour < 6) {
-                            targetDateObj.setDate(targetDateObj.getDate() - 1);
-                        }
-                    }
-
-                    const targetDateStr = `${String(targetDateObj.getDate()).padStart(2, '0')}/${String(targetDateObj.getMonth() + 1).padStart(2, '0')}/${targetDateObj.getFullYear()}`;
-                    const headerTextEl = document.getElementById('maint-header-text');
-                    headerTextEl.innerText = `SHIFT ${targetShift.toUpperCase()} MAINTENANCE (${targetDateStr})`;
-
                     const lines = val.split('\n');
-                    const filtered = lines.filter(l => {
-                        const cleanLine = l.toLowerCase();
-                        const matchString = targetDateStr + " " + targetShift;
-                        return cleanLine.includes(matchString);
-                    }).map(l => {
-                        let clean = l.replace(/Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/g, '').trim();
-                        const dateShiftRegex = new RegExp(targetDateStr + "\\s+" + targetShift, "gi");
-                        return clean.replace(dateShiftRegex, '').replace(/^[\s\-→|•*]+/, '').replace(/[\s\-→|•*]+$/, '').trim();
-                    }).filter(l => l.length > 2);
-                    
-                    document.getElementById('maint-list').innerHTML = filtered.length === 0 ? 
-                        `<div class="sch-item" style="border-color:var(--border-color); color:var(--text-dim); background:transparent;">No maintenance assigned for Shift ${targetShift.toUpperCase()}</div>` : 
-                        filtered.map(l => `<div class="sch-item">${l}</div>`).join('');
+                    document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="sch-item">${l}</div>`).join('');
                 }
+
                 if (unit === "TechTicker") {
-                    const [head, body] = val.split('|');
-                    document.getElementById('ticker-head').innerText = head || "TECH";
-                    document.getElementById('ticker-text').innerText = body || "---";
+                    const [h, b] = val.split('|');
+                    document.getElementById('ticker-head').innerText = h || "STATUS";
+                    document.getElementById('ticker-text').innerText = b || "---";
                 }
-                
-                if (unit === "DriverPopup" || unit === "Technician" || unit === "Tech") {
-                    const [name, phone, shift, img] = val.split('|');
-                    const card = document.getElementById('driver-card');
-                    const nameEl = document.getElementById('driver-name');
-                    const phoneEl = document.getElementById('driver-phone');
-                    const shiftEl = document.getElementById('driver-shift');
-                    
-                    const isUpdated = name && name.trim() !== "" && name.trim().toUpperCase() !== "N/A" && name.trim().toUpperCase() !== "PENDING";
-                    
-                    if (!isUpdated) {
-                        card.classList.add('outdated');
-                        nameEl.innerText = "NOT UPDATED";
-                        phoneEl.innerText = "---";
-                        shiftEl.innerText = "SHIFT: ---";
-                    } else {
-                        card.classList.remove('outdated');
-                        nameEl.innerText = name;
-                        phoneEl.innerText = phone || '---';
-                        shiftEl.innerText = 'SHIFT: ' + (shift || '---');
-                        document.getElementById('driver-img').src = (img && img.startsWith('http')) ? img : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png";
-                    }
+
+                if (unit === "DriverPopup" || unit === "Technician") {
+                    const [n, p, s, i] = val.split('|');
+                    document.getElementById('driver-name').innerText = n || "---";
+                    document.getElementById('driver-phone').innerText = p || "---";
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${s || '---'}`;
+                    if(i) document.getElementById('driver-img').src = i;
+                }
+
+                if (unit === "sheetab" && param === "sheetab_R2C1") {
+                    evaluateUpdateBadge(val);
                 }
             });
-            document.getElementById('station-grid').innerHTML = stHtml;
-            document.getElementById('roster-today').innerHTML = tdHtml;
-            document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+
+            if(stHtml) document.getElementById('station-grid').innerHTML = stHtml;
+            if(tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
+            if(tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
         };
 
         function updateClocks() {
-            const now = new Date();
-            const s = now.getSeconds(), m = now.getMinutes(), h = now.getHours();
+            const n = new Date();
+            const s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
-            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
-            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
+            document.getElementById('ana-s').style.transform = `rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `rotate(${h * 30 + m * 0.5}deg)`;
         }
         setInterval(updateClocks, 1000);
-        updateClocks();
 
         function refreshData() {
             const old = document.getElementById('api-script');
@@ -913,8 +735,9 @@
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
             document.body.appendChild(s);
         }
-        refreshData();
         setInterval(refreshData, 15000);
+        refreshData();
+        updateClocks();
     </script>
 </body>
 </html>
