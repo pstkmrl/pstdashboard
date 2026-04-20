@@ -341,6 +341,10 @@
         .h-hr { width: 6px; height: 25%; background: #fff; }
         .h-min { width: 4px; height: 35%; background: #999; }
         .h-sec { width: 2px; height: 40%; background: var(--accent-red); }
+          /* FLOATING AB BUTTON */
+        .floating-ab { position: fixed; bottom: 15px; right: 15px; width: 50px; height: 50px; background: var(--accent); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-weight: 900; text-decoration: none; box-shadow: 0 4px 15px rgba(88, 166, 255, 0.4); z-index: 2000; transition: transform 0.2s; border: 2px solid #fff; }
+        .floating-ab:hover { transform: scale(1.1); background: #fff; }
+
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -352,6 +356,7 @@
             <div id="ana-s" class="hand h-sec"></div>
         </div>
     </div>
+    <a href="absub.html" class="floating-ab">AB</a>
 
     <header class="top-bar">
         <div class="logo-section">
