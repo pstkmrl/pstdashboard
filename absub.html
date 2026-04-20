@@ -220,7 +220,7 @@
         .stock-val.warn { color: var(--error); }
         .stock-icon { font-size: 1.1rem !important; opacity: 0.8; }
 
-        /* Dashboard content layout updated to support scrolling on all devices */
+        /* Dashboard content layout */
         .dashboard-content { 
             display: grid; 
             grid-template-columns: 2fr 1fr; 
@@ -231,16 +231,17 @@
         }
         .left-column { display: flex; flex-direction: column; gap: 16px; height: max-content; }
         .right-column { display: flex; flex-direction: column; gap: 16px; height: max-content; }
-        .rosters-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .rosters-row { display: flex; flex-direction: column; gap: 16px; }
 
         .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 20px; box-shadow: var(--shadow-1); display: flex; flex-direction: column; overflow: hidden; }
         .card-header { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; max-height: 400px; overflow-y: auto; }
-        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .m3-shift-active { border: 2px solid var(--success); background: var(--success-container); }
-        .m3-shift-label { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); text-align: center; margin-bottom: 4px; }
-        .m3-staff-item { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 6px 10px; border-radius: var(--radius-s); font-size: 0.8rem; font-weight: 600; }
+        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 10px; display: flex; flex-direction: column; gap: 6px; border: 2px solid transparent; transition: border 0.3s ease; }
+        .m3-shift-active { border-color: var(--success); }
+        .m3-shift-label { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); margin-bottom: 2px; }
+        .shift-tpc-badge { font-size: 0.65rem; background: var(--primary-container); color: var(--on-primary-container); padding: 2px 8px; border-radius: var(--radius-full); font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
+        .m3-staff-item { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 4px 8px; border-radius: var(--radius-s); font-size: 0.75rem; font-weight: 600; }
         .staff-name { color: var(--on-surface-variant); }
         .m3-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: var(--radius-full); font-weight: 800; }
         .badge-tpc-m { background: #00E5FF; color: #000; }
@@ -248,18 +249,17 @@
         .badge-tpc-n { background: #D500F9; color: #FFF; }
         .badge-default { background: var(--outline); color: var(--surface); }
 
-        .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 16px; padding-bottom: 12px; }
-        .ops-container { display: flex; flex-direction: column; gap: 12px; }
-        .ops-box { flex: 1; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-m); font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; padding: 20px; text-align: center; box-shadow: var(--shadow-1); }
-        .ops-box.alert { background: var(--error-container); color: var(--on-error-container); }
-        .ops-box.ok { background: var(--success-container); color: var(--on-success-container); }
+        .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 16px; padding-bottom: 12px; position: relative; }
+        
+        .maint-header-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+        .ops-inline-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .ops-badge { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; padding: 4px 12px; border-radius: var(--radius-full); box-shadow: var(--shadow-1); text-align: center; }
+        .ops-badge.alert { background: var(--error-container); color: var(--on-error-container); border: 1px solid var(--error); }
+        .ops-badge.ok { background: var(--success-container); color: var(--on-success-container); border: 1px solid var(--success); }
+
         .maint-divider { height: 2px; background: var(--surface-variant); margin: 8px 0; border-radius: var(--radius-full); }
         .maint-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; max-height: 300px; }
         .m3-sch-item { background: var(--surface-variant); color: var(--on-surface); padding: 12px 16px; border-radius: var(--radius-m); font-size: 0.9rem; font-weight: 600; border-left: 6px solid var(--warning); }
-
-        .notice-board-card { flex-grow: 1; background: var(--primary-container); color: var(--on-primary-container); position: relative; min-height: 150px; }
-        .notice-wrapper { flex-grow: 1; position: relative; overflow: hidden; margin-top: 8px; }
-        .notice-content { position: absolute; top: 0; left: 0; width: 100%; font-size: 1.1rem; font-weight: 500; line-height: 1.6; }
 
         .driver-card {
             position: fixed; bottom: 65px; left: 16px; background: var(--surface); padding: 12px 20px 12px 12px;
@@ -288,9 +288,9 @@
         .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background: var(--surface); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; z-index: 1001; }
         .ticker-head { background: var(--primary); color: var(--surface); height: 100%; padding: 0 24px; display: flex; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; border-radius: 0 24px 24px 0; z-index: 2; flex-shrink: 0; }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        .ticker-scroll { white-space: nowrap; font-size: 1rem; font-weight: 700; color: var(--on-surface); padding: 0 24px; }
-        .scrolling-active { position: absolute; animation: ticker-move 25s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(50vw); } 100% { transform: translateX(-100%); } }
+        .ticker-scroll { white-space: nowrap; font-size: 1rem; font-weight: 700; color: var(--on-surface); padding: 0 24px; flex-shrink: 0; }
+        .scrolling-active { padding-left: 100%; animation: ticker-move 20s linear infinite; }
+        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .fab-ab { position: fixed; bottom: 65px; right: 16px; width: 64px; height: 64px; background: var(--primary-container); color: var(--on-primary-container); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; text-decoration: none; box-shadow: var(--shadow-2); z-index: 1000; flex-shrink: 0; }
 
@@ -307,7 +307,6 @@
         /* --- MOBILE RESPONSIVE CSS --- */
         @media (max-width: 900px) {
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 140px; padding-top: 8px; }
-            .rosters-row { grid-template-columns: 1fr; }
             
             .app-bar { flex-wrap: wrap; padding: 12px 16px; margin: 8px; gap: 8px; justify-content: space-between; border-radius: var(--radius-m); }
             .middle-module { order: 3; width: 100%; margin: 8px 0 0 0; height: 44px; }
@@ -378,23 +377,18 @@
                     <div id="roster-tomorrow" class="roster-grid"></div>
                 </div>
             </div>
-            <div class="m3-card notice-board-card">
-                <div class="card-header"><span class="material-symbols-rounded">campaign</span> IMPORTANT NOTICE</div>
-                <div class="notice-wrapper" id="notice-wrapper">
-                    <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
-                </div>
-                <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
-            </div>
         </div>
         <div class="right-column">
             <div class="m3-card unified-unit">
-                <div class="card-header"><span class="material-symbols-rounded">settings_applications</span> OPERATIONS STATUS</div>
-                <div class="ops-container">
-                    <div id="box-mainline" class="ops-box">MAINLINE: ---</div>
-                    <div id="box-depot" class="ops-box">DEPOT: ---</div>
+                <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
+                <div class="maint-header-wrapper">
+                    <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
+                    <div class="ops-inline-container">
+                        <div id="box-mainline" class="ops-badge">MAINLINE: ---</div>
+                        <div id="box-depot" class="ops-badge">DEPOT: ---</div>
+                    </div>
                 </div>
                 <div class="maint-divider"></div>
-                <div class="card-header" style="margin-top: 8px;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
                 <div id="maint-list" class="maint-list"></div>
             </div>
         </div>
@@ -415,7 +409,7 @@
     </div>
 
     <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">TECHTICKER</div>
+        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
         </div>
@@ -423,7 +417,6 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
-        let noticeScrollInterval = null, noticeScrollPos = 0;
 
         function initTheme() {
             const savedTheme = localStorage.getItem('kmrl_theme') || 'dark';
@@ -468,7 +461,7 @@
 
         function parseStaff(raw) {
             if(!raw) return '';
-            return raw.split('\n').map(line => {
+            return raw.split('\n').filter(l => l.trim() !== '').map(line => {
                 if(line.includes('|')) {
                     const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
                     let bCls = 'badge-default';
@@ -501,48 +494,50 @@
 
         function updateTickerBar(badge, names) {
             const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
-            head.innerText = badge.toUpperCase(); text.innerText = names;
+            head.innerText = badge.toUpperCase(); 
+            text.classList.remove('scrolling-active');
+            text.innerText = names;
             requestAnimationFrame(() => {
                 const textWidth = text.scrollWidth, containerWidth = body.offsetWidth;
                 if (textWidth > containerWidth - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; } 
-                else { text.classList.remove('scrolling-active'); body.style.justifyContent = 'center'; }
+                else { body.style.justifyContent = 'center'; }
             });
-        }
-
-        function startNoticeAutoScroll() {
-            const wrapper = document.getElementById('notice-wrapper'), content = document.getElementById('notice-text-content');
-            if (noticeScrollInterval) clearInterval(noticeScrollInterval);
-            noticeScrollPos = 0; content.style.transform = `translateY(0)`;
-            setTimeout(() => {
-                const diff = content.scrollHeight - wrapper.offsetHeight;
-                if (diff > 0) {
-                    let waitCounter = 0;
-                    noticeScrollInterval = setInterval(() => {
-                        if (noticeScrollPos === 0 && waitCounter < 30) { waitCounter++; return; }
-                        noticeScrollPos -= 0.5;
-                        if (Math.abs(noticeScrollPos) >= diff + 20) { if (waitCounter < 60) { waitCounter++; return; } noticeScrollPos = 0; waitCounter = 0; }
-                        content.style.transform = `translateY(${noticeScrollPos}px)`;
-                    }, 50);
-                }
-            }, 500);
         }
 
         window.draw = function(data) {
             document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
             let stHtml = '', tdHtml = '', tmHtml = '';
             
+            let staff = {
+                today: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' },
+                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' }
+            };
+            
             data.forEach(item => {
                 const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
 
-                if (param === "sheetab_R2C2" && unit === "sheetab") {
-                    const el = document.getElementById('notice-text-content');
-                    if (el.innerText !== val) { el.innerText = val; startNoticeAutoScroll(); }
+                // Notice processing overrides the TechTicker
+                if (param === "sheetab_R2C2") {
+                    const formattedNotice = val.split('\n').map(l => l.trim()).filter(l => l !== "").join('   •   ');
+                    updateTickerBar("IMPORTANT NOTICE", formattedNotice);
                 }
 
-                if (param === "TechTicker" || unit === "TechTicker") {
-                    if (val.includes('|')) { const pts = val.split('|'); updateTickerBar(pts[0], pts[1]); } 
-                    else { updateTickerBar("TECHNICIANS", val); }
-                }
+                // Staff mapping by direct parameter
+                if (param === "sheetab_R2C12") staff.today.gen = val;
+                if (param === "sheetab_R2C3") staff.today.morn = val;
+                if (param === "sheetab_R2C4") staff.today.eve = val;
+                if (param === "sheetab_R2C5") staff.today.night = val;
+                if (param === "sheetab_R2C9") staff.today.tpcMorn = val;
+                if (param === "sheetab_R2C10") staff.today.tpcEve = val;
+                if (param === "sheetab_R2C11") staff.today.tpcNight = val;
+
+                if (param === "sheetab_R2C26") staff.tomorrow.gen = val;
+                if (param === "sheetab_R2C17") staff.tomorrow.morn = val;
+                if (param === "sheetab_R2C18") staff.tomorrow.eve = val;
+                if (param === "sheetab_R2C19") staff.tomorrow.night = val;
+                if (param === "sheetab_R2C23") staff.tomorrow.tpcMorn = val;
+                if (param === "sheetab_R2C24") staff.tomorrow.tpcEve = val;
+                if (param === "sheetab_R2C25") staff.tomorrow.tpcNight = val;
 
                 if (param === "ChecklistStatus") {
                     const el = document.getElementById('checklist-text');
@@ -564,16 +559,13 @@
                         <span class="stock-val ${trfo > trfoLimit ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
                     </div>`;
                 }
-
-                if (unit === "Staff-Today") tdHtml += `<div class="m3-shift-card ${item.Limit === 'ACTIVE' ? 'm3-shift-active' : ''}"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
-                if (unit === "Staff-Tomorrow") tmHtml += `<div class="m3-shift-card"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
                 
                 if (unit === "OpsBlock") {
                     const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
                     const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
                     mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
-                    mEl.className = `ops-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    dEl.className = `ops-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    mEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                 }
 
                 if (unit === "OpsSchedule") {
@@ -590,6 +582,25 @@
 
                 if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
             });
+
+            // Build shifts
+            const currentHour = new Date().getHours();
+            
+            function buildShift(title, val, active, tpc) {
+                const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
+                const staffHtml = (val && val.trim() !== '') ? parseStaff(val) : `<div class="m3-staff-item" style="justify-content: center; opacity: 0.5;">No Deployment</div>`;
+                return `<div class="m3-shift-card ${active ? 'm3-shift-active' : ''}"><div class="m3-shift-label"><span>${title}</span>${tpcHtml}</div><div class="staff-list" style="display: flex; flex-direction: column; gap: 4px;">${staffHtml}</div></div>`;
+            }
+
+            tdHtml += buildShift("GENERAL", staff.today.gen, currentHour >= 8 && currentHour < 18, "");
+            tdHtml += buildShift("MORNING", staff.today.morn, currentHour >= 8 && currentHour < 16, staff.today.tpcMorn);
+            tdHtml += buildShift("EVENING", staff.today.eve, currentHour >= 16 && currentHour <= 23, staff.today.tpcEve);
+            tdHtml += buildShift("NIGHT", staff.today.night, currentHour >= 0 && currentHour < 8, staff.today.tpcNight);
+
+            tmHtml += buildShift("GENERAL", staff.tomorrow.gen, false, "");
+            tmHtml += buildShift("MORNING", staff.tomorrow.morn, false, staff.tomorrow.tpcMorn);
+            tmHtml += buildShift("EVENING", staff.tomorrow.eve, false, staff.tomorrow.tpcEve);
+            tmHtml += buildShift("NIGHT", staff.tomorrow.night, false, staff.tomorrow.tpcNight);
 
             if (stHtml) document.getElementById('station-track').innerHTML = stHtml;
             if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
@@ -623,7 +634,6 @@
         window.onresize = () => {
             const text = document.getElementById('ticker-text');
             updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText);
-            startNoticeAutoScroll(); 
         };
     </script>
 </body>
