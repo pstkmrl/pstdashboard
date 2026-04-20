@@ -1,1 +1,921 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMRL SUBSTATION DASHBOARD</title>
+    
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+    <style>
+        /* --- M3 THEME VARIABLES --- */
+        :root {
+            /* Transitions */
+            --transition-speed: 0.3s;
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 24px;
+            --radius-full: 999px;
+            
+            /* Typography */
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-color: #F4F6F9;
+            --surface: #FFFFFF;
+            --surface-variant: #E8EAED;
+            --on-bg: #1A1C1E;
+            --on-surface: #1A1C1E;
+            --on-surface-variant: #44474F;
+            --outline: #74777F;
+            
+            --primary: #0061A4;
+            --primary-container: #D1E4FF;
+            --on-primary-container: #001D36;
+            
+            --secondary: #535F70;
+            --secondary-container: #D7E3F7;
+            
+            --error: #BA1A1A;
+            --error-container: #FFDAD6;
+            --on-error-container: #410002;
+            
+            --success: #146C2E;
+            --success-container: #C4EED0;
+            --on-success-container: #002107;
+            
+            --warning: #7D5260;
+            --warning-container: #FFD8E4;
+            --on-warning-container: #31111D;
+            
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-color: #0F141A;
+            --surface: #1A2027;
+            --surface-variant: #2A313A;
+            --on-bg: #E2E2E6;
+            --on-surface: #E2E2E6;
+            --on-surface-variant: #C2C7CF;
+            --outline: #8C9199;
+            
+            --primary: #9ECAFF;
+            --primary-container: #00497D;
+            --on-primary-container: #D1E4FF;
+            
+            --secondary: #BBC7DB;
+            --secondary-container: #3B4858;
+            
+            --error: #FFB4AB;
+            --error-container: #93000A;
+            --on-error-container: #FFDAD6;
+            
+            --success: #8FDF8D;
+            --success-container: #00531E;
+            --on-success-container: #C4EED0;
+            
+            --warning: #FFB1C8;
+            --warning-container: #633B48;
+            --on-warning-container: #FFD8E4;
+            
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        /* --- GLOBAL RESETS --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--on-bg);
+            font-family: var(--font-body);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+            transition: background var(--transition-speed), color var(--transition-speed);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--surface-variant); border-radius: var(--radius-full); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--outline); }
+
+        /* --- APP BAR (TOP) --- */
+        .app-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface);
+            padding: 12px 24px;
+            margin: 12px;
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-1);
+            z-index: 100;
+            flex-shrink: 0;
+            transition: background var(--transition-speed);
+        }
+
+        .logo-section img {
+            height: 36px;
+            object-fit: contain;
+        }
+
+        /* Middle Section: Clock & Checklist */
+        .middle-module {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 24px;
+            height: 48px;
+            overflow: hidden;
+        }
+
+        .checklist-container {
+            width: 100%;
+            height: 100%;
+            background: var(--secondary-container);
+            color: var(--on-surface);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checklist-marquee {
+            white-space: nowrap;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.1rem;
+            position: absolute;
+            animation: scroll-text 20s linear infinite;
+        }
+
+        @keyframes scroll-text {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .clock-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .clock-unit {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+            border-radius: var(--radius-m);
+            padding: 4px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+        }
+
+        .clock-val {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .clock-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--on-surface-variant);
+            letter-spacing: 1px;
+        }
+
+        /* Top Controls */
+        .top-controls { display: flex; gap: 12px; }
+        
+        .icon-btn {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
+        .icon-btn:active { transform: scale(0.95); }
+        
+        .btn-grid-active {
+            background: var(--primary);
+            color: var(--surface);
+        }
+        
+        .btn-off {
+            background: var(--error-container);
+            color: var(--on-error-container);
+        }
+
+        /* --- STATION GRID --- */
+        .station-wrapper {
+            padding: 0 16px;
+            flex-shrink: 0;
+            margin-bottom: 8px;
+        }
+        .station-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        .m3-station {
+            background: var(--surface);
+            border-radius: var(--radius-m);
+            padding: 12px;
+            box-shadow: var(--shadow-1);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: background var(--transition-speed);
+        }
+
+        .m3-station.m3-alarm {
+            background: var(--error-container);
+            animation: pulse-alarm 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-alarm {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+        }
+
+        .st-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--surface-variant); padding-bottom: 4px; }
+        .st-name { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); }
+        .st-time { font-size: 0.65rem; color: var(--outline); font-weight: 600; }
+        
+        .st-body { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.8rem; }
+        .st-val { display: flex; align-items: center; gap: 2px; }
+        .st-val .material-symbols-rounded { font-size: 1rem; }
+        .st-val.safe { color: var(--success); }
+        .st-val.warn { color: var(--error); }
+        
+        .m3-station.m3-alarm .st-name, .m3-station.m3-alarm .st-time, .m3-station.m3-alarm .st-val { color: var(--on-error-container); }
+
+        /* --- DASHBOARD MAIN LAYOUT --- */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 16px;
+            padding: 0 16px 80px 16px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .dashboard-content { grid-template-columns: 1fr; }
+            .app-bar { border-radius: var(--radius-m); flex-wrap: wrap; height: auto; gap: 12px; }
+            .middle-module { order: 3; width: 100%; margin: 0; }
+        }
+
+        /* Generic M3 Card */
+        .m3-card {
+            background: var(--surface);
+            border-radius: var(--radius-l);
+            padding: 20px;
+            box-shadow: var(--shadow-1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Rosters */
+        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; overflow-y: auto;}
+        
+        .m3-shift-card {
+            background: var(--surface-variant);
+            border-radius: var(--radius-m);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .m3-shift-active { border: 2px solid var(--success); background: var(--success-container); }
+        .m3-shift-active .m3-shift-label { color: var(--on-success-container); }
+        .m3-shift-active .staff-name { color: var(--on-success-container); }
+
+        .m3-shift-label { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); text-align: center; margin-bottom: 4px; }
+        
+        .m3-staff-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            padding: 6px 10px;
+            border-radius: var(--radius-s);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .staff-name { color: var(--on-surface-variant); }
+        
+        .m3-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+            font-weight: 800;
+        }
+        .badge-tpc-m { background: #00E5FF; color: #000; }
+        .badge-tpc-e { background: #FF9100; color: #000; }
+        .badge-tpc-n { background: #D500F9; color: #FFF; }
+        .badge-default { background: var(--outline); color: var(--surface); }
+
+        /* Ops Blocks */
+        .ops-container { display: flex; gap: 12px; flex-direction: column; }
+        .ops-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-l);
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.2rem;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-1);
+        }
+        .ops-box.alert { background: var(--error-container); color: var(--on-error-container); }
+        .ops-box.ok { background: var(--success-container); color: var(--on-success-container); }
+
+        /* Notice Board */
+        .notice-board-card {
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            position: relative;
+        }
+        .notice-board-card .card-header { color: var(--on-primary-container); border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 8px; }
+        
+        .notice-wrapper {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .notice-content {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.6;
+            transition: transform 0.1s linear;
+        }
+
+        /* Maintenance List */
+        .maint-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+        .m3-sch-item {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+            padding: 12px 16px;
+            border-radius: var(--radius-m);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-left: 6px solid var(--warning);
+        }
+
+        /* --- DRIVER CARD --- */
+        .driver-card {
+            position: fixed;
+            bottom: 70px;
+            left: 20px;
+            background: var(--surface);
+            padding: 12px 20px 12px 12px;
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-2);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 1000;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .driver-card.outdated {
+            border-color: var(--error);
+            opacity: 0.8;
+            filter: grayscale(0.3);
+        }
+
+        .driver-img-wrap { position: relative; width: 56px; height: 56px; }
+        .driver-img { width: 100%; height: 100%; border-radius: var(--radius-full); object-fit: cover; cursor: pointer; border: 2px solid var(--primary); }
+        .call-icon { position: absolute; bottom: -4px; right: -4px; background: var(--success); color: var(--on-success-container); border-radius: 50%; padding: 4px; font-size: 14px; box-shadow: var(--shadow-1); cursor: pointer; pointer-events: none;}
+
+        .driver-info { display: flex; flex-direction: column; justify-content: center; }
+        .driver-shift { font-size: 0.65rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--on-surface); line-height: 1.2; }
+        .driver-phone { font-size: 0.85rem; font-weight: 600; color: var(--outline); margin-bottom: 4px; }
+        
+        .driver-badge {
+            font-size: 0.6rem; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-full); display: inline-block; width: fit-content;
+        }
+        .badge-active { background: var(--success-container); color: var(--on-success-container); }
+        .badge-outdated { background: var(--error-container); color: var(--on-error-container); animation: blink 1s infinite alternate;}
+        @keyframes blink { from { opacity: 1; } to { opacity: 0.6; } }
+
+        /* --- TICKER --- */
+        .ticker-bar {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%; height: 48px;
+            background: var(--surface);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .ticker-head {
+            background: var(--primary);
+            color: var(--surface);
+            height: 100%;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 0 24px 24px 0;
+            z-index: 2;
+        }
+
+        .ticker-body {
+            flex-grow: 1;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ticker-scroll {
+            white-space: nowrap;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--on-surface);
+            padding: 0 24px;
+        }
+
+        .scrolling-active {
+            position: absolute;
+            animation: ticker-move 25s linear infinite;
+        }
+
+        @keyframes ticker-move { 0% { transform: translateX(50vw); } 100% { transform: translateX(-100%); } }
+
+        /* --- FAB (Floating Action Button) --- */
+        .fab-ab {
+            position: fixed;
+            bottom: 70px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-decoration: none;
+            box-shadow: var(--shadow-2);
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+        .fab-ab:hover { transform: translateY(-4px); background: var(--primary); color: var(--surface); }
+
+        /* --- STANDBY / BLACKOUT --- */
+        #blackout {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            cursor: pointer;
+        }
+        .analog-wrap {
+            width: 320px; height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            border: 2px solid #333;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
+        .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
+        .h-min { width: 4px; height: 40%; background: #aaa; margin-left: -2px; }
+        .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
+        .center-dot { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
+
+        /* Update indicator */
+        .update-stamp {
+            position: absolute;
+            top: 12px; right: 24px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--outline);
+        }
+
+    </style>
+</head>
+<body onclick="wakeUp()">
+
+    <!-- STANDBY MODE -->
+    <div id="blackout">
+        <div class="analog-wrap">
+            <div id="ana-h" class="hand h-hr"></div>
+            <div id="ana-m" class="hand h-min"></div>
+            <div id="ana-s" class="hand h-sec"></div>
+            <div class="center-dot"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING AB -->
+    <a href="absub.html" class="fab-ab">AB</a>
+
+    <!-- TOP APP BAR -->
+    <header class="app-bar">
+        <div class="logo-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
+        </div>
+        
+        <div class="middle-module">
+            <div id="checklist-container" class="checklist-container" style="display: none;">
+                <div id="checklist-text" class="checklist-marquee">CONNECTING TO KMRL DATA...</div>
+            </div>
+            <div id="clock-container" class="clock-container" style="display: flex;">
+                <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
+                <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
+                <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
+            </div>
+        </div>
+
+        <div class="top-controls">
+            <button class="icon-btn" onclick="toggleTheme(event)" title="Toggle Theme">
+                <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
+            </button>
+            <button id="btn-grid" class="icon-btn" onclick="toggleGrid(event)" title="Toggle Stations Grid">
+                <span class="material-symbols-rounded">grid_view</span>
+            </button>
+            <button class="icon-btn" onclick="goFullscreen(event)" title="Fullscreen">
+                <span class="material-symbols-rounded">fullscreen</span>
+            </button>
+            <button class="icon-btn btn-off" onclick="manualOff(event)" title="Standby">
+                <span class="material-symbols-rounded">power_settings_new</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- STATION GRID (Collapsible) -->
+    <div class="station-wrapper" id="station-wrapper" style="display: none;">
+        <div id="station-grid" class="station-grid"></div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard-content">
+        <!-- Roster Today -->
+        <div class="m3-card">
+            <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
+            <div id="roster-today" class="roster-grid"></div>
+        </div>
+
+        <!-- Roster Tomorrow -->
+        <div class="m3-card">
+            <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
+            <div id="roster-tomorrow" class="roster-grid"></div>
+        </div>
+
+        <!-- Ops Blocks -->
+        <div class="ops-container">
+            <div id="box-mainline" class="ops-box">MAINLINE: ---</div>
+            <div id="box-depot" class="ops-box">DEPOT: ---</div>
+        </div>
+
+        <!-- Maintenance -->
+        <div class="m3-card">
+            <div class="card-header"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
+            <div id="maint-list" class="maint-list"></div>
+        </div>
+
+        <!-- Notice Board -->
+        <div class="m3-card notice-board-card">
+            <div class="card-header"><span class="material-symbols-rounded">campaign</span> IMPORTANT NOTICE</div>
+            <div class="notice-wrapper" id="notice-wrapper">
+                <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+            </div>
+            <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
+        </div>
+    </main>
+
+    <!-- DRIVER CARD -->
+    <div id="driver-card" class="driver-card outdated">
+        <div class="driver-img-wrap" onclick="initiateCall(event)">
+            <img id="driver-img" src="https://cdn-icons-png.flaticon.com/256/15726/15726482.png" class="driver-img" alt="Driver">
+            <span class="material-symbols-rounded call-icon">call</span>
+        </div>
+        <div class="driver-info">
+            <div id="driver-shift" class="driver-shift">SHIFT: ---</div>
+            <div id="driver-name" class="driver-name">Loading...</div>
+            <div id="driver-phone" class="driver-phone">---</div>
+            <div id="driver-update-badge" class="driver-badge badge-outdated">UPDATE: ---</div>
+        </div>
+    </div>
+
+    <!-- TICKER -->
+    <footer class="ticker-bar">
+        <div id="ticker-head" class="ticker-head">TECHTICKER</div>
+        <div id="ticker-body" class="ticker-body">
+            <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
+        
+        let noticeScrollInterval = null;
+        let noticeScrollPos = 0;
+
+        // Theme Setup
+        function initTheme() {
+            const savedTheme = localStorage.getItem('kmrl_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-icon').innerText = savedTheme === 'dark' ? 'light_mode' : 'dark_mode';
+        }
+        initTheme();
+
+        function toggleTheme(e) {
+            if(e) e.stopPropagation();
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('kmrl_theme', next);
+            document.getElementById('theme-icon').innerText = next === 'dark' ? 'light_mode' : 'dark_mode';
+        }
+
+        // App Controls
+        function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
+        function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
+
+        function initiateCall(e) {
+            if(e) e.stopPropagation();
+            const phone = document.getElementById('driver-phone').innerText;
+            if (phone && phone !== "---") window.location.href = `tel:${phone.replace(/\D/g, '')}`;
+        }
+
+        function toggleGrid(e) {
+            if(e) e.stopPropagation();
+            const gridWrap = document.getElementById('station-wrapper'), 
+                  chk = document.getElementById('checklist-container'), 
+                  clk = document.getElementById('clock-container'), 
+                  btn = document.getElementById('btn-grid');
+            
+            const isHidden = gridWrap.style.display === 'none';
+            gridWrap.style.display = isHidden ? 'block' : 'none';
+            chk.style.display = isHidden ? 'flex' : 'none';
+            clk.style.display = isHidden ? 'none' : 'flex';
+            btn.classList.toggle('btn-grid-active', isHidden);
+        }
+
+        // Parsers mapped to M3 Styles
+        function parseStaff(raw) {
+            if(!raw) return '';
+            return raw.split('\n').map(line => {
+                if(line.includes('|')) {
+                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
+                    let bCls = 'badge-default';
+                    if(dCode.includes('M TPC')) bCls = 'badge-tpc-m'; 
+                    else if(dCode.includes('E TPC')) bCls = 'badge-tpc-e'; 
+                    else if(dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    return `<div class="m3-staff-item"><span class="staff-name">${name}</span><span class="m3-badge ${bCls}">${duty}</span></div>`;
+                }
+                return `<div class="m3-staff-item"><span class="staff-name">${line}</span></div>`;
+            }).join('');
+        }
+
+        function evaluateUpdateBadge(rawTimestamp) {
+            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
+            if (!rawTimestamp || rawTimestamp === "---") { 
+                badge.innerText = "UPDATE: N/A"; badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); return; 
+            }
+            try {
+                const updateTime = new Date(rawTimestamp), now = new Date();
+                badge.innerText = `LAST UPDATE: ${updateTime.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false })}`;
+                const currentHour = now.getHours();
+                let shiftStart = new Date(now);
+                
+                if (currentHour >= 8 && currentHour < 20) shiftStart.setHours(8, 0, 0, 0);
+                else { if (currentHour < 8) shiftStart.setDate(now.getDate() - 1); shiftStart.setHours(20, 0, 0, 0); }
+                
+                if (updateTime >= shiftStart) { badge.className = "driver-badge badge-active"; card.classList.remove('outdated'); }
+                else { badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); }
+            } catch (e) { badge.innerText = "UPDATE: ERR"; }
+        }
+
+        function updateTickerBar(badge, names) {
+            const head = document.getElementById('ticker-head');
+            const text = document.getElementById('ticker-text');
+            const body = document.getElementById('ticker-body');
+            head.innerText = badge.toUpperCase();
+            text.innerText = names;
+            requestAnimationFrame(() => {
+                const textWidth = text.scrollWidth;
+                const containerWidth = body.offsetWidth;
+                if (textWidth > containerWidth - 40) {
+                    text.classList.add('scrolling-active');
+                    body.style.justifyContent = 'flex-start';
+                } else {
+                    text.classList.remove('scrolling-active');
+                    body.style.justifyContent = 'center';
+                }
+            });
+        }
+
+        function startNoticeAutoScroll() {
+            const wrapper = document.getElementById('notice-wrapper');
+            const content = document.getElementById('notice-text-content');
+            
+            if (noticeScrollInterval) clearInterval(noticeScrollInterval);
+            
+            noticeScrollPos = 0;
+            content.style.transform = `translateY(0)`;
+
+            setTimeout(() => {
+                const diff = content.scrollHeight - wrapper.offsetHeight;
+                if (diff > 0) {
+                    let waitCounter = 0;
+                    noticeScrollInterval = setInterval(() => {
+                        if (noticeScrollPos === 0 && waitCounter < 30) { waitCounter++; return; }
+                        noticeScrollPos -= 0.5;
+                        if (Math.abs(noticeScrollPos) >= diff + 20) {
+                            if (waitCounter < 60) { waitCounter++; return; }
+                            noticeScrollPos = 0; waitCounter = 0;
+                        }
+                        content.style.transform = `translateY(${noticeScrollPos}px)`;
+                    }, 50);
+                }
+            }, 500);
+        }
+
+        // Data Core Parser
+        window.draw = function(data) {
+            document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            let stHtml = '', tdHtml = '', tmHtml = '';
+            
+            data.forEach(item => {
+                const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
+
+                // Notice
+                if (param === "sheetab_R2C2" && unit === "sheetab") {
+                    const el = document.getElementById('notice-text-content');
+                    if (el.innerText !== val) { el.innerText = val; startNoticeAutoScroll(); }
+                }
+
+                // Ticker
+                if (param === "TechTicker" || unit === "TechTicker") {
+                    if (val.includes('|')) {
+                        const pts = val.split('|'); updateTickerBar(pts[0], pts[1]);
+                    } else {
+                        updateTickerBar("TECHNICIANS", val);
+                    }
+                }
+
+                // Checklist
+                if (param === "ChecklistStatus") {
+                    const el = document.getElementById('checklist-text');
+                    el.innerText = `CHECKLIST STATUS: ${val}`;
+                    el.style.color = val.includes("FILLED") ? "var(--success)" : "var(--error)";
+                }
+
+                // Station Grid Cards
+                if (unit === "StationTemp") {
+                    const parts = val.split("|"), amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0, isAlarm = amb > 34 || trfo > 80;
+                    stHtml += `
+                    <div class="m3-station ${isAlarm ? 'm3-alarm' : ''}">
+                        <div class="st-head"><span class="st-name">${param}</span><span class="st-time">${parts[2] || '--:--'}</span></div>
+                        <div class="st-body">
+                            <span class="st-val ${amb > 34 ? 'warn' : 'safe'}"><span class="material-symbols-rounded">device_thermostat</span>${parts[0]}°</span>
+                            <span class="st-val ${trfo > 80 ? 'warn' : 'safe'}"><span class="material-symbols-rounded">bolt</span>${parts[1]}°</span>
+                        </div>
+                    </div>`;
+                }
+
+                // Rosters
+                if (unit === "Staff-Today") tdHtml += `<div class="m3-shift-card ${item.Limit === 'ACTIVE' ? 'm3-shift-active' : ''}"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
+                if (unit === "Staff-Tomorrow") tmHtml += `<div class="m3-shift-card"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
+                
+                // Ops Status
+                if (unit === "OpsBlock") {
+                    const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
+                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
+                    mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
+                    mEl.className = `ops-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                }
+
+                // Maintenance
+                if (unit === "OpsSchedule") {
+                    const lines = val.split('\n').filter(l => l.trim() !== "");
+                    document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
+                }
+
+                // Driver / Tech
+                if (unit === "DriverPopup" || unit === "Technician") {
+                    const parts = val.split('|');
+                    document.getElementById('driver-name').innerText = parts[0] || "---";
+                    document.getElementById('driver-phone').innerText = parts[1] || "---";
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
+                    if(parts[3]) document.getElementById('driver-img').src = parts[3];
+                }
+
+                // Update Timestamp logic
+                if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
+            });
+
+            if (stHtml) document.getElementById('station-grid').innerHTML = stHtml;
+            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
+            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+        };
+
+        // Clocks Engine
+        function updateClocks() {
+            const n = new Date();
+            const s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
+            
+            // Digital
+            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
+            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
+            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            
+            // Analog
+            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
+        }
+        setInterval(updateClocks, 1000);
+
+        // API Fetcher
+        function refreshData() {
+            const old = document.getElementById('api-script');
+            if(old) old.remove();
+            const s = document.createElement('script');
+            s.id = 'api-script';
+            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
+            document.body.appendChild(s);
+        }
+        
+        setInterval(refreshData, 15000);
+        refreshData();
+        updateClocks();
+        
+        window.onresize = () => {
+            const text = document.getElementById('ticker-text');
+            const head = document.getElementById('ticker-head').innerText;
+            updateTickerBar(head, text.innerText);
+            startNoticeAutoScroll(); 
+        };
+    </script>
+</body>
+</html>
