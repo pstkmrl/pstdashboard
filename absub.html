@@ -133,7 +133,6 @@
             object-fit: contain;
         }
 
-        /* Middle Section: Clock & Checklist */
         .middle-module {
             flex-grow: 1;
             display: flex;
@@ -201,7 +200,6 @@
             letter-spacing: 1px;
         }
 
-        /* Top Controls */
         .top-controls { display: flex; gap: 12px; }
         
         .icon-btn {
@@ -279,21 +277,30 @@
         /* --- DASHBOARD MAIN LAYOUT --- */
         .dashboard-content {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: auto 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: 16px;
             padding: 0 16px 80px 16px;
             flex-grow: 1;
-            overflow-y: auto;
+            overflow-y: hidden;
+        }
+        
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
         }
 
-        @media (max-width: 1200px) {
-            .dashboard-content { grid-template-columns: 1fr 1fr; }
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
-        @media (max-width: 768px) {
-            .dashboard-content { grid-template-columns: 1fr; }
-            .app-bar { border-radius: var(--radius-m); flex-wrap: wrap; height: auto; gap: 12px; }
-            .middle-module { order: 3; width: 100%; margin: 0; }
+
+        .rosters-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
         }
 
         /* Generic M3 Card */
@@ -360,18 +367,31 @@
         .badge-tpc-n { background: #D500F9; color: #FFF; }
         .badge-default { background: var(--outline); color: var(--surface); }
 
-        /* Ops Blocks */
-        .ops-container { display: flex; gap: 12px; flex-direction: column; }
+        /* --- Unified Ops & Maintenance Unit --- */
+        .unified-unit {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 12px;
+        }
+
+        .ops-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+
         .ops-box {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--radius-l);
+            border-radius: var(--radius-m);
             font-family: var(--font-display);
             font-weight: 900;
-            font-size: 1.2rem;
-            padding: 24px;
+            font-size: 1.1rem;
+            padding: 20px;
             text-align: center;
             transition: all 0.3s;
             box-shadow: var(--shadow-1);
@@ -379,8 +399,34 @@
         .ops-box.alert { background: var(--error-container); color: var(--on-error-container); }
         .ops-box.ok { background: var(--success-container); color: var(--on-success-container); }
 
+        .maint-divider {
+            height: 2px;
+            background: var(--surface-variant);
+            margin: 8px 0;
+            border-radius: var(--radius-full);
+        }
+
+        .maint-list { 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+            padding-right: 4px; 
+            flex-grow: 1;
+        }
+        .m3-sch-item {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+            padding: 12px 16px;
+            border-radius: var(--radius-m);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-left: 6px solid var(--warning);
+        }
+
         /* Notice Board */
         .notice-board-card {
+            flex-grow: 1;
             background: var(--primary-container);
             color: var(--on-primary-container);
             position: relative;
@@ -402,18 +448,6 @@
             transition: transform 0.1s linear;
         }
 
-        /* Maintenance List */
-        .maint-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
-        .m3-sch-item {
-            background: var(--surface-variant);
-            color: var(--on-surface);
-            padding: 12px 16px;
-            border-radius: var(--radius-m);
-            font-size: 0.9rem;
-            font-weight: 600;
-            border-left: 6px solid var(--warning);
-        }
-
         /* --- DRIVER CARD --- */
         .driver-card {
             position: fixed;
@@ -433,13 +467,47 @@
         
         .driver-card.outdated {
             border-color: var(--error);
-            opacity: 0.8;
-            filter: grayscale(0.3);
+            opacity: 0.4;
+            filter: grayscale(0.5);
         }
 
-        .driver-img-wrap { position: relative; width: 56px; height: 56px; }
-        .driver-img { width: 100%; height: 100%; border-radius: var(--radius-full); object-fit: cover; cursor: pointer; border: 2px solid var(--primary); }
-        .call-icon { position: absolute; bottom: -4px; right: -4px; background: var(--success); color: var(--on-success-container); border-radius: 50%; padding: 4px; font-size: 14px; box-shadow: var(--shadow-1); cursor: pointer; pointer-events: none;}
+        .outdated-warning-tag {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--error);
+            color: var(--surface);
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            white-space: nowrap;
+            animation: warning-blink 1.5s infinite alternate;
+            display: none;
+            z-index: 10;
+        }
+
+        @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
+
+        .driver-img-wrap { 
+            position: relative; 
+            width: 56px; 
+            height: 56px; 
+            background: var(--surface-variant);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+        .driver-img-wrap .material-symbols-rounded.main-icon { font-size: 32px; }
+        .call-icon { position: absolute; bottom: -4px; right: -4px; background: var(--success); color: var(--on-success-container); border-radius: 50%; padding: 4px; font-size: 14px; box-shadow: var(--shadow-1); pointer-events: none;}
 
         .driver-info { display: flex; flex-direction: column; justify-content: center; }
         .driver-shift { font-size: 0.65rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -450,8 +518,7 @@
             font-size: 0.6rem; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-full); display: inline-block; width: fit-content;
         }
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
-        .badge-outdated { background: var(--error-container); color: var(--on-error-container); animation: blink 1s infinite alternate;}
-        @keyframes blink { from { opacity: 1; } to { opacity: 0.6; } }
+        .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
 
         /* --- TICKER --- */
         .ticker-bar {
@@ -504,7 +571,7 @@
 
         @keyframes ticker-move { 0% { transform: translateX(50vw); } 100% { transform: translateX(-100%); } }
 
-        /* --- FAB (Floating Action Button) --- */
+        /* --- FAB --- */
         .fab-ab {
             position: fixed;
             bottom: 70px;
@@ -527,7 +594,7 @@
         }
         .fab-ab:hover { transform: translateY(-4px); background: var(--primary); color: var(--surface); }
 
-        /* --- STANDBY / BLACKOUT --- */
+        /* --- STANDBY --- */
         #blackout {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
@@ -548,7 +615,6 @@
         .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
         .center-dot { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
 
-        /* Update indicator */
         .update-stamp {
             position: absolute;
             top: 12px; right: 24px;
@@ -572,7 +638,7 @@
     </div>
 
     <!-- FLOATING AB -->
-    <a href="absub.html" class="fab-ab">AB</a>
+    <a href="index.html" class="fab-ab">O</a>
 
     <!-- TOP APP BAR -->
     <header class="app-bar">
@@ -607,51 +673,52 @@
         </div>
     </header>
 
-    <!-- STATION GRID (Collapsible) -->
+    <!-- STATION GRID -->
     <div class="station-wrapper" id="station-wrapper" style="display: none;">
         <div id="station-grid" class="station-grid"></div>
     </div>
 
     <!-- MAIN DASHBOARD -->
     <main class="dashboard-content">
-        <!-- Roster Today -->
-        <div class="m3-card">
-            <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
-            <div id="roster-today" class="roster-grid"></div>
-        </div>
-
-        <!-- Roster Tomorrow -->
-        <div class="m3-card">
-            <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
-            <div id="roster-tomorrow" class="roster-grid"></div>
-        </div>
-
-        <!-- Ops Blocks -->
-        <div class="ops-container">
-            <div id="box-mainline" class="ops-box">MAINLINE: ---</div>
-            <div id="box-depot" class="ops-box">DEPOT: ---</div>
-        </div>
-
-        <!-- Maintenance -->
-        <div class="m3-card">
-            <div class="card-header"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
-            <div id="maint-list" class="maint-list"></div>
-        </div>
-
-        <!-- Notice Board -->
-        <div class="m3-card notice-board-card">
-            <div class="card-header"><span class="material-symbols-rounded">campaign</span> IMPORTANT NOTICE</div>
-            <div class="notice-wrapper" id="notice-wrapper">
-                <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+        <div class="left-column">
+            <div class="rosters-row">
+                <div class="m3-card">
+                    <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
+                    <div id="roster-today" class="roster-grid"></div>
+                </div>
+                <div class="m3-card">
+                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
+                    <div id="roster-tomorrow" class="roster-grid"></div>
+                </div>
             </div>
-            <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
+            <div class="m3-card notice-board-card">
+                <div class="card-header"><span class="material-symbols-rounded">campaign</span> IMPORTANT NOTICE</div>
+                <div class="notice-wrapper" id="notice-wrapper">
+                    <div id="notice-text-content" class="notice-content">Awaiting latest updates from control...</div>
+                </div>
+                <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="m3-card unified-unit">
+                <div class="card-header"><span class="material-symbols-rounded">settings_applications</span> OPERATIONS STATUS</div>
+                <div class="ops-container">
+                    <div id="box-mainline" class="ops-box">MAINLINE: ---</div>
+                    <div id="box-depot" class="ops-box">DEPOT: ---</div>
+                </div>
+                <div class="maint-divider"></div>
+                <div class="card-header" style="margin-top: 8px;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
+                <div id="maint-list" class="maint-list"></div>
+            </div>
         </div>
     </main>
 
     <!-- DRIVER CARD -->
     <div id="driver-card" class="driver-card outdated">
+        <div id="outdated-warning-text" class="outdated-warning-tag">⚠️ OUTDATED</div>
         <div class="driver-img-wrap" onclick="initiateCall(event)">
-            <img id="driver-img" src="https://cdn-icons-png.flaticon.com/256/15726/15726482.png" class="driver-img" alt="Driver">
+            <span class="material-symbols-rounded main-icon">directions_car</span>
             <span class="material-symbols-rounded call-icon">call</span>
         </div>
         <div class="driver-info">
@@ -677,7 +744,6 @@
         let noticeScrollInterval = null;
         let noticeScrollPos = 0;
 
-        // Theme Setup
         function initTheme() {
             const savedTheme = localStorage.getItem('kmrl_theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
@@ -694,7 +760,6 @@
             document.getElementById('theme-icon').innerText = next === 'dark' ? 'light_mode' : 'dark_mode';
         }
 
-        // App Controls
         function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
@@ -719,7 +784,6 @@
             btn.classList.toggle('btn-grid-active', isHidden);
         }
 
-        // Parsers mapped to M3 Styles
         function parseStaff(raw) {
             if(!raw) return '';
             return raw.split('\n').map(line => {
@@ -736,9 +800,16 @@
         }
 
         function evaluateUpdateBadge(rawTimestamp) {
-            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
+            const card = document.getElementById('driver-card'), 
+                  badge = document.getElementById('driver-update-badge'),
+                  warningText = document.getElementById('outdated-warning-text');
+                  
             if (!rawTimestamp || rawTimestamp === "---") { 
-                badge.innerText = "UPDATE: N/A"; badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); return; 
+                badge.innerText = "UPDATE: N/A"; 
+                badge.className = "driver-badge badge-outdated"; 
+                card.classList.add('outdated'); 
+                if (warningText) warningText.style.display = 'block';
+                return; 
             }
             try {
                 const updateTime = new Date(rawTimestamp), now = new Date();
@@ -749,8 +820,16 @@
                 if (currentHour >= 8 && currentHour < 20) shiftStart.setHours(8, 0, 0, 0);
                 else { if (currentHour < 8) shiftStart.setDate(now.getDate() - 1); shiftStart.setHours(20, 0, 0, 0); }
                 
-                if (updateTime >= shiftStart) { badge.className = "driver-badge badge-active"; card.classList.remove('outdated'); }
-                else { badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); }
+                if (updateTime >= shiftStart) { 
+                    badge.className = "driver-badge badge-active"; 
+                    card.classList.remove('outdated'); 
+                    if (warningText) warningText.style.display = 'none';
+                }
+                else { 
+                    badge.className = "driver-badge badge-outdated"; 
+                    card.classList.add('outdated'); 
+                    if (warningText) warningText.style.display = 'block';
+                }
             } catch (e) { badge.innerText = "UPDATE: ERR"; }
         }
 
@@ -776,12 +855,9 @@
         function startNoticeAutoScroll() {
             const wrapper = document.getElementById('notice-wrapper');
             const content = document.getElementById('notice-text-content');
-            
             if (noticeScrollInterval) clearInterval(noticeScrollInterval);
-            
             noticeScrollPos = 0;
             content.style.transform = `translateY(0)`;
-
             setTimeout(() => {
                 const diff = content.scrollHeight - wrapper.offsetHeight;
                 if (diff > 0) {
@@ -799,7 +875,6 @@
             }, 500);
         }
 
-        // Data Core Parser
         window.draw = function(data) {
             document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
             let stHtml = '', tdHtml = '', tmHtml = '';
@@ -807,13 +882,11 @@
             data.forEach(item => {
                 const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
 
-                // Notice
                 if (param === "sheetab_R2C2" && unit === "sheetab") {
                     const el = document.getElementById('notice-text-content');
                     if (el.innerText !== val) { el.innerText = val; startNoticeAutoScroll(); }
                 }
 
-                // Ticker
                 if (param === "TechTicker" || unit === "TechTicker") {
                     if (val.includes('|')) {
                         const pts = val.split('|'); updateTickerBar(pts[0], pts[1]);
@@ -822,14 +895,12 @@
                     }
                 }
 
-                // Checklist
                 if (param === "ChecklistStatus") {
                     const el = document.getElementById('checklist-text');
                     el.innerText = `CHECKLIST STATUS: ${val}`;
                     el.style.color = val.includes("FILLED") ? "var(--success)" : "var(--error)";
                 }
 
-                // Station Grid Cards
                 if (unit === "StationTemp") {
                     const parts = val.split("|"), amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0, isAlarm = amb > 34 || trfo > 80;
                     stHtml += `
@@ -842,11 +913,9 @@
                     </div>`;
                 }
 
-                // Rosters
                 if (unit === "Staff-Today") tdHtml += `<div class="m3-shift-card ${item.Limit === 'ACTIVE' ? 'm3-shift-active' : ''}"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
                 if (unit === "Staff-Tomorrow") tmHtml += `<div class="m3-shift-card"><div class="m3-shift-label">${param}</div><div class="staff-list">${parseStaff(val)}</div></div>`;
                 
-                // Ops Status
                 if (unit === "OpsBlock") {
                     const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
                     const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
@@ -855,22 +924,18 @@
                     dEl.className = `ops-box ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                 }
 
-                // Maintenance
                 if (unit === "OpsSchedule") {
                     const lines = val.split('\n').filter(l => l.trim() !== "");
                     document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
                 }
 
-                // Driver / Tech
                 if (unit === "DriverPopup" || unit === "Technician") {
                     const parts = val.split('|');
                     document.getElementById('driver-name').innerText = parts[0] || "---";
                     document.getElementById('driver-phone').innerText = parts[1] || "---";
                     document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
-                    if(parts[3]) document.getElementById('driver-img').src = parts[3];
                 }
 
-                // Update Timestamp logic
                 if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
             });
 
@@ -879,24 +944,18 @@
             if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
         };
 
-        // Clocks Engine
         function updateClocks() {
             const n = new Date();
             const s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
-            
-            // Digital
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            
-            // Analog
             document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
             document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
             document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
         }
         setInterval(updateClocks, 1000);
 
-        // API Fetcher
         function refreshData() {
             const old = document.getElementById('api-script');
             if(old) old.remove();
