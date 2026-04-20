@@ -513,6 +513,8 @@
                 tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' }
             };
             
+            let chkStatus = "", techNames = "";
+            
             data.forEach(item => {
                 const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
 
@@ -539,10 +541,13 @@
                 if (param === "sheetab_R2C24") staff.tomorrow.tpcEve = val;
                 if (param === "sheetab_R2C25") staff.tomorrow.tpcNight = val;
 
+                // Marquee mappings
                 if (param === "ChecklistStatus") {
-                    const el = document.getElementById('checklist-text');
-                    el.innerText = `CHECKLIST STATUS: ${val}`;
-                    el.style.color = val.includes("FILLED") ? "var(--success)" : "var(--error)";
+                    chkStatus = val;
+                }
+                
+                if (param === "TechTicker" || unit === "TechTicker") {
+                    techNames = val;
                 }
 
                 if (unit === "StationTemp") {
@@ -582,6 +587,21 @@
 
                 if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
             });
+            
+            // Build top marquee
+            const chkEl = document.getElementById('checklist-text');
+            let marqueeHtml = [];
+            if (chkStatus) {
+                const chkColor = chkStatus.includes("FILLED") ? "var(--success)" : "var(--error)";
+                marqueeHtml.push(`<span style="color: ${chkColor};">CHECKLIST STATUS: ${chkStatus}</span>`);
+            }
+            if (techNames) {
+                const cleanNames = techNames.includes('|') ? techNames.split('|')[1] : techNames;
+                marqueeHtml.push(`<span style="color: var(--on-surface);">ON DUTY TECHNICIANS: ${cleanNames}</span>`);
+            }
+            if (marqueeHtml.length > 0) {
+                chkEl.innerHTML = marqueeHtml.join('<span style="color: var(--outline); margin: 0 16px;">•</span>');
+            }
 
             // Build shifts
             const currentHour = new Date().getHours();
