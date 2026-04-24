@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KMRL SUBSTATION DASHBOARD</title>
     
-    <!-- Google Fonts & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
-        /* --- M3 THEME VARIABLES --- */
         :root {
             --transition-speed: 0.3s;
             --radius-s: 8px;
@@ -24,9 +22,10 @@
         }
 
         [data-theme="light"] {
-            --bg-color: #F4F6F9;
+            --bg-color: #F0F4F8;
             --surface: #FFFFFF;
-            --surface-variant: #E8EAED;
+            --surface-variant: #E4EBF2;
+            --surface-dim: #D8E2EE;
             --on-bg: #1A1C1E;
             --on-surface: #1A1C1E;
             --on-surface-variant: #44474F;
@@ -45,37 +44,45 @@
             --warning: #7D5260;
             --warning-container: #FFD8E4;
             --on-warning-container: #31111D;
-            --shadow-1: 0 2px 4px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06);
             --shadow-2: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.1);
+            --tech-bg: rgba(0, 97, 164, 0.06);
+            --tech-border: rgba(0, 97, 164, 0.2);
+            --tech-name-color: #003D6B;
         }
 
         [data-theme="dark"] {
-            --bg-color: #0F141A;
-            --surface: #1A2027;
-            --surface-variant: #2A313A;
-            --on-bg: #E2E2E6;
-            --on-surface: #E2E2E6;
-            --on-surface-variant: #C2C7CF;
-            --outline: #8C9199;
-            --primary: #9ECAFF;
-            --primary-container: #00497D;
+            --bg-color: #0D1117;
+            --surface: #161C25;
+            --surface-variant: #1F2836;
+            --surface-dim: #131920;
+            --on-bg: #E2E6EC;
+            --on-surface: #E2E6EC;
+            --on-surface-variant: #B8C4D4;
+            --outline: #6E7A8A;
+            --primary: #7DBEFF;
+            --primary-container: #003D6B;
             --on-primary-container: #D1E4FF;
-            --secondary: #BBC7DB;
-            --secondary-container: #3B4858;
+            --secondary: #A8BDD4;
+            --secondary-container: #2C3D52;
             --error: #FFB4AB;
-            --error-container: #93000A;
+            --error-container: #7A0009;
             --on-error-container: #FFDAD6;
-            --success: #8FDF8D;
-            --success-container: #00531E;
+            --success: #72D48A;
+            --success-container: #003D17;
             --on-success-container: #C4EED0;
             --warning: #FFB1C8;
-            --warning-container: #633B48;
+            --warning-container: #4A2234;
             --on-warning-container: #FFD8E4;
-            --shadow-1: 0 2px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.3);
-            --shadow-2: 0 4px 8px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.5);
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.6);
+            --tech-bg: rgba(125, 190, 255, 0.07);
+            --tech-border: rgba(125, 190, 255, 0.18);
+            --tech-name-color: #9ECAFF;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             background: var(--bg-color);
             color: var(--on-bg);
@@ -89,106 +96,75 @@
             transition: background var(--transition-speed), color var(--transition-speed);
         }
 
+        /* ── APP BAR ── */
         .app-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--surface);
-            padding: 12px 24px;
-            margin: 12px;
+            padding: 10px 20px;
+            margin: 10px 10px 0 10px;
             border-radius: var(--radius-full);
             box-shadow: var(--shadow-1);
             z-index: 100;
             flex-shrink: 0;
         }
-
-        .logo-section img { height: 36px; object-fit: contain; }
-
+        .logo-section img { height: 34px; object-fit: contain; }
         .middle-module {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 16px;
-            margin: 0 24px;
-            height: 48px;
+            gap: 12px;
+            margin: 0 20px;
+            height: 44px;
             overflow: hidden;
         }
-
         .checklist-container {
-            flex: 1;
-            min-width: 0;
-            height: 100%;
-            background: var(--secondary-container);
-            color: var(--on-surface);
+            flex: 1; min-width: 0; height: 100%;
+            background: var(--secondary-container); color: var(--on-surface);
             border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
+            display: flex; align-items: center; position: relative; overflow: hidden;
         }
-
         .checklist-marquee {
-            white-space: nowrap;
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.1rem;
+            white-space: nowrap; font-family: var(--font-display);
+            font-weight: 800; font-size: 1rem;
             position: absolute;
             animation: scroll-text 20s linear infinite;
         }
-
         @keyframes scroll-text {
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
-
-        .clock-container { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+        .clock-container { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
         .clock-unit {
-            background: var(--surface-variant);
-            color: var(--on-surface);
-            border-radius: var(--radius-m);
-            padding: 4px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 60px;
+            background: var(--surface-variant); color: var(--on-surface);
+            border-radius: var(--radius-m); padding: 3px 10px;
+            display: flex; flex-direction: column; align-items: center; min-width: 54px;
         }
-        .clock-val { font-family: var(--font-display); font-size: 1.5rem; font-weight: 900; line-height: 1.1; }
-        .clock-label { font-size: 0.6rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1px; }
-
-        .top-controls { display: flex; gap: 12px; }
+        .clock-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
+        .clock-label { font-size: 0.55rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1.2px; }
+        .top-controls { display: flex; gap: 8px; }
         .icon-btn {
-            background: var(--surface-variant);
-            color: var(--on-surface);
-            border: none;
-            width: 44px;
-            height: 44px;
+            background: var(--surface-variant); color: var(--on-surface);
+            border: none; width: 40px; height: 40px;
             border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s ease;
         }
         .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
         .btn-grid-active { background: var(--primary); color: var(--surface); }
         .btn-off { background: var(--error-container); color: var(--on-error-container); }
 
-        /* Stock Ticker style for Stations */
-        .station-wrapper { 
-            padding: 10px 0; 
-            margin: 0 16px 12px 16px; 
-            flex-shrink: 0; 
-            background: var(--surface);
+        /* ── STATION TICKER ── */
+        .station-wrapper {
+            padding: 8px 0; margin: 8px 10px;
+            flex-shrink: 0; background: var(--surface);
             border-radius: var(--radius-full);
-            box-shadow: var(--shadow-1);
-            overflow: hidden;
-            position: relative;
+            box-shadow: var(--shadow-1); overflow: hidden; position: relative;
         }
-        .station-track { 
-            display: flex; 
-            gap: 24px; 
-            width: max-content;
+        .station-track {
+            display: flex; gap: 20px; width: max-content;
             animation: stock-scroll 45s linear infinite;
         }
         .station-track:hover { animation-play-state: paused; }
@@ -196,165 +172,406 @@
             0% { transform: translateX(100vw); }
             100% { transform: translateX(-100%); }
         }
-
         .stock-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--surface-variant);
-            padding: 6px 20px;
+            display: flex; align-items: center; gap: 10px;
+            background: var(--surface-variant); padding: 5px 18px;
             border-radius: var(--radius-full);
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.5rem;
-            white-space: nowrap;
+            font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; white-space: nowrap;
         }
         .stock-item.alarm { background: var(--error-container); color: var(--on-error-container); animation: pulse-alarm 1.5s infinite alternate; }
         @keyframes pulse-alarm {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
-            100% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(255,0,0,0); }
         }
-        .stock-name { color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stock-name { color: var(--primary); text-transform: uppercase; }
         .stock-val { display: flex; align-items: center; gap: 4px; }
         .stock-val.safe { color: var(--success); }
         .stock-val.warn { color: var(--error); }
-        .stock-icon { font-size: 1.1rem !important; opacity: 0.8; }
+        .stock-icon { font-size: 1rem !important; opacity: 0.8; }
 
-        /* Dashboard content layout */
-        .dashboard-content { 
-            display: grid; 
-            grid-template-columns: 2fr 1fr; 
-            gap: 16px; 
-            padding: 0 16px 90px 16px; 
-            flex-grow: 1; 
-            overflow-y: auto; 
+        /* ── DASHBOARD LAYOUT ── */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 5fr 3fr;
+            gap: 10px;
+            padding: 10px 10px 90px 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--surface-variant) transparent;
         }
-        .left-column { display: flex; flex-direction: column; gap: 16px; height: max-content; }
-        .right-column { display: flex; flex-direction: column; gap: 16px; height: max-content; }
-        .rosters-row { display: flex; flex-direction: column; gap: 16px; }
+        .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
 
-        .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 20px; box-shadow: var(--shadow-1); display: flex; flex-direction: column; overflow: hidden; }
-        .card-header { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        /* ── M3 CARD ── */
+        .m3-card {
+            background: var(--surface); border-radius: var(--radius-l);
+            padding: 16px; box-shadow: var(--shadow-1);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
 
-        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 10px; display: flex; flex-direction: column; gap: 6px; border: 2px solid transparent; transition: border 0.3s ease; }
-        .m3-shift-active { border-color: var(--success); }
-        .m3-shift-label { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); margin-bottom: 2px; }
-        .shift-tpc-badge { font-size: 0.65rem; background: var(--primary-container); color: var(--on-primary-container); padding: 2px 8px; border-radius: var(--radius-full); font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
-        .m3-staff-item { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 4px 8px; border-radius: var(--radius-s); font-size: 0.75rem; font-weight: 600; }
-        .staff-name { color: var(--on-surface-variant); }
-        .m3-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: var(--radius-full); font-weight: 800; }
+        /* ── DEPLOYMENT CARD HEADER with inline general info ── */
+        .deploy-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+        .card-header {
+            font-family: var(--font-display);
+            font-weight: 900; font-size: 1rem;
+            color: var(--primary);
+            display: flex; align-items: center; gap: 8px;
+            text-transform: uppercase; letter-spacing: 0.8px;
+            flex-shrink: 0;
+        }
+        .general-info-pill {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            flex: 1;
+            justify-content: flex-end;
+        }
+        .gen-name-tag {
+            background: var(--surface-variant);
+            color: var(--on-surface);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            border: 1.5px solid var(--outline);
+            letter-spacing: 0.3px;
+        }
+        .gen-label-pill {
+            background: var(--secondary-container);
+            color: var(--on-surface-variant);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.65rem;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        /* ── ROSTER GRID ── */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        /* ── SHIFT CARD ── */
+        .m3-shift-card {
+            background: var(--surface-variant);
+            border-radius: var(--radius-m);
+            padding: 12px;
+            display: flex; flex-direction: column; gap: 0;
+            border: 2px solid transparent;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            overflow: hidden;
+        }
+        .m3-shift-active {
+            border-color: var(--success);
+            box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px rgba(114, 212, 138, 0.15);
+        }
+
+        .shift-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .m3-shift-label {
+            font-family: var(--font-display);
+            font-weight: 900; font-size: 1rem;
+            color: var(--on-surface);
+            letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .shift-active-dot {
+            width: 8px; height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: none;
+            animation: pulse-dot 2s infinite;
+        }
+        .m3-shift-active .shift-active-dot { display: inline-block; }
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+        }
+
+        .shift-tpc-badge {
+            font-size: 0.62rem;
+            background: var(--primary-container);
+            color: var(--on-primary-container);
+            padding: 2px 8px; border-radius: var(--radius-full);
+            font-weight: 800; letter-spacing: 0.5px; white-space: nowrap;
+        }
+
+        /* ── STAFF LIST ── */
+        .staff-list {
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .m3-staff-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--surface); padding: 6px 10px;
+            border-radius: var(--radius-s);
+        }
+        .staff-name {
+            font-family: var(--font-display);
+            font-size: 0.9rem; font-weight: 800;
+            color: var(--on-surface);
+            letter-spacing: 0.2px;
+        }
+        .m3-badge { font-size: 0.62rem; padding: 2px 7px; border-radius: var(--radius-full); font-weight: 800; }
         .badge-tpc-m { background: #00E5FF; color: #000; }
         .badge-tpc-e { background: #FF9100; color: #000; }
         .badge-tpc-n { background: #D500F9; color: #FFF; }
         .badge-default { background: var(--outline); color: var(--surface); }
 
-        .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 16px; padding-bottom: 12px; position: relative; }
-        
-        .maint-header-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-        .ops-inline-container { display: flex; gap: 8px; flex-wrap: wrap; }
-        .ops-badge { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; padding: 4px 12px; border-radius: var(--radius-full); box-shadow: var(--shadow-1); text-align: center; }
+        /* ── TECHNICIAN SECTION (inside shift card) ── */
+        .tech-section {
+            margin-top: 8px;
+            border-top: 1.5px solid var(--tech-border);
+            padding-top: 8px;
+        }
+        .tech-label-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .tech-label {
+            font-family: var(--font-display);
+            font-size: 0.6rem; font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .tech-label-icon {
+            font-size: 13px !important;
+            color: var(--primary);
+        }
+
+        /* Infinite scroll marquee for technicians */
+        .tech-scroll-wrap {
+            overflow: hidden;
+            border-radius: var(--radius-s);
+            background: var(--tech-bg);
+            border: 1px solid var(--tech-border);
+            padding: 5px 0;
+            position: relative;
+        }
+        .tech-scroll-track {
+            display: flex;
+            gap: 0;
+            width: max-content;
+            animation: tech-scroll 18s linear infinite;
+        }
+        .tech-scroll-track:hover { animation-play-state: paused; }
+        @keyframes tech-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .tech-name-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 14px;
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--tech-name-color);
+            white-space: nowrap;
+            border-right: 1.5px solid var(--tech-border);
+        }
+        .tech-name-chip:last-child { border-right: none; }
+        .tech-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+        /* Static display for few names */
+        .tech-static { 
+            display: flex; flex-wrap: wrap; gap: 4px;
+            padding: 2px 0;
+        }
+        .tech-static .tech-name-chip {
+            background: var(--tech-bg);
+            border: 1px solid var(--tech-border);
+            border-radius: var(--radius-full);
+            padding: 3px 10px;
+        }
+
+        /* ── RIGHT COLUMN: Maintenance ── */
+        .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .maint-header-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .ops-inline-container { display: flex; gap: 6px; flex-wrap: wrap; }
+        .ops-badge {
+            font-family: var(--font-display); font-weight: 800; font-size: 0.8rem;
+            padding: 4px 12px; border-radius: var(--radius-full);
+            box-shadow: var(--shadow-1); text-align: center;
+        }
         .ops-badge.alert { background: var(--error-container); color: var(--on-error-container); border: 1px solid var(--error); }
         .ops-badge.ok { background: var(--success-container); color: var(--on-success-container); border: 1px solid var(--success); }
-
-        .maint-divider { height: 2px; background: var(--surface-variant); margin: 8px 0; border-radius: var(--radius-full); }
-        .maint-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; max-height: 300px; }
-        .m3-sch-item { background: var(--surface-variant); color: var(--on-surface); padding: 12px 16px; border-radius: var(--radius-m); font-size: 0.9rem; font-weight: 600; border-left: 6px solid var(--warning); }
-
-        .driver-card {
-            position: fixed; bottom: 65px; left: 16px; background: var(--surface); padding: 12px 20px 12px 12px;
-            border-radius: var(--radius-full); box-shadow: var(--shadow-2); display: flex; align-items: center; gap: 16px; z-index: 1000;
-            border: 2px solid transparent; transition: all 0.3s ease; max-width: calc(100vw - 100px);
+        .maint-divider { height: 1.5px; background: var(--surface-variant); margin: 4px 0; border-radius: var(--radius-full); }
+        .maint-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+        .m3-sch-item {
+            background: var(--surface-variant); color: var(--on-surface);
+            padding: 10px 14px; border-radius: var(--radius-m);
+            font-size: 0.85rem; font-weight: 600;
+            border-left: 5px solid var(--warning);
+            line-height: 1.5;
         }
-        .driver-card.outdated { border-color: var(--error); opacity: 0.4; filter: grayscale(0.5); }
+
+        /* ── DRIVER CARD ── */
+        .driver-card {
+            position: fixed; bottom: 54px; left: 10px;
+            background: var(--surface); padding: 10px 18px 10px 10px;
+            border-radius: var(--radius-full); box-shadow: var(--shadow-2);
+            display: flex; align-items: center; gap: 14px; z-index: 1000;
+            border: 2px solid transparent; transition: all 0.3s ease;
+            max-width: calc(100vw - 90px);
+        }
+        .driver-card.outdated { border-color: var(--error); opacity: 0.45; filter: grayscale(0.5); }
         .outdated-warning-tag {
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--error); color: var(--surface);
-            font-family: var(--font-display); font-size: 0.7rem; font-weight: 900; padding: 4px 12px; border-radius: var(--radius-full);
-            letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); animation: warning-blink 1.5s infinite alternate; display: none;
-            white-space: nowrap;
+            position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+            background: var(--error); color: var(--surface);
+            font-family: var(--font-display); font-size: 0.65rem; font-weight: 900;
+            padding: 3px 10px; border-radius: var(--radius-full);
+            letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            animation: warning-blink 1.5s infinite alternate; display: none; white-space: nowrap;
         }
         @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
-        .driver-img-wrap { width: 56px; height: 56px; flex-shrink: 0; background: var(--surface-variant); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); border: 2px solid var(--primary); cursor: pointer; position: relative; }
-        .driver-img-wrap .material-symbols-rounded.main-icon { font-size: 32px; }
-        .call-icon { position: absolute; bottom: -4px; right: -4px; background: var(--success); color: var(--on-success-container); border-radius: 50%; padding: 4px; font-size: 14px; box-shadow: var(--shadow-1); pointer-events: none;}
+        .driver-img-wrap {
+            width: 52px; height: 52px; flex-shrink: 0;
+            background: var(--surface-variant); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); border: 2px solid var(--primary);
+            cursor: pointer; position: relative;
+        }
+        .driver-img-wrap .main-icon { font-size: 28px; }
+        .call-icon {
+            position: absolute; bottom: -4px; right: -4px;
+            background: var(--success); color: var(--on-success-container);
+            border-radius: 50%; padding: 3px; font-size: 13px; box-shadow: var(--shadow-1);
+            pointer-events: none;
+        }
         .driver-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-        .driver-shift { font-size: 0.65rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
-        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--on-surface); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .driver-phone { font-size: 0.85rem; font-weight: 600; color: var(--outline); margin-bottom: 4px; }
-        .driver-badge { font-size: 0.6rem; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-full); width: fit-content; white-space: nowrap;}
+        .driver-shift { font-size: 0.6rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
+        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--on-surface); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .driver-phone { font-size: 0.8rem; font-weight: 600; color: var(--outline); margin-bottom: 3px; }
+        .driver-badge { font-size: 0.58rem; font-weight: 800; padding: 2px 7px; border-radius: var(--radius-full); width: fit-content; white-space: nowrap; }
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
 
-        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background: var(--surface); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; z-index: 1001; cursor: pointer; }
-        .ticker-head { background: var(--primary); color: var(--surface); height: 100%; padding: 0 24px; display: flex; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; border-radius: 0 24px 24px 0; z-index: 2; flex-shrink: 0; }
+        /* ── TICKER ── */
+        .ticker-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            height: 46px; background: var(--surface);
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; z-index: 1001; cursor: pointer;
+        }
+        .ticker-head {
+            background: var(--primary); color: var(--surface);
+            height: 100%; padding: 0 20px;
+            display: flex; align-items: center;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.8rem;
+            letter-spacing: 1px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
+        }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        .ticker-scroll { white-space: nowrap; font-size: 1rem; font-weight: 700; color: var(--on-surface); padding: 0 24px; flex-shrink: 0; }
-        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; } /* Speed reduced to quarter speed */
+        .ticker-scroll { white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: var(--on-surface); padding: 0 20px; flex-shrink: 0; }
+        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; }
         @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-
-        /* Ticker Hover Pause and Popup Logic */
         .ticker-bar:hover .scrolling-active { animation-play-state: paused; }
         .ticker-popup {
-            display: none;
-            position: absolute;
-            bottom: 60px; /* Floating above the ticker */
-            left: 50%;
+            display: none; position: absolute; bottom: 58px; left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 32px);
-            max-width: 900px;
-            background: var(--surface);
-            color: var(--on-surface);
-            padding: 20px 24px;
-            border-radius: var(--radius-l);
+            width: calc(100% - 28px); max-width: 860px;
+            background: var(--surface); color: var(--on-surface);
+            padding: 18px 22px; border-radius: var(--radius-l);
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            border: 2px solid var(--primary);
-            z-index: 1005;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-family: var(--font-body);
-            font-weight: 600;
-            white-space: pre-wrap; /* Keeps original line breaks visible */
-            max-height: 60vh;
-            overflow-y: auto;
-            cursor: default;
+            border: 2px solid var(--primary); z-index: 1005;
+            font-size: 1rem; line-height: 1.6;
+            font-family: var(--font-body); font-weight: 600;
+            white-space: pre-wrap; max-height: 60vh; overflow-y: auto; cursor: default;
         }
         .ticker-bar:hover .ticker-popup { display: block; }
 
-        .fab-ab { position: fixed; bottom: 65px; right: 16px; width: 64px; height: 64px; background: var(--primary-container); color: var(--on-primary-container); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; text-decoration: none; box-shadow: var(--shadow-2); z-index: 1000; flex-shrink: 0; }
+        .fab-ab {
+            position: fixed; bottom: 60px; right: 10px;
+            width: 58px; height: 58px;
+            background: var(--primary-container); color: var(--on-primary-container);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-weight: 900; font-size: 1.1rem;
+            text-decoration: none; box-shadow: var(--shadow-2); z-index: 1000;
+        }
 
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
-        .analog-wrap { width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
+        /* ── BLACKOUT ── */
+        #blackout {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: none;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        .analog-wrap {
+            width: 300px; height: 300px; border-radius: 50%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            border: 2px solid #333; position: relative;
+        }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
         .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
         .h-min { width: 4px; height: 40%; background: #aaa; margin-left: -2px; }
         .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
-        .center-dot { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
+        .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
 
-        .update-stamp { position: absolute; top: 12px; right: 24px; font-size: 0.7rem; font-weight: 600; color: var(--outline); }
+        .update-stamp { position: absolute; top: 10px; right: 20px; font-size: 0.65rem; font-weight: 600; color: var(--outline); }
 
-        /* --- MOBILE RESPONSIVE CSS --- */
+        /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
-            .dashboard-content { grid-template-columns: 1fr; padding-bottom: 140px; padding-top: 8px; }
-            
-            .app-bar { flex-wrap: wrap; padding: 12px 16px; margin: 8px; gap: 8px; justify-content: space-between; border-radius: var(--radius-m); }
-            .middle-module { order: 3; width: 100%; margin: 8px 0 0 0; height: 44px; }
-            .logo-section img { height: 28px; }
-            
-            .icon-btn { width: 40px; height: 40px; }
-            .clock-unit { min-width: 50px; padding: 2px 8px; }
+            .dashboard-content {
+                grid-template-columns: 1fr;
+                padding-bottom: 130px;
+                padding-top: 8px;
+                gap: 8px;
+            }
+            .app-bar {
+                flex-wrap: wrap; padding: 10px 14px;
+                margin: 8px 8px 0 8px; gap: 6px;
+                justify-content: space-between; border-radius: var(--radius-l);
+            }
+            .middle-module { order: 3; width: 100%; margin: 6px 0 0 0; height: 40px; }
+            .logo-section img { height: 26px; }
+            .icon-btn { width: 38px; height: 38px; }
+            .clock-unit { min-width: 46px; padding: 2px 7px; }
             .clock-val { font-size: 1.2rem; }
+            .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+            .station-wrapper { margin: 6px 8px; }
+            .driver-card { left: 8px; bottom: 52px; padding: 8px 12px 8px 8px; gap: 10px; max-width: calc(100vw - 75px); }
+            .driver-img-wrap { width: 42px; height: 42px; }
+            .driver-img-wrap .main-icon { font-size: 22px; }
+            .driver-name { font-size: 0.9rem; }
+            .fab-ab { width: 46px; height: 46px; bottom: 56px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
+            .ticker-head { padding: 0 14px; font-size: 0.72rem; }
+            .ticker-popup { bottom: 56px; width: calc(100% - 14px); padding: 14px; }
+            .deploy-header { flex-direction: column; gap: 8px; }
+            .general-info-pill { justify-content: flex-start; }
+        }
 
-            .station-wrapper { margin: 0 8px 8px 8px; border-radius: var(--radius-m); }
-            
-            .driver-card { left: 8px; bottom: 60px; padding: 8px 12px 8px 8px; gap: 12px; max-width: calc(100vw - 75px); }
-            .driver-img-wrap { width: 44px; height: 44px; }
-            .driver-img-wrap .main-icon { font-size: 24px; }
-            .driver-name { font-size: 0.95rem; }
-            
-            .fab-ab { width: 48px; height: 48px; bottom: 60px; right: 8px; font-size: 1rem; border-radius: 14px; }
-            .ticker-head { padding: 0 16px; font-size: 0.75rem; }
-            
-            .ticker-popup { bottom: 60px; width: calc(100% - 16px); padding: 16px; font-size: 1rem; }
+        @media (max-width: 600px) {
+            .roster-grid { grid-template-columns: 1fr; gap: 8px; }
+            .top-controls { gap: 6px; }
+            .m3-card { padding: 12px; }
+            .staff-name { font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -397,22 +614,33 @@
 
     <main class="dashboard-content">
         <div class="left-column">
-            <div class="rosters-row">
-                <div class="m3-card">
+            <!-- TODAY DEPLOYMENT -->
+            <div class="m3-card">
+                <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
-                    <div id="roster-today" class="roster-grid"></div>
+                    <div class="general-info-pill" id="today-gen-pills">
+                        <span class="gen-label-pill">GENERAL</span>
+                    </div>
                 </div>
-                <div class="m3-card">
+                <div id="roster-today" class="roster-grid"></div>
+            </div>
+            <!-- TOMORROW DEPLOYMENT -->
+            <div class="m3-card">
+                <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
-                    <div id="roster-tomorrow" class="roster-grid"></div>
+                    <div class="general-info-pill" id="tomorrow-gen-pills">
+                        <span class="gen-label-pill">GENERAL</span>
+                    </div>
                 </div>
+                <div id="roster-tomorrow" class="roster-grid"></div>
             </div>
         </div>
+
         <div class="right-column">
             <div class="m3-card unified-unit">
                 <div id="refresh-indicator" class="update-stamp">UPDATED: ---</div>
                 <div class="maint-header-wrapper">
-                    <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
+                    <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
                     <div class="ops-inline-container">
                         <div id="box-mainline" class="ops-badge">MAINLINE: ---</div>
                         <div id="box-depot" class="ops-badge">DEPOT: ---</div>
@@ -450,160 +678,220 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
 
         function initTheme() {
-            const savedTheme = localStorage.getItem('kmrl_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            document.getElementById('theme-icon').innerText = savedTheme === 'dark' ? 'light_mode' : 'dark_mode';
+            const saved = localStorage.getItem('kmrl_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('theme-icon').innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
         }
         initTheme();
 
         function toggleTheme(e) {
-            if(e) e.stopPropagation();
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('kmrl_theme', next);
-            document.getElementById('theme-icon').innerText = next === 'dark' ? 'light_mode' : 'dark_mode';
+            if (e) e.stopPropagation();
+            const cur = document.documentElement.getAttribute('data-theme');
+            const nxt = cur === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', nxt);
+            localStorage.setItem('kmrl_theme', nxt);
+            document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
         }
-
-        function goFullscreen(e) { if(e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function manualOff(e) { if(e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
+        function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
-        function initiateCall(e) { if(e) e.stopPropagation(); const phone = document.getElementById('driver-phone').innerText; if (phone && phone !== "---") window.location.href = `tel:${phone.replace(/\D/g, '')}`; }
+        function initiateCall(e) { if (e) e.stopPropagation(); const ph = document.getElementById('driver-phone').innerText; if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`; }
 
         function toggleGrid(e) {
-            if(e) e.stopPropagation();
-            const gridWrap = document.getElementById('station-wrapper'), 
-                  chk = document.getElementById('checklist-container'), 
+            if (e) e.stopPropagation();
+            const gw = document.getElementById('station-wrapper'),
+                  chk = document.getElementById('checklist-container'),
                   btn = document.getElementById('btn-grid');
-            
-            const isHidden = gridWrap.style.display === 'none';
-            gridWrap.style.display = isHidden ? 'block' : 'none';
+            const isHidden = gw.style.display === 'none';
+            gw.style.display = isHidden ? 'block' : 'none';
             chk.style.display = isHidden ? 'flex' : 'none';
             btn.classList.toggle('btn-grid-active', isHidden);
-
-            // Reflow and trigger animation for stock track
             if (isHidden) {
-                const track = document.getElementById('station-track');
-                track.style.animation = 'none';
-                track.offsetHeight; /* trigger reflow */
-                track.style.animation = null; 
+                const t = document.getElementById('station-track');
+                t.style.animation = 'none'; t.offsetHeight; t.style.animation = null;
             }
         }
 
         function parseStaff(raw) {
-            if(!raw) return '';
+            if (!raw) return '';
             return raw.split('\n').filter(l => l.trim() !== '').map(line => {
-                if(line.includes('|')) {
+                if (line.includes('|')) {
                     const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
                     let bCls = 'badge-default';
-                    if(dCode.includes('M TPC')) bCls = 'badge-tpc-m'; 
-                    else if(dCode.includes('E TPC')) bCls = 'badge-tpc-e'; 
-                    else if(dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    if (dCode.includes('M TPC')) bCls = 'badge-tpc-m';
+                    else if (dCode.includes('E TPC')) bCls = 'badge-tpc-e';
+                    else if (dCode.includes('N TPC')) bCls = 'badge-tpc-n';
                     return `<div class="m3-staff-item"><span class="staff-name">${name}</span><span class="m3-badge ${bCls}">${duty}</span></div>`;
                 }
                 return `<div class="m3-staff-item"><span class="staff-name">${line}</span></div>`;
             }).join('');
         }
 
-        function evaluateUpdateBadge(rawTimestamp) {
-            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge'), warningText = document.getElementById('outdated-warning-text');
-            if (!rawTimestamp || rawTimestamp === "---") { 
-                badge.innerText = "UPDATE: N/A"; badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); 
-                if (warningText) warningText.style.display = 'block'; return; 
+        // Build technician display with infinite scroll for many names
+        function buildTechSection(techRaw) {
+            if (!techRaw || techRaw.trim() === '') return '';
+            const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (names.length === 0) return '';
+
+            const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
+
+            // For scrolling: duplicate the list so it loops seamlessly
+            const allChips = names.map(chipHtml).join('');
+            const doubledChips = allChips + allChips; // duplicate for seamless loop
+
+            // Use scroll for 3+ names, static for fewer
+            if (names.length >= 3) {
+                return `
+                <div class="tech-section">
+                    <div class="tech-label-row">
+                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
+                        <span class="tech-label">Technicians On Duty</span>
+                    </div>
+                    <div class="tech-scroll-wrap">
+                        <div class="tech-scroll-track">${doubledChips}</div>
+                    </div>
+                </div>`;
+            } else {
+                return `
+                <div class="tech-section">
+                    <div class="tech-label-row">
+                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
+                        <span class="tech-label">Technicians On Duty</span>
+                    </div>
+                    <div class="tech-static">${names.map(chipHtml).join('')}</div>
+                </div>`;
             }
-            try {
-                const updateTime = new Date(rawTimestamp), now = new Date();
-                badge.innerText = `LAST UPDATE: ${updateTime.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false })}`;
-                const currentHour = now.getHours();
-                let shiftStart = new Date(now);
-                if (currentHour >= 8 && currentHour < 20) shiftStart.setHours(8, 0, 0, 0);
-                else { if (currentHour < 8) shiftStart.setDate(now.getDate() - 1); shiftStart.setHours(20, 0, 0, 0); }
-                if (updateTime >= shiftStart) { badge.className = "driver-badge badge-active"; card.classList.remove('outdated'); if (warningText) warningText.style.display = 'none'; }
-                else { badge.className = "driver-badge badge-outdated"; card.classList.add('outdated'); if (warningText) warningText.style.display = 'block'; }
-            } catch (e) { badge.innerText = "UPDATE: ERR"; }
+        }
+
+        // Correct shift time logic:
+        // Morning:  06:30 – 14:00
+        // Evening:  14:00 – 21:30
+        // Night:    21:30 – 06:30 (next day)
+        function isShiftActive(shiftName) {
+            const now = new Date();
+            const totalMins = now.getHours() * 60 + now.getMinutes();
+            const m = (h, min) => h * 60 + min;
+
+            if (shiftName === 'MORNING') {
+                return totalMins >= m(6, 30) && totalMins < m(14, 0);
+            }
+            if (shiftName === 'EVENING') {
+                return totalMins >= m(14, 0) && totalMins < m(21, 30);
+            }
+            if (shiftName === 'NIGHT') {
+                // Night: 21:30–23:59 or 00:00–06:29
+                return totalMins >= m(21, 30) || totalMins < m(6, 30);
+            }
+            return false;
+        }
+
+        function buildShift(title, val, active, tpc, techRaw) {
+            const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
+            const staffHtml = (val && val.trim() !== '')
+                ? parseStaff(val)
+                : `<div class="m3-staff-item" style="justify-content:center;opacity:0.4;font-family:var(--font-display);font-size:0.8rem;">No Deployment</div>`;
+            const techHtml = buildTechSection(techRaw);
+            return `
+            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
+                <div class="shift-header-row">
+                    <div class="m3-shift-label">
+                        <span class="shift-active-dot"></span>
+                        ${title}
+                    </div>
+                    ${tpcHtml}
+                </div>
+                <div class="staff-list">${staffHtml}</div>
+                ${techHtml}
+            </div>`;
+        }
+
+        // Build general info pills inside header
+        function buildGenPills(genRaw) {
+            if (!genRaw || genRaw.trim() === '') return '';
+            return genRaw.split('\n').filter(l => l.trim() !== '').map(line => {
+                const name = line.includes('|') ? line.split('|')[0].trim() : line.trim();
+                return `<span class="gen-name-tag">${name}</span>`;
+            }).join('');
         }
 
         function updateTickerBar(badge, names, rawText = null) {
-            const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
-            head.innerText = badge.toUpperCase(); 
+            const head = document.getElementById('ticker-head'),
+                  text = document.getElementById('ticker-text'),
+                  body = document.getElementById('ticker-body');
+            head.innerText = badge.toUpperCase();
             text.classList.remove('scrolling-active');
             text.innerText = names;
-
             const popup = document.getElementById('ticker-popup');
-            if (popup) {
-                popup.innerText = rawText !== null ? rawText : names;
-            }
-
+            if (popup) popup.innerText = rawText !== null ? rawText : names;
             requestAnimationFrame(() => {
-                const textWidth = text.scrollWidth, containerWidth = body.offsetWidth;
-                if (textWidth > containerWidth - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; } 
+                const tw = text.scrollWidth, cw = body.offsetWidth;
+                if (tw > cw - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; }
                 else { body.style.justifyContent = 'center'; }
             });
         }
 
         window.draw = function(data) {
-            document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
             let stHtml = '', tdHtml = '', tmHtml = '';
-            
+
             let staff = {
-                today: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' },
-                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' }
+                today:    { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
+                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
             };
-            
-            let chkStatus = "", techNames = "";
-            
+
+            let chkStatus = '', techNames = '';
+
             data.forEach(item => {
-                const unit = (item.Unit || "").trim(), param = (item.Parameter || "").trim(), val = (item.Value || "").trim();
+                const unit  = (item.Unit      || '').trim(),
+                      param = (item.Parameter || '').trim(),
+                      val   = (item.Value     || '').trim();
 
-                // Notice processing overrides the TechTicker
-                if (param === "sheetab_R2C2") {
-                    const formattedNotice = val.split('\n').map(l => l.trim()).filter(l => l !== "").join('   •   ');
-                    // Pass the original val to be displayed inside the hover popup cleanly
-                    updateTickerBar("IMPORTANT NOTICE", formattedNotice, val);
+                if (param === 'sheetab_R2C2') {
+                    const formatted = val.split('\n').map(l => l.trim()).filter(l => l !== '').join('   •   ');
+                    updateTickerBar('IMPORTANT NOTICE', formatted, val);
                 }
 
-                // Staff mapping by direct parameter
-                if (param === "sheetab_R2C12") staff.today.gen = val;
-                if (param === "sheetab_R2C3") staff.today.morn = val;
-                if (param === "sheetab_R2C4") staff.today.eve = val;
-                if (param === "sheetab_R2C5") staff.today.night = val;
-                if (param === "sheetab_R2C9") staff.today.tpcMorn = val;
-                if (param === "sheetab_R2C10") staff.today.tpcEve = val;
-                if (param === "sheetab_R2C11") staff.today.tpcNight = val;
+                // Today staff
+                if (param === 'sheetab_R2C12') staff.today.gen      = val;
+                if (param === 'sheetab_R2C3')  staff.today.morn     = val;
+                if (param === 'sheetab_R2C4')  staff.today.eve      = val;
+                if (param === 'sheetab_R2C5')  staff.today.night    = val;
+                if (param === 'sheetab_R2C9')  staff.today.tpcMorn  = val;
+                if (param === 'sheetab_R2C10') staff.today.tpcEve   = val;
+                if (param === 'sheetab_R2C11') staff.today.tpcNight = val;
+                // Today technicians
+                if (param === 'sheetab_R2C6')  staff.today.techMorn  = val;
+                if (param === 'sheetab_R2C7')  staff.today.techEve   = val;
+                if (param === 'sheetab_R2C8')  staff.today.techNight = val;
 
-                if (param === "sheetab_R2C26") staff.tomorrow.gen = val;
-                if (param === "sheetab_R2C17") staff.tomorrow.morn = val;
-                if (param === "sheetab_R2C18") staff.tomorrow.eve = val;
-                if (param === "sheetab_R2C19") staff.tomorrow.night = val;
-                if (param === "sheetab_R2C23") staff.tomorrow.tpcMorn = val;
-                if (param === "sheetab_R2C24") staff.tomorrow.tpcEve = val;
-                if (param === "sheetab_R2C25") staff.tomorrow.tpcNight = val;
+                // Tomorrow staff
+                if (param === 'sheetab_R2C26') staff.tomorrow.gen      = val;
+                if (param === 'sheetab_R2C17') staff.tomorrow.morn     = val;
+                if (param === 'sheetab_R2C18') staff.tomorrow.eve      = val;
+                if (param === 'sheetab_R2C19') staff.tomorrow.night    = val;
+                if (param === 'sheetab_R2C23') staff.tomorrow.tpcMorn  = val;
+                if (param === 'sheetab_R2C24') staff.tomorrow.tpcEve   = val;
+                if (param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
+                // Tomorrow technicians
+                if (param === 'sheetab_R2C20') staff.tomorrow.techMorn  = val;
+                if (param === 'sheetab_R2C21') staff.tomorrow.techEve   = val;
+                if (param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
 
-                // Marquee mappings
-                if (param === "ChecklistStatus") {
-                    chkStatus = val;
-                }
-                
-                if (param === "TechTicker" || unit === "TechTicker") {
-                    techNames = val;
-                }
+                if (param === 'ChecklistStatus') chkStatus = val;
+                if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
 
-                if (unit === "StationTemp") {
-                    const parts = val.split("|");
-                    const amb = parseFloat(parts[0]) || 0;
-                    const trfo = parseFloat(parts[1]) || 0;
-                    const ambLimit = 34, trfoLimit = 80;
-                    const isAlarm = amb > ambLimit || trfo > trfoLimit;
-                    
-                    stHtml += `
-                    <div class="stock-item ${isAlarm ? 'alarm' : ''}">
+                if (unit === 'StationTemp') {
+                    const parts = val.split('|');
+                    const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
+                    const isAlarm = amb > 34 || trfo > 80;
+                    stHtml += `<div class="stock-item ${isAlarm ? 'alarm' : ''}">
                         <span class="stock-name">${param}</span>
-                        <span class="stock-val ${amb > ambLimit ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${parts[0]}°</span>
-                        <span class="stock-val ${trfo > trfoLimit ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
+                        <span class="stock-val ${amb > 34 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${parts[0]}°</span>
+                        <span class="stock-val ${trfo > 80 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
                     </div>`;
                 }
-                
-                if (unit === "OpsBlock") {
+
+                if (unit === 'OpsBlock') {
                     const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
                     const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
                     mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
@@ -611,63 +899,78 @@
                     dEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
                 }
 
-                if (unit === "OpsSchedule") {
-                    const lines = val.split('\n').filter(l => l.trim() !== "");
+                if (unit === 'OpsSchedule') {
+                    const lines = val.split('\n').filter(l => l.trim() !== '');
                     document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
                 }
 
-                if (unit === "DriverPopup") {
+                if (unit === 'DriverPopup') {
                     const parts = val.split('|');
-                    document.getElementById('driver-name').innerText = parts[0] || "---";
-                    document.getElementById('driver-phone').innerText = parts[1] || "---";
+                    document.getElementById('driver-name').innerText  = parts[0] || '---';
+                    document.getElementById('driver-phone').innerText = parts[1] || '---';
                     document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
                 }
 
-                if (unit === "sheetab" && param === "sheetab_R2C1") evaluateUpdateBadge(val);
+                if (unit === 'sheetab' && param === 'sheetab_R2C1') evaluateUpdateBadge(val);
             });
-            
-            // Build top marquee
+
+            // Marquee bar
             const chkEl = document.getElementById('checklist-text');
-            let marqueeHtml = [];
+            let mHtml = [];
             if (chkStatus) {
-                const chkColor = chkStatus.includes("FILLED") ? "var(--success)" : "var(--error)";
-                marqueeHtml.push(`<span style="color: ${chkColor};">CHECKLIST STATUS: ${chkStatus}</span>`);
+                const cc = chkStatus.includes('FILLED') ? 'var(--success)' : 'var(--error)';
+                mHtml.push(`<span style="color:${cc}">CHECKLIST STATUS: ${chkStatus}</span>`);
             }
             if (techNames) {
-                const cleanNames = techNames.includes('|') ? techNames.split('|')[1] : techNames;
-                marqueeHtml.push(`<span style="color: var(--on-surface);">ON DUTY TECHNICIANS: ${cleanNames}</span>`);
+                const clean = techNames.includes('|') ? techNames.split('|')[1] : techNames;
+                mHtml.push(`<span style="color:var(--on-surface)">ON DUTY TECHNICIANS: ${clean}</span>`);
             }
-            if (marqueeHtml.length > 0) {
-                chkEl.innerHTML = marqueeHtml.join('<span style="color: var(--outline); margin: 0 16px;">•</span>');
-            }
-
-            // Build shifts
-            const currentHour = new Date().getHours();
-            
-            function buildShift(title, val, active, tpc) {
-                const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
-                const staffHtml = (val && val.trim() !== '') ? parseStaff(val) : `<div class="m3-staff-item" style="justify-content: center; opacity: 0.5;">No Deployment</div>`;
-                return `<div class="m3-shift-card ${active ? 'm3-shift-active' : ''}"><div class="m3-shift-label"><span>${title}</span>${tpcHtml}</div><div class="staff-list" style="display: flex; flex-direction: column; gap: 4px;">${staffHtml}</div></div>`;
+            if (mHtml.length > 0) {
+                chkEl.innerHTML = mHtml.join('<span style="color:var(--outline);margin:0 14px">•</span>');
             }
 
-            tdHtml += buildShift("GENERAL", staff.today.gen, currentHour >= 8 && currentHour < 18, "");
-            tdHtml += buildShift("MORNING", staff.today.morn, currentHour >= 8 && currentHour < 16, staff.today.tpcMorn);
-            tdHtml += buildShift("EVENING", staff.today.eve, currentHour >= 16 && currentHour <= 23, staff.today.tpcEve);
-            tdHtml += buildShift("NIGHT", staff.today.night, currentHour >= 0 && currentHour < 8, staff.today.tpcNight);
+            // Build general pills
+            const todayPills = document.getElementById('today-gen-pills');
+            const tomorrowPills = document.getElementById('tomorrow-gen-pills');
+            todayPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
+            tomorrowPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
 
-            tmHtml += buildShift("GENERAL", staff.tomorrow.gen, false, "");
-            tmHtml += buildShift("MORNING", staff.tomorrow.morn, false, staff.tomorrow.tpcMorn);
-            tmHtml += buildShift("EVENING", staff.tomorrow.eve, false, staff.tomorrow.tpcEve);
-            tmHtml += buildShift("NIGHT", staff.tomorrow.night, false, staff.tomorrow.tpcNight);
+            // Build shift cards with correct time logic
+            tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn,  staff.today.techMorn);
+            tdHtml += buildShift('EVENING', staff.today.eve,  isShiftActive('EVENING'), staff.today.tpcEve,   staff.today.techEve);
+            tdHtml += buildShift('NIGHT',   staff.today.night, isShiftActive('NIGHT'),  staff.today.tpcNight, staff.today.techNight);
+
+            tmHtml += buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn,  staff.tomorrow.techMorn);
+            tmHtml += buildShift('EVENING', staff.tomorrow.eve,  false, staff.tomorrow.tpcEve,   staff.tomorrow.techEve);
+            tmHtml += buildShift('NIGHT',   staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
 
             if (stHtml) document.getElementById('station-track').innerHTML = stHtml;
             if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
             if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
         };
 
+        function evaluateUpdateBadge(raw) {
+            const card = document.getElementById('driver-card'),
+                  badge = document.getElementById('driver-update-badge'),
+                  warn = document.getElementById('outdated-warning-text');
+            if (!raw || raw === '---') {
+                badge.innerText = 'UPDATE: N/A'; badge.className = 'driver-badge badge-outdated';
+                card.classList.add('outdated'); if (warn) warn.style.display = 'block'; return;
+            }
+            try {
+                const ut = new Date(raw), now = new Date();
+                badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
+                const h = now.getHours();
+                let ss = new Date(now);
+                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0);
+                else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
+                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); if (warn) warn.style.display = 'none'; }
+                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); if (warn) warn.style.display = 'block'; }
+            } catch (e) { badge.innerText = 'UPDATE: ERR'; }
+        }
+
         function updateClocks() {
-            const n = new Date();
-            const s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
+            const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
@@ -679,7 +982,7 @@
 
         function refreshData() {
             const old = document.getElementById('api-script');
-            if(old) old.remove();
+            if (old) old.remove();
             const s = document.createElement('script');
             s.id = 'api-script';
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
@@ -688,10 +991,10 @@
         setInterval(refreshData, 15000);
         refreshData();
         updateClocks();
-        
+
         window.onresize = () => {
-            const text = document.getElementById('ticker-text');
-            const popup = document.getElementById('ticker-popup');
+            const text = document.getElementById('ticker-text'),
+                  popup = document.getElementById('ticker-popup');
             updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
         };
     </script>
