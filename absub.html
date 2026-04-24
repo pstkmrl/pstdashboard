@@ -236,18 +236,51 @@
         .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 20px; box-shadow: var(--shadow-1); display: flex; flex-direction: column; overflow: hidden; }
         .card-header { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 10px; display: flex; flex-direction: column; gap: 6px; border: 2px solid transparent; transition: border 0.3s ease; }
+        /* Roster & Shift Cards - Upgraded for Visibility */
+        .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 14px; display: flex; flex-direction: column; gap: 8px; border: 2px solid transparent; transition: border 0.3s ease; }
         .m3-shift-active { border-color: var(--success); }
-        .m3-shift-label { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--on-surface); margin-bottom: 2px; }
-        .shift-tpc-badge { font-size: 0.65rem; background: var(--primary-container); color: var(--on-primary-container); padding: 2px 8px; border-radius: var(--radius-full); font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
-        .m3-staff-item { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 4px 8px; border-radius: var(--radius-s); font-size: 0.75rem; font-weight: 600; }
-        .staff-name { color: var(--on-surface-variant); }
-        .m3-badge { font-size: 0.65rem; padding: 2px 6px; border-radius: var(--radius-full); font-weight: 800; }
+        .m3-shift-label { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; color: var(--on-surface); margin-bottom: 4px; }
+        .shift-tpc-badge { font-size: 0.7rem; background: var(--primary-container); color: var(--on-primary-container); padding: 4px 10px; border-radius: var(--radius-full); font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
+        
+        /* Staff Names - Larger and Bolder */
+        .m3-staff-item { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 10px 14px; border-radius: var(--radius-s); font-size: 0.95rem; font-weight: 700; box-shadow: var(--shadow-1); }
+        .staff-name { color: var(--on-surface); font-family: var(--font-display); font-weight: 800; letter-spacing: 0.2px; }
+        .m3-badge { font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-full); font-weight: 900; letter-spacing: 0.5px; }
         .badge-tpc-m { background: #00E5FF; color: #000; }
         .badge-tpc-e { background: #FF9100; color: #000; }
         .badge-tpc-n { background: #D500F9; color: #FFF; }
         .badge-default { background: var(--outline); color: var(--surface); }
+
+        /* Technician Scroll Box Integration */
+        .tech-area {
+            display: flex; align-items: center; background: var(--surface);
+            border-radius: var(--radius-s); padding: 6px; margin-top: 4px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--outline); opacity: 0.9;
+        }
+        [data-theme="dark"] .tech-area { background: rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.05); box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); }
+        .tech-label {
+            font-size: 0.65rem; font-weight: 900; background: var(--secondary); color: var(--surface);
+            padding: 4px 8px; border-radius: 6px; margin-right: 8px; letter-spacing: 0.5px; z-index: 2;
+            flex-shrink: 0; box-shadow: var(--shadow-1);
+        }
+        .tech-track {
+            flex-grow: 1; overflow: hidden; position: relative; display: flex; align-items: center;
+            mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
+        }
+        .tech-scroll-content {
+            display: flex; white-space: nowrap; animation: scroll-techs 12s linear infinite;
+        }
+        .tech-area:hover .tech-scroll-content { animation-play-state: paused; }
+        .tech-item {
+            font-size: 0.85rem; font-weight: 700; color: var(--primary);
+            display: flex; align-items: center; gap: 6px; margin-right: 32px;
+            font-family: var(--font-display);
+        }
+        .tech-item .material-symbols-rounded { font-size: 1.1rem; }
+        @keyframes scroll-techs { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 16px; padding-bottom: 12px; position: relative; }
         
@@ -285,12 +318,40 @@
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
 
-        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background: var(--surface); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; z-index: 1001; }
+        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 48px; background: var(--surface); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; z-index: 1001; cursor: pointer; }
         .ticker-head { background: var(--primary); color: var(--surface); height: 100%; padding: 0 24px; display: flex; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 0.85rem; letter-spacing: 1px; border-radius: 0 24px 24px 0; z-index: 2; flex-shrink: 0; }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
         .ticker-scroll { white-space: nowrap; font-size: 1rem; font-weight: 700; color: var(--on-surface); padding: 0 24px; flex-shrink: 0; }
-        .scrolling-active { padding-left: 100%; animation: ticker-move 20s linear infinite; }
+        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; } /* Speed reduced to quarter speed */
         @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* Ticker Hover Pause and Popup Logic */
+        .ticker-bar:hover .scrolling-active { animation-play-state: paused; }
+        .ticker-popup {
+            display: none;
+            position: absolute;
+            bottom: 60px; /* Floating above the ticker */
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 900px;
+            background: var(--surface);
+            color: var(--on-surface);
+            padding: 20px 24px;
+            border-radius: var(--radius-l);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 2px solid var(--primary);
+            z-index: 1005;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-family: var(--font-body);
+            font-weight: 600;
+            white-space: pre-wrap; /* Keeps original line breaks visible */
+            max-height: 60vh;
+            overflow-y: auto;
+            cursor: default;
+        }
+        .ticker-bar:hover .ticker-popup { display: block; }
 
         .fab-ab { position: fixed; bottom: 65px; right: 16px; width: 64px; height: 64px; background: var(--primary-container); color: var(--on-primary-container); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; text-decoration: none; box-shadow: var(--shadow-2); z-index: 1000; flex-shrink: 0; }
 
@@ -323,8 +384,15 @@
             .driver-img-wrap .main-icon { font-size: 24px; }
             .driver-name { font-size: 0.95rem; }
             
+            .m3-staff-item { padding: 8px 12px; font-size: 0.85rem; }
+            .staff-name { font-size: 0.9rem; }
+            .tech-item { font-size: 0.8rem; margin-right: 24px; }
+            .roster-grid { grid-template-columns: 1fr; }
+            
             .fab-ab { width: 48px; height: 48px; bottom: 60px; right: 8px; font-size: 1rem; border-radius: 14px; }
             .ticker-head { padding: 0 16px; font-size: 0.75rem; }
+            
+            .ticker-popup { bottom: 60px; width: calc(100% - 16px); padding: 16px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -413,6 +481,7 @@
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
         </div>
+        <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
     </footer>
 
     <script>
@@ -492,11 +561,17 @@
             } catch (e) { badge.innerText = "UPDATE: ERR"; }
         }
 
-        function updateTickerBar(badge, names) {
+        function updateTickerBar(badge, names, rawText = null) {
             const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
             head.innerText = badge.toUpperCase(); 
             text.classList.remove('scrolling-active');
             text.innerText = names;
+
+            const popup = document.getElementById('ticker-popup');
+            if (popup) {
+                popup.innerText = rawText !== null ? rawText : names;
+            }
+
             requestAnimationFrame(() => {
                 const textWidth = text.scrollWidth, containerWidth = body.offsetWidth;
                 if (textWidth > containerWidth - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; } 
@@ -509,8 +584,8 @@
             let stHtml = '', tdHtml = '', tmHtml = '';
             
             let staff = {
-                today: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' },
-                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '' }
+                today: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
+                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
             };
             
             let chkStatus = "", techNames = "";
@@ -521,7 +596,8 @@
                 // Notice processing overrides the TechTicker
                 if (param === "sheetab_R2C2") {
                     const formattedNotice = val.split('\n').map(l => l.trim()).filter(l => l !== "").join('   •   ');
-                    updateTickerBar("IMPORTANT NOTICE", formattedNotice);
+                    // Pass the original val to be displayed inside the hover popup cleanly
+                    updateTickerBar("IMPORTANT NOTICE", formattedNotice, val);
                 }
 
                 // Staff mapping by direct parameter
@@ -533,6 +609,11 @@
                 if (param === "sheetab_R2C10") staff.today.tpcEve = val;
                 if (param === "sheetab_R2C11") staff.today.tpcNight = val;
 
+                // Today Techs
+                if (param === "sheetab_R2C6") staff.today.techMorn = val;
+                if (param === "sheetab_R2C7") staff.today.techEve = val;
+                if (param === "sheetab_R2C8") staff.today.techNight = val;
+
                 if (param === "sheetab_R2C26") staff.tomorrow.gen = val;
                 if (param === "sheetab_R2C17") staff.tomorrow.morn = val;
                 if (param === "sheetab_R2C18") staff.tomorrow.eve = val;
@@ -540,6 +621,11 @@
                 if (param === "sheetab_R2C23") staff.tomorrow.tpcMorn = val;
                 if (param === "sheetab_R2C24") staff.tomorrow.tpcEve = val;
                 if (param === "sheetab_R2C25") staff.tomorrow.tpcNight = val;
+
+                // Tomorrow Techs
+                if (param === "sheetab_R2C20") staff.tomorrow.techMorn = val;
+                if (param === "sheetab_R2C21") staff.tomorrow.techEve = val;
+                if (param === "sheetab_R2C22") staff.tomorrow.techNight = val;
 
                 // Marquee mappings
                 if (param === "ChecklistStatus") {
@@ -603,24 +689,58 @@
                 chkEl.innerHTML = marqueeHtml.join('<span style="color: var(--outline); margin: 0 16px;">•</span>');
             }
 
-            // Build shifts
-            const currentHour = new Date().getHours();
+            // --- SHIFT HIGHLIGHT LOGIC ---
+            // Using fractional hours to correctly account for 30-minute offsets
+            const now = new Date();
+            const currentHourFloat = now.getHours() + (now.getMinutes() / 60);
+
+            function formatTechs(raw) {
+                if(!raw) return '';
+                const techs = raw.split('\n').map(t => t.trim()).filter(t => t !== '');
+                if(techs.length === 0) return '';
+                const itemsHtml = techs.map(t => `<span class="tech-item"><span class="material-symbols-rounded">build</span>${t}</span>`).join('');
+                // Duplicate the items directly inside the scroll block to allow an infinite scrolling CSS loop
+                return `<div class="tech-scroll-content">${itemsHtml}${itemsHtml}</div>`;
+            }
             
-            function buildShift(title, val, active, tpc) {
+            function buildShift(title, val, active, tpc, techs) {
                 const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
                 const staffHtml = (val && val.trim() !== '') ? parseStaff(val) : `<div class="m3-staff-item" style="justify-content: center; opacity: 0.5;">No Deployment</div>`;
-                return `<div class="m3-shift-card ${active ? 'm3-shift-active' : ''}"><div class="m3-shift-label"><span>${title}</span>${tpcHtml}</div><div class="staff-list" style="display: flex; flex-direction: column; gap: 4px;">${staffHtml}</div></div>`;
+                
+                let techHtml = '';
+                if (techs && techs.trim() !== '') {
+                    techHtml = `
+                    <div class="tech-area">
+                        <div class="tech-label">TECHS</div>
+                        <div class="tech-track">
+                            ${formatTechs(techs)}
+                        </div>
+                    </div>`;
+                }
+
+                return `<div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
+                            <div class="m3-shift-label"><span>${title}</span>${tpcHtml}</div>
+                            <div class="staff-list" style="display: flex; flex-direction: column; gap: 6px;">${staffHtml}</div>
+                            ${techHtml}
+                        </div>`;
             }
 
-            tdHtml += buildShift("GENERAL", staff.today.gen, currentHour >= 8 && currentHour < 18, "");
-            tdHtml += buildShift("MORNING", staff.today.morn, currentHour >= 8 && currentHour < 16, staff.today.tpcMorn);
-            tdHtml += buildShift("EVENING", staff.today.eve, currentHour >= 16 && currentHour <= 23, staff.today.tpcEve);
-            tdHtml += buildShift("NIGHT", staff.today.night, currentHour >= 0 && currentHour < 8, staff.today.tpcNight);
+            // General shift logic left as 08:00 - 18:00 based on standard hours
+            tdHtml += buildShift("GENERAL", staff.today.gen, currentHourFloat >= 8 && currentHourFloat < 18, "", "");
+            
+            // Morning: 06:30 to 14:00
+            tdHtml += buildShift("MORNING", staff.today.morn, currentHourFloat >= 6.5 && currentHourFloat < 14.0, staff.today.tpcMorn, staff.today.techMorn);
+            
+            // Evening: 14:00 to 21:30
+            tdHtml += buildShift("EVENING", staff.today.eve, currentHourFloat >= 14.0 && currentHourFloat < 21.5, staff.today.tpcEve, staff.today.techEve);
+            
+            // Night: 21:30 to 06:30 the next day
+            tdHtml += buildShift("NIGHT", staff.today.night, currentHourFloat >= 21.5 || currentHourFloat < 6.5, staff.today.tpcNight, staff.today.techNight);
 
-            tmHtml += buildShift("GENERAL", staff.tomorrow.gen, false, "");
-            tmHtml += buildShift("MORNING", staff.tomorrow.morn, false, staff.tomorrow.tpcMorn);
-            tmHtml += buildShift("EVENING", staff.tomorrow.eve, false, staff.tomorrow.tpcEve);
-            tmHtml += buildShift("NIGHT", staff.tomorrow.night, false, staff.tomorrow.tpcNight);
+            tmHtml += buildShift("GENERAL", staff.tomorrow.gen, false, "", "");
+            tmHtml += buildShift("MORNING", staff.tomorrow.morn, false, staff.tomorrow.tpcMorn, staff.tomorrow.techMorn);
+            tmHtml += buildShift("EVENING", staff.tomorrow.eve, false, staff.tomorrow.tpcEve, staff.tomorrow.techEve);
+            tmHtml += buildShift("NIGHT", staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
 
             if (stHtml) document.getElementById('station-track').innerHTML = stHtml;
             if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
@@ -653,7 +773,8 @@
         
         window.onresize = () => {
             const text = document.getElementById('ticker-text');
-            updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText);
+            const popup = document.getElementById('ticker-popup');
+            updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
         };
     </script>
 </body>
