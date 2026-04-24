@@ -988,7 +988,7 @@
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
             document.body.appendChild(s);
         }
-        setInterval(refreshData, 15000);
+        setInterval(refreshData, 60000);
         refreshData();
         updateClocks();
 
