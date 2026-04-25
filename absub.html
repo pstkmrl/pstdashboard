@@ -263,6 +263,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+            align-items: stretch;
         }
 
         /* ── SHIFT CARD ── */
@@ -274,10 +275,6 @@
             border: 2px solid transparent;
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
             overflow: hidden;
-        }
-        /* Staff list grows to fill available space, pushing tech section down */
-        .m3-shift-card .staff-list {
-            flex: 1;
         }
         /* Tech section always at bottom */
         .m3-shift-card .tech-section {
