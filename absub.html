@@ -293,7 +293,39 @@
             font-weight: 900; font-size: 1rem;
             color: var(--on-surface);
             letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 6px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .shift-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: var(--surface-dim);
+            border: 1px solid var(--outline);
+            border-radius: var(--radius-full);
+            padding: 1px 8px 1px 6px;
+            font-family: var(--font-display);
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--on-surface-variant);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .shift-count-badge .cnt-staff {
+            color: var(--on-surface);
+            font-weight: 900;
+        }
+        .shift-count-badge .cnt-sep {
+            opacity: 0.4;
+            margin: 0 1px;
+            font-size: 0.6rem;
+        }
+        .shift-count-badge .cnt-tech {
+            color: var(--primary);
+            font-weight: 900;
+        }
+        .shift-count-badge .material-symbols-rounded {
+            font-size: 11px !important;
+            opacity: 0.55;
         }
         .shift-active-dot {
             width: 8px; height: 8px;
@@ -327,7 +359,7 @@
         }
         .staff-name {
             font-family: var(--font-display);
-            font-size: 0.9rem; font-weight: 800;
+            font-size: 1.125rem; font-weight: 800;
             color: var(--on-surface);
             letter-spacing: 0.2px;
         }
@@ -386,7 +418,7 @@
             gap: 5px;
             padding: 3px 14px;
             font-family: var(--font-display);
-            font-size: 0.82rem;
+            font-size: 1.025rem;
             font-weight: 800;
             color: var(--tech-name-color);
             white-space: nowrap;
@@ -436,41 +468,41 @@
         /* ── DRIVER CARD ── */
         .driver-card {
             position: fixed; bottom: 54px; left: 10px;
-            background: var(--surface); padding: 10px 18px 10px 10px;
+            background: var(--surface); padding: 6px 12px 6px 6px;
             border-radius: var(--radius-full); box-shadow: var(--shadow-2);
-            display: flex; align-items: center; gap: 14px; z-index: 1000;
+            display: flex; align-items: center; gap: 8px; z-index: 1000;
             border: 2px solid transparent; transition: all 0.3s ease;
             max-width: calc(100vw - 90px);
         }
         .driver-card.outdated { border-color: var(--error); opacity: 0.45; filter: grayscale(0.5); }
         .outdated-warning-tag {
-            position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
             background: var(--error); color: var(--surface);
-            font-family: var(--font-display); font-size: 0.65rem; font-weight: 900;
-            padding: 3px 10px; border-radius: var(--radius-full);
+            font-family: var(--font-display); font-size: 0.58rem; font-weight: 900;
+            padding: 2px 8px; border-radius: var(--radius-full);
             letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             animation: warning-blink 1.5s infinite alternate; display: none; white-space: nowrap;
         }
         @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
         .driver-img-wrap {
-            width: 52px; height: 52px; flex-shrink: 0;
+            width: 38px; height: 38px; flex-shrink: 0;
             background: var(--surface-variant); border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             color: var(--primary); border: 2px solid var(--primary);
             cursor: pointer; position: relative;
         }
-        .driver-img-wrap .main-icon { font-size: 28px; }
+        .driver-img-wrap .main-icon { font-size: 20px; }
         .call-icon {
-            position: absolute; bottom: -4px; right: -4px;
+            position: absolute; bottom: -3px; right: -3px;
             background: var(--success); color: var(--on-success-container);
-            border-radius: 50%; padding: 3px; font-size: 13px; box-shadow: var(--shadow-1);
+            border-radius: 50%; padding: 2px; font-size: 11px; box-shadow: var(--shadow-1);
             pointer-events: none;
         }
-        .driver-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-        .driver-shift { font-size: 0.6rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
-        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--on-surface); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .driver-phone { font-size: 0.8rem; font-weight: 600; color: var(--outline); margin-bottom: 3px; }
-        .driver-badge { font-size: 0.58rem; font-weight: 800; padding: 2px 7px; border-radius: var(--radius-full); width: fit-content; white-space: nowrap; }
+        .driver-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; gap: 1px; }
+        .driver-shift { font-size: 0.55rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1; }
+        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 0.88rem; color: var(--on-surface); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .driver-phone { font-size: 0.72rem; font-weight: 600; color: var(--outline); }
+        .driver-badge { font-size: 0.52rem; font-weight: 800; padding: 1px 6px; border-radius: var(--radius-full); width: fit-content; white-space: nowrap; }
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
 
@@ -556,10 +588,10 @@
             .clock-val { font-size: 1.2rem; }
             .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
             .station-wrapper { margin: 6px 8px; }
-            .driver-card { left: 8px; bottom: 52px; padding: 8px 12px 8px 8px; gap: 10px; max-width: calc(100vw - 75px); }
-            .driver-img-wrap { width: 42px; height: 42px; }
-            .driver-img-wrap .main-icon { font-size: 22px; }
-            .driver-name { font-size: 0.9rem; }
+            .driver-card { left: 8px; bottom: 52px; padding: 5px 10px 5px 6px; gap: 7px; max-width: calc(100vw - 75px); }
+            .driver-img-wrap { width: 34px; height: 34px; }
+            .driver-img-wrap .main-icon { font-size: 18px; }
+            .driver-name { font-size: 0.82rem; }
             .fab-ab { width: 46px; height: 46px; bottom: 56px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
             .ticker-head { padding: 0 14px; font-size: 0.72rem; }
             .ticker-popup { bottom: 56px; width: calc(100% - 14px); padding: 14px; }
@@ -571,7 +603,7 @@
             .roster-grid { grid-template-columns: 1fr; gap: 8px; }
             .top-controls { gap: 6px; }
             .m3-card { padding: 12px; }
-            .staff-name { font-size: 0.85rem; }
+            .staff-name { font-size: 1.0625rem; }
         }
     </style>
 </head>
@@ -791,12 +823,32 @@
                 ? parseStaff(val)
                 : `<div class="m3-staff-item" style="justify-content:center;opacity:0.4;font-family:var(--font-display);font-size:0.8rem;">No Deployment</div>`;
             const techHtml = buildTechSection(techRaw);
+
+            // Count staff
+            const staffCount = (val && val.trim() !== '')
+                ? val.split('\n').filter(l => l.trim() !== '').length
+                : 0;
+            // Count technicians
+            const techCount = (techRaw && techRaw.trim() !== '')
+                ? techRaw.split('\n').filter(l => l.trim() !== '').length
+                : 0;
+
+            const countBadge = (staffCount > 0 || techCount > 0)
+                ? `<span class="shift-count-badge">
+                    <span class="material-symbols-rounded">group</span>
+                    <span class="cnt-staff">${staffCount}</span>
+                    <span class="cnt-sep">+</span>
+                    <span class="cnt-tech">${techCount}</span>
+                   </span>`
+                : '';
+
             return `
             <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
                 <div class="shift-header-row">
                     <div class="m3-shift-label">
                         <span class="shift-active-dot"></span>
                         ${title}
+                        ${countBadge}
                     </div>
                     ${tpcHtml}
                 </div>
@@ -988,7 +1040,7 @@
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
             document.body.appendChild(s);
         }
-        setInterval(refreshData, 15000);
+        setInterval(refreshData, 60000);
         refreshData();
         updateClocks();
 
