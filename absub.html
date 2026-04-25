@@ -156,9 +156,9 @@
         /* ── STATION TEMP TRACK (lives inside checklist-container) ── */
         .station-track {
             display: flex; gap: 16px; width: max-content;
-            align-items: center; padding: 0 0px;
+            align-items: center; padding: 0 16px;
             position: absolute;
-            top: 50%; transform: translateY(-50%);
+            top: 0; left: 0; height: 100%;
             animation: stock-scroll 45s linear infinite;
         }
         .station-track:hover { animation-play-state: paused; }
@@ -275,6 +275,15 @@
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
             overflow: hidden;
         }
+        /* Staff list grows to fill available space, pushing tech section down */
+        .m3-shift-card .staff-list {
+            flex: 1;
+        }
+        /* Tech section always at bottom */
+        .m3-shift-card .tech-section {
+            margin-top: auto;
+            padding-top: 8px;
+        }
         .m3-shift-active {
             border-color: var(--success);
             box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px rgba(114, 212, 138, 0.15);
@@ -374,7 +383,6 @@
 
         /* ── TECHNICIAN SECTION (inside shift card) ── */
         .tech-section {
-            margin-top: 8px;
             border-top: 1.5px solid var(--tech-border);
             padding-top: 8px;
         }
