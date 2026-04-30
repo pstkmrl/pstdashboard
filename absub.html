@@ -524,7 +524,7 @@
 
         /* ── DRIVER CARD ── */
         .driver-card {
-            position: fixed; bottom: 120px; left: 10px;
+            position: fixed; bottom: 46px; left: 10px;
             background: var(--surface); padding: 6px 12px 6px 6px;
             border-radius: var(--radius-full); box-shadow: var(--shadow-2);
             display: flex; align-items: center; gap: 8px; z-index: 1000;
@@ -880,7 +880,7 @@
             .clock-unit { min-width: 46px; padding: 2px 7px; }
             .clock-val { font-size: 1.2rem; }
             .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-            .driver-card { left: 8px; bottom: 118px; padding: 5px 10px 5px 6px; gap: 7px; max-width: calc(100vw - 75px); }
+            .driver-card { left: 8px; bottom: 46px; padding: 5px 10px 5px 6px; gap: 7px; max-width: calc(100vw - 75px); }
             .driver-img-wrap { width: 34px; height: 34px; }
             .driver-img-wrap .main-icon { font-size: 18px; }
             .driver-name { font-size: 0.82rem; }
@@ -889,6 +889,25 @@
             .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
             .deploy-header { flex-direction: column; gap: 8px; }
             .general-info-pill { justify-content: flex-start; }
+
+            /* Dock: collapsed by default on mobile */
+            .app-dock {
+                bottom: 46px;
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                overflow: hidden;
+                opacity: 0;
+                pointer-events: none;
+                box-shadow: none;
+            }
+            .app-dock.dock-expanded {
+                max-height: 120px;
+                padding: 8px 16px;
+                opacity: 1;
+                pointer-events: auto;
+                box-shadow: var(--shadow-2), 0 0 0 1px var(--outline);
+            }
         }
 
         @media (max-width: 600px) {
@@ -995,7 +1014,7 @@
 
     <div id="driver-card" class="driver-card outdated">
         <div id="outdated-warning-text" class="outdated-warning-tag">⚠️ OUTDATED</div>
-        <div class="driver-img-wrap" onclick="initiateCall(event)">
+        <div class="driver-img-wrap" onclick="toggleDock(event)">
             <span class="material-symbols-rounded main-icon">directions_car</span>
             <span class="material-symbols-rounded call-icon">call</span>
         </div>
@@ -1038,8 +1057,26 @@
         }
         function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
-        function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
+        function wakeUp() {
+            document.getElementById('blackout').style.display = 'none';
+            // Collapse dock on mobile when tapping elsewhere
+            if (window.innerWidth <= 900) {
+                const dock = document.getElementById('app-dock');
+                if (dock) dock.classList.remove('dock-expanded');
+            }
+        }
         function initiateCall(e) { if (e) e.stopPropagation(); const ph = document.getElementById('driver-phone').innerText; if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`; }
+
+        function toggleDock(e) {
+            if (e) e.stopPropagation();
+            // Only toggle on mobile (≤900px); on desktop dock is always visible
+            if (window.innerWidth > 900) {
+                initiateCall(e);
+                return;
+            }
+            const dock = document.getElementById('app-dock');
+            if (dock) dock.classList.toggle('dock-expanded');
+        }
 
         function toggleGrid(e) {
             if (e) e.stopPropagation();
