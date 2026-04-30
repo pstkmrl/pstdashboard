@@ -861,6 +861,38 @@
             transform: translateX(-50%) rotate(45deg);
         }
 
+        /* ── DOCK TOGGLE BUTTON (mobile only) ── */
+        .dock-toggle-btn {
+            display: none; /* hidden on desktop */
+        }
+        @media (max-width: 900px) {
+            .dock-toggle-btn {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                position: fixed;
+                bottom: 54px;
+                right: 10px;
+                z-index: 1002;
+                background: var(--primary-container);
+                color: var(--on-primary-container);
+                border: none;
+                border-radius: var(--radius-full);
+                padding: 6px 12px 6px 10px;
+                font-family: var(--font-display);
+                font-size: 0.6rem;
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                box-shadow: var(--shadow-2);
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            .dock-toggle-btn:hover { transform: scale(1.04); }
+            .dock-toggle-icon { font-size: 18px !important; transition: transform 0.3s ease; }
+            .dock-toggle-btn.active .dock-toggle-icon { transform: rotate(180deg); }
+        }
+
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
             .dashboard-content {
@@ -902,11 +934,15 @@
                 box-shadow: none;
             }
             .app-dock.dock-expanded {
-                max-height: 120px;
-                padding: 8px 16px;
+                bottom: 100px;
+                max-height: 200px;
+                padding: 10px 18px;
                 opacity: 1;
                 pointer-events: auto;
-                box-shadow: var(--shadow-2), 0 0 0 1px var(--outline);
+                box-shadow: var(--shadow-2), 0 0 0 1px var(--outline), 0 0 0 100vmax rgba(0,0,0,0.35);
+                z-index: 1003;
+                flex-wrap: wrap;
+                border-radius: var(--radius-l);
             }
         }
 
@@ -1014,7 +1050,7 @@
 
     <div id="driver-card" class="driver-card outdated">
         <div id="outdated-warning-text" class="outdated-warning-tag">⚠️ OUTDATED</div>
-        <div class="driver-img-wrap" onclick="toggleDock(event)">
+        <div class="driver-img-wrap" onclick="initiateCall(event)">
             <span class="material-symbols-rounded main-icon">directions_car</span>
             <span class="material-symbols-rounded call-icon">call</span>
         </div>
@@ -1028,6 +1064,12 @@
 
     <!-- ── APP DOCK ── -->
     <div id="app-dock" class="app-dock"></div>
+
+    <!-- Dock toggle button: mobile only -->
+    <button id="dock-toggle-btn" class="dock-toggle-btn" onclick="toggleDock(event)" aria-label="Toggle Consumables Dock">
+        <span class="material-symbols-rounded dock-toggle-icon" id="dock-toggle-icon">expand_less</span>
+        <span class="dock-toggle-label">CONSUMABLES</span>
+    </button>
 
     <footer class="ticker-bar">
         <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
@@ -1062,20 +1104,19 @@
             // Collapse dock on mobile when tapping elsewhere
             if (window.innerWidth <= 900) {
                 const dock = document.getElementById('app-dock');
+                const btn  = document.getElementById('dock-toggle-btn');
                 if (dock) dock.classList.remove('dock-expanded');
+                if (btn)  btn.classList.remove('active');
             }
         }
         function initiateCall(e) { if (e) e.stopPropagation(); const ph = document.getElementById('driver-phone').innerText; if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`; }
 
         function toggleDock(e) {
             if (e) e.stopPropagation();
-            // Only toggle on mobile (≤900px); on desktop dock is always visible
-            if (window.innerWidth > 900) {
-                initiateCall(e);
-                return;
-            }
             const dock = document.getElementById('app-dock');
+            const btn  = document.getElementById('dock-toggle-btn');
             if (dock) dock.classList.toggle('dock-expanded');
+            if (btn)  btn.classList.toggle('active');
         }
 
         function toggleGrid(e) {
