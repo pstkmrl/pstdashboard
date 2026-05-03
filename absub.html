@@ -522,46 +522,317 @@
             line-height: 1.5;
         }
 
-        /* ── DRIVER CARD ── */
+        /* ── DRIVER CARD — Liquid Glass Pill ── */
         .driver-card {
-            position: fixed; bottom: 46px; left: 10px;
-            background: var(--surface); padding: 6px 12px 6px 6px;
-            border-radius: var(--radius-full); box-shadow: var(--shadow-2);
-            display: flex; align-items: center; gap: 8px; z-index: 1000;
-            border: 2px solid transparent; transition: all 0.3s ease;
-            max-width: calc(100vw - 90px);
+            position: fixed; bottom: 54px; left: 10px;
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .driver-card.outdated { border-color: var(--error); opacity: 0.45; filter: grayscale(0.5); }
-        .outdated-warning-tag {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            background: var(--error); color: var(--surface);
-            font-family: var(--font-display); font-size: 0.58rem; font-weight: 900;
-            padding: 2px 8px; border-radius: var(--radius-full);
-            letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            animation: warning-blink 1.5s infinite alternate; display: none; white-space: nowrap;
+
+        /* Collapsed pill */
+        .driver-pill {
+            display: flex; align-items: center; gap: 0;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: var(--radius-full);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2),
+                        inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(28px) saturate(1.8);
+            -webkit-backdrop-filter: blur(28px) saturate(1.8);
+            padding: 6px 14px 6px 8px;
+            gap: 8px;
+            max-width: 240px;
+            overflow: hidden;
+            transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
-        .driver-img-wrap {
-            width: 38px; height: 38px; flex-shrink: 0;
-            background: var(--surface-variant); border-radius: 50%;
+        [data-theme="light"] .driver-pill {
+            background: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.75);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.07),
+                        inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        .driver-card.outdated .driver-pill {
+            border-color: rgba(255,100,80,0.55);
+            box-shadow: 0 8px 32px rgba(186,26,26,0.3), 0 2px 8px rgba(0,0,0,0.2),
+                        inset 0 1px 0 rgba(255,180,171,0.2);
+        }
+
+        .driver-pill-icon {
+            width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+            background: rgba(125,190,255,0.15);
+            border: 1.5px solid rgba(125,190,255,0.35);
             display: flex; align-items: center; justify-content: center;
-            color: var(--primary); border: 2px solid var(--primary);
-            cursor: pointer; position: relative;
+            color: var(--primary);
+            font-size: 17px;
         }
-        .driver-img-wrap .main-icon { font-size: 20px; }
-        .call-icon {
-            position: absolute; bottom: -3px; right: -3px;
-            background: var(--success); color: var(--on-success-container);
-            border-radius: 50%; padding: 2px; font-size: 11px; box-shadow: var(--shadow-1);
+        .driver-card.outdated .driver-pill-icon {
+            background: rgba(255,100,80,0.12);
+            border-color: rgba(255,100,80,0.35);
+            color: var(--error);
+        }
+
+        /* Sliding text: name → number alternating */
+        .driver-pill-text-wrap {
+            overflow: hidden;
+            height: 1.25rem;
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+        .driver-pill-slide {
+            display: flex; flex-direction: column;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.6s ease;
+        }
+        .driver-pill-slide.show-number { transform: translateY(-50%); }
+        .driver-pill-name-val {
+            font-family: var(--font-display);
+            font-weight: 800; font-size: 0.88rem;
+            color: var(--on-surface);
+            white-space: nowrap; line-height: 1.25rem;
+            letter-spacing: 0.2px;
+        }
+        .driver-pill-num-val {
+            font-family: var(--font-display);
+            font-weight: 700; font-size: 0.82rem;
+            color: var(--primary);
+            white-space: nowrap; line-height: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+        .driver-card.outdated .driver-pill-num-val { color: var(--error); }
+
+        /* Outdated badge on pill */
+        .driver-pill-outdated-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--error);
+            box-shadow: 0 0 6px var(--error);
+            flex-shrink: 0;
+            display: none;
+            animation: warn-pulse 2s infinite;
+        }
+        .driver-card.outdated .driver-pill-outdated-dot { display: block; }
+
+        @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
+
+        /* Expanded panel — pops out above the pill */
+        .driver-expanded {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            min-width: 220px;
+            background: rgba(22,28,37,0.82);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: var(--radius-l);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3),
+                        inset 0 1px 0 rgba(255,255,255,0.2);
+            backdrop-filter: blur(32px) saturate(2);
+            -webkit-backdrop-filter: blur(32px) saturate(2);
+            padding: 14px 16px;
+            display: flex; flex-direction: column; gap: 10px;
             pointer-events: none;
+            opacity: 0;
+            transform: translateY(8px) scale(0.97);
+            transform-origin: bottom left;
+            transition: opacity 0.28s cubic-bezier(0.4,0,0.2,1),
+                        transform 0.28s cubic-bezier(0.4,0,0.2,1);
         }
-        .driver-info { display: flex; flex-direction: column; justify-content: center; overflow: hidden; gap: 1px; }
-        .driver-shift { font-size: 0.55rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1; }
-        .driver-name { font-family: var(--font-display); font-weight: 800; font-size: 0.88rem; color: var(--on-surface); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .driver-phone { font-size: 0.72rem; font-weight: 600; color: var(--outline); }
-        .driver-badge { font-size: 0.52rem; font-weight: 800; padding: 1px 6px; border-radius: var(--radius-full); width: fit-content; white-space: nowrap; }
+        [data-theme="light"] .driver-expanded {
+            background: rgba(255,255,255,0.82);
+            border-color: rgba(255,255,255,0.85);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1),
+                        inset 0 1px 0 rgba(255,255,255,0.95);
+        }
+        .driver-card.expanded .driver-expanded {
+            pointer-events: auto;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .driver-card.outdated .driver-expanded {
+            border-color: rgba(255,100,80,0.4);
+        }
+
+        /* Outdated banner inside expanded */
+        .driver-exp-outdated {
+            display: none;
+            align-items: center; gap: 6px;
+            background: rgba(186,26,26,0.18);
+            border: 1px solid rgba(255,100,80,0.35);
+            border-radius: var(--radius-s);
+            padding: 5px 10px;
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 900;
+            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--error);
+            animation: warning-blink 1.5s infinite alternate;
+        }
+        .driver-card.outdated .driver-exp-outdated { display: flex; }
+
+        .driver-exp-header {
+            display: flex; flex-direction: column; gap: 2px;
+        }
+        .driver-exp-label {
+            font-size: 0.52rem; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 1.2px; color: var(--on-surface-variant); opacity: 0.6;
+        }
+        .driver-exp-shift {
+            font-size: 0.6rem; font-weight: 800; color: var(--primary);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .driver-exp-name {
+            font-family: var(--font-display); font-weight: 900; font-size: 1.05rem;
+            color: var(--on-surface); letter-spacing: 0.2px; line-height: 1.2;
+        }
+        [data-theme="light"] .driver-exp-name { color: var(--on-surface); }
+        .driver-exp-phone {
+            font-size: 0.78rem; font-weight: 600; color: var(--on-surface-variant);
+            letter-spacing: 0.3px;
+        }
+        .driver-exp-update {
+            font-size: 0.56rem; font-weight: 700; color: var(--outline);
+            letter-spacing: 0.4px;
+            padding-top: 2px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        [data-theme="light"] .driver-exp-update { border-color: rgba(0,0,0,0.08); }
+        .driver-exp-call {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: rgba(114,212,138,0.15);
+            border: 1.5px solid rgba(114,212,138,0.4);
+            border-radius: var(--radius-full);
+            padding: 8px 14px;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.78rem;
+            letter-spacing: 0.8px; text-transform: uppercase;
+            color: var(--success);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .driver-exp-call:hover {
+            background: rgba(114,212,138,0.25);
+            transform: scale(1.02);
+        }
+        .driver-exp-call .material-symbols-rounded { font-size: 18px !important; }
+
+        /* keep these for badge-active / badge-outdated used in evaluateUpdateBadge */
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
+
+        /* ── FLASH NEWS OVERLAY ── */
+        #flash-news-overlay {
+            position: fixed; inset: 0; z-index: 9990;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
+        .flash-backdrop {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(6px) saturate(0.6);
+            -webkit-backdrop-filter: blur(6px) saturate(0.6);
+        }
+        .flash-panel {
+            position: relative; z-index: 1;
+            width: min(820px, calc(100vw - 32px));
+            background: rgba(10,14,20,0.88);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius-l);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4),
+                        inset 0 1px 0 rgba(255,255,255,0.2);
+            backdrop-filter: blur(40px) saturate(2);
+            -webkit-backdrop-filter: blur(40px) saturate(2);
+            overflow: hidden;
+            transform: scale(0.93) translateY(20px);
+            transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        [data-theme="light"] .flash-panel {
+            background: rgba(240,244,248,0.9);
+            border-color: rgba(255,255,255,0.8);
+        }
+        #flash-news-overlay.visible .flash-panel {
+            transform: scale(1) translateY(0);
+        }
+        .flash-banner {
+            display: flex; align-items: center; gap: 10px;
+            background: #CC0000;
+            padding: 7px 20px;
+        }
+        .flash-banner-live {
+            display: flex; align-items: center; gap: 5px;
+            background: #fff;
+            border-radius: 3px; padding: 1px 8px;
+            font-family: var(--font-display); font-size: 0.72rem; font-weight: 900;
+            color: #CC0000; letter-spacing: 1.5px;
+            animation: flash-live-blink 1s infinite;
+        }
+        .flash-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #CC0000; }
+        @keyframes flash-live-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .flash-banner-text {
+            font-family: var(--font-display); font-size: 0.72rem; font-weight: 900;
+            letter-spacing: 2px; color: #fff; text-transform: uppercase;
+        }
+        .flash-banner-tag {
+            margin-left: auto;
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 800;
+            letter-spacing: 1.5px; color: rgba(255,255,255,0.7);
+        }
+        .flash-body {
+            padding: 28px 28px 24px;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .flash-eyebrow {
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 900;
+            letter-spacing: 2.5px; text-transform: uppercase;
+            color: #CC0000;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .flash-eyebrow::before {
+            content: '';
+            display: block; width: 20px; height: 2px; background: #CC0000;
+        }
+        .flash-headline {
+            font-family: var(--font-display); font-weight: 900;
+            font-size: clamp(1.4rem, 4vw, 2.1rem);
+            line-height: 1.25; letter-spacing: -0.3px;
+            color: var(--on-bg);
+        }
+        [data-theme="light"] .flash-headline { color: var(--on-bg); }
+        .flash-item-num {
+            display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 800;
+            color: var(--on-surface-variant); opacity: 0.5; letter-spacing: 1px;
+        }
+        .flash-dots { display: flex; gap: 5px; }
+        .flash-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); transition: background 0.3s;
+        }
+        [data-theme="light"] .flash-dot { background: rgba(0,0,0,0.15); }
+        .flash-dot.active { background: #CC0000; }
+        .flash-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 12px 28px;
+        }
+        [data-theme="light"] .flash-footer { border-color: rgba(0,0,0,0.08); }
+        .flash-progress-wrap {
+            flex: 1; height: 2px; background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-full); overflow: hidden; margin-right: 16px;
+        }
+        [data-theme="light"] .flash-progress-wrap { background: rgba(0,0,0,0.1); }
+        .flash-progress-fill {
+            height: 100%; background: #CC0000;
+            border-radius: var(--radius-full);
+            transition: width 0.1s linear;
+            width: 0%;
+        }
+        .flash-dismiss {
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 900;
+            letter-spacing: 1.2px; text-transform: uppercase;
+            color: var(--on-surface-variant); opacity: 0.5;
+            cursor: pointer; transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+        .flash-dismiss:hover { opacity: 1; }
 
         /* ── APP DOCK — Liquid Glass ── */
         .app-dock {
@@ -1035,10 +1306,8 @@
             .clock-unit { min-width: 46px; padding: 2px 7px; }
             .clock-val { font-size: 1.2rem; }
             .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-            .driver-card { left: 8px; bottom: 46px; padding: 5px 10px 5px 6px; gap: 7px; max-width: calc(100vw - 75px); }
-            .driver-img-wrap { width: 34px; height: 34px; }
-            .driver-img-wrap .main-icon { font-size: 18px; }
-            .driver-name { font-size: 0.82rem; }
+            .driver-card { left: 8px; bottom: 46px; }
+            .driver-expanded { min-width: 200px; }
             .fab-ab { width: 46px; height: 46px; bottom: 122px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
             .ticker-head { padding: 0 14px; font-size: 0.72rem; }
             .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
@@ -1178,17 +1447,66 @@
         </div>
     </main>
 
-    <div id="driver-card" class="driver-card outdated">
-        <div id="outdated-warning-text" class="outdated-warning-tag">⚠️ OUTDATED</div>
-        <div class="driver-img-wrap" onclick="initiateCall(event)">
-            <span class="material-symbols-rounded main-icon">directions_car</span>
-            <span class="material-symbols-rounded call-icon">call</span>
+    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
+        <!-- Expanded panel (pops above) -->
+        <div class="driver-expanded" onclick="event.stopPropagation()">
+            <div class="driver-exp-outdated">
+                <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
+                OUTDATED DATA
+            </div>
+            <div class="driver-exp-header">
+                <div class="driver-exp-label">On Duty Driver</div>
+                <div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div>
+                <div id="driver-name" class="driver-exp-name">Loading...</div>
+                <div id="driver-phone" class="driver-exp-phone">---</div>
+            </div>
+            <div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div>
+            <div class="driver-exp-call" onclick="initiateCall(event)">
+                <span class="material-symbols-rounded">call</span>
+                CALL DRIVER
+            </div>
         </div>
-        <div class="driver-info">
-            <div id="driver-shift" class="driver-shift">SHIFT: ---</div>
-            <div id="driver-name" class="driver-name">Loading...</div>
-            <div id="driver-phone" class="driver-phone">---</div>
-            <div id="driver-update-badge" class="driver-badge badge-outdated">UPDATE: ---</div>
+        <!-- Collapsed pill -->
+        <div class="driver-pill">
+            <div class="driver-pill-icon">
+                <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
+            </div>
+            <div class="driver-pill-text-wrap">
+                <div class="driver-pill-slide" id="driver-pill-slide">
+                    <span class="driver-pill-name-val" id="driver-pill-name">Loading...</span>
+                    <span class="driver-pill-num-val" id="driver-pill-num">---</span>
+                </div>
+            </div>
+            <div class="driver-pill-outdated-dot"></div>
+        </div>
+    </div>
+
+    <!-- Flash News Overlay -->
+    <div id="flash-news-overlay">
+        <div class="flash-backdrop" onclick="dismissFlash()"></div>
+        <div class="flash-panel">
+            <div class="flash-banner">
+                <div class="flash-banner-live">
+                    <div class="flash-live-dot"></div>
+                    LIVE
+                </div>
+                <div class="flash-banner-text">⚡ IMPORTANT NOTICE</div>
+                <div class="flash-banner-tag" id="flash-tag">KMRL SUBSTATION</div>
+            </div>
+            <div class="flash-body">
+                <div class="flash-eyebrow">BREAKING UPDATE</div>
+                <div class="flash-headline" id="flash-headline">—</div>
+                <div class="flash-item-num">
+                    <span id="flash-item-label">ITEM 1 OF 1</span>
+                    <div class="flash-dots" id="flash-dots"></div>
+                </div>
+            </div>
+            <div class="flash-footer">
+                <div class="flash-progress-wrap">
+                    <div class="flash-progress-fill" id="flash-progress-fill"></div>
+                </div>
+                <div class="flash-dismiss" onclick="dismissFlash()">DISMISS ✕</div>
+            </div>
         </div>
     </div>
 
@@ -1238,9 +1556,142 @@
                 if (btn)  btn.classList.remove('active');
             }
         }
-        function initiateCall(e) { if (e) e.stopPropagation(); const ph = document.getElementById('driver-phone').innerText; if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`; }
+        // ── Driver pill: alternate name ↔ number every 10s ──
+        let _driverPillTimer = null;
+        let _driverShowingNum = false;
+        function startDriverPillCycle() {
+            if (_driverPillTimer) clearInterval(_driverPillTimer);
+            _driverPillTimer = setInterval(() => {
+                const slide = document.getElementById('driver-pill-slide');
+                if (!slide) return;
+                _driverShowingNum = !_driverShowingNum;
+                slide.classList.toggle('show-number', _driverShowingNum);
+            }, 10000);
+        }
+        startDriverPillCycle();
 
-        function toggleDock(e) {
+        function toggleDriverCard(e) {
+            if (e) e.stopPropagation();
+            const card = document.getElementById('driver-card');
+            card.classList.toggle('expanded');
+        }
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+            const card = document.getElementById('driver-card');
+            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
+                card.classList.remove('expanded');
+            }
+        });
+
+        function initiateCall(e) {
+            if (e) e.stopPropagation();
+            const ph = document.getElementById('driver-phone').innerText;
+            if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`;
+        }
+
+        function evaluateUpdateBadge(raw) {
+            const card = document.getElementById('driver-card');
+            const badge = document.getElementById('driver-update-badge');
+            if (!raw || raw === '---') {
+                if (badge) badge.innerText = 'UPDATE: N/A';
+                card.classList.add('outdated'); return;
+            }
+            try {
+                const ut = new Date(raw), now = new Date();
+                const formatted = ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false});
+                if (badge) badge.innerText = `LAST UPDATE: ${formatted}`;
+                const h = now.getHours();
+                let ss = new Date(now);
+                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0);
+                else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
+                if (ut >= ss) { card.classList.remove('outdated'); }
+                else { card.classList.add('outdated'); }
+            } catch (e) { if (badge) badge.innerText = 'UPDATE: ERR'; }
+        }
+
+        // ── Flash News System ──
+        let _flashItems = [];
+        let _flashIdx = 0;
+        let _flashTimer = null;
+        let _flashProgressTimer = null;
+        let _flashHourTimer = null;
+        let _lastNoticeRaw = '';
+        const FLASH_ITEM_DURATION = 7000; // ms per item
+
+        function showFlashNews(items, startIdx = 0) {
+            if (!items || items.length === 0) return;
+            _flashItems = items;
+            _flashIdx = startIdx;
+            _renderFlashItem();
+            const overlay = document.getElementById('flash-news-overlay');
+            overlay.classList.add('visible');
+            _startFlashProgress();
+        }
+
+        function _renderFlashItem() {
+            const items = _flashItems;
+            const idx = _flashIdx;
+            const total = items.length;
+            document.getElementById('flash-headline').innerText = items[idx] || '';
+            document.getElementById('flash-item-label').innerText = `ITEM ${idx + 1} OF ${total}`;
+            // Dots
+            const dotsEl = document.getElementById('flash-dots');
+            dotsEl.innerHTML = items.map((_, i) =>
+                `<div class="flash-dot ${i === idx ? 'active' : ''}"></div>`
+            ).join('');
+            document.getElementById('flash-tag').innerText =
+                new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:false}) + ' · KMRL';
+        }
+
+        function _startFlashProgress() {
+            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            if (_flashTimer) clearTimeout(_flashTimer);
+            const fill = document.getElementById('flash-progress-fill');
+            if (fill) fill.style.width = '0%';
+            const start = Date.now();
+            _flashProgressTimer = setInterval(() => {
+                const elapsed = Date.now() - start;
+                const pct = Math.min(100, (elapsed / FLASH_ITEM_DURATION) * 100);
+                if (fill) fill.style.width = pct + '%';
+            }, 80);
+            _flashTimer = setTimeout(() => {
+                clearInterval(_flashProgressTimer);
+                _flashIdx++;
+                if (_flashIdx < _flashItems.length) {
+                    _renderFlashItem();
+                    _startFlashProgress();
+                } else {
+                    dismissFlash();
+                }
+            }, FLASH_ITEM_DURATION);
+        }
+
+        function dismissFlash() {
+            if (_flashTimer) clearTimeout(_flashTimer);
+            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            document.getElementById('flash-news-overlay').classList.remove('visible');
+        }
+
+        // Called whenever ticker updates
+        function triggerFlashIfChanged(raw) {
+            if (!raw || raw.trim() === '') return;
+            const items = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (items.length === 0) return;
+
+            // Show if content changed
+            if (raw.trim() !== _lastNoticeRaw.trim()) {
+                _lastNoticeRaw = raw.trim();
+                // Slight delay so page renders first
+                setTimeout(() => showFlashNews(items, 0), 1200);
+
+                // Reset hourly cycle
+                if (_flashHourTimer) clearInterval(_flashHourTimer);
+                _flashHourTimer = setInterval(() => {
+                    const latest = _lastNoticeRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
+                    if (latest.length > 0) showFlashNews(latest, 0);
+                }, 60 * 60 * 1000); // every 1 hour
+            }
+        }
             if (e) e.stopPropagation();
             const dock = document.getElementById('app-dock');
             const btn  = document.getElementById('dock-toggle-btn');
@@ -1420,6 +1871,7 @@
                 if (param === 'sheetab_R2C2') {
                     const formatted = val.split('\n').map(l => l.trim()).filter(l => l !== '').join('   •   ');
                     updateTickerBar('IMPORTANT NOTICE', formatted, val);
+                    triggerFlashIfChanged(val);
                 }
 
                 // Today staff
@@ -1478,9 +1930,17 @@
 
                 if (unit === 'DriverPopup') {
                     const parts = val.split('|');
-                    document.getElementById('driver-name').innerText  = parts[0] || '---';
-                    document.getElementById('driver-phone').innerText = parts[1] || '---';
-                    document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
+                    const name = parts[0] || '---';
+                    const phone = parts[1] || '---';
+                    const shift = parts[2] || '---';
+                    document.getElementById('driver-name').innerText  = name;
+                    document.getElementById('driver-phone').innerText = phone;
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${shift}`;
+                    // Pill
+                    const pn = document.getElementById('driver-pill-name');
+                    const pNum = document.getElementById('driver-pill-num');
+                    if (pn) pn.innerText = name;
+                    if (pNum) pNum.innerText = phone !== '---' ? phone : shift !== '---' ? `SHIFT: ${shift}` : '---';
                 }
 
                 if (unit === 'sheetab' && param === 'sheetab_R2C1') evaluateUpdateBadge(val);
