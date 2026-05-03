@@ -1692,6 +1692,8 @@
                 }, 60 * 60 * 1000); // every 1 hour
             }
         }
+
+        function toggleDock(e) {
             if (e) e.stopPropagation();
             const dock = document.getElementById('app-dock');
             const btn  = document.getElementById('dock-toggle-btn');
