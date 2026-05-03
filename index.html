@@ -563,44 +563,129 @@
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
 
-        /* ── APP DOCK ── */
+        /* ── APP DOCK — Liquid Glass ── */
         .app-dock {
             position: fixed;
-            bottom: 46px; /* sit right above the ticker bar */
+            bottom: 54px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 999;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: var(--surface);
+            gap: 6px;
+            padding: 10px 14px;
+            /* liquid glass */
+            background: rgba(255,255,255,0.08);
             border-radius: var(--radius-full);
-            box-shadow: var(--shadow-2), 0 0 0 1px var(--outline);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.35),
+                0 2px 8px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.22),
+                inset 0 -1px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(28px) saturate(1.8);
+            -webkit-backdrop-filter: blur(28px) saturate(1.8);
             max-width: calc(100vw - 40px);
             flex-wrap: nowrap;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] .app-dock {
+            background: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.7);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.12),
+                0 2px 8px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 -1px 0 rgba(0,0,0,0.06);
         }
         .app-dock:empty { display: none; }
+
+        /* Dock scroll container for items */
+        .dock-items-scroll {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            flex-shrink: 1;
+            min-width: 0;
+        }
+        /* Infinite scroll track (when collapsed & overflowing) */
+        .dock-items-scroll.scrolling {
+            overflow: visible;
+        }
+        .dock-scroll-track {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .dock-scroll-track.animated {
+            animation: dock-ticker 20s linear infinite;
+        }
+        .dock-scroll-track.animated:hover { animation-play-state: paused; }
+        @keyframes dock-ticker {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Expand/collapse button within dock */
+        .dock-expand-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--on-surface);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+        [data-theme="light"] .dock-expand-btn {
+            background: rgba(0,0,0,0.06);
+            border-color: rgba(0,0,0,0.12);
+        }
+        .dock-expand-btn:hover { background: rgba(255,255,255,0.22); transform: scale(1.08); }
+        .dock-expand-btn .material-symbols-rounded { font-size: 18px !important; transition: transform 0.3s ease; }
+        .dock-expand-btn.expanded .material-symbols-rounded { transform: rotate(180deg); }
+        .dock-expand-btn.visible { display: flex; }
+
+        /* When dock is expanded: wrap items */
+        .app-dock.dock-expanded {
+            border-radius: var(--radius-l);
+            max-width: calc(100vw - 40px);
+        }
+        .app-dock.dock-expanded .dock-items-scroll {
+            flex-wrap: wrap;
+            overflow: visible;
+            justify-content: center;
+        }
+        .app-dock.dock-expanded .dock-scroll-track {
+            flex-wrap: wrap;
+            animation: none !important;
+            justify-content: center;
+        }
 
         .dock-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: default;
             transition: transform 0.2s ease;
             flex-shrink: 0;
+            position: relative;
         }
-        .dock-item:hover { transform: translateY(-4px) scale(1.08); }
+        .dock-item:hover { transform: translateY(-4px) scale(1.1); }
 
         .dock-icon-ring {
             position: relative;
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
             flex-shrink: 0;
         }
         .dock-icon-ring svg {
@@ -612,57 +697,88 @@
         }
         .dock-icon-ring svg .ring-track {
             fill: none;
-            stroke: var(--surface-variant);
-            stroke-width: 3.5;
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 3;
+        }
+        [data-theme="light"] .dock-icon-ring svg .ring-track {
+            stroke: rgba(0,0,0,0.1);
         }
         .dock-icon-ring svg .ring-fill {
             fill: none;
-            stroke-width: 3.5;
+            stroke-width: 3;
             stroke-linecap: round;
-            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1),
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1),
                         stroke 0.4s ease;
         }
+        /* Glass circle icon container — matches ring shape */
         .dock-img-wrap {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             width: 38px; height: 38px;
-            border-radius: 12px;
+            border-radius: 50%;
             overflow: hidden;
-            background: var(--surface-variant);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.22);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.2);
             display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+        [data-theme="light"] .dock-img-wrap {
+            background: rgba(255,255,255,0.6);
+            border-color: rgba(255,255,255,0.8);
         }
         .dock-img-wrap img {
             width: 100%; height: 100%;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 50%;
         }
         .dock-img-fallback {
             font-family: var(--font-display);
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--primary);
             text-transform: uppercase;
         }
         .dock-label {
             font-family: var(--font-display);
-            font-size: 0.52rem;
+            font-size: 0.5rem;
             font-weight: 800;
-            color: var(--on-surface-variant);
+            color: rgba(255,255,255,0.7);
             text-transform: uppercase;
             letter-spacing: 0.6px;
             white-space: nowrap;
-            max-width: 56px;
+            max-width: 54px;
             overflow: hidden;
             text-overflow: ellipsis;
             text-align: center;
         }
+        [data-theme="light"] .dock-label { color: var(--on-surface-variant); }
         .dock-pct {
             font-family: var(--font-display);
-            font-size: 0.5rem;
+            font-size: 0.48rem;
             font-weight: 900;
             letter-spacing: 0.4px;
             text-align: center;
+        }
+
+        /* Warning badge on icon — subtle glow dot */
+        .dock-warn-badge {
+            position: absolute;
+            top: 0; right: 0;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--error);
+            border: 2px solid rgba(13,17,23,0.8);
+            box-shadow: 0 0 6px var(--error);
+            animation: warn-pulse 2s infinite;
+            display: none;
+        }
+        [data-theme="light"] .dock-warn-badge { border-color: rgba(240,244,248,0.9); }
+        .dock-warn-badge.visible { display: block; }
+        @keyframes warn-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.25); opacity: 0.75; }
         }
 
         /* Ring colour thresholds */
@@ -674,10 +790,10 @@
         .pct-low    { color: var(--error); }
 
         @media (max-width: 600px) {
-            .app-dock { gap: 7px; padding: 6px 12px; }
+            .app-dock { gap: 5px; padding: 8px 11px; }
             .dock-icon-ring { width: 44px; height: 44px; }
             .dock-img-wrap { width: 32px; height: 32px; }
-            .dock-label { font-size: 0.48rem; max-width: 46px; }
+            .dock-label { font-size: 0.46rem; max-width: 44px; }
         }
 
         /* ── TICKER ── */
@@ -863,7 +979,7 @@
 
         /* ── DOCK TOGGLE BUTTON (mobile only) ── */
         .dock-toggle-btn {
-            display: none; /* hidden on desktop */
+            display: none;
         }
         @media (max-width: 900px) {
             .dock-toggle-btn {
@@ -874,9 +990,9 @@
                 bottom: 54px;
                 right: 10px;
                 z-index: 1002;
-                background: var(--primary-container);
-                color: var(--on-primary-container);
-                border: none;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                color: var(--on-surface);
                 border-radius: var(--radius-full);
                 padding: 6px 12px 6px 10px;
                 font-family: var(--font-display);
@@ -884,9 +1000,16 @@
                 font-weight: 900;
                 letter-spacing: 1px;
                 text-transform: uppercase;
-                box-shadow: var(--shadow-2);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
                 cursor: pointer;
                 transition: all 0.2s ease;
+            }
+            [data-theme="light"] .dock-toggle-btn {
+                background: rgba(255,255,255,0.6);
+                border-color: rgba(255,255,255,0.8);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
             }
             .dock-toggle-btn:hover { transform: scale(1.04); }
             .dock-toggle-icon { font-size: 18px !important; transition: transform 0.3s ease; }
@@ -922,7 +1045,7 @@
             .deploy-header { flex-direction: column; gap: 8px; }
             .general-info-pill { justify-content: flex-start; }
 
-            /* Dock: collapsed by default on mobile */
+            /* Dock on mobile: collapsed by default */
             .app-dock {
                 bottom: 46px;
                 max-height: 0;
@@ -931,18 +1054,25 @@
                 overflow: hidden;
                 opacity: 0;
                 pointer-events: none;
-                box-shadow: none;
             }
             .app-dock.dock-expanded {
                 bottom: 100px;
-                max-height: 200px;
-                padding: 10px 18px;
+                max-height: 300px;
+                padding: 10px 14px;
                 opacity: 1;
                 pointer-events: auto;
-                box-shadow: var(--shadow-2), 0 0 0 1px var(--outline), 0 0 0 100vmax rgba(0,0,0,0.35);
                 z-index: 1003;
-                flex-wrap: wrap;
                 border-radius: var(--radius-l);
+            }
+            .app-dock.dock-expanded .dock-items-scroll {
+                flex-wrap: wrap;
+                overflow: visible;
+                justify-content: center;
+            }
+            .app-dock.dock-expanded .dock-scroll-track {
+                flex-wrap: wrap;
+                animation: none !important;
+                justify-content: center;
             }
         }
 
@@ -1101,7 +1231,6 @@
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() {
             document.getElementById('blackout').style.display = 'none';
-            // Collapse dock on mobile when tapping elsewhere
             if (window.innerWidth <= 900) {
                 const dock = document.getElementById('app-dock');
                 const btn  = document.getElementById('dock-toggle-btn');
@@ -1457,7 +1586,6 @@
             const dock = document.getElementById('app-dock');
             if (!dock) return;
 
-            // Collect rows that have at least a label or icon defined, sort by row number
             const rows = Object.keys(dockRows)
                 .map(Number)
                 .sort((a, b) => a - b)
@@ -1465,37 +1593,73 @@
 
             if (rows.length === 0) { dock.innerHTML = ''; return; }
 
-            const CIRCUMFERENCE = 2 * Math.PI * 22; // radius 22
+            const RADIUS = 21;
+            const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+            const COLLAPSE_THRESHOLD = 5; // show expand btn if more than this many items
 
-            dock.innerHTML = rows.map(r => {
+            const itemsHtml = rows.map(r => {
                 const { label = '', pct = '', icon = '' } = dockRows[r];
                 const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
                 const offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE;
 
-                // Colour class by value
                 const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
 
-                // Icon: img if URL given, else initials fallback
                 const iconHtml = icon && icon.startsWith('http')
                     ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                        <span class="dock-img-fallback" style="display:none;">${label.charAt(0)}</span>`
                     : `<span class="dock-img-fallback">${label.charAt(0) || '?'}</span>`;
 
+                const warnBadge = (pctNum < 20)
+                    ? `<span class="dock-warn-badge visible" title="${pctNum.toFixed(0)}% remaining — low stock"></span>`
+                    : `<span class="dock-warn-badge"></span>`;
+
                 return `
                 <div class="dock-item">
+                    ${warnBadge}
                     <div class="dock-icon-ring">
-                        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
-                            <circle class="ring-track" cx="26" cy="26" r="22"/>
-                            <circle class="ring-fill ring-${cls}" cx="26" cy="26" r="22"
+                        <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="ring-track" cx="25" cy="25" r="${RADIUS}"/>
+                            <circle class="ring-fill ring-${cls}" cx="25" cy="25" r="${RADIUS}"
                                 stroke-dasharray="${CIRCUMFERENCE}"
                                 stroke-dashoffset="${offset}"/>
                         </svg>
                         <div class="dock-img-wrap">${iconHtml}</div>
                     </div>
                     <div class="dock-label" title="${label}">${label}</div>
-                    <div class="dock-pct pct-${cls}">${pctNum > 0 ? pctNum.toFixed(0) + '%' : '—'}</div>
+                    <div class="dock-pct pct-${cls}">${pctNum.toFixed(0)}%</div>
                 </div>`;
             }).join('');
+
+            const needsExpand = rows.length > COLLAPSE_THRESHOLD;
+
+            // Build scroll track — duplicate for seamless loop when scrolling
+            const trackHtml = needsExpand
+                ? `<div class="dock-scroll-track animated" id="dock-scroll-track">${itemsHtml}${itemsHtml}</div>`
+                : `<div class="dock-scroll-track" id="dock-scroll-track">${itemsHtml}</div>`;
+
+            const expandBtn = needsExpand
+                ? `<button class="dock-expand-btn visible" id="dock-expand-btn" onclick="toggleDockExpand(event)" title="Show all">
+                       <span class="material-symbols-rounded">expand_less</span>
+                   </button>`
+                : '';
+
+            dock.innerHTML = `<div class="dock-items-scroll" id="dock-items-scroll">${trackHtml}</div>${expandBtn}`;
+        }
+
+        function toggleDockExpand(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('app-dock');
+            const btn  = document.getElementById('dock-expand-btn');
+            const track = document.getElementById('dock-scroll-track');
+            const expanded = dock.classList.toggle('dock-expanded');
+            if (btn) btn.classList.toggle('expanded', expanded);
+            if (track) {
+                if (expanded) {
+                    track.classList.remove('animated');
+                } else {
+                    track.classList.add('animated');
+                }
+            }
         }
 
         function evaluateUpdateBadge(raw) {
