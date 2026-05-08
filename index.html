@@ -1202,7 +1202,7 @@
         /* The glass slab that flips */
         .ir-slab {
             width: 100%;
-            min-height: 148px;
+            height: 148px;          /* ← fixed height, no min/max */
             border-radius: var(--radius-l);
             /* glass */
             background: rgba(22, 28, 40, 0.55);
@@ -1225,10 +1225,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 18px 16px 14px;
-            gap: 6px;
+            padding: 14px 12px 10px;
+            gap: 4px;
             position: relative;
-            /* specular highlight that makes it look like glass */
+            box-sizing: border-box;
         }
         .ir-slab::before {
             content: '';
@@ -1283,16 +1283,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
+            flex-shrink: 0;
         }
         .ir-icon-wrap .material-symbols-rounded {
-            font-size: 44px !important;
+            font-size: 36px !important;
             color: var(--primary);
             font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48;
             line-height: 1;
         }
         .ir-icon-img {
-            width: 52px; height: 52px;
+            width: 42px; height: 42px;
             border-radius: var(--radius-m);
             object-fit: cover;
             border: 1px solid rgba(255,255,255,0.18);
@@ -1302,13 +1303,23 @@
         /* main headline — weather condition / day name / item text */
         .ir-headline {
             font-family: var(--font-display);
-            font-size: 1.35rem;
+            font-size: 1.2rem;
             font-weight: 900;
             color: var(--on-surface);
             text-align: center;
             line-height: 1.15;
             letter-spacing: -0.3px;
             word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            max-width: 100%;
+        }
+        /* When no icon, headline gets more vertical room */
+        .ir-headline.ir-headline-full {
+            -webkit-line-clamp: 5;
+            font-size: 1.1rem;
         }
 
         /* small sub-label below headline */
@@ -1345,9 +1356,7 @@
             transform: scale(1.4);
         }
 
-        @media (max-width: 900px) {
-            #info-rotator { bottom: 46px; right: 8px; width: 154px; }
-        }
+        /* info-rotator mobile handled in unified @media blocks below */
 
         /* ── TICKER ── */
         .ticker-bar {
@@ -1578,23 +1587,27 @@
                 gap: 8px;
             }
             .app-bar {
-                flex-wrap: wrap; padding: 10px 14px;
-                margin: 8px 8px 0 8px; gap: 6px;
+                flex-wrap: wrap; padding: 8px 12px;
+                margin: 6px 6px 0 6px; gap: 6px;
                 justify-content: space-between; border-radius: var(--radius-l);
             }
-            .middle-module { order: 3; width: 100%; margin: 6px 0 0 0; height: 40px; }
-            .logo-section img { height: 26px; }
-            .icon-btn { width: 38px; height: 38px; }
-            .clock-unit { min-width: 46px; padding: 2px 7px; }
-            .clock-val { font-size: 1.2rem; }
+            .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
+            .logo-section img { height: 24px; }
+            .icon-btn { width: 36px; height: 36px; }
+            .icon-btn .material-symbols-rounded { font-size: 20px !important; }
+            .clock-unit { min-width: 42px; padding: 2px 6px; }
+            .clock-val { font-size: 1.1rem; }
+            .clock-label { font-size: 0.48rem; }
             .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
             .driver-card { left: 8px; bottom: 46px; }
             .driver-expanded { min-width: 200px; }
             .fab-ab { width: 46px; height: 46px; bottom: 122px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
-            .ticker-head { padding: 0 14px; font-size: 0.72rem; }
+            .ticker-head { padding: 0 12px; font-size: 0.68rem; }
             .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
-            .deploy-header { flex-direction: column; gap: 8px; }
+            .deploy-header { flex-direction: column; gap: 6px; }
             .general-info-pill { justify-content: flex-start; }
+            .card-header { font-size: 0.88rem; }
+            .m3-card { padding: 12px; }
 
             /* Dock on mobile: collapsed by default */
             .app-dock {
@@ -1625,13 +1638,51 @@
                 animation: none !important;
                 justify-content: center;
             }
+
+            /* Info rotator on mobile */
+            #info-rotator { bottom: 46px; right: 8px; width: 148px; }
         }
 
         @media (max-width: 600px) {
-            .roster-grid { grid-template-columns: 1fr; gap: 8px; }
-            .top-controls { gap: 6px; }
-            .m3-card { padding: 12px; }
-            .staff-name { font-size: 1.0625rem; }
+            .dashboard-content {
+                padding: 6px 6px 220px 6px;
+                gap: 6px;
+            }
+            .app-bar {
+                padding: 6px 10px;
+                margin: 4px 4px 0 4px;
+            }
+            .logo-section img { height: 22px; }
+            .middle-module { height: 34px; gap: 8px; }
+            .clock-container { gap: 4px; }
+            .clock-unit { min-width: 36px; padding: 1px 5px; }
+            .clock-val { font-size: 0.95rem; }
+            .clock-label { font-size: 0.42rem; letter-spacing: 0.8px; }
+            .top-controls { gap: 4px; }
+            .icon-btn { width: 32px; height: 32px; }
+            .icon-btn .material-symbols-rounded { font-size: 18px !important; }
+            .roster-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .m3-card { padding: 10px; border-radius: var(--radius-m); }
+            .staff-name { font-size: 0.95rem; }
+            .card-header { font-size: 0.82rem; gap: 6px; }
+            .gen-name-tag { font-size: 0.7rem; padding: 3px 9px; }
+            .gen-label-pill { font-size: 0.58rem; padding: 2px 8px; }
+            .m3-shift-label { font-size: 0.9rem; }
+            .ticker-head { padding: 0 10px; font-size: 0.62rem; }
+            .ticker-scroll { font-size: 0.82rem; }
+            .ops-badge { font-size: 0.7rem; padding: 3px 9px; }
+            .chk-d-label { font-size: 0.65rem; }
+            .chk-d-status { font-size: 0.52rem; }
+
+            /* Info rotator on small mobile */
+            #info-rotator { bottom: 46px; right: 6px; width: 136px; }
+        }
+
+        @media (max-width: 400px) {
+            .roster-grid { grid-template-columns: 1fr; gap: 6px; }
+            .clock-unit { min-width: 30px; padding: 1px 4px; }
+            .clock-val { font-size: 0.85rem; }
+            #info-rotator { width: 126px; }
         }
     </style>
 </head>
@@ -2176,6 +2227,8 @@
             let irWeather = '', irItems = '', irImages = '';
             // Dock items: keyed by row number
             const dockRows = {};
+            // Info rotator C36/C37: collect by row, starting from row 2
+            const irRowItems = {}, irRowImages = {};
 
             data.forEach(item => {
                 const unit  = (item.Unit      || '').trim(),
@@ -2218,8 +2271,20 @@
                 if (param === 'sheetab_R2C33') mtrsStatus = val;
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
                 if (param === 'sheetab_R2C35') irWeather  = val;
-                if (param === 'sheetab_R2C36') irItems    = val;
-                if (param === 'sheetab_R2C37') irImages   = val;
+                if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
+                if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
+
+                // Collect additional rows C36 and C37 (r3, r4, r5...)
+                const c36Match = param.match(/^sheetab_R(\d+)C36$/);
+                if (c36Match && unit === 'sheetab') {
+                    const row = parseInt(c36Match[1], 10);
+                    if (row >= 3) irRowItems[row] = val;
+                }
+                const c37Match = param.match(/^sheetab_R(\d+)C37$/);
+                if (c37Match && unit === 'sheetab') {
+                    const row = parseInt(c37Match[1], 10);
+                    if (row >= 3) irRowImages[row] = val;
+                }
                 if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
 
                 if (unit === 'StationTemp') {
@@ -2238,8 +2303,10 @@
                     const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
                     const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
                     mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
-                    mEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    dEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    const mEnergised = m.toUpperCase().includes('ENERGISED');
+                    const dEnergised = d.toUpperCase().includes('ENERGISED');
+                    mEl.className = `ops-badge ${mEnergised ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-badge ${dEnergised ? 'alert' : 'ok'}`;
                 }
 
                 if (unit === 'OpsSchedule') {
@@ -2365,7 +2432,7 @@
             buildAppDock(dockRows);
 
             // ── Info Rotator ──
-            initInfoRotator(irWeather, irItems, irImages);
+            initInfoRotator(irWeather, irRowItems, irRowImages);
         };
 
         function buildAppDock(dockRows) {
@@ -2522,8 +2589,8 @@
         }
 
         // Each slide is a plain data object: { iconType, icon, headline, label }
-        // iconType: 'material' | 'img'
-        function initInfoRotator(weatherRaw, itemsRaw, imagesRaw) {
+        // iconType: 'material' | 'img' | 'none'
+        function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
             if (_irTimer) clearTimeout(_irTimer);
             _irSlides = [];
 
@@ -2536,23 +2603,33 @@
                 label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
             });
 
-            // ── Slides 2-N: Custom items from C36 / C37 (only if available) ──
-            const itemLines  = (itemsRaw  || '').split('\n').map(l => l.trim()).filter(l => l !== '');
-            const imageLines = (imagesRaw || '').split('\n').map(l => l.trim());
+            // ── Slides 2-N: Custom items from C36 rows (r2, r3, r4...) ──
+            // irRowItems and irRowImages are objects keyed by row number
+            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
 
-            itemLines.forEach((line, i) => {
-                const imgUrl = imageLines[i] || '';
-                const hasImg = imgUrl.startsWith('http');
-                let text = line;
-                if (line.includes('|')) {
-                    const p = line.split('|');
-                    text = (p[1] || p[0]).trim();
-                }
-                _irSlides.push({
-                    iconType: hasImg ? 'img' : 'material',
-                    icon: hasImg ? imgUrl : 'info',
-                    headline: text,
-                    label: '',
+            rowNums.forEach(rowNum => {
+                const rawItem = (irRowItems[rowNum] || '').trim();
+                const rawImg  = ((irRowImages || {})[rowNum] || '').trim();
+                if (!rawItem) return;
+
+                // Each cell may contain multiple lines — each line = one slide
+                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== '');
+                const imageLines = rawImg.split('\n').map(l => l.trim());
+
+                itemLines.forEach((line, i) => {
+                    const imgUrl = imageLines[i] || '';
+                    const hasImg = imgUrl.startsWith('http');
+                    let text = line;
+                    if (line.includes('|')) {
+                        const p = line.split('|');
+                        text = (p[1] || p[0]).trim();
+                    }
+                    _irSlides.push({
+                        iconType: hasImg ? 'img' : 'none',
+                        icon: hasImg ? imgUrl : '',
+                        headline: text,
+                        label: '',
+                    });
                 });
             });
 
@@ -2571,17 +2648,39 @@
 
             function _applySlide() {
                 const s = _irSlides[_irIdx];
+                const hasIcon = s.iconType === 'img' || s.iconType === 'material';
 
                 // Icon
                 if (s.iconType === 'img') {
-                    iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size:44px!important;color:var(--primary);font-variation-settings:\\'FILL\\' 1\\'>info</span>'">`;
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt=""
+                        onerror="this.parentElement.style.display='none';document.getElementById('ir-headline').classList.add('ir-headline-full');">`;
+                } else if (s.iconType === 'material') {
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:36px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`;
                 } else {
-                    iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:44px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`;
+                    // no icon — hide wrap, give full space to text
+                    iconWrap.style.display = 'none';
+                    iconWrap.innerHTML = '';
                 }
 
-                // Headline — auto-shrink for long text
+                // Headline — class and font-size based on icon presence & text length
                 headline.textContent = s.headline;
-                headline.style.fontSize = s.headline.length > 12 ? '1.05rem' : '1.35rem';
+                headline.classList.remove('ir-headline-full');
+                if (!hasIcon || s.iconType === 'none') {
+                    headline.classList.add('ir-headline-full');
+                }
+                // Dynamic font size based on text length
+                const len = s.headline.length;
+                let fs;
+                if (!hasIcon || s.iconType === 'none') {
+                    // no icon: more room, can go bigger
+                    fs = len <= 10 ? '1.5rem' : len <= 20 ? '1.2rem' : len <= 40 ? '0.98rem' : '0.82rem';
+                } else {
+                    // with icon: less vertical room
+                    fs = len <= 10 ? '1.25rem' : len <= 20 ? '1.05rem' : len <= 40 ? '0.88rem' : '0.74rem';
+                }
+                headline.style.fontSize = fs;
 
                 // Label
                 label.textContent = s.label;
