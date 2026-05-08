@@ -1185,193 +1185,168 @@
             .dock-label { font-size: 0.46rem; max-width: 44px; }
         }
 
-        /* ── INFO ROTATOR WIDGET ── */
+        /* ── INFO ROTATOR WIDGET — flip slab ── */
+
+        /* Outer anchor: fixed position only, no overflow clip (clip kills 3D) */
         #info-rotator {
             position: fixed;
-            bottom: 54px;   /* sits just above the ticker bar */
+            bottom: 54px;
             right: 10px;
             z-index: 1000;
-            width: 180px;
+            width: 172px;
+            /* 3-D perspective for child flip */
+            perspective: 700px;
+            perspective-origin: 50% 50%;
+        }
+
+        /* The glass slab that flips */
+        .ir-slab {
+            width: 100%;
+            min-height: 148px;
             border-radius: var(--radius-l);
-            overflow: hidden;
             /* glass */
-            background: rgba(255,255,255,0.08);
+            background: rgba(22, 28, 40, 0.55);
             border: 1px solid rgba(255,255,255,0.18);
             box-shadow:
-                0 8px 32px rgba(0,0,0,0.35),
-                0 2px 8px  rgba(0,0,0,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.22),
-                inset 0 -1px 0 rgba(0,0,0,0.12);
-            backdrop-filter: blur(28px) saturate(1.8);
-            -webkit-backdrop-filter: blur(28px) saturate(1.8);
-            transition: box-shadow 0.3s ease;
-        }
-        [data-theme="light"] #info-rotator {
-            background: rgba(255,255,255,0.55);
-            border-color: rgba(255,255,255,0.75);
-            box-shadow:
-                0 8px 24px rgba(0,0,0,0.1),
-                0 2px 6px  rgba(0,0,0,0.07),
-                inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        /* top accent stripe */
-        .ir-accent-bar {
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 60%, white));
-            border-radius: 0;
-        }
-
-        /* slide viewport */
-        .ir-viewport {
-            position: relative;
+                0 12px 40px rgba(0,0,0,0.45),
+                0 2px 8px  rgba(0,0,0,0.25),
+                inset 0 1.5px 0 rgba(255,255,255,0.22),
+                inset 0 -1px 0 rgba(0,0,0,0.18);
+            backdrop-filter: blur(30px) saturate(1.9);
+            -webkit-backdrop-filter: blur(30px) saturate(1.9);
+            /* 3-D transform setup */
+            transform-style: preserve-3d;
+            transform-origin: 50% 50%;
+            /* default state */
+            transform: rotateX(0deg);
+            transition: none;             /* JS drives the flip */
             overflow: hidden;
-            min-height: 100px;
-        }
-
-        /* each slide */
-        .ir-slide {
-            position: absolute;
-            inset: 0;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 12px 14px 10px;
-            gap: 4px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1),
-                        transform 0.45s cubic-bezier(0.4,0,0.2,1);
+            padding: 18px 16px 14px;
+            gap: 6px;
+            position: relative;
+            /* specular highlight that makes it look like glass */
+        }
+        .ir-slab::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            border-radius: var(--radius-l) var(--radius-l) 0 0;
+            background: linear-gradient(
+                180deg,
+                rgba(255,255,255,0.10) 0%,
+                rgba(255,255,255,0.02) 100%
+            );
             pointer-events: none;
         }
-        .ir-slide.ir-active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-            position: relative;
+        [data-theme="light"] .ir-slab {
+            background: rgba(255,255,255,0.52);
+            border-color: rgba(255,255,255,0.80);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.12),
+                0 2px 8px  rgba(0,0,0,0.08),
+                inset 0 1.5px 0 rgba(255,255,255,0.95);
         }
 
-        /* slide with image: side-by-side */
-        .ir-slide.ir-has-img {
-            flex-direction: row;
+        /* flip-out: slab tilts backward on top edge (like flipping a card away) */
+        @keyframes ir-flip-out {
+            0%   { transform: rotateX(0deg);     opacity: 1; }
+            100% { transform: rotateX(-90deg);    opacity: 0.3; }
+        }
+        /* flip-in: new slab comes in from the front-bottom */
+        @keyframes ir-flip-in {
+            0%   { transform: rotateX(90deg);     opacity: 0.3; }
+            100% { transform: rotateX(0deg);      opacity: 1; }
+        }
+        .ir-slab.flipping-out {
+            animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+        .ir-slab.flipping-in {
+            animation: ir-flip-in  0.36s cubic-bezier(0, 0, 0.2, 1) forwards;
+        }
+
+        /* accent bar at top of slab */
+        .ir-accent-bar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white));
+            border-radius: var(--radius-l) var(--radius-l) 0 0;
+        }
+
+        /* icon — big */
+        .ir-icon-wrap {
+            display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            margin-bottom: 2px;
         }
-        .ir-slide-img {
-            width: 44px; height: 44px;
-            border-radius: var(--radius-s);
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-        }
-        .ir-slide-text-block { flex: 1; min-width: 0; }
-
-        /* category label */
-        .ir-cat {
-            font-family: var(--font-display);
-            font-size: 0.5rem;
-            font-weight: 900;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
+        .ir-icon-wrap .material-symbols-rounded {
+            font-size: 44px !important;
             color: var(--primary);
-            opacity: 0.85;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+            line-height: 1;
+        }
+        .ir-icon-img {
+            width: 52px; height: 52px;
+            border-radius: var(--radius-m);
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.3);
         }
 
-        /* main value */
-        .ir-main {
+        /* main headline — weather condition / day name / item text */
+        .ir-headline {
             font-family: var(--font-display);
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             font-weight: 900;
             color: var(--on-surface);
+            text-align: center;
             line-height: 1.15;
             letter-spacing: -0.3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-break: break-word;
         }
 
-        /* sub line */
-        .ir-sub {
+        /* small sub-label below headline */
+        .ir-label {
             font-family: var(--font-body);
             font-size: 0.62rem;
             font-weight: 600;
             color: var(--on-surface-variant);
-            opacity: 0.75;
+            opacity: 0.7;
+            text-align: center;
+            letter-spacing: 0.3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            letter-spacing: 0.2px;
+            max-width: 100%;
         }
 
-        /* weather-specific big temp */
-        .ir-temp {
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -1px;
-            color: var(--on-surface);
-        }
-        .ir-temp-unit {
-            font-size: 0.95rem;
-            font-weight: 700;
-            vertical-align: super;
-            letter-spacing: 0;
-            color: var(--on-surface-variant);
-        }
-
-        /* progress dots footer */
-        .ir-footer {
+        /* dot indicator — sits below the slab, outside it */
+        .ir-dots-row {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 14px 8px;
-            gap: 8px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-        [data-theme="light"] .ir-footer { border-color: rgba(0,0,0,0.07); }
-
-        .ir-dots {
-            display: flex;
-            gap: 4px;
-            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 8px;
         }
         .ir-dot {
             width: 5px; height: 5px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.22);
             transition: background 0.3s ease, transform 0.3s ease;
-            flex-shrink: 0;
         }
-        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.15); }
+        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.18); }
         .ir-dot.ir-dot-active {
             background: var(--primary);
-            transform: scale(1.35);
-        }
-
-        /* progress bar under dots */
-        .ir-progress {
-            flex: 1;
-            height: 2px;
-            background: rgba(255,255,255,0.1);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-        [data-theme="light"] .ir-progress { background: rgba(0,0,0,0.1); }
-        .ir-progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: var(--radius-full);
-            width: 0%;
-            transition: width 0.1s linear;
+            transform: scale(1.4);
         }
 
         @media (max-width: 900px) {
-            #info-rotator { bottom: 46px; right: 8px; width: 160px; }
+            #info-rotator { bottom: 46px; right: 8px; width: 154px; }
         }
 
         /* ── TICKER ── */
@@ -1846,14 +1821,13 @@
 
     <!-- ── INFO ROTATOR WIDGET ── -->
     <div id="info-rotator">
-        <div class="ir-accent-bar"></div>
-        <div class="ir-viewport" id="ir-viewport">
-            <!-- slides injected by JS -->
+        <div class="ir-slab" id="ir-slab">
+            <div class="ir-accent-bar"></div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-headline" id="ir-headline">—</div>
+            <div class="ir-label"   id="ir-label"></div>
         </div>
-        <div class="ir-footer">
-            <div class="ir-dots" id="ir-dots"></div>
-            <div class="ir-progress"><div class="ir-progress-fill" id="ir-progress-fill"></div></div>
-        </div>
+        <div class="ir-dots-row" id="ir-dots"></div>
     </div>
 
     <footer class="ticker-bar">
@@ -2522,24 +2496,24 @@
                   popup = document.getElementById('ticker-popup');
             updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
         };
-        // ── INFO ROTATOR ENGINE ──
-        let _irTimer = null, _irProgressTimer = null, _irIdx = 0, _irSlides = [];
+        // ── INFO ROTATOR ENGINE — glass slab flip ──
+        let _irTimer = null, _irIdx = 0, _irSlides = [];
         const IR_INTERVAL = 5000;
+        const IR_FLIP_DUR = 360; // ms — must match CSS animation duration
 
-        // Weather icon map: keyword → material symbol
         const WEATHER_ICONS = {
             'rain': 'rainy', 'drizzle': 'rainy', 'shower': 'rainy',
-            'thunder': 'thunderstorm', 'storm': 'thunderstorm',
-            'cloud': 'cloud', 'overcast': 'cloud', 'cloudy': 'partly_cloudy_day',
-            'sun': 'sunny', 'clear': 'sunny', 'fair': 'sunny',
-            'fog': 'foggy', 'mist': 'foggy', 'haze': 'foggy',
-            'snow': 'ac_unit', 'hail': 'hail',
-            'wind': 'air', 'breezy': 'air',
-            'hot': 'thermostat', 'humid': 'humidity_mid',
+            'thunder': 'thunderstorm', 'lightning': 'thunderstorm', 'storm': 'thunderstorm',
+            'cloud': 'partly_cloudy_day', 'overcast': 'cloud', 'cloudy': 'partly_cloudy_day',
+            'sun': 'sunny', 'clear': 'sunny', 'fair': 'sunny', 'bright': 'sunny',
+            'fog': 'foggy', 'mist': 'foggy', 'haze': 'foggy', 'smoke': 'foggy',
+            'snow': 'ac_unit', 'hail': 'hail', 'sleet': 'weather_mix',
+            'wind': 'air', 'breezy': 'air', 'gust': 'air',
+            'hot': 'thermostat', 'humid': 'humidity_mid', 'dry': 'wb_sunny',
         };
 
-        function weatherIcon(text) {
-            if (!text) return 'wb_sunny';
+        function _weatherIcon(text) {
+            if (!text) return 'wb_cloudy';
             const t = text.toLowerCase();
             for (const [kw, icon] of Object.entries(WEATHER_ICONS)) {
                 if (t.includes(kw)) return icon;
@@ -2547,144 +2521,138 @@
             return 'wb_cloudy';
         }
 
-        function buildWeatherSlide(raw) {
-            // Expected format examples:
-            //  "32°C Partly Cloudy"  or  "Kochi|32°C|Partly Cloudy"  or just "32°C"
-            if (!raw || raw.trim() === '' || raw === '---') return null;
-            const v = raw.trim();
-            let location = '', temp = '', condition = '';
-            if (v.includes('|')) {
-                const p = v.split('|');
-                location  = (p[0] || '').trim();
-                temp      = (p[1] || '').trim();
-                condition = (p[2] || '').trim();
-            } else {
-                // Try to extract temp via regex
-                const tMatch = v.match(/(\d+\.?\d*\s*°?\s*[CcFf]?)/);
-                temp = tMatch ? tMatch[1].trim() : '';
-                condition = v.replace(tMatch ? tMatch[0] : '', '').trim();
-            }
-
-            const now   = new Date();
-            const days  = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-            const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const dayStr = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
-            const icon   = weatherIcon(condition || v);
-
-            const tempDisplay = temp || v;
-            const locDisplay  = location || condition || '';
-
-            return {
-                cat: 'WEATHER' + (location ? ' · ' + location.toUpperCase() : ''),
-                html: `
-                    <div class="ir-slide ir-active" id="ir-slide-weather">
-                        <div class="ir-cat">📍 ${location ? location.toUpperCase() : 'WEATHER'}</div>
-                        <div style="display:flex;align-items:flex-end;gap:6px;margin:2px 0;">
-                            <span class="ir-temp">${tempDisplay}</span>
-                            <span class="material-symbols-rounded" style="font-size:22px;color:var(--primary);margin-bottom:3px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">${icon}</span>
-                        </div>
-                        <div class="ir-sub">${condition || ''}</div>
-                        <div class="ir-sub" style="margin-top:2px;color:var(--primary);opacity:0.9;font-weight:800;letter-spacing:0.5px;">${dayStr}</div>
-                    </div>`
-            };
-        }
-
-        function buildItemSlide(text, imgUrl, idx) {
-            if (!text || text.trim() === '') return null;
-            const t = text.trim();
-            // Split label|value if pipe present
-            let label = '', value = t;
-            if (t.includes('|')) {
-                const p = t.split('|');
-                label = (p[0] || '').trim();
-                value = (p[1] || '').trim();
-            }
-
-            const hasImg = imgUrl && imgUrl.trim().startsWith('http');
-            const imgHtml = hasImg
-                ? `<img class="ir-slide-img" src="${imgUrl.trim()}" alt="${label||value}" onerror="this.style.display='none'">`
-                : '';
-
-            const textBlock = `
-                <div class="ir-slide-text-block">
-                    ${label ? `<div class="ir-cat">${label.toUpperCase()}</div>` : ''}
-                    <div class="ir-main" style="font-size:${value.length > 14 ? '0.9rem' : '1.1rem'}">${value}</div>
-                </div>`;
-
-            return {
-                html: `<div class="ir-slide ${hasImg ? 'ir-has-img' : ''}" id="ir-slide-${idx}">
-                    ${imgHtml}${textBlock}
-                </div>`
-            };
-        }
-
+        // Each slide is a plain data object: { iconType, icon, headline, label }
+        // iconType: 'material' | 'img'
         function initInfoRotator(weatherRaw, itemsRaw, imagesRaw) {
-            // Clear previous
-            if (_irTimer)         clearTimeout(_irTimer);
-            if (_irProgressTimer) clearInterval(_irProgressTimer);
+            if (_irTimer) clearTimeout(_irTimer);
             _irSlides = [];
 
-            // Slide 1: weather + day
-            const wSlide = buildWeatherSlide(weatherRaw);
-            if (wSlide) _irSlides.push(wSlide.html);
+            // ── Slide 1: Weather ──
+            if (weatherRaw && weatherRaw.trim() && weatherRaw.trim() !== '---') {
+                const v = weatherRaw.trim();
+                let location = '', condition = '';
+                if (v.includes('|')) {
+                    const p = v.split('|');
+                    location  = (p[0] || '').trim();
+                    condition = (p[1] || p[2] || '').trim();
+                    // if 3 parts: loc | temp | condition
+                    if (p.length >= 3) condition = (p[2] || p[1] || '').trim();
+                } else {
+                    // strip any temperature like "32°C " from front
+                    condition = v.replace(/^\d+\.?\d*\s*°?\s*[CcFf]?\s*/, '').trim() || v;
+                    condition = condition || v;
+                }
+                _irSlides.push({
+                    iconType: 'material',
+                    icon: _weatherIcon(condition || v),
+                    headline: condition || v,
+                    label: location || 'WEATHER',
+                });
+            }
 
-            // Slides 2-N: items from C36, images from C37 (newline-delimited, parallel arrays)
+            // ── Slide 2: Day of week ──
+            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            _irSlides.push({
+                iconType: 'material',
+                icon: 'calendar_today',
+                headline: DAYS[new Date().getDay()],
+                label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+            });
+
+            // ── Slides 3-N: Custom items from C36 / C37 ──
             const itemLines  = (itemsRaw  || '').split('\n').map(l => l.trim()).filter(l => l !== '');
             const imageLines = (imagesRaw || '').split('\n').map(l => l.trim());
 
             itemLines.forEach((line, i) => {
-                const img = imageLines[i] || '';
-                const slide = buildItemSlide(line, img, i);
-                if (slide) _irSlides.push(slide.html);
+                const imgUrl = imageLines[i] || '';
+                const hasImg = imgUrl.startsWith('http');
+                // Support "Label|Text" pipe format
+                let text = line;
+                if (line.includes('|')) {
+                    const p = line.split('|');
+                    text = (p[1] || p[0]).trim();
+                }
+                _irSlides.push({
+                    iconType: hasImg ? 'img' : 'material',
+                    icon: hasImg ? imgUrl : 'info',
+                    headline: text,
+                    label: '',
+                });
             });
 
-            if (_irSlides.length === 0) { document.getElementById('info-rotator').style.display = 'none'; return; }
+            if (_irSlides.length === 0) {
+                document.getElementById('info-rotator').style.display = 'none';
+                return;
+            }
             document.getElementById('info-rotator').style.display = '';
-
             _irIdx = 0;
-            _renderIRSlide();
+            _renderIRSlide(false); // no flip on first load
         }
 
-        function _renderIRSlide() {
-            const vp   = document.getElementById('ir-viewport');
-            const dots = document.getElementById('ir-dots');
-            if (!vp || !dots) return;
+        function _renderIRSlide(withFlip) {
+            const slab     = document.getElementById('ir-slab');
+            const iconWrap = document.getElementById('ir-icon-wrap');
+            const headline = document.getElementById('ir-headline');
+            const label    = document.getElementById('ir-label');
+            const dotsEl   = document.getElementById('ir-dots');
+            if (!slab) return;
 
-            // Render all slides, activate current
-            vp.innerHTML = _irSlides.map((html, i) => {
-                // Inject active class on current
-                return html.replace(
-                    /class="ir-slide([^"]*)"/, 
-                    (_, rest) => `class="ir-slide${rest}${i === _irIdx ? ' ir-active' : ''}"`
-                );
-            }).join('');
+            function _applySlide() {
+                const s = _irSlides[_irIdx];
 
-            // Dots
-            dots.innerHTML = _irSlides.map((_, i) =>
-                `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`
-            ).join('');
+                // Icon
+                if (s.iconType === 'img') {
+                    iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.innerHTML='<span class=\\'material-symbols-rounded\\' style=\\'font-size:44px!important;color:var(--primary);font-variation-settings:\\'FILL\\' 1\\'>info</span>'">`;
+                } else {
+                    iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:44px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`;
+                }
 
-            // Min-height based on active slide content
-            vp.style.minHeight = '';
+                // Headline — auto-shrink for long text
+                headline.textContent = s.headline;
+                headline.style.fontSize = s.headline.length > 12 ? '1.05rem' : '1.35rem';
 
-            // Reset + run progress bar
-            _runIRProgress();
+                // Label
+                label.textContent = s.label;
+                label.style.display = s.label ? '' : 'none';
+
+                // Dots
+                dotsEl.innerHTML = _irSlides.map((_, i) =>
+                    `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`
+                ).join('');
+            }
+
+            if (!withFlip) {
+                _applySlide();
+                _scheduleNext();
+                return;
+            }
+
+            // FLIP OUT
+            slab.classList.remove('flipping-in');
+            slab.classList.add('flipping-out');
+
+            setTimeout(() => {
+                // Swap content mid-flip (slab is hidden at 90°)
+                _applySlide();
+
+                // FLIP IN
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+
+                // Clean up after flip-in completes
+                setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleNext();
+                }, IR_FLIP_DUR);
+
+            }, IR_FLIP_DUR);
         }
 
-        function _runIRProgress() {
-            if (_irProgressTimer) clearInterval(_irProgressTimer);
-            if (_irTimer)         clearTimeout(_irTimer);
-            const fill = document.getElementById('ir-progress-fill');
-            if (fill) fill.style.width = '0%';
-            const start = Date.now();
-            _irProgressTimer = setInterval(() => {
-                const pct = Math.min(100, ((Date.now() - start) / IR_INTERVAL) * 100);
-                if (fill) fill.style.width = pct + '%';
-            }, 80);
+        function _scheduleNext() {
+            if (_irTimer) clearTimeout(_irTimer);
             _irTimer = setTimeout(() => {
-                clearInterval(_irProgressTimer);
                 _irIdx = (_irIdx + 1) % _irSlides.length;
-                _renderIRSlide();
+                _renderIRSlide(true);
             }, IR_INTERVAL);
         }
 
