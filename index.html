@@ -2527,30 +2527,7 @@
             if (_irTimer) clearTimeout(_irTimer);
             _irSlides = [];
 
-            // ── Slide 1: Weather ──
-            if (weatherRaw && weatherRaw.trim() && weatherRaw.trim() !== '---') {
-                const v = weatherRaw.trim();
-                let location = '', condition = '';
-                if (v.includes('|')) {
-                    const p = v.split('|');
-                    location  = (p[0] || '').trim();
-                    condition = (p[1] || p[2] || '').trim();
-                    // if 3 parts: loc | temp | condition
-                    if (p.length >= 3) condition = (p[2] || p[1] || '').trim();
-                } else {
-                    // strip any temperature like "32°C " from front
-                    condition = v.replace(/^\d+\.?\d*\s*°?\s*[CcFf]?\s*/, '').trim() || v;
-                    condition = condition || v;
-                }
-                _irSlides.push({
-                    iconType: 'material',
-                    icon: _weatherIcon(condition || v),
-                    headline: condition || v,
-                    label: location || 'WEATHER',
-                });
-            }
-
-            // ── Slide 2: Day of week ──
+            // ── Slide 1: Day of week (always shown) ──
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             _irSlides.push({
                 iconType: 'material',
@@ -2559,14 +2536,13 @@
                 label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
             });
 
-            // ── Slides 3-N: Custom items from C36 / C37 ──
+            // ── Slides 2-N: Custom items from C36 / C37 (only if available) ──
             const itemLines  = (itemsRaw  || '').split('\n').map(l => l.trim()).filter(l => l !== '');
             const imageLines = (imagesRaw || '').split('\n').map(l => l.trim());
 
             itemLines.forEach((line, i) => {
                 const imgUrl = imageLines[i] || '';
                 const hasImg = imgUrl.startsWith('http');
-                // Support "Label|Text" pipe format
                 let text = line;
                 if (line.includes('|')) {
                     const p = line.split('|');
@@ -2580,13 +2556,9 @@
                 });
             });
 
-            if (_irSlides.length === 0) {
-                document.getElementById('info-rotator').style.display = 'none';
-                return;
-            }
             document.getElementById('info-rotator').style.display = '';
             _irIdx = 0;
-            _renderIRSlide(false); // no flip on first load
+            _renderIRSlide(false);
         }
 
         function _renderIRSlide(withFlip) {
@@ -2650,6 +2622,7 @@
 
         function _scheduleNext() {
             if (_irTimer) clearTimeout(_irTimer);
+            if (_irSlides.length <= 1) return; // nothing to rotate
             _irTimer = setTimeout(() => {
                 _irIdx = (_irIdx + 1) % _irSlides.length;
                 _renderIRSlide(true);
