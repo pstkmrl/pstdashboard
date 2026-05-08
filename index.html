@@ -501,6 +501,93 @@
         .chk-empty .chk-label { color: var(--on-warning-container); }
         .chk-empty .chk-status-text { color: var(--on-warning-container); }
 
+        /* ── DUAL CHECKLIST (MTRS + TKRS) ── */
+        .checklist-dual-row {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .chk-dual-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-radius: var(--radius-m);
+            padding: 9px 12px;
+            border: 1.5px solid transparent;
+            transition: all 0.35s ease;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .chk-d-filled {
+            background: var(--success-container);
+            border-color: var(--success);
+        }
+        .chk-d-empty {
+            background: var(--warning-container);
+            border-color: var(--warning);
+        }
+        .chk-d-check-wrap {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chk-d-icon {
+            font-size: 22px !important;
+            transition: color 0.3s ease;
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chk-d-filled .chk-d-icon { color: var(--success); }
+        .chk-d-empty .chk-d-icon  { color: var(--warning); }
+        .chk-d-body { flex: 1; min-width: 0; }
+        .chk-d-label {
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chk-d-filled .chk-d-label { color: var(--on-success-container); }
+        .chk-d-empty .chk-d-label  { color: var(--on-warning-container); }
+        .chk-d-status {
+            font-family: var(--font-body);
+            font-size: 0.58rem;
+            font-weight: 700;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.2px;
+            margin-top: 1px;
+        }
+        .chk-d-filled .chk-d-status { color: var(--on-success-container); }
+        .chk-d-empty .chk-d-status  { color: var(--on-warning-container); }
+        .chk-d-pill {
+            font-family: var(--font-display);
+            font-size: 0.53rem;
+            font-weight: 900;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .chk-d-filled .chk-d-pill {
+            background: rgba(114,212,138,0.22);
+            color: var(--success);
+            border: 1px solid rgba(114,212,138,0.4);
+        }
+        .chk-d-empty .chk-d-pill {
+            background: rgba(255,177,200,0.18);
+            color: var(--warning);
+            border: 1px solid rgba(255,177,200,0.35);
+        }
+
         /* ── RIGHT COLUMN: Maintenance ── */
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
         .maint-header-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -557,6 +644,7 @@
             border-color: rgba(255,100,80,0.55);
             box-shadow: 0 8px 32px rgba(186,26,26,0.3), 0 2px 8px rgba(0,0,0,0.2),
                         inset 0 1px 0 rgba(255,180,171,0.2);
+            opacity: 0.5;
         }
 
         .driver-pill-icon {
@@ -602,7 +690,36 @@
         }
         .driver-card.outdated .driver-pill-num-val { color: var(--error); }
 
-        /* Outdated badge on pill */
+        /* Outdated: pill fades to 50% opacity */
+        .driver-card.outdated .driver-pill {
+            opacity: 0.5;
+        }
+
+        /* Outdated badge pill — shown on collapsed pill only */
+        .driver-pill-outdated-badge {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            background: var(--error-container);
+            border: 1px solid rgba(255,100,80,0.5);
+            border-radius: var(--radius-full);
+            padding: 2px 8px 2px 6px;
+            font-family: var(--font-display);
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--error);
+            white-space: nowrap;
+            flex-shrink: 0;
+            animation: warning-blink 1.5s infinite alternate;
+        }
+        .driver-pill-outdated-badge .material-symbols-rounded {
+            font-size: 11px !important;
+        }
+        .driver-card.outdated .driver-pill-outdated-badge { display: flex; }
+
+        /* Outdated dot (keep for backwards compat but hide since badge replaces it) */
         .driver-pill-outdated-dot {
             width: 8px; height: 8px; border-radius: 50%;
             background: var(--error);
@@ -611,7 +728,8 @@
             display: none;
             animation: warn-pulse 2s infinite;
         }
-        .driver-card.outdated .driver-pill-outdated-dot { display: block; }
+        /* dot hidden — badge replaces it */
+        .driver-card.outdated .driver-pill-outdated-dot { display: none; }
 
         @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
 
@@ -1067,6 +1185,195 @@
             .dock-label { font-size: 0.46rem; max-width: 44px; }
         }
 
+        /* ── INFO ROTATOR WIDGET ── */
+        #info-rotator {
+            position: fixed;
+            bottom: 54px;   /* sits just above the ticker bar */
+            right: 10px;
+            z-index: 1000;
+            width: 180px;
+            border-radius: var(--radius-l);
+            overflow: hidden;
+            /* glass */
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.35),
+                0 2px 8px  rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.22),
+                inset 0 -1px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(28px) saturate(1.8);
+            -webkit-backdrop-filter: blur(28px) saturate(1.8);
+            transition: box-shadow 0.3s ease;
+        }
+        [data-theme="light"] #info-rotator {
+            background: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.75);
+            box-shadow:
+                0 8px 24px rgba(0,0,0,0.1),
+                0 2px 6px  rgba(0,0,0,0.07),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        /* top accent stripe */
+        .ir-accent-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 60%, white));
+            border-radius: 0;
+        }
+
+        /* slide viewport */
+        .ir-viewport {
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+        }
+
+        /* each slide */
+        .ir-slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 12px 14px 10px;
+            gap: 4px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1),
+                        transform 0.45s cubic-bezier(0.4,0,0.2,1);
+            pointer-events: none;
+        }
+        .ir-slide.ir-active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+
+        /* slide with image: side-by-side */
+        .ir-slide.ir-has-img {
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        .ir-slide-img {
+            width: 44px; height: 44px;
+            border-radius: var(--radius-s);
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+        .ir-slide-text-block { flex: 1; min-width: 0; }
+
+        /* category label */
+        .ir-cat {
+            font-family: var(--font-display);
+            font-size: 0.5rem;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--primary);
+            opacity: 0.85;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* main value */
+        .ir-main {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--on-surface);
+            line-height: 1.15;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* sub line */
+        .ir-sub {
+            font-family: var(--font-body);
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            opacity: 0.75;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.2px;
+        }
+
+        /* weather-specific big temp */
+        .ir-temp {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            color: var(--on-surface);
+        }
+        .ir-temp-unit {
+            font-size: 0.95rem;
+            font-weight: 700;
+            vertical-align: super;
+            letter-spacing: 0;
+            color: var(--on-surface-variant);
+        }
+
+        /* progress dots footer */
+        .ir-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px 8px;
+            gap: 8px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+        [data-theme="light"] .ir-footer { border-color: rgba(0,0,0,0.07); }
+
+        .ir-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .ir-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s ease, transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.15); }
+        .ir-dot.ir-dot-active {
+            background: var(--primary);
+            transform: scale(1.35);
+        }
+
+        /* progress bar under dots */
+        .ir-progress {
+            flex: 1;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        [data-theme="light"] .ir-progress { background: rgba(0,0,0,0.1); }
+        .ir-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: var(--radius-full);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        @media (max-width: 900px) {
+            #info-rotator { bottom: 46px; right: 8px; width: 160px; }
+        }
+
         /* ── TICKER ── */
         .ticker-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -1419,13 +1726,27 @@
                     </div>
                 </div>
                 <div class="maint-divider"></div>
-                <div id="checklist-status-card" class="checklist-status-card chk-empty" style="display:none;">
-                    <div class="chk-icon-wrap">
-                        <span class="material-symbols-rounded" id="chk-icon">assignment_late</span>
+                <!-- Dual Checklist Status: MTRS + TKRS -->
+                <div id="checklist-dual" class="checklist-dual-row">
+                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-label">MTRS Checklist</div>
+                            <div class="chk-d-status" id="chk-mtrs-status">Not Filled</div>
+                        </div>
+                        <div class="chk-d-pill" id="chk-mtrs-pill">—</div>
                     </div>
-                    <div>
-                        <div class="chk-label">Checklist</div>
-                        <div id="chk-status-text" class="chk-status-text">---</div>
+                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-label">TKRS Checklist</div>
+                            <div class="chk-d-status" id="chk-tkrs-status">Not Filled</div>
+                        </div>
+                        <div class="chk-d-pill" id="chk-tkrs-pill">—</div>
                     </div>
                 </div>
                 <div id="maint-list" class="maint-list"></div>
@@ -1477,6 +1798,10 @@
                     <span class="driver-pill-num-val" id="driver-pill-num">---</span>
                 </div>
             </div>
+            <div class="driver-pill-outdated-badge">
+                <span class="material-symbols-rounded">warning</span>
+                OUTDATED
+            </div>
             <div class="driver-pill-outdated-dot"></div>
         </div>
     </div>
@@ -1518,6 +1843,18 @@
         <span class="material-symbols-rounded dock-toggle-icon" id="dock-toggle-icon">expand_less</span>
         <span class="dock-toggle-label">CONSUMABLES</span>
     </button>
+
+    <!-- ── INFO ROTATOR WIDGET ── -->
+    <div id="info-rotator">
+        <div class="ir-accent-bar"></div>
+        <div class="ir-viewport" id="ir-viewport">
+            <!-- slides injected by JS -->
+        </div>
+        <div class="ir-footer">
+            <div class="ir-dots" id="ir-dots"></div>
+            <div class="ir-progress"><div class="ir-progress-fill" id="ir-progress-fill"></div></div>
+        </div>
+    </div>
 
     <footer class="ticker-bar">
         <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
@@ -1861,7 +2198,8 @@
                 tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
             };
 
-            let chkStatus = '', techNames = '';
+            let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
+            let irWeather = '', irItems = '', irImages = '';
             // Dock items: keyed by row number
             const dockRows = {};
 
@@ -1903,6 +2241,11 @@
                 if (param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
 
                 if (param === 'ChecklistStatus') chkStatus = val;
+                if (param === 'sheetab_R2C33') mtrsStatus = val;
+                if (param === 'sheetab_R2C34') tkrsStatus = val;
+                if (param === 'sheetab_R2C35') irWeather  = val;
+                if (param === 'sheetab_R2C36') irItems    = val;
+                if (param === 'sheetab_R2C37') irImages   = val;
                 if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
 
                 if (unit === 'StationTemp') {
@@ -1990,25 +2333,29 @@
                 }
             });
 
-            // Checklist status card
-            const chkCard = document.getElementById('checklist-status-card');
-            const chkIcon = document.getElementById('chk-icon');
-            const chkText = document.getElementById('chk-status-text');
-            if (chkStatus && chkCard) {
-                chkCard.style.display = 'flex';
-                const upper = chkStatus.toUpperCase();
-                if (upper.includes('FULLY') || (upper.includes('FILLED') && !upper.includes('PARTIAL'))) {
-                    chkCard.className = 'checklist-status-card chk-filled';
-                    chkIcon.innerText = 'assignment_turned_in';
-                } else if (upper.includes('PARTIAL')) {
-                    chkCard.className = 'checklist-status-card chk-partial';
-                    chkIcon.innerText = 'assignment_ind';
+            // Dual checklist status (MTRS + TKRS)
+            function applyChkDual(id, rawVal) {
+                const item   = document.getElementById(id);
+                const icon   = document.getElementById(id + '-icon');
+                const status = document.getElementById(id + '-status');
+                const pill   = document.getElementById(id + '-pill');
+                if (!item) return;
+                const val = (rawVal || '').trim();
+                const isFilled = val !== '' && val !== '---' && val !== '0' &&
+                                 !val.toUpperCase().includes('NOT') &&
+                                 !val.toUpperCase().includes('EMPTY');
+                item.className = 'chk-dual-item ' + (isFilled ? 'chk-d-filled' : 'chk-d-empty');
+                icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank';
+                if (isFilled) {
+                    status.innerText = val;
+                    pill.innerText = 'FILLED';
                 } else {
-                    chkCard.className = 'checklist-status-card chk-empty';
-                    chkIcon.innerText = 'assignment_late';
+                    status.innerText = val !== '' && val !== '---' ? val : 'Not Filled';
+                    pill.innerText = 'PENDING';
                 }
-                chkText.innerText = chkStatus;
             }
+            applyChkDual('chk-mtrs', mtrsStatus);
+            applyChkDual('chk-tkrs', tkrsStatus);
 
             // Tech names marquee (for ticker bar only, no longer shown in checklist-container)
             // (techNames variable kept for any future use but not displayed in appbar)
@@ -2042,6 +2389,9 @@
 
             // ── Build App Dock ──
             buildAppDock(dockRows);
+
+            // ── Info Rotator ──
+            initInfoRotator(irWeather, irItems, irImages);
         };
 
         function buildAppDock(dockRows) {
@@ -2172,6 +2522,172 @@
                   popup = document.getElementById('ticker-popup');
             updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
         };
+        // ── INFO ROTATOR ENGINE ──
+        let _irTimer = null, _irProgressTimer = null, _irIdx = 0, _irSlides = [];
+        const IR_INTERVAL = 5000;
+
+        // Weather icon map: keyword → material symbol
+        const WEATHER_ICONS = {
+            'rain': 'rainy', 'drizzle': 'rainy', 'shower': 'rainy',
+            'thunder': 'thunderstorm', 'storm': 'thunderstorm',
+            'cloud': 'cloud', 'overcast': 'cloud', 'cloudy': 'partly_cloudy_day',
+            'sun': 'sunny', 'clear': 'sunny', 'fair': 'sunny',
+            'fog': 'foggy', 'mist': 'foggy', 'haze': 'foggy',
+            'snow': 'ac_unit', 'hail': 'hail',
+            'wind': 'air', 'breezy': 'air',
+            'hot': 'thermostat', 'humid': 'humidity_mid',
+        };
+
+        function weatherIcon(text) {
+            if (!text) return 'wb_sunny';
+            const t = text.toLowerCase();
+            for (const [kw, icon] of Object.entries(WEATHER_ICONS)) {
+                if (t.includes(kw)) return icon;
+            }
+            return 'wb_cloudy';
+        }
+
+        function buildWeatherSlide(raw) {
+            // Expected format examples:
+            //  "32°C Partly Cloudy"  or  "Kochi|32°C|Partly Cloudy"  or just "32°C"
+            if (!raw || raw.trim() === '' || raw === '---') return null;
+            const v = raw.trim();
+            let location = '', temp = '', condition = '';
+            if (v.includes('|')) {
+                const p = v.split('|');
+                location  = (p[0] || '').trim();
+                temp      = (p[1] || '').trim();
+                condition = (p[2] || '').trim();
+            } else {
+                // Try to extract temp via regex
+                const tMatch = v.match(/(\d+\.?\d*\s*°?\s*[CcFf]?)/);
+                temp = tMatch ? tMatch[1].trim() : '';
+                condition = v.replace(tMatch ? tMatch[0] : '', '').trim();
+            }
+
+            const now   = new Date();
+            const days  = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+            const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+            const dayStr = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]}`;
+            const icon   = weatherIcon(condition || v);
+
+            const tempDisplay = temp || v;
+            const locDisplay  = location || condition || '';
+
+            return {
+                cat: 'WEATHER' + (location ? ' · ' + location.toUpperCase() : ''),
+                html: `
+                    <div class="ir-slide ir-active" id="ir-slide-weather">
+                        <div class="ir-cat">📍 ${location ? location.toUpperCase() : 'WEATHER'}</div>
+                        <div style="display:flex;align-items:flex-end;gap:6px;margin:2px 0;">
+                            <span class="ir-temp">${tempDisplay}</span>
+                            <span class="material-symbols-rounded" style="font-size:22px;color:var(--primary);margin-bottom:3px;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24">${icon}</span>
+                        </div>
+                        <div class="ir-sub">${condition || ''}</div>
+                        <div class="ir-sub" style="margin-top:2px;color:var(--primary);opacity:0.9;font-weight:800;letter-spacing:0.5px;">${dayStr}</div>
+                    </div>`
+            };
+        }
+
+        function buildItemSlide(text, imgUrl, idx) {
+            if (!text || text.trim() === '') return null;
+            const t = text.trim();
+            // Split label|value if pipe present
+            let label = '', value = t;
+            if (t.includes('|')) {
+                const p = t.split('|');
+                label = (p[0] || '').trim();
+                value = (p[1] || '').trim();
+            }
+
+            const hasImg = imgUrl && imgUrl.trim().startsWith('http');
+            const imgHtml = hasImg
+                ? `<img class="ir-slide-img" src="${imgUrl.trim()}" alt="${label||value}" onerror="this.style.display='none'">`
+                : '';
+
+            const textBlock = `
+                <div class="ir-slide-text-block">
+                    ${label ? `<div class="ir-cat">${label.toUpperCase()}</div>` : ''}
+                    <div class="ir-main" style="font-size:${value.length > 14 ? '0.9rem' : '1.1rem'}">${value}</div>
+                </div>`;
+
+            return {
+                html: `<div class="ir-slide ${hasImg ? 'ir-has-img' : ''}" id="ir-slide-${idx}">
+                    ${imgHtml}${textBlock}
+                </div>`
+            };
+        }
+
+        function initInfoRotator(weatherRaw, itemsRaw, imagesRaw) {
+            // Clear previous
+            if (_irTimer)         clearTimeout(_irTimer);
+            if (_irProgressTimer) clearInterval(_irProgressTimer);
+            _irSlides = [];
+
+            // Slide 1: weather + day
+            const wSlide = buildWeatherSlide(weatherRaw);
+            if (wSlide) _irSlides.push(wSlide.html);
+
+            // Slides 2-N: items from C36, images from C37 (newline-delimited, parallel arrays)
+            const itemLines  = (itemsRaw  || '').split('\n').map(l => l.trim()).filter(l => l !== '');
+            const imageLines = (imagesRaw || '').split('\n').map(l => l.trim());
+
+            itemLines.forEach((line, i) => {
+                const img = imageLines[i] || '';
+                const slide = buildItemSlide(line, img, i);
+                if (slide) _irSlides.push(slide.html);
+            });
+
+            if (_irSlides.length === 0) { document.getElementById('info-rotator').style.display = 'none'; return; }
+            document.getElementById('info-rotator').style.display = '';
+
+            _irIdx = 0;
+            _renderIRSlide();
+        }
+
+        function _renderIRSlide() {
+            const vp   = document.getElementById('ir-viewport');
+            const dots = document.getElementById('ir-dots');
+            if (!vp || !dots) return;
+
+            // Render all slides, activate current
+            vp.innerHTML = _irSlides.map((html, i) => {
+                // Inject active class on current
+                return html.replace(
+                    /class="ir-slide([^"]*)"/, 
+                    (_, rest) => `class="ir-slide${rest}${i === _irIdx ? ' ir-active' : ''}"`
+                );
+            }).join('');
+
+            // Dots
+            dots.innerHTML = _irSlides.map((_, i) =>
+                `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`
+            ).join('');
+
+            // Min-height based on active slide content
+            vp.style.minHeight = '';
+
+            // Reset + run progress bar
+            _runIRProgress();
+        }
+
+        function _runIRProgress() {
+            if (_irProgressTimer) clearInterval(_irProgressTimer);
+            if (_irTimer)         clearTimeout(_irTimer);
+            const fill = document.getElementById('ir-progress-fill');
+            if (fill) fill.style.width = '0%';
+            const start = Date.now();
+            _irProgressTimer = setInterval(() => {
+                const pct = Math.min(100, ((Date.now() - start) / IR_INTERVAL) * 100);
+                if (fill) fill.style.width = pct + '%';
+            }, 80);
+            _irTimer = setTimeout(() => {
+                clearInterval(_irProgressTimer);
+                _irIdx = (_irIdx + 1) % _irSlides.length;
+                _renderIRSlide();
+            }, IR_INTERVAL);
+        }
+
     </script>
 </body>
 </html>
