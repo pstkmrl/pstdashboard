@@ -501,6 +501,93 @@
         .chk-empty .chk-label { color: var(--on-warning-container); }
         .chk-empty .chk-status-text { color: var(--on-warning-container); }
 
+        /* ── DUAL CHECKLIST (MTRS + TKRS) ── */
+        .checklist-dual-row {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .chk-dual-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-radius: var(--radius-m);
+            padding: 9px 12px;
+            border: 1.5px solid transparent;
+            transition: all 0.35s ease;
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .chk-d-filled {
+            background: var(--success-container);
+            border-color: var(--success);
+        }
+        .chk-d-empty {
+            background: var(--warning-container);
+            border-color: var(--warning);
+        }
+        .chk-d-check-wrap {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chk-d-icon {
+            font-size: 22px !important;
+            transition: color 0.3s ease;
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chk-d-filled .chk-d-icon { color: var(--success); }
+        .chk-d-empty .chk-d-icon  { color: var(--warning); }
+        .chk-d-body { flex: 1; min-width: 0; }
+        .chk-d-label {
+            font-family: var(--font-display);
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chk-d-filled .chk-d-label { color: var(--on-success-container); }
+        .chk-d-empty .chk-d-label  { color: var(--on-warning-container); }
+        .chk-d-status {
+            font-family: var(--font-body);
+            font-size: 0.58rem;
+            font-weight: 700;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.2px;
+            margin-top: 1px;
+        }
+        .chk-d-filled .chk-d-status { color: var(--on-success-container); }
+        .chk-d-empty .chk-d-status  { color: var(--on-warning-container); }
+        .chk-d-pill {
+            font-family: var(--font-display);
+            font-size: 0.53rem;
+            font-weight: 900;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .chk-d-filled .chk-d-pill {
+            background: rgba(114,212,138,0.22);
+            color: var(--success);
+            border: 1px solid rgba(114,212,138,0.4);
+        }
+        .chk-d-empty .chk-d-pill {
+            background: rgba(255,177,200,0.18);
+            color: var(--warning);
+            border: 1px solid rgba(255,177,200,0.35);
+        }
+
         /* ── RIGHT COLUMN: Maintenance ── */
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
         .maint-header-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -546,7 +633,6 @@
             overflow: hidden;
             transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            opacity: 1;
         }
         [data-theme="light"] .driver-pill {
             background: rgba(255,255,255,0.55);
@@ -555,10 +641,10 @@
                         inset 0 1px 0 rgba(255,255,255,0.9);
         }
         .driver-card.outdated .driver-pill {
-            opacity: 0.5;
             border-color: rgba(255,100,80,0.55);
             box-shadow: 0 8px 32px rgba(186,26,26,0.3), 0 2px 8px rgba(0,0,0,0.2),
                         inset 0 1px 0 rgba(255,180,171,0.2);
+            opacity: 0.5;
         }
 
         .driver-pill-icon {
@@ -604,7 +690,36 @@
         }
         .driver-card.outdated .driver-pill-num-val { color: var(--error); }
 
-        /* Outdated badge on pill — NOW VISIBLE */
+        /* Outdated: pill fades to 50% opacity */
+        .driver-card.outdated .driver-pill {
+            opacity: 0.5;
+        }
+
+        /* Outdated badge pill — shown on collapsed pill only */
+        .driver-pill-outdated-badge {
+            display: none;
+            align-items: center;
+            gap: 4px;
+            background: var(--error-container);
+            border: 1px solid rgba(255,100,80,0.5);
+            border-radius: var(--radius-full);
+            padding: 2px 8px 2px 6px;
+            font-family: var(--font-display);
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--error);
+            white-space: nowrap;
+            flex-shrink: 0;
+            animation: warning-blink 1.5s infinite alternate;
+        }
+        .driver-pill-outdated-badge .material-symbols-rounded {
+            font-size: 11px !important;
+        }
+        .driver-card.outdated .driver-pill-outdated-badge { display: flex; }
+
+        /* Outdated dot (keep for backwards compat but hide since badge replaces it) */
         .driver-pill-outdated-dot {
             width: 8px; height: 8px; border-radius: 50%;
             background: var(--error);
@@ -613,43 +728,10 @@
             display: none;
             animation: warn-pulse 2s infinite;
         }
-        .driver-card.outdated .driver-pill-outdated-dot { display: block; }
+        /* dot hidden — badge replaces it */
+        .driver-card.outdated .driver-pill-outdated-dot { display: none; }
 
         @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
-        @keyframes warn-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-
-        /* ── CAR ANIMATION ── */
-        .driver-car-animation {
-            position: fixed;
-            z-index: 1001;
-            font-size: 28px;
-            pointer-events: none;
-            bottom: 120px;
-            right: calc(100vw - 40px);
-            opacity: 0;
-            animation: car-drive 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        @keyframes car-drive {
-            0% {
-                right: calc(100vw - 40px);
-                bottom: 120px;
-                opacity: 1;
-                transform: scaleX(1);
-            }
-            50% {
-                bottom: 80px;
-                opacity: 1;
-            }
-            100% {
-                right: 60px;
-                bottom: 54px;
-                opacity: 0;
-                transform: scaleX(1);
-            }
-        }
 
         /* Expanded panel — pops out above the pill */
         .driver-expanded {
@@ -1035,172 +1117,1203 @@
             background: rgba(255,255,255,0.6);
             border-color: rgba(255,255,255,0.8);
         }
-        .dock-img { width: 100%; height: 100%; object-fit: cover; }
+        .dock-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .dock-img-fallback {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 0.95rem;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
         .dock-label {
             font-family: var(--font-display);
-            font-size: 0.52rem; font-weight: 900;
-            letter-spacing: 0.8px; text-transform: uppercase;
-            color: var(--on-surface-variant); opacity: 0.6;
+            font-size: 0.5rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
+            max-width: 54px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+        [data-theme="light"] .dock-label { color: var(--on-surface-variant); }
+        .dock-pct {
+            font-family: var(--font-display);
+            font-size: 0.48rem;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            text-align: center;
+        }
+
+        /* Warning badge on icon — subtle glow dot */
+        .dock-warn-badge {
+            position: absolute;
+            top: 0; right: 0;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--error);
+            border: 2px solid rgba(13,17,23,0.8);
+            box-shadow: 0 0 6px var(--error);
+            animation: warn-pulse 2s infinite;
+            display: none;
+        }
+        [data-theme="light"] .dock-warn-badge { border-color: rgba(240,244,248,0.9); }
+        .dock-warn-badge.visible { display: block; }
+        @keyframes warn-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.25); opacity: 0.75; }
+        }
+
+        /* Ring colour thresholds */
+        .ring-high  { stroke: var(--success); }
+        .ring-mid   { stroke: var(--primary); }
+        .ring-low   { stroke: var(--error); }
+        .pct-high   { color: var(--success); }
+        .pct-mid    { color: var(--primary); }
+        .pct-low    { color: var(--error); }
+
+        @media (max-width: 600px) {
+            .app-dock { gap: 5px; padding: 8px 11px; }
+            .dock-icon-ring { width: 44px; height: 44px; }
+            .dock-img-wrap { width: 32px; height: 32px; }
+            .dock-label { font-size: 0.46rem; max-width: 44px; }
+        }
+
+        /* ── TICKER ── */
+        .ticker-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            height: 46px; background: var(--surface);
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; z-index: 1001; cursor: pointer;
+        }
+        .ticker-head {
+            background: var(--primary); color: var(--surface);
+            height: 100%; padding: 0 20px;
+            display: flex; align-items: center;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.8rem;
+            letter-spacing: 1px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
+        }
+        .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        .ticker-scroll { white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: var(--on-surface); padding: 0 20px; flex-shrink: 0; }
+        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; }
+        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .ticker-bar:hover .scrolling-active { animation-play-state: paused; }
+        .ticker-popup {
+            display: none; position: absolute; bottom: 118px; left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 28px); max-width: 860px;
+            background: var(--surface); color: var(--on-surface);
+            padding: 18px 22px; border-radius: var(--radius-l);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 2px solid var(--primary); z-index: 1005;
+            font-size: 1rem; line-height: 1.6;
+            font-family: var(--font-body); font-weight: 600;
+            white-space: pre-wrap; max-height: 60vh; overflow-y: auto; cursor: default;
+        }
+        .ticker-bar:hover .ticker-popup { display: block; }
+
+        .fab-ab {
+            position: fixed; bottom: 125px; right: 10px;
+            width: 58px; height: 58px;
+            background: var(--primary-container); color: var(--on-primary-container);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display); font-weight: 900; font-size: 1.1rem;
+            text-decoration: none; box-shadow: var(--shadow-2); z-index: 1000;
+        }
+
+        /* ── BLACKOUT ── */
+        #blackout {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: none;
+            align-items: center; justify-content: center; cursor: pointer;
+        }
+        .analog-wrap {
+            width: 300px; height: 300px; border-radius: 50%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            border: 2px solid #333; position: relative;
+        }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
+        .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
+        .h-min { width: 4px; height: 40%; background: #aaa; margin-left: -2px; }
+        .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
+        .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
+
+        /* ── MAINTENANCE PROGRESS BAR (bottom of right column) ── */
+        .maint-progress-footer {
+            margin-top: auto;
+            padding-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .maint-progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .maint-progress-label {
+            font-family: var(--font-display);
+            font-size: 0.58rem;
+            font-weight: 900;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            opacity: 0.65;
+        }
+        .maint-progress-value {
+            font-family: var(--font-display);
+            font-size: 0.88rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+        .maint-progress-track {
+            position: relative;
+            height: 3px;
+            background: var(--surface-variant);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        .maint-progress-fill {
+            position: absolute;
+            top: 0; left: 0; height: 100%;
+            border-radius: var(--radius-full);
+            background: linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 70%, white) 100%);
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+        .maint-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 24px; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35));
+            border-radius: var(--radius-full);
+        }
+        .maint-refresh-stamp {
+            font-size: 0.58rem;
+            font-weight: 600;
+            color: var(--outline);
+            opacity: 0.55;
+            text-align: right;
+            letter-spacing: 0.4px;
+        }
+
+        /* ── MAINTENANCE PROGRESS POPUP ── */
+        .maint-progress-footer { position: relative; }
+        .maint-progress-popup {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 0; right: 0;
+            background: var(--surface);
+            border: 1px solid var(--outline);
+            border-radius: var(--radius-m);
+            padding: 14px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.22s ease, transform 0.22s ease;
+            z-index: 200;
+        }
+        .maint-progress-footer:hover .maint-progress-popup {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .maint-popup-eyebrow {
+            font-family: var(--font-display);
+            font-size: 0.52rem;
+            font-weight: 900;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            opacity: 0.55;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .maint-popup-eyebrow .material-symbols-rounded {
+            font-size: 13px !important;
+            opacity: 0.7;
+        }
+        .maint-popup-body {
+            font-family: var(--font-body);
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--on-surface);
+            line-height: 1.55;
+            white-space: pre-wrap;
+        }
+        /* Tiny caret pointing down toward the bar */
+        .maint-progress-popup::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 10px;
+            background: var(--surface);
+            border-right: 1px solid var(--outline);
+            border-bottom: 1px solid var(--outline);
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        /* ── DOCK TOGGLE BUTTON (mobile only) ── */
+        .dock-toggle-btn {
+            display: none;
+        }
+        @media (max-width: 900px) {
+            .dock-toggle-btn {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                position: fixed;
+                bottom: 54px;
+                right: 10px;
+                z-index: 1002;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                color: var(--on-surface);
+                border-radius: var(--radius-full);
+                padding: 6px 12px 6px 10px;
+                font-family: var(--font-display);
+                font-size: 0.6rem;
+                font-weight: 900;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            [data-theme="light"] .dock-toggle-btn {
+                background: rgba(255,255,255,0.6);
+                border-color: rgba(255,255,255,0.8);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+            }
+            .dock-toggle-btn:hover { transform: scale(1.04); }
+            .dock-toggle-icon { font-size: 18px !important; transition: transform 0.3s ease; }
+            .dock-toggle-btn.active .dock-toggle-icon { transform: rotate(180deg); }
+        }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+                padding-bottom: 200px;
+                padding-top: 8px;
+                gap: 8px;
+            }
+            .app-bar {
+                flex-wrap: wrap; padding: 10px 14px;
+                margin: 8px 8px 0 8px; gap: 6px;
+                justify-content: space-between; border-radius: var(--radius-l);
+            }
+            .middle-module { order: 3; width: 100%; margin: 6px 0 0 0; height: 40px; }
+            .logo-section img { height: 26px; }
+            .icon-btn { width: 38px; height: 38px; }
+            .clock-unit { min-width: 46px; padding: 2px 7px; }
+            .clock-val { font-size: 1.2rem; }
+            .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+            .driver-card { left: 8px; bottom: 46px; }
+            .driver-expanded { min-width: 200px; }
+            .fab-ab { width: 46px; height: 46px; bottom: 122px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
+            .ticker-head { padding: 0 14px; font-size: 0.72rem; }
+            .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
+            .deploy-header { flex-direction: column; gap: 8px; }
+            .general-info-pill { justify-content: flex-start; }
+
+            /* Dock on mobile: collapsed by default */
+            .app-dock {
+                bottom: 46px;
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                overflow: hidden;
+                opacity: 0;
+                pointer-events: none;
+            }
+            .app-dock.dock-expanded {
+                bottom: 100px;
+                max-height: 300px;
+                padding: 10px 14px;
+                opacity: 1;
+                pointer-events: auto;
+                z-index: 1003;
+                border-radius: var(--radius-l);
+            }
+            .app-dock.dock-expanded .dock-items-scroll {
+                flex-wrap: wrap;
+                overflow: visible;
+                justify-content: center;
+            }
+            .app-dock.dock-expanded .dock-scroll-track {
+                flex-wrap: wrap;
+                animation: none !important;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .roster-grid { grid-template-columns: 1fr; gap: 8px; }
+            .top-controls { gap: 6px; }
+            .m3-card { padding: 12px; }
+            .staff-name { font-size: 1.0625rem; }
         }
     </style>
 </head>
-<body>
-    <!-- Notice Bar with space for car animation -->
-    <div class="app-bar">
-        <div class="logo-section"><img alt="logo"></div>
+<body onclick="wakeUp()">
+
+    <div id="blackout">
+        <div class="analog-wrap">
+            <div id="ana-h" class="hand h-hr"></div>
+            <div id="ana-m" class="hand h-min"></div>
+            <div id="ana-s" class="hand h-sec"></div>
+            <div class="center-dot"></div>
+        </div>
+    </div>
+
+    
+    <header class="app-bar">
+        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
         <div class="middle-module">
-            <div class="checklist-container">
-                <div class="station-track" id="stationTrack"></div>
+            <div id="checklist-container" class="checklist-container">
+                <div id="station-track" class="station-track"><!-- populated by JS --></div>
             </div>
-            <div class="clock-container">
-                <div class="clock-unit">
-                    <div class="clock-val" id="hoursDisplay">00</div>
-                    <div class="clock-label">HOURS</div>
-                </div>
-                <div class="clock-unit">
-                    <div class="clock-val" id="minutesDisplay">00</div>
-                    <div class="clock-label">MINS</div>
-                </div>
-                <div class="clock-unit">
-                    <div class="clock-val" id="secondsDisplay">00</div>
-                    <div class="clock-label">SECS</div>
-                </div>
+            <div id="clock-container" class="clock-container">
+                <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
+                <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
+                <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
         </div>
         <div class="top-controls">
-            <button class="icon-btn" id="gridBtn" title="Grid">
-                <span class="material-symbols-rounded">grid_3x3</span>
-            </button>
-            <button class="icon-btn" id="offBtn" title="Off">
-                <span class="material-symbols-rounded">power_settings_new</span>
-            </button>
+            <button class="icon-btn" onclick="toggleTheme(event)"><span class="material-symbols-rounded" id="theme-icon">dark_mode</span></button>
+            <button id="btn-grid" class="icon-btn" onclick="toggleGrid(event)"><span class="material-symbols-rounded">monitoring</span></button>
+            <button class="icon-btn" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span></button>
+            <button class="icon-btn btn-off" onclick="manualOff(event)"><span class="material-symbols-rounded">power_settings_new</span></button>
         </div>
-    </div>
+    </header>
 
-    <!-- Main Dashboard -->
-    <div class="dashboard-content">
-        <!-- LEFT COLUMN -->
-        <div class="left-column" id="leftColumn"></div>
-
-        <!-- RIGHT COLUMN -->
-        <div class="right-column" id="rightColumn"></div>
-    </div>
-
-    <!-- Driver Card — Liquid Glass Pill -->
-    <div class="driver-card" id="driverCard">
-        <div class="driver-pill">
-            <div class="driver-pill-icon">
-                <span class="material-symbols-rounded">directions_car</span>
+    <main class="dashboard-content">
+        <div class="left-column">
+            <!-- TODAY DEPLOYMENT -->
+            <div class="m3-card">
+                <div class="deploy-header">
+                    <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
+                    <div class="general-info-pill" id="today-gen-pills">
+                        <span class="gen-label-pill">GENERAL</span>
+                    </div>
+                </div>
+                <div id="roster-today" class="roster-grid"></div>
             </div>
-            <div class="driver-pill-text-wrap">
-                <div class="driver-pill-slide">
-                    <div class="driver-pill-name-val" id="driverPillName">DRIVER NAME</div>
-                    <div class="driver-pill-num-val" id="driverPillNum">000</div>
+            <!-- TOMORROW DEPLOYMENT -->
+            <div class="m3-card">
+                <div class="deploy-header">
+                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
+                    <div class="general-info-pill" id="tomorrow-gen-pills">
+                        <span class="gen-label-pill">GENERAL</span>
+                    </div>
+                </div>
+                <div id="roster-tomorrow" class="roster-grid"></div>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="m3-card unified-unit">
+                <div class="maint-header-wrapper">
+                    <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
+                    <div class="ops-inline-container">
+                        <div id="box-mainline" class="ops-badge">MAINLINE: ---</div>
+                        <div id="box-depot" class="ops-badge">DEPOT: ---</div>
+                    </div>
+                </div>
+                <div class="maint-divider"></div>
+                <!-- Dual Checklist Status: MTRS + TKRS -->
+                <div id="checklist-dual" class="checklist-dual-row">
+                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-label">MTRS Checklist</div>
+                            <div class="chk-d-status" id="chk-mtrs-status">Not Filled</div>
+                        </div>
+                        <div class="chk-d-pill" id="chk-mtrs-pill">—</div>
+                    </div>
+                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-label">TKRS Checklist</div>
+                            <div class="chk-d-status" id="chk-tkrs-status">Not Filled</div>
+                        </div>
+                        <div class="chk-d-pill" id="chk-tkrs-pill">—</div>
+                    </div>
+                </div>
+                <div id="maint-list" class="maint-list"></div>
+                <div class="maint-progress-footer">
+                    <div class="maint-progress-popup">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
+                    <div class="maint-progress-meta">
+                        <span class="maint-progress-label">Maintenance Progress</span>
+                        <span id="maint-progress-value" class="maint-progress-value">—</span>
+                    </div>
+                    <div class="maint-progress-track">
+                        <div id="maint-progress-fill" class="maint-progress-fill"></div>
+                    </div>
+                    <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                 </div>
             </div>
-            <div class="driver-pill-outdated-dot" id="driverPillDot"></div>
         </div>
-        <div class="driver-expanded">
-            <div class="driver-exp-outdated" id="driverExpOutdated">
-                <span class="material-symbols-rounded">warning</span>
-                <span>OUTDATED</span>
+    </main>
+
+    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
+        <!-- Expanded panel (pops above) -->
+        <div class="driver-expanded" onclick="event.stopPropagation()">
+            <div class="driver-exp-outdated">
+                <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
+                OUTDATED DATA
             </div>
             <div class="driver-exp-header">
-                <div class="driver-exp-label">Current Driver</div>
-                <div class="driver-exp-shift" id="driverExpShift">SHIFT</div>
+                <div class="driver-exp-label">On Duty Driver</div>
+                <div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div>
+                <div id="driver-name" class="driver-exp-name">Loading...</div>
+                <div id="driver-phone" class="driver-exp-phone">---</div>
             </div>
-            <div class="driver-exp-name" id="driverExpName">Driver Name</div>
-            <div class="driver-exp-phone" id="driverExpPhone">+91 99999 00000</div>
-            <div class="driver-exp-update" id="driverExpUpdate">Updated 2 mins ago</div>
-            <button class="driver-exp-call" id="driverExpCall">
+            <div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div>
+            <div class="driver-exp-call" onclick="initiateCall(event)">
                 <span class="material-symbols-rounded">call</span>
-                <span>CALL NOW</span>
-            </button>
+                CALL DRIVER
+            </div>
         </div>
-    </div>
-
-    <!-- App Dock -->
-    <div class="app-dock" id="appDock">
-        <div class="dock-items-scroll" id="dockItemsScroll">
-            <div class="dock-scroll-track" id="dockScrollTrack"></div>
+        <!-- Collapsed pill -->
+        <div class="driver-pill">
+            <div class="driver-pill-icon">
+                <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
+            </div>
+            <div class="driver-pill-text-wrap">
+                <div class="driver-pill-slide" id="driver-pill-slide">
+                    <span class="driver-pill-name-val" id="driver-pill-name">Loading...</span>
+                    <span class="driver-pill-num-val" id="driver-pill-num">---</span>
+                </div>
+            </div>
+            <div class="driver-pill-outdated-badge">
+                <span class="material-symbols-rounded">warning</span>
+                OUTDATED
+            </div>
+            <div class="driver-pill-outdated-dot"></div>
         </div>
-        <button class="dock-expand-btn" id="dockExpandBtn">
-            <span class="material-symbols-rounded">expand_more</span>
-        </button>
     </div>
 
     <!-- Flash News Overlay -->
     <div id="flash-news-overlay">
-        <div class="flash-backdrop"></div>
+        <div class="flash-backdrop" onclick="dismissFlash()"></div>
         <div class="flash-panel">
             <div class="flash-banner">
                 <div class="flash-banner-live">
                     <div class="flash-live-dot"></div>
-                    <span>LIVE</span>
+                    LIVE
                 </div>
-                <div class="flash-banner-text" id="flashBannerText">ALERT</div>
-                <div class="flash-banner-tag" id="flashBannerTag">NEW</div>
+                <div class="flash-banner-text">⚡ IMPORTANT NOTICE</div>
+                <div class="flash-banner-tag" id="flash-tag">KMRL SUBSTATION</div>
             </div>
             <div class="flash-body">
-                <div class="flash-eyebrow" id="flashEyebrow">ALERT</div>
-                <div class="flash-headline" id="flashHeadline">Message</div>
+                <div class="flash-eyebrow">BREAKING UPDATE</div>
+                <div class="flash-headline" id="flash-headline">—</div>
                 <div class="flash-item-num">
-                    <span id="flashItemNum">1 of 1</span>
-                    <div class="flash-dots" id="flashDots"></div>
+                    <span id="flash-item-label">ITEM 1 OF 1</span>
+                    <div class="flash-dots" id="flash-dots"></div>
                 </div>
             </div>
             <div class="flash-footer">
                 <div class="flash-progress-wrap">
-                    <div class="flash-progress-fill" id="flashProgressFill"></div>
+                    <div class="flash-progress-fill" id="flash-progress-fill"></div>
                 </div>
-                <div class="flash-dismiss" id="flashDismiss">DISMISS</div>
+                <div class="flash-dismiss" onclick="dismissFlash()">DISMISS ✕</div>
             </div>
         </div>
     </div>
 
+    <!-- ── APP DOCK ── -->
+    <div id="app-dock" class="app-dock"></div>
+
+    <!-- Dock toggle button: mobile only -->
+    <button id="dock-toggle-btn" class="dock-toggle-btn" onclick="toggleDock(event)" aria-label="Toggle Consumables Dock">
+        <span class="material-symbols-rounded dock-toggle-icon" id="dock-toggle-icon">expand_less</span>
+        <span class="dock-toggle-label">CONSUMABLES</span>
+    </button>
+
+    <footer class="ticker-bar">
+        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
+        <div id="ticker-body" class="ticker-body">
+            <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
+        </div>
+        <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
+    </footer>
+
     <script>
-        // ===== DRIVER CAR ANIMATION & PILL OPACITY UPDATE =====
-        function playCarAnimation() {
-            const car = document.createElement('div');
-            car.className = 'driver-car-animation';
-            car.textContent = '🚗';
-            document.body.appendChild(car);
-            
-            // Remove after animation completes
-            setTimeout(() => car.remove(), 2800);
+        const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
+
+        function initTheme() {
+            const saved = localStorage.getItem('kmrl_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('theme-icon').innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
         }
+        initTheme();
 
-        function updateDriverStatus(isOutdated) {
-            const driverCard = document.getElementById('driverCard');
-            
-            if (isOutdated) {
-                driverCard.classList.add('outdated');
-            } else {
-                driverCard.classList.remove('outdated');
-            }
-            
-            // Play the car animation when status changes
-            playCarAnimation();
+        function toggleTheme(e) {
+            if (e) e.stopPropagation();
+            const cur = document.documentElement.getAttribute('data-theme');
+            const nxt = cur === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', nxt);
+            localStorage.setItem('kmrl_theme', nxt);
+            document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
         }
-
-        // Example: Toggle outdated status (remove this in production, replace with actual data)
-        document.getElementById('driverCard').addEventListener('click', function(e) {
-            if (!this.classList.contains('expanded')) {
-                this.classList.add('expanded');
-            } else if (e.target.closest('.driver-pill')) {
-                this.classList.remove('expanded');
-                const isOutdated = this.classList.contains('outdated');
-                updateDriverStatus(!isOutdated);
+        function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
+        function wakeUp() {
+            document.getElementById('blackout').style.display = 'none';
+            if (window.innerWidth <= 900) {
+                const dock = document.getElementById('app-dock');
+                const btn  = document.getElementById('dock-toggle-btn');
+                if (dock) dock.classList.remove('dock-expanded');
+                if (btn)  btn.classList.remove('active');
             }
-        });
+        }
+        // ── Driver pill: alternate name ↔ number every 10s ──
+        let _driverPillTimer = null;
+        let _driverShowingNum = false;
+        function startDriverPillCycle() {
+            if (_driverPillTimer) clearInterval(_driverPillTimer);
+            _driverPillTimer = setInterval(() => {
+                const slide = document.getElementById('driver-pill-slide');
+                if (!slide) return;
+                _driverShowingNum = !_driverShowingNum;
+                slide.classList.toggle('show-number', _driverShowingNum);
+            }, 10000);
+        }
+        startDriverPillCycle();
 
-        // Close expanded on outside click
+        function toggleDriverCard(e) {
+            if (e) e.stopPropagation();
+            const card = document.getElementById('driver-card');
+            card.classList.toggle('expanded');
+        }
+        // Close when clicking outside
         document.addEventListener('click', function(e) {
-            const driverCard = document.getElementById('driverCard');
-            if (driverCard.classList.contains('expanded') && !driverCard.contains(e.target)) {
-                driverCard.classList.remove('expanded');
+            const card = document.getElementById('driver-card');
+            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
+                card.classList.remove('expanded');
             }
         });
+
+        function initiateCall(e) {
+            if (e) e.stopPropagation();
+            const ph = document.getElementById('driver-phone').innerText;
+            if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`;
+        }
+
+        function evaluateUpdateBadge(raw) {
+            const card = document.getElementById('driver-card');
+            const badge = document.getElementById('driver-update-badge');
+            if (!raw || raw === '---') {
+                if (badge) badge.innerText = 'UPDATE: N/A';
+                card.classList.add('outdated'); return;
+            }
+            try {
+                const ut = new Date(raw), now = new Date();
+                const formatted = ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false});
+                if (badge) badge.innerText = `LAST UPDATE: ${formatted}`;
+                const h = now.getHours();
+                let ss = new Date(now);
+                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0);
+                else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
+                if (ut >= ss) { card.classList.remove('outdated'); }
+                else { card.classList.add('outdated'); }
+            } catch (e) { if (badge) badge.innerText = 'UPDATE: ERR'; }
+        }
+
+        // ── Flash News System ──
+        let _flashItems = [];
+        let _flashIdx = 0;
+        let _flashTimer = null;
+        let _flashProgressTimer = null;
+        let _flashHourTimer = null;
+        let _lastNoticeRaw = '';
+        const FLASH_ITEM_DURATION = 7000; // ms per item
+
+        function showFlashNews(items, startIdx = 0) {
+            if (!items || items.length === 0) return;
+            _flashItems = items;
+            _flashIdx = startIdx;
+            _renderFlashItem();
+            const overlay = document.getElementById('flash-news-overlay');
+            overlay.classList.add('visible');
+            _startFlashProgress();
+        }
+
+        function _renderFlashItem() {
+            const items = _flashItems;
+            const idx = _flashIdx;
+            const total = items.length;
+            document.getElementById('flash-headline').innerText = items[idx] || '';
+            document.getElementById('flash-item-label').innerText = `ITEM ${idx + 1} OF ${total}`;
+            // Dots
+            const dotsEl = document.getElementById('flash-dots');
+            dotsEl.innerHTML = items.map((_, i) =>
+                `<div class="flash-dot ${i === idx ? 'active' : ''}"></div>`
+            ).join('');
+            document.getElementById('flash-tag').innerText =
+                new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:false}) + ' · KMRL';
+        }
+
+        function _startFlashProgress() {
+            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            if (_flashTimer) clearTimeout(_flashTimer);
+            const fill = document.getElementById('flash-progress-fill');
+            if (fill) fill.style.width = '0%';
+            const start = Date.now();
+            _flashProgressTimer = setInterval(() => {
+                const elapsed = Date.now() - start;
+                const pct = Math.min(100, (elapsed / FLASH_ITEM_DURATION) * 100);
+                if (fill) fill.style.width = pct + '%';
+            }, 80);
+            _flashTimer = setTimeout(() => {
+                clearInterval(_flashProgressTimer);
+                _flashIdx++;
+                if (_flashIdx < _flashItems.length) {
+                    _renderFlashItem();
+                    _startFlashProgress();
+                } else {
+                    dismissFlash();
+                }
+            }, FLASH_ITEM_DURATION);
+        }
+
+        function dismissFlash() {
+            if (_flashTimer) clearTimeout(_flashTimer);
+            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            document.getElementById('flash-news-overlay').classList.remove('visible');
+        }
+
+        // Called whenever ticker updates
+        function triggerFlashIfChanged(raw) {
+            if (!raw || raw.trim() === '') return;
+            const items = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (items.length === 0) return;
+
+            // Show if content changed
+            if (raw.trim() !== _lastNoticeRaw.trim()) {
+                _lastNoticeRaw = raw.trim();
+                // Slight delay so page renders first
+                setTimeout(() => showFlashNews(items, 0), 1200);
+
+                // Reset hourly cycle
+                if (_flashHourTimer) clearInterval(_flashHourTimer);
+                _flashHourTimer = setInterval(() => {
+                    const latest = _lastNoticeRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
+                    if (latest.length > 0) showFlashNews(latest, 0);
+                }, 60 * 60 * 1000); // every 1 hour
+            }
+        }
+
+        function toggleDock(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('app-dock');
+            const btn  = document.getElementById('dock-toggle-btn');
+            if (dock) dock.classList.toggle('dock-expanded');
+            if (btn)  btn.classList.toggle('active');
+        }
+
+        function toggleGrid(e) {
+            if (e) e.stopPropagation();
+            const chk = document.getElementById('checklist-container'),
+                  btn = document.getElementById('btn-grid');
+            const isHidden = chk.style.visibility === 'hidden';
+            chk.style.visibility = isHidden ? 'visible' : 'hidden';
+            btn.classList.toggle('btn-grid-active', !isHidden ? false : true);
+            if (isHidden) {
+                const t = document.getElementById('station-track');
+                t.style.animation = 'none'; t.offsetHeight; t.style.animation = null;
+            }
+        }
+
+        function parseStaff(raw) {
+            if (!raw) return '';
+            return raw.split('\n').filter(l => l.trim() !== '').map(line => {
+                if (line.includes('|')) {
+                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
+                    let bCls = 'badge-default';
+                    if (dCode.includes('M TPC')) bCls = 'badge-tpc-m';
+                    else if (dCode.includes('E TPC')) bCls = 'badge-tpc-e';
+                    else if (dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    return `<div class="m3-staff-item"><span class="staff-name">${name}</span><span class="m3-badge ${bCls}">${duty}</span></div>`;
+                }
+                return `<div class="m3-staff-item"><span class="staff-name">${line}</span></div>`;
+            }).join('');
+        }
+
+        // Build technician display with infinite scroll for many names
+        function buildTechSection(techRaw) {
+            if (!techRaw || techRaw.trim() === '') return '';
+            const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (names.length === 0) return '';
+
+            const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
+
+            // For scrolling: duplicate the list so it loops seamlessly
+            const allChips = names.map(chipHtml).join('');
+            const doubledChips = allChips + allChips; // duplicate for seamless loop
+
+            // Use scroll for 3+ names, static for fewer
+            if (names.length >= 3) {
+                return `
+                <div class="tech-section">
+                    <div class="tech-label-row">
+                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
+                        <span class="tech-label">Technicians On Duty</span>
+                    </div>
+                    <div class="tech-scroll-wrap">
+                        <div class="tech-scroll-track">${doubledChips}</div>
+                    </div>
+                </div>`;
+            } else {
+                return `
+                <div class="tech-section">
+                    <div class="tech-label-row">
+                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
+                        <span class="tech-label">Technicians On Duty</span>
+                    </div>
+                    <div class="tech-static">${names.map(chipHtml).join('')}</div>
+                </div>`;
+            }
+        }
+
+        // Correct shift time logic:
+        // Morning:  06:30 – 14:00
+        // Evening:  14:00 – 21:30
+        // Night:    21:30 – 06:30 (next day)
+        function isShiftActive(shiftName) {
+            const now = new Date();
+            const totalMins = now.getHours() * 60 + now.getMinutes();
+            const m = (h, min) => h * 60 + min;
+
+            if (shiftName === 'MORNING') {
+                return totalMins >= m(6, 30) && totalMins < m(14, 0);
+            }
+            if (shiftName === 'EVENING') {
+                return totalMins >= m(14, 0) && totalMins < m(21, 30);
+            }
+            if (shiftName === 'NIGHT') {
+                // Night: 21:30–23:59 or 00:00–06:29
+                return totalMins >= m(21, 30) || totalMins < m(6, 30);
+            }
+            return false;
+        }
+
+        function buildShift(title, val, active, tpc, techRaw) {
+            const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
+            const staffHtml = (val && val.trim() !== '')
+                ? parseStaff(val)
+                : `<div class="m3-staff-item" style="justify-content:center;opacity:0.4;font-family:var(--font-display);font-size:0.8rem;">No Deployment</div>`;
+            const techHtml = buildTechSection(techRaw);
+
+            // Count staff
+            const staffCount = (val && val.trim() !== '')
+                ? val.split('\n').filter(l => l.trim() !== '').length
+                : 0;
+            // Count technicians
+            const techCount = (techRaw && techRaw.trim() !== '')
+                ? techRaw.split('\n').filter(l => l.trim() !== '').length
+                : 0;
+
+            const countBadge = (staffCount > 0 || techCount > 0)
+                ? `<span class="shift-count-badge">
+                    <span class="material-symbols-rounded">group</span>
+                    <span class="cnt-staff">${staffCount}</span>
+                    <span class="cnt-sep">+</span>
+                    <span class="cnt-tech">${techCount}</span>
+                   </span>`
+                : '';
+
+            return `
+            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
+                <div class="shift-header-row">
+                    <div class="m3-shift-label">
+                        <span class="shift-active-dot"></span>
+                        ${title}
+                        ${countBadge}
+                    </div>
+                    ${tpcHtml}
+                </div>
+                <div class="staff-list">${staffHtml}</div>
+                ${techHtml}
+            </div>`;
+        }
+
+        // Build general info pills inside header
+        function buildGenPills(genRaw) {
+            if (!genRaw || genRaw.trim() === '') return '';
+            return genRaw.split('\n').filter(l => l.trim() !== '').map(line => {
+                const name = line.includes('|') ? line.split('|')[0].trim() : line.trim();
+                return `<span class="gen-name-tag">${name}</span>`;
+            }).join('');
+        }
+
+        function updateTickerBar(badge, names, rawText = null) {
+            const head = document.getElementById('ticker-head'),
+                  text = document.getElementById('ticker-text'),
+                  body = document.getElementById('ticker-body');
+            head.innerText = badge.toUpperCase();
+            text.classList.remove('scrolling-active');
+            text.innerText = names;
+            const popup = document.getElementById('ticker-popup');
+            if (popup) popup.innerText = rawText !== null ? rawText : names;
+            requestAnimationFrame(() => {
+                const tw = text.scrollWidth, cw = body.offsetWidth;
+                if (tw > cw - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; }
+                else { body.style.justifyContent = 'center'; }
+            });
+        }
+
+        window.draw = function(data) {
+            document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
+            let stHtml = '', tdHtml = '', tmHtml = '';
+
+            let staff = {
+                today:    { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
+                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
+            };
+
+            let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
+            // Dock items: keyed by row number
+            const dockRows = {};
+
+            data.forEach(item => {
+                const unit  = (item.Unit      || '').trim(),
+                      param = (item.Parameter || '').trim(),
+                      val   = (item.Value     || '').trim();
+
+                if (param === 'sheetab_R2C2') {
+                    const formatted = val.split('\n').map(l => l.trim()).filter(l => l !== '').join('   •   ');
+                    updateTickerBar('IMPORTANT NOTICE', formatted, val);
+                    triggerFlashIfChanged(val);
+                }
+
+                // Today staff
+                if (param === 'sheetab_R2C12') staff.today.gen      = val;
+                if (param === 'sheetab_R2C3')  staff.today.morn     = val;
+                if (param === 'sheetab_R2C4')  staff.today.eve      = val;
+                if (param === 'sheetab_R2C5')  staff.today.night    = val;
+                if (param === 'sheetab_R2C9')  staff.today.tpcMorn  = val;
+                if (param === 'sheetab_R2C10') staff.today.tpcEve   = val;
+                if (param === 'sheetab_R2C11') staff.today.tpcNight = val;
+                // Today technicians
+                if (param === 'sheetab_R2C6')  staff.today.techMorn  = val;
+                if (param === 'sheetab_R2C7')  staff.today.techEve   = val;
+                if (param === 'sheetab_R2C8')  staff.today.techNight = val;
+
+                // Tomorrow staff
+                if (param === 'sheetab_R2C26') staff.tomorrow.gen      = val;
+                if (param === 'sheetab_R2C17') staff.tomorrow.morn     = val;
+                if (param === 'sheetab_R2C18') staff.tomorrow.eve      = val;
+                if (param === 'sheetab_R2C19') staff.tomorrow.night    = val;
+                if (param === 'sheetab_R2C23') staff.tomorrow.tpcMorn  = val;
+                if (param === 'sheetab_R2C24') staff.tomorrow.tpcEve   = val;
+                if (param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
+                // Tomorrow technicians
+                if (param === 'sheetab_R2C20') staff.tomorrow.techMorn  = val;
+                if (param === 'sheetab_R2C21') staff.tomorrow.techEve   = val;
+                if (param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
+
+                if (param === 'ChecklistStatus') chkStatus = val;
+                if (param === 'sheetab_R2C33') mtrsStatus = val;
+                if (param === 'sheetab_R2C34') tkrsStatus = val;
+                if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
+
+                if (unit === 'StationTemp') {
+                    const parts = val.split('|');
+                    const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
+                    const isAlarm = amb > 34 || trfo > 80;
+                    stHtml += `<div class="stock-item ${isAlarm ? 'alarm' : ''}">
+                        <span class="stock-name">${param}</span>
+                        <span class="stock-val ${amb > 34 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${parts[0]}°</span>
+                        <span class="stock-divider"></span>
+                        <span class="stock-val ${trfo > 80 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
+                    </div>`;
+                }
+
+                if (unit === 'OpsBlock') {
+                    const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
+                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
+                    mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
+                    mEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                }
+
+                if (unit === 'OpsSchedule') {
+                    const lines = val.split('\n').filter(l => l.trim() !== '');
+                    document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
+                }
+
+                if (unit === 'DriverPopup') {
+                    const parts = val.split('|');
+                    const name = parts[0] || '---';
+                    const phone = parts[1] || '---';
+                    const shift = parts[2] || '---';
+                    document.getElementById('driver-name').innerText  = name;
+                    document.getElementById('driver-phone').innerText = phone;
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${shift}`;
+                    // Pill
+                    const pn = document.getElementById('driver-pill-name');
+                    const pNum = document.getElementById('driver-pill-num');
+                    if (pn) pn.innerText = name;
+                    if (pNum) pNum.innerText = phone !== '---' ? phone : shift !== '---' ? `SHIFT: ${shift}` : '---';
+                }
+
+                if (unit === 'sheetab' && param === 'sheetab_R2C1') evaluateUpdateBadge(val);
+
+                // Dock items from C29 (label), C30 (progress%), C31 (icon URL)
+                const dockMatch = param.match(/^sheetab_R(\d+)C(29|30|31)$/);
+                if (dockMatch && unit === 'sheetab') {
+                    const row = parseInt(dockMatch[1], 10);
+                    const col = parseInt(dockMatch[2], 10);
+                    if (!dockRows[row]) dockRows[row] = {};
+                    if (col === 29) dockRows[row].label = val;
+                    if (col === 30) dockRows[row].pct   = val;
+                    if (col === 31) dockRows[row].icon  = val;
+                }
+
+                if (param === 'sheetab_R2C28') {
+                    const popupEl = document.getElementById('maint-progress-popup-body');
+                    if (popupEl) popupEl.innerText = val && val.trim() !== '' ? val.trim() : '—';
+                }
+
+                if (param === 'sheetab_R2C27') {
+                    const pct = parseFloat(val);
+                    const fillEl = document.getElementById('maint-progress-fill');
+                    const valEl  = document.getElementById('maint-progress-value');
+                    if (!isNaN(pct)) {
+                        const clamped = Math.min(100, Math.max(0, pct));
+                        valEl.innerText = clamped.toFixed(1) + '%';
+                        // Animate after a brief paint delay
+                        setTimeout(() => { fillEl.style.width = clamped + '%'; }, 80);
+                        // Colour shift: green above 80, amber 50-80, red below 50
+                        if (clamped >= 80) {
+                            fillEl.style.background = 'linear-gradient(90deg, var(--success) 0%, color-mix(in srgb, var(--success) 60%, white) 100%)';
+                            valEl.style.color = 'var(--success)';
+                        } else if (clamped >= 50) {
+                            fillEl.style.background = 'linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%)';
+                            valEl.style.color = 'var(--primary)';
+                        } else {
+                            fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)';
+                            valEl.style.color = 'var(--error)';
+                        }
+                    } else {
+                        valEl.innerText = '—';
+                        fillEl.style.width = '0%';
+                    }
+                }
+            });
+
+            // Dual checklist status (MTRS + TKRS)
+            function applyChkDual(id, rawVal) {
+                const item   = document.getElementById(id);
+                const icon   = document.getElementById(id + '-icon');
+                const status = document.getElementById(id + '-status');
+                const pill   = document.getElementById(id + '-pill');
+                if (!item) return;
+                const val = (rawVal || '').trim();
+                const isFilled = val !== '' && val !== '---' && val !== '0' &&
+                                 !val.toUpperCase().includes('NOT') &&
+                                 !val.toUpperCase().includes('EMPTY');
+                item.className = 'chk-dual-item ' + (isFilled ? 'chk-d-filled' : 'chk-d-empty');
+                icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank';
+                if (isFilled) {
+                    status.innerText = val;
+                    pill.innerText = 'FILLED';
+                } else {
+                    status.innerText = val !== '' && val !== '---' ? val : 'Not Filled';
+                    pill.innerText = 'PENDING';
+                }
+            }
+            applyChkDual('chk-mtrs', mtrsStatus);
+            applyChkDual('chk-tkrs', tkrsStatus);
+
+            // Tech names marquee (for ticker bar only, no longer shown in checklist-container)
+            // (techNames variable kept for any future use but not displayed in appbar)
+
+            // Station temp track — duplicate for seamless infinite scroll
+            const stEl = document.getElementById('station-track');
+            if (stHtml) {
+                stEl.innerHTML = stHtml + stHtml; // duplicate for seamless loop
+                stEl.style.animation = 'none';
+                stEl.offsetHeight;
+                stEl.style.animation = '';
+            }
+
+            // Build general pills
+            const todayPills = document.getElementById('today-gen-pills');
+            const tomorrowPills = document.getElementById('tomorrow-gen-pills');
+            todayPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
+            tomorrowPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
+
+            // Build shift cards with correct time logic
+            tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn,  staff.today.techMorn);
+            tdHtml += buildShift('EVENING', staff.today.eve,  isShiftActive('EVENING'), staff.today.tpcEve,   staff.today.techEve);
+            tdHtml += buildShift('NIGHT',   staff.today.night, isShiftActive('NIGHT'),  staff.today.tpcNight, staff.today.techNight);
+
+            tmHtml += buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn,  staff.tomorrow.techMorn);
+            tmHtml += buildShift('EVENING', staff.tomorrow.eve,  false, staff.tomorrow.tpcEve,   staff.tomorrow.techEve);
+            tmHtml += buildShift('NIGHT',   staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
+
+            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
+            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+
+            // ── Build App Dock ──
+            buildAppDock(dockRows);
+        };
+
+        function buildAppDock(dockRows) {
+            const dock = document.getElementById('app-dock');
+            if (!dock) return;
+
+            const rows = Object.keys(dockRows)
+                .map(Number)
+                .sort((a, b) => a - b)
+                .filter(r => dockRows[r].label || dockRows[r].icon);
+
+            if (rows.length === 0) { dock.innerHTML = ''; return; }
+
+            const RADIUS = 21;
+            const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+            const COLLAPSE_THRESHOLD = 5; // show expand btn if more than this many items
+
+            const itemsHtml = rows.map(r => {
+                const { label = '', pct = '', icon = '' } = dockRows[r];
+                const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
+                const offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE;
+
+                const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
+
+                const iconHtml = icon && icon.startsWith('http')
+                    ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                       <span class="dock-img-fallback" style="display:none;">${label.charAt(0)}</span>`
+                    : `<span class="dock-img-fallback">${label.charAt(0) || '?'}</span>`;
+
+                const warnBadge = (pctNum < 20)
+                    ? `<span class="dock-warn-badge visible" title="${pctNum.toFixed(0)}% remaining — low stock"></span>`
+                    : `<span class="dock-warn-badge"></span>`;
+
+                return `
+                <div class="dock-item">
+                    ${warnBadge}
+                    <div class="dock-icon-ring">
+                        <svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="ring-track" cx="25" cy="25" r="${RADIUS}"/>
+                            <circle class="ring-fill ring-${cls}" cx="25" cy="25" r="${RADIUS}"
+                                stroke-dasharray="${CIRCUMFERENCE}"
+                                stroke-dashoffset="${offset}"/>
+                        </svg>
+                        <div class="dock-img-wrap">${iconHtml}</div>
+                    </div>
+                    <div class="dock-label" title="${label}">${label}</div>
+                    <div class="dock-pct pct-${cls}">${pctNum.toFixed(0)}%</div>
+                </div>`;
+            }).join('');
+
+            const needsExpand = rows.length > COLLAPSE_THRESHOLD;
+
+            // Build scroll track — duplicate for seamless loop when scrolling
+            const trackHtml = needsExpand
+                ? `<div class="dock-scroll-track animated" id="dock-scroll-track">${itemsHtml}${itemsHtml}</div>`
+                : `<div class="dock-scroll-track" id="dock-scroll-track">${itemsHtml}</div>`;
+
+            const expandBtn = needsExpand
+                ? `<button class="dock-expand-btn visible" id="dock-expand-btn" onclick="toggleDockExpand(event)" title="Show all">
+                       <span class="material-symbols-rounded">expand_less</span>
+                   </button>`
+                : '';
+
+            dock.innerHTML = `<div class="dock-items-scroll" id="dock-items-scroll">${trackHtml}</div>${expandBtn}`;
+        }
+
+        function toggleDockExpand(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('app-dock');
+            const btn  = document.getElementById('dock-expand-btn');
+            const track = document.getElementById('dock-scroll-track');
+            const expanded = dock.classList.toggle('dock-expanded');
+            if (btn) btn.classList.toggle('expanded', expanded);
+            if (track) {
+                if (expanded) {
+                    track.classList.remove('animated');
+                } else {
+                    track.classList.add('animated');
+                }
+            }
+        }
+
+        function evaluateUpdateBadge(raw) {
+            const card = document.getElementById('driver-card'),
+                  badge = document.getElementById('driver-update-badge'),
+                  warn = document.getElementById('outdated-warning-text');
+            if (!raw || raw === '---') {
+                badge.innerText = 'UPDATE: N/A'; badge.className = 'driver-badge badge-outdated';
+                card.classList.add('outdated'); if (warn) warn.style.display = 'block'; return;
+            }
+            try {
+                const ut = new Date(raw), now = new Date();
+                badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
+                const h = now.getHours();
+                let ss = new Date(now);
+                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0);
+                else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
+                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); if (warn) warn.style.display = 'none'; }
+                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); if (warn) warn.style.display = 'block'; }
+            } catch (e) { badge.innerText = 'UPDATE: ERR'; }
+        }
+
+        function updateClocks() {
+            const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
+            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
+            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
+            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
+        }
+        setInterval(updateClocks, 1000);
+
+        function refreshData() {
+            const old = document.getElementById('api-script');
+            if (old) old.remove();
+            const s = document.createElement('script');
+            s.id = 'api-script';
+            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
+            document.body.appendChild(s);
+        }
+        setInterval(refreshData, 60000);
+        refreshData();
+        updateClocks();
+
+        window.onresize = () => {
+            const text = document.getElementById('ticker-text'),
+                  popup = document.getElementById('ticker-popup');
+            updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
+        };
     </script>
 </body>
 </html>
