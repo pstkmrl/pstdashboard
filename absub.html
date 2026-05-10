@@ -194,7 +194,7 @@
 
         /* ── DASHBOARD WRAPPER & TABS ── */
         .dashboard-wrapper {
-            display: flex; flex-direction: column; flex-grow: 1; overflow: hidden;
+            display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden;
             padding: 10px 10px 0 10px;
         }
         .mobile-tab-bar { display: none; }
@@ -203,7 +203,8 @@
             display: grid;
             grid-template-columns: 5fr 3fr;
             gap: 10px;
-            flex-grow: 1;
+            flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding-bottom: 150px;
             scrollbar-width: thin;
@@ -267,7 +268,7 @@
             padding: 3px 10px; border-radius: var(--radius-full);
             text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0;
         }
-        .chevron-icon { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: var(--outline); }
+        .chevron-icon { display: none; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: var(--outline); }
         .m3-card.collapsed .chevron-icon { transform: rotate(180deg); }
 
         /* ── ROSTER GRID ── */
@@ -753,13 +754,14 @@
 
             .dashboard-wrapper { padding: 6px 6px 0 6px; }
             .dashboard-content {
-                display: flex; flex-direction: row; width: 200%;
+                display: flex; flex-direction: row; width: 200%; flex: 1; min-height: 0;
                 transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-                overflow-y: visible; padding-bottom: 0;
+                overflow-y: hidden; padding-bottom: 0;
             }
             .left-column, .right-column {
                 width: 50%; padding: 0 4px; overflow-y: auto; height: 100%;
                 padding-bottom: 220px; /* space for floaters */
+                -webkit-overflow-scrolling: touch;
             }
 
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 4px 4px 0 4px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
@@ -772,6 +774,8 @@
             .deploy-header { flex-direction: row; flex-wrap: nowrap; gap: 6px; }
             .card-header { font-size: 0.88rem; }
             .m3-card { padding: 12px; }
+
+            .chevron-icon { display: block; }
 
             /* Scaling floaters down to clear space on mobile */
             #info-rotator { transform: scale(0.85); transform-origin: bottom right; bottom: 42px; right: 0px; }
@@ -874,7 +878,7 @@
                     </div>
                 </div>
                 <!-- TOMORROW DEPLOYMENT -->
-                <div class="m3-card collapsed" id="card-tomorrow">
+                <div class="m3-card" id="card-tomorrow">
                     <div class="deploy-header" onclick="toggleCardCollapse(this)">
                         <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
                         <div class="header-right-actions">
@@ -1088,7 +1092,8 @@
 
         // Make sure tomorrow is collapsed on load for mobile
         if (window.innerWidth <= 900) {
-            document.getElementById('card-tomorrow').classList.add('collapsed');
+            const tmrCard = document.getElementById('card-tomorrow');
+            if (tmrCard) tmrCard.classList.add('collapsed');
         }
 
         function initTheme() {
