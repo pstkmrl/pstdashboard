@@ -30,16 +30,20 @@
             --on-bg: #2D3436;
             --on-surface: #2D3436;
             --on-surface-variant: #636E72;
-            --primary: #FF6B6B; /* Cheerful Coral */
+            --outline: #B2BEC3;
+            --primary: #FF6B6B; 
             --primary-container: #FFD3B6;
             --on-primary: #FFFFFF;
-            --secondary: #48DBFB; /* Happy Sky Blue */
-            --success: #1DD1A1; /* Mint Green */
+            --secondary: #48DBFB; 
+            --success: #1DD1A1; 
             --success-container: #C8F7E6;
-            --warning: #FECA57; /* Sunny Yellow */
+            --on-success-container: #004D36;
+            --warning: #FECA57; 
             --warning-container: #FFF2D1;
+            --on-warning-container: #5C4300;
             --error: #FF6B6B;
             --error-container: #FFD8D8;
+            --on-error-container: #5C0000;
             --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
             --border-glass: 1px solid rgba(255, 255, 255, 0.6);
             
@@ -47,6 +51,9 @@
             --grad-morning: linear-gradient(135deg, #FFEAA7 0%, #FFD3B6 100%);
             --grad-evening: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
             --grad-night: linear-gradient(135deg, #A18CD1 0%, #FBC2EB 100%);
+            
+            --tech-bg: rgba(255, 255, 255, 0.5);
+            --tech-border: rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] {
@@ -56,16 +63,20 @@
             --on-bg: #F8F9FA;
             --on-surface: #F8F9FA;
             --on-surface-variant: #B0B3B8;
+            --outline: #6E7A8A;
             --primary: #FF8E8B;
             --primary-container: #4A2B2B;
             --on-primary: #1E1E2F;
             --secondary: #81ECEC;
             --success: #00B894;
             --success-container: #103A2F;
+            --on-success-container: #A3F3DB;
             --warning: #FDCB6E;
             --warning-container: #4A3C1A;
+            --on-warning-container: #FDE8B3;
             --error: #FF7675;
             --error-container: #4A2525;
+            --on-error-container: #FFD8D8;
             --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             --border-glass: 1px solid rgba(255, 255, 255, 0.05);
 
@@ -73,6 +84,9 @@
             --grad-morning: linear-gradient(135deg, #5A4A22 0%, #5E3A20 100%);
             --grad-evening: linear-gradient(135deg, #5C2A3A 0%, #4A2545 100%);
             --grad-night: linear-gradient(135deg, #2A2A4A 0%, #1A1A3A 100%);
+            
+            --tech-bg: rgba(0, 0, 0, 0.2);
+            --tech-border: rgba(255, 255, 255, 0.05);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -88,13 +102,10 @@
             flex-direction: column;
             overflow: hidden;
             transition: color var(--transition-smooth);
+            user-select: none;
         }
 
-        @keyframes gradient-breathing {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @keyframes gradient-breathing { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         /* ── Glassmorphism Utility ── */
         .glass-card {
@@ -106,26 +117,59 @@
             box-shadow: var(--shadow-glass);
             transition: transform var(--transition-bounce), box-shadow var(--transition-smooth);
         }
-        .glass-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1); }
 
-        /* ── APP BAR (Floating Island) ── */
+        /* ── APP BAR ── */
         .app-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 15px 25px 0;
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            z-index: 100;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: space-between;
+            margin: 15px 25px 0; padding: 10px 20px;
+            border-radius: var(--radius-full); z-index: 100; flex-shrink: 0;
+            gap: 20px;
         }
         .logo-section img { height: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         
+        .middle-module {
+            flex-grow: 1; display: flex; justify-content: center; align-items: center; gap: 12px; height: 48px; overflow: hidden;
+        }
+        
+        /* ── STATION TEMP MARQUEE ── */
+        .checklist-container {
+            flex: 1; min-width: 0; height: 100%;
+            background: var(--surface-variant); border-radius: var(--radius-full);
+            display: flex; align-items: center; position: relative; overflow: hidden;
+            border: var(--border-glass); transition: opacity 0.3s;
+        }
+        .checklist-container::before, .checklist-container::after {
+            content: ''; position: absolute; top: 0; width: 40px; height: 100%; z-index: 2; pointer-events: none;
+        }
+        .checklist-container::before { left: 0; background: linear-gradient(to right, var(--surface), transparent); }
+        .checklist-container::after  { right: 0; background: linear-gradient(to left, var(--surface), transparent); }
+        
+        .station-track {
+            display: flex; gap: 16px; width: max-content; align-items: center; padding: 0 16px;
+            position: absolute; top: 0; left: 0; height: 100%;
+            animation: stock-scroll 45s linear infinite;
+        }
+        .station-track:hover { animation-play-state: paused; }
+        @keyframes stock-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .stock-item {
+            display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.4);
+            padding: 4px 14px 4px 10px; border-radius: var(--radius-full); font-family: var(--font-display); font-weight: 800; font-size: 1rem;
+            border: 1px solid rgba(0,0,0,0.05); white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] .stock-item { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); }
+        .stock-item.alarm { background: var(--error-container); color: var(--error); animation: pulse-alarm 1.5s infinite alternate; }
+        @keyframes pulse-alarm { 0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.4); } 100% { box-shadow: 0 0 0 8px rgba(255,107,107,0); } }
+        .stock-name { color: var(--on-surface-variant); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.8px; font-weight: 900; }
+        .stock-val { display: inline-flex; align-items: center; gap: 3px; }
+        .stock-val.safe { color: var(--success); }
+        .stock-val.warn { color: var(--error); }
+        .stock-icon { font-size: 0.9rem !important; opacity: 0.75; }
+        .stock-divider { width: 1px; height: 18px; background: var(--outline); opacity: 0.4; flex-shrink: 0; }
+
         .clock-container {
-            display: flex; gap: 8px; align-items: center;
-            background: var(--surface-variant);
-            padding: 8px 20px; border-radius: var(--radius-full);
-            border: var(--border-glass);
+            display: flex; gap: 8px; align-items: center; background: var(--surface-variant);
+            padding: 8px 20px; border-radius: var(--radius-full); border: var(--border-glass); flex-shrink: 0;
         }
         .clock-val { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; color: var(--primary); }
         .clock-colon { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; color: var(--on-surface-variant); animation: blink 1s infinite; }
@@ -134,226 +178,325 @@
         .top-controls { display: flex; gap: 12px; }
         .icon-btn {
             background: var(--surface); border: var(--border-glass); color: var(--on-surface);
-            width: 48px; height: 48px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all var(--transition-bounce);
-            box-shadow: var(--shadow-glass);
+            width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all var(--transition-bounce); box-shadow: var(--shadow-glass);
         }
         .icon-btn:hover { transform: scale(1.15) rotate(5deg); background: var(--primary); color: white; }
+        .btn-grid-active { background: var(--secondary); color: var(--on-surface); }
 
-        /* ── BENTO BOX DASHBOARD LAYOUT ── */
+        /* ── LAYOUT ── */
         .dashboard-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: 1fr;
-            gap: 25px;
-            padding: 25px;
-            flex-grow: 1;
-            height: calc(100vh - 100px);
+            display: grid; grid-template-columns: 2fr 1fr; gap: 25px; padding: 25px 25px 120px 25px;
+            flex-grow: 1; overflow-y: auto; scrollbar-width: none;
         }
-        
-        /* ── LEFT: DEPLOYMENT ROSTER ── */
-        .left-column {
-            display: flex; flex-direction: column; gap: 20px;
-            overflow-y: auto; padding-right: 10px;
-        }
-        .left-column::-webkit-scrollbar { width: 6px; }
-        .left-column::-webkit-scrollbar-thumb { background: var(--surface-variant); border-radius: 10px; }
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
 
-        .roster-section {
-            padding: 24px;
-            display: flex; flex-direction: column; gap: 15px;
-        }
-        .section-header {
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .section-title {
-            font-family: var(--font-display); font-weight: 900; font-size: 1.4rem;
-            color: var(--on-surface); display: flex; align-items: center; gap: 8px;
-        }
+        .roster-section { padding: 24px; display: flex; flex-direction: column; gap: 15px; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; }
+        .section-title { font-family: var(--font-display); font-weight: 900; font-size: 1.4rem; color: var(--on-surface); display: flex; align-items: center; gap: 8px; }
         .section-title .material-symbols-rounded { color: var(--primary); font-size: 28px; }
         
         .gen-info-pill {
-            background: var(--surface-variant); padding: 6px 16px;
-            border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 700;
+            background: var(--surface-variant); padding: 6px 16px; border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 700;
             color: var(--on-surface); display: flex; gap: 8px; align-items: center;
         }
 
-        .roster-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
-        }
+        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; align-items: stretch; }
 
-        /* ── HAPPY SHIFT CARDS ── */
+        /* ── SHIFT CARDS ── */
         .shift-card {
-            border-radius: var(--radius-m); padding: 18px;
-            display: flex; flex-direction: column; gap: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: transform var(--transition-bounce);
-            border: 1px solid rgba(255,255,255,0.4);
-            position: relative; overflow: hidden;
+            border-radius: var(--radius-m); padding: 18px; display: flex; flex-direction: column; gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform var(--transition-bounce);
+            border: 1px solid rgba(255,255,255,0.4); position: relative; overflow: hidden;
         }
         .shift-card:hover { transform: translateY(-5px) scale(1.02); }
-        .shift-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px;
-        }
+        .shift-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; }
         
-        /* Shift Modifiers */
         .shift-morning { background: var(--grad-morning); color: #3E2723; }
         .shift-morning::before { background: #FFB142; }
-        .shift-morning .staff-name { color: #3E2723; }
-        
         .shift-evening { background: var(--grad-evening); color: #4A148C; }
         .shift-evening::before { background: #FF5285; }
-        .shift-evening .staff-name { color: #4A148C; }
-        
         .shift-night { background: var(--grad-night); color: #1A237E; }
         .shift-night::before { background: #303F9F; }
-        .shift-night .staff-name { color: #1A237E; }
-
-        [data-theme="dark"] .shift-morning .staff-name, [data-theme="dark"] .shift-evening .staff-name, [data-theme="dark"] .shift-night .staff-name { color: white; }
+        
         [data-theme="dark"] .shift-morning, [data-theme="dark"] .shift-evening, [data-theme="dark"] .shift-night { color: white; }
 
-        .shift-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; }
-        .shift-active-badge {
-            background: rgba(255,255,255,0.4); padding: 4px 10px; border-radius: var(--radius-full);
-            font-size: 0.7rem; display: flex; align-items: center; gap: 4px; font-weight: 800;
-            animation: pulse-soft 2s infinite;
+        .shift-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; }
+        .shift-label-wrap { display: flex; align-items: center; gap: 8px; }
+        
+        /* Count Badge restored */
+        .shift-count-badge {
+            display: inline-flex; align-items: center; gap: 3px; background: rgba(255,255,255,0.4);
+            border-radius: var(--radius-full); padding: 2px 9px; font-family: var(--font-display);
+            font-size: 0.85rem; font-weight: 800; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        @keyframes pulse-soft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        [data-theme="dark"] .shift-count-badge { background: rgba(0,0,0,0.2); }
+        .cnt-tech { color: var(--primary); }
+        .shift-count-badge .material-symbols-rounded { font-size: 14px !important; opacity: 0.7; }
+
+        .shift-active-dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; display: none; animation: pulse-dot 2s infinite; }
+        .m3-shift-active .shift-active-dot { display: inline-block; }
+        @keyframes pulse-dot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.7; } }
+        
+        .shift-tpc-badge { font-size: 0.7rem; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: var(--radius-full); font-weight: 800; white-space: nowrap; }
 
         .staff-list { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; }
         .staff-item {
             background: rgba(255,255,255,0.3); padding: 8px 12px; border-radius: var(--radius-s);
-            display: flex; justify-content: space-between; align-items: center;
-            font-weight: 700; font-size: 0.9rem; backdrop-filter: blur(4px);
+            display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.9rem; backdrop-filter: blur(4px);
         }
-        .duty-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: var(--radius-full); background: rgba(0,0,0,0.1); font-weight: 800; text-transform: uppercase; }
+        [data-theme="dark"] .staff-item { background: rgba(0,0,0,0.2); }
+        .duty-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: var(--radius-full); font-weight: 800; text-transform: uppercase; }
+        .badge-tpc-m { background: #00E5FF; color: #000; }
+        .badge-tpc-e { background: #FF9100; color: #000; }
+        .badge-tpc-n { background: #D500F9; color: #FFF; }
+        .badge-default { background: rgba(0,0,0,0.1); }
         
+        /* Technician Scroller Restored */
         .tech-section { margin-top: auto; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 10px; }
+        [data-theme="dark"] .tech-section { border-top-color: rgba(255,255,255,0.1); }
         .tech-title { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
-        .tech-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-        .tech-chip { background: rgba(255,255,255,0.4); padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 800; }
-
-        /* ── RIGHT: MAINTENANCE & STATUS ── */
-        .right-column { display: flex; flex-direction: column; gap: 20px; }
         
+        .tech-scroll-wrap { overflow: hidden; border-radius: var(--radius-s); background: var(--tech-bg); border: 1px solid var(--tech-border); padding: 5px 0; position: relative; }
+        .tech-scroll-track { display: flex; width: max-content; animation: tech-scroll 18s linear infinite; }
+        .tech-scroll-track:hover { animation-play-state: paused; }
+        @keyframes tech-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .tech-name-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 14px; font-family: var(--font-display); font-size: 0.95rem; font-weight: 800; white-space: nowrap; border-right: 1.5px solid var(--tech-border); }
+        .tech-name-chip:last-child { border-right: none; }
+        .tech-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+        
+        .tech-static { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0; }
+        .tech-static .tech-name-chip { background: var(--tech-bg); border: 1px solid var(--tech-border); border-radius: var(--radius-full); padding: 4px 10px; border-right: 1px solid var(--tech-border); }
+
+        /* ── RIGHT COLUMN: MAINTENANCE ── */
         .status-overview { display: flex; gap: 15px; }
         .status-box {
-            flex: 1; padding: 15px; border-radius: var(--radius-m);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-            font-family: var(--font-display); font-weight: 800; text-align: center;
-            transition: all var(--transition-bounce);
+            flex: 1; padding: 15px; border-radius: var(--radius-m); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+            font-family: var(--font-display); font-weight: 800; text-align: center; transition: all var(--transition-bounce);
         }
         .status-box:hover { transform: scale(1.05); }
-        .status-box.ok { background: var(--success-container); color: var(--success); border: 2px solid var(--success); }
-        .status-box.alert { background: var(--error-container); color: var(--error); border: 2px solid var(--error); animation: shake 0.5s; }
+        .status-box.ok { background: var(--success-container); color: var(--on-success-container); border: 2px solid var(--success); }
+        .status-box.alert { background: var(--error-container); color: var(--on-error-container); border: 2px solid var(--error); animation: shake 0.5s; }
         .status-icon { font-size: 32px !important; }
 
         .maintenance-panel { flex-grow: 1; display: flex; flex-direction: column; padding: 24px; }
         
         .checklist-dual { display: flex; gap: 15px; margin: 15px 0; }
-        .chk-item {
-            flex: 1; padding: 12px; border-radius: var(--radius-s); display: flex; align-items: center; gap: 10px;
-            font-family: var(--font-display); font-weight: 800; font-size: 0.9rem;
-        }
-        .chk-filled { background: var(--success-container); color: var(--success); }
-        .chk-empty { background: var(--warning-container); color: var(--warning); }
+        .chk-item { flex: 1; padding: 12px; border-radius: var(--radius-s); display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; transition: background 0.3s; }
+        .chk-filled { background: var(--success-container); color: var(--on-success-container); border: 1px solid var(--success); }
+        .chk-empty { background: var(--warning-container); color: var(--on-warning-container); border: 1px solid var(--warning); }
         .chk-item .material-symbols-rounded { font-size: 24px; }
 
         .maint-list { overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .maint-list-item {
-            background: var(--surface-variant); padding: 12px 16px; border-radius: var(--radius-s);
-            font-weight: 600; font-size: 0.85rem; border-left: 4px solid var(--secondary);
-            transition: transform var(--transition-smooth);
-        }
+        .maint-list-item { background: var(--surface-variant); padding: 12px 16px; border-radius: var(--radius-s); font-weight: 600; font-size: 0.85rem; border-left: 4px solid var(--secondary); transition: transform var(--transition-smooth); }
         .maint-list-item:hover { transform: translateX(5px); background: var(--surface); }
 
-        .progress-container { background: var(--surface-variant); padding: 20px; border-radius: var(--radius-m); }
+        /* Progress Bar + Restored Remarks Popup */
+        .progress-container { background: var(--surface-variant); padding: 20px; border-radius: var(--radius-m); position: relative; }
         .progress-header { display: flex; justify-content: space-between; font-family: var(--font-display); font-weight: 900; margin-bottom: 10px; }
         .progress-track { height: 12px; background: rgba(0,0,0,0.05); border-radius: var(--radius-full); overflow: hidden; position: relative; }
-        .progress-fill { height: 100%; border-radius: var(--radius-full); transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); background: linear-gradient(90deg, var(--secondary), var(--primary)); }
+        .progress-fill { height: 100%; border-radius: var(--radius-full); transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background 1s; width: 0%; }
         .progress-fill::after { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent); background-size: 20px 20px; animation: progress-stripes 2s linear infinite; }
         @keyframes progress-stripes { 100% { background-position: 20px 0; } }
-        .refresh-stamp { text-align: right; font-size: 0.7rem; font-weight: 700; color: var(--on-surface-variant); margin-top: 8px; }
+        .refresh-stamp { text-align: right; font-size: 0.7rem; font-weight: 700; color: var(--outline); margin-top: 8px; }
 
-        /* ── FLOATING WIDGETS (Friendly shapes) ── */
-        .floating-dock {
-            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 15px; padding: 15px 25px; border-radius: var(--radius-full);
-            z-index: 900; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        .maint-progress-popup {
+            position: absolute; bottom: calc(100% + 15px); left: 0; right: 0; background: var(--surface); border: var(--border-glass); border-radius: var(--radius-m); padding: 14px 16px; box-shadow: var(--shadow-glass); pointer-events: none; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease; z-index: 200; backdrop-filter: blur(16px);
         }
-        .dock-item {
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
-            transition: transform var(--transition-bounce); cursor: pointer;
-        }
-        .dock-item:hover { transform: translateY(-10px) scale(1.1); }
-        .dock-circle {
-            width: 50px; height: 50px; border-radius: 50%; background: var(--surface);
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display); font-weight: 900; font-size: 1.2rem;
-            color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 3px solid;
-        }
-        .dock-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; color: var(--on-surface); background: var(--surface); padding: 2px 8px; border-radius: 10px; }
+        .progress-container:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: var(--on-surface-variant); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.9rem; font-weight: 700; color: var(--on-surface); line-height: 1.5; white-space: pre-wrap; }
 
-        .driver-card {
-            position: fixed; bottom: 80px; left: 25px; z-index: 900;
-            display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 10px;
-            border-radius: var(--radius-full); cursor: pointer;
-        }
-        .driver-avatar {
-            width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white;
-            display: flex; align-items: center; justify-content: center; font-size: 24px;
-        }
-        .driver-info { display: flex; flex-direction: column; }
-        .driver-name { font-family: var(--font-display); font-weight: 900; font-size: 1rem; }
-        .driver-role { font-size: 0.7rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+        /* ── FLOATING WIDGETS ── */
         
-        .info-rotator {
-            position: fixed; bottom: 80px; right: 25px; z-index: 900;
-            width: 180px; height: 160px; padding: 20px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        /* 1. App Dock (Restored SVG Rings & Expand Logic) */
+        .app-dock {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: var(--radius-full); z-index: 900; transition: all var(--transition-bounce); max-width: calc(100vw - 40px); overflow: hidden;
         }
-        .ir-icon { font-size: 42px !important; color: var(--secondary); margin-bottom: 10px; }
-        .ir-text { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; line-height: 1.2; }
+        .dock-items-scroll { display: flex; align-items: center; gap: 8px; overflow: hidden; min-width: 0; }
+        .dock-scroll-track { display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
+        .dock-scroll-track.animated { animation: dock-ticker 20s linear infinite; }
+        .dock-scroll-track.animated:hover { animation-play-state: paused; }
+        @keyframes dock-ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* ── TICKER BAR ── */
-        .ticker-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 50px;
-            background: var(--surface); backdrop-filter: blur(10px);
-            display: flex; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        .dock-expand-btn {
+            display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface-variant); border: var(--border-glass); color: var(--on-surface); cursor: pointer; flex-shrink: 0; transition: all 0.3s ease;
         }
-        .ticker-tag {
-            background: var(--primary); color: white; font-family: var(--font-display); font-weight: 900;
-            padding: 0 25px; height: 100%; display: flex; align-items: center; border-radius: 0 25px 25px 0;
-            z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-        }
+        .dock-expand-btn:hover { background: var(--primary); color: white; transform: scale(1.1); }
+        .dock-expand-btn.visible { display: flex; }
+        .dock-expand-btn.expanded .material-symbols-rounded { transform: rotate(180deg); }
+
+        .app-dock.dock-expanded { border-radius: var(--radius-l); }
+        .app-dock.dock-expanded .dock-items-scroll { flex-wrap: wrap; overflow: visible; justify-content: center; }
+        .app-dock.dock-expanded .dock-scroll-track { flex-wrap: wrap; animation: none !important; justify-content: center; }
+
+        .dock-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: default; transition: transform var(--transition-bounce); position: relative; }
+        .dock-item:hover { transform: translateY(-8px) scale(1.1); }
+        
+        .dock-icon-ring { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
+        .dock-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
+        .dock-icon-ring svg .ring-track { fill: none; stroke: rgba(0,0,0,0.05); stroke-width: 4; }
+        [data-theme="dark"] .dock-icon-ring svg .ring-track { stroke: rgba(255,255,255,0.05); }
+        .dock-icon-ring svg .ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.4s ease; }
+        
+        .dock-img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: var(--surface-variant); border: var(--border-glass); display: flex; align-items: center; justify-content: center; }
+        .dock-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .dock-img-fallback { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; color: var(--primary); text-transform: uppercase; }
+        .dock-label { font-family: var(--font-display); font-size: 0.55rem; font-weight: 800; color: var(--on-surface); text-transform: uppercase; max-width: 60px; overflow: hidden; text-overflow: ellipsis; text-align: center; background: var(--surface-variant); padding: 2px 6px; border-radius: 8px; }
+        .dock-pct { font-family: var(--font-display); font-size: 0.55rem; font-weight: 900; text-align: center; }
+        
+        .dock-warn-badge { position: absolute; top: 0; right: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--error); border: 2px solid var(--surface); display: none; animation: warn-pulse 2s infinite; }
+        .dock-warn-badge.visible { display: block; }
+        .ring-high { stroke: var(--success); } .ring-mid { stroke: var(--secondary); } .ring-low { stroke: var(--error); }
+        .pct-high { color: var(--success); } .pct-mid { color: var(--secondary); } .pct-low { color: var(--error); }
+
+        /* 2. Driver Card (Restored Slide, Expand, Outdated Logic) */
+        .driver-card-wrapper { position: fixed; bottom: 80px; left: 25px; z-index: 900; cursor: pointer; }
+        .driver-pill { display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 10px; border-radius: var(--radius-full); transition: all var(--transition-bounce); overflow: hidden; max-width: 260px; border: var(--border-glass); }
+        .driver-card-wrapper.outdated .driver-pill { border-color: var(--error); opacity: 0.7; }
+        
+        .driver-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        .driver-card-wrapper.outdated .driver-avatar { background: var(--error-container); color: var(--error); }
+        
+        .driver-pill-text-wrap { overflow: hidden; height: 1.5rem; display: flex; flex-direction: column; position: relative; }
+        .driver-pill-slide { display: flex; flex-direction: column; transition: transform 0.6s var(--transition-bounce); }
+        .driver-pill-slide.show-number { transform: translateY(-50%); }
+        .driver-pill-name-val { font-family: var(--font-display); font-weight: 900; font-size: 1rem; color: var(--on-surface); white-space: nowrap; line-height: 1.5rem; }
+        .driver-pill-num-val { font-family: var(--font-display); font-weight: 800; font-size: 0.9rem; color: var(--secondary); white-space: nowrap; line-height: 1.5rem; }
+        
+        .driver-pill-outdated-badge { display: none; align-items: center; gap: 4px; background: var(--error-container); border-radius: var(--radius-full); padding: 4px 10px; font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; color: var(--error); animation: pulse-alarm 1.5s infinite alternate; }
+        .driver-card-wrapper.outdated .driver-pill-outdated-badge { display: flex; }
+
+        .driver-expanded { position: absolute; bottom: calc(100% + 15px); left: 0; min-width: 240px; border-radius: var(--radius-l); padding: 20px; display: flex; flex-direction: column; gap: 12px; pointer-events: none; opacity: 0; transform: translateY(10px) scale(0.95); transform-origin: bottom left; transition: all 0.3s ease; border: var(--border-glass); }
+        .driver-card-wrapper.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
+        
+        .driver-exp-outdated { display: none; align-items: center; gap: 6px; background: var(--error-container); padding: 6px 12px; border-radius: var(--radius-s); font-family: var(--font-display); font-size: 0.7rem; font-weight: 900; color: var(--error); }
+        .driver-card-wrapper.outdated .driver-exp-outdated { display: flex; }
+        
+        .driver-exp-label { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; color: var(--on-surface-variant); }
+        .driver-exp-shift { font-size: 0.7rem; font-weight: 900; color: var(--primary); }
+        .driver-exp-name { font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; color: var(--on-surface); }
+        .driver-exp-phone { font-size: 0.9rem; font-weight: 700; color: var(--on-surface-variant); }
+        .driver-exp-update { font-size: 0.65rem; font-weight: 800; color: var(--outline); padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); }
+        [data-theme="dark"] .driver-exp-update { border-top-color: rgba(255,255,255,0.1); }
+        
+        .driver-exp-call { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--success-container); border: 2px solid var(--success); border-radius: var(--radius-full); padding: 10px 16px; font-family: var(--font-display); font-weight: 900; font-size: 0.9rem; color: var(--on-success-container); cursor: pointer; transition: transform 0.2s; }
+        .driver-exp-call:hover { transform: scale(1.05); }
+
+        /* 3. Info Rotator (Restored 3D Flip & Data Parsing) */
+        #info-rotator { position: fixed; bottom: 80px; right: 25px; z-index: 900; width: 190px; perspective: 800px; }
+        .ir-slab { width: 100%; height: 160px; border-radius: var(--radius-l); transform-style: preserve-3d; transform-origin: 50% 50%; transform: rotateX(0deg); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; gap: 8px; position: relative; border: var(--border-glass); }
+        .ir-slab.flipping-out { animation: ir-flip-out 0.4s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        .ir-slab.flipping-in { animation: ir-flip-in 0.4s cubic-bezier(0, 0, 0.2, 1) forwards; }
+        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0; } }
+        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0; } 100% { transform: rotateX(0deg); opacity: 1; } }
+        
+        .ir-accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--secondary), var(--primary)); }
+        .ir-icon-wrap { display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .ir-icon-wrap .material-symbols-rounded { font-size: 46px !important; color: var(--primary); }
+        .ir-icon-img { width: 50px; height: 50px; border-radius: var(--radius-m); object-fit: cover; box-shadow: var(--shadow-glass); }
+        .ir-headline { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; color: var(--on-surface); text-align: center; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .ir-headline.ir-headline-full { -webkit-line-clamp: 5; font-size: 1.1rem; }
+        .ir-label { font-family: var(--font-body); font-size: 0.75rem; font-weight: 700; color: var(--on-surface-variant); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+        
+        .ir-dots-row { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+        .ir-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--outline); transition: all 0.3s ease; }
+        .ir-dot.ir-dot-active { background: var(--primary); transform: scale(1.5); }
+
+        /* ── FLASH NEWS OVERLAY (Restored) ── */
+        #flash-news-overlay { position: fixed; inset: 0; z-index: 9990; display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+        #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
+        .flash-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); }
+        .flash-panel { position: relative; z-index: 1; width: min(800px, calc(100vw - 40px)); border-radius: var(--radius-l); overflow: hidden; transform: scale(0.9) translateY(20px); transition: transform var(--transition-bounce); border: var(--border-glass); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        #flash-news-overlay.visible .flash-panel { transform: scale(1) translateY(0); }
+        
+        .flash-banner { display: flex; align-items: center; gap: 12px; background: var(--error); padding: 12px 25px; }
+        .flash-banner-live { display: flex; align-items: center; gap: 6px; background: white; border-radius: 6px; padding: 2px 10px; font-family: var(--font-display); font-size: 0.8rem; font-weight: 900; color: var(--error); animation: blink 1s infinite; }
+        .flash-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
+        .flash-banner-text { font-family: var(--font-display); font-size: 0.9rem; font-weight: 900; color: white; letter-spacing: 2px; }
+        
+        .flash-body { padding: 35px; display: flex; flex-direction: column; gap: 20px; }
+        .flash-eyebrow { font-family: var(--font-display); font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; color: var(--error); text-transform: uppercase; }
+        .flash-headline { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--on-surface); line-height: 1.2; }
+        
+        .flash-footer { display: flex; align-items: center; padding: 20px 35px; border-top: 1px solid rgba(0,0,0,0.1); }
+        [data-theme="dark"] .flash-footer { border-top-color: rgba(255,255,255,0.1); }
+        .flash-progress-wrap { flex: 1; height: 6px; background: var(--surface-variant); border-radius: var(--radius-full); overflow: hidden; margin-right: 20px; }
+        .flash-progress-fill { height: 100%; background: var(--error); border-radius: var(--radius-full); transition: width 0.1s linear; width: 0%; }
+        .flash-dismiss { font-family: var(--font-display); font-size: 0.8rem; font-weight: 900; color: var(--on-surface-variant); cursor: pointer; transition: color 0.2s; }
+        .flash-dismiss:hover { color: var(--error); }
+
+        /* ── TICKER BAR & POPUP (Restored Popup) ── */
+        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 50px; background: var(--surface); backdrop-filter: blur(10px); display: flex; align-items: center; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); cursor: pointer; }
+        .ticker-tag { background: var(--primary); color: white; font-family: var(--font-display); font-weight: 900; padding: 0 25px; height: 100%; display: flex; align-items: center; border-radius: 0 25px 25px 0; z-index: 2; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
         .ticker-scroll-area { flex-grow: 1; overflow: hidden; position: relative; height: 100%; display: flex; align-items: center; }
-        .ticker-text { white-space: nowrap; font-weight: 700; font-size: 1rem; color: var(--on-surface); padding-left: 100%; animation: scroll-left 40s linear infinite; }
+        .ticker-text { white-space: nowrap; font-weight: 700; font-size: 1rem; color: var(--on-surface); padding-left: 100%; animation: scroll-left 60s linear infinite; }
+        .ticker-bar:hover .ticker-text { animation-play-state: paused; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
+        .ticker-popup { display: none; position: absolute; bottom: 65px; left: 50%; transform: translateX(-50%); width: calc(100% - 50px); max-width: 900px; padding: 25px; border-radius: var(--radius-l); font-family: var(--font-body); font-weight: 700; font-size: 1.1rem; line-height: 1.6; color: var(--on-surface); border: 2px solid var(--primary); z-index: 1005; white-space: pre-wrap; max-height: 60vh; overflow-y: auto; cursor: default; }
+        .ticker-bar:hover .ticker-popup { display: block; }
 
-        /* Blackout Overlay */
-        #blackout { position: fixed; inset: 0; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; color: white; font-family: var(--font-display); font-size: 3rem; font-weight: 900; }
+        /* ── BLACKOUT & ANALOG CLOCK (Restored) ── */
+        #blackout { position: fixed; inset: 0; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
+        .analog-wrap { width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle, #2a2a2a 0%, #050505 100%); border: 4px solid #444; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
+        .h-hr { width: 8px; height: 28%; background: #fff; margin-left: -4px; }
+        .h-min { width: 6px; height: 40%; background: var(--secondary); margin-left: -3px; }
+        .h-sec { width: 3px; height: 45%; background: var(--primary); margin-left: -1.5px; }
+        .center-dot { position: absolute; top: 50%; left: 50%; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; transform: translate(-50%, -50%); border: 3px solid #000; }
 
     </style>
 </head>
 <body onclick="wakeUp()">
 
-    <div id="blackout">Tap to Wake</div>
+    <div id="blackout">
+        <div class="analog-wrap">
+            <div id="ana-h" class="hand h-hr"></div>
+            <div id="ana-m" class="hand h-min"></div>
+            <div id="ana-s" class="hand h-sec"></div>
+            <div class="center-dot"></div>
+        </div>
+    </div>
+
+    <div id="flash-news-overlay">
+        <div class="flash-backdrop" onclick="dismissFlash()"></div>
+        <div class="flash-panel glass-card">
+            <div class="flash-banner">
+                <div class="flash-banner-live"><div class="flash-live-dot"></div>LIVE</div>
+                <div class="flash-banner-text">⚡ IMPORTANT NOTICE</div>
+            </div>
+            <div class="flash-body">
+                <div class="flash-eyebrow">BREAKING UPDATE</div>
+                <div class="flash-headline" id="flash-headline">—</div>
+            </div>
+            <div class="flash-footer">
+                <div class="flash-progress-wrap"><div class="flash-progress-fill" id="flash-progress-fill"></div></div>
+                <div class="flash-dismiss" onclick="dismissFlash()">DISMISS ✕</div>
+            </div>
+        </div>
+    </div>
 
     <header class="app-bar glass-card">
         <div class="logo-section">
             <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL Logo">
         </div>
+        
+        <div class="middle-module">
+            <div id="checklist-container" class="checklist-container">
+                <div id="station-track" class="station-track"></div>
+            </div>
+        </div>
+
         <div class="clock-container">
-            <span id="clk-h" class="clock-val">00</span>
-            <span class="clock-colon">:</span>
-            <span id="clk-m" class="clock-val">00</span>
-            <span class="clock-colon">:</span>
+            <span id="clk-h" class="clock-val">00</span><span class="clock-colon">:</span>
+            <span id="clk-m" class="clock-val">00</span><span class="clock-colon">:</span>
             <span id="clk-s" class="clock-val" style="color: var(--secondary);">00</span>
         </div>
         <div class="top-controls">
             <button class="icon-btn" onclick="toggleTheme(event)"><span class="material-symbols-rounded" id="theme-icon">dark_mode</span></button>
+            <button id="btn-grid" class="icon-btn btn-grid-active" onclick="toggleGrid(event)"><span class="material-symbols-rounded">monitoring</span></button>
             <button class="icon-btn" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span></button>
             <button class="icon-btn" onclick="manualOff(event)" style="background: var(--error-container); color: var(--error);"><span class="material-symbols-rounded">power_settings_new</span></button>
         </div>
@@ -368,7 +511,6 @@
                 </div>
                 <div id="roster-today" class="roster-grid"></div>
             </div>
-
             <div class="roster-section glass-card">
                 <div class="section-header">
                     <div class="section-title"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
@@ -398,31 +540,27 @@
                 <div class="checklist-dual">
                     <div id="chk-mtrs" class="chk-item chk-empty">
                         <span class="material-symbols-rounded" id="chk-mtrs-icon">pending</span>
-                        <div>
-                            <div>MTRS</div>
-                            <div id="chk-mtrs-status" style="font-size: 0.7rem; opacity: 0.8;">Not Filled</div>
-                        </div>
+                        <div><div>MTRS</div><div id="chk-mtrs-status" style="font-size: 0.7rem; opacity: 0.8;">Not Filled</div></div>
                     </div>
                     <div id="chk-tkrs" class="chk-item chk-empty">
                         <span class="material-symbols-rounded" id="chk-tkrs-icon">pending</span>
-                        <div>
-                            <div>TKRS</div>
-                            <div id="chk-tkrs-status" style="font-size: 0.7rem; opacity: 0.8;">Not Filled</div>
-                        </div>
+                        <div><div>TKRS</div><div id="chk-tkrs-status" style="font-size: 0.7rem; opacity: 0.8;">Not Filled</div></div>
                     </div>
                 </div>
 
-                <div id="maint-list" class="maint-list">
-                    <div class="maint-list-item">Loading Schedule...</div>
-                </div>
+                <div id="maint-list" class="maint-list"></div>
 
                 <div class="progress-container">
+                    <div class="maint-progress-popup glass-card">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded" style="font-size:14px;">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
                     <div class="progress-header">
                         <span>Maintenance Progress</span>
                         <span id="maint-progress-value" style="color: var(--primary);">0%</span>
                     </div>
                     <div class="progress-track">
-                        <div id="maint-progress-fill" class="progress-fill" style="width: 0%;"></div>
+                        <div id="maint-progress-fill" class="progress-fill"></div>
                     </div>
                     <div id="refresh-indicator" class="refresh-stamp">UPDATED: --:--</div>
                 </div>
@@ -430,32 +568,54 @@
         </div>
     </main>
 
-    <div class="driver-card glass-card">
-        <div class="driver-avatar"><span class="material-symbols-rounded">person</span></div>
-        <div class="driver-info">
-            <span class="driver-role" id="driver-shift">ON DUTY</span>
-            <span class="driver-name" id="driver-name">Loading...</span>
+    <div id="driver-card" class="driver-card-wrapper outdated" onclick="toggleDriverCard(event)">
+        <div class="driver-expanded glass-card" onclick="event.stopPropagation()">
+            <div class="driver-exp-outdated"><span class="material-symbols-rounded" style="font-size:16px;">warning</span> OUTDATED DATA</div>
+            <div>
+                <div class="driver-exp-label">On Duty Driver</div>
+                <div class="driver-exp-shift" id="driver-shift">SHIFT: ---</div>
+                <div class="driver-exp-name" id="driver-name">Loading...</div>
+                <div class="driver-exp-phone" id="driver-phone">---</div>
+            </div>
+            <div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div>
+            <div class="driver-exp-call" onclick="initiateCall(event)"><span class="material-symbols-rounded">call</span> CALL DRIVER</div>
+        </div>
+        <div class="driver-pill glass-card">
+            <div class="driver-avatar"><span class="material-symbols-rounded">directions_car</span></div>
+            <div class="driver-pill-text-wrap">
+                <div class="driver-pill-slide" id="driver-pill-slide">
+                    <span class="driver-pill-name-val" id="driver-pill-name">Loading...</span>
+                    <span class="driver-pill-num-val" id="driver-pill-num">---</span>
+                </div>
+            </div>
+            <div class="driver-pill-outdated-badge"><span class="material-symbols-rounded" style="font-size:12px;">warning</span> OUTDATED</div>
         </div>
     </div>
 
-    <div id="app-dock" class="floating-dock glass-card"></div>
+    <div id="app-dock" class="app-dock glass-card"></div>
 
-    <div id="info-rotator" class="info-rotator glass-card">
-        <span class="material-symbols-rounded ir-icon" id="ir-icon">routine</span>
-        <div class="ir-text" id="ir-headline">Syncing...</div>
+    <div id="info-rotator">
+        <div class="ir-slab glass-card" id="ir-slab">
+            <div class="ir-accent-bar"></div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-headline" id="ir-headline">—</div>
+            <div class="ir-label" id="ir-label"></div>
+        </div>
+        <div class="ir-dots-row" id="ir-dots"></div>
     </div>
 
     <footer class="ticker-bar">
-        <div class="ticker-tag">⚡ LIVE UPDATE</div>
+        <div class="ticker-tag" id="ticker-head">IMPORTANT NOTICE</div>
         <div class="ticker-scroll-area">
-            <div id="ticker-text" class="ticker-text">CONNECTING TO KMRL SUBSTATION DATA CORE...</div>
+            <div id="ticker-text" class="ticker-text">SYNCING DATA...</div>
         </div>
+        <div id="ticker-popup" class="ticker-popup glass-card">SYNCING DATA...</div>
     </footer>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
 
-        // Theme Handling
+        // ── Theme, Fullscreen, Toggles ──
         function initTheme() {
             const saved = localStorage.getItem('kmrl_theme') || 'light';
             document.documentElement.setAttribute('data-theme', saved);
@@ -465,34 +625,128 @@
 
         function toggleTheme(e) {
             if (e) e.stopPropagation();
-            const cur = document.documentElement.getAttribute('data-theme');
-            const nxt = cur === 'dark' ? 'light' : 'dark';
+            const nxt = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', nxt);
             localStorage.setItem('kmrl_theme', nxt);
             document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
         }
 
-        // Utils
         function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
+        
+        function toggleGrid(e) {
+            if (e) e.stopPropagation();
+            const chk = document.getElementById('checklist-container'), btn = document.getElementById('btn-grid');
+            const isHidden = chk.style.opacity === '0';
+            chk.style.opacity = isHidden ? '1' : '0';
+            btn.classList.toggle('btn-grid-active', isHidden);
+        }
 
-        // Clocks
+        // ── Clocks (Digital & Analog) ──
         function updateClocks() {
             const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
+            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
+            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
         }
         setInterval(updateClocks, 1000);
 
-        // Data Parsing & Rendering
+        // ── Driver Card Logic ──
+        let _driverPillTimer = null, _driverShowingNum = false;
+        function startDriverPillCycle() {
+            if (_driverPillTimer) clearInterval(_driverPillTimer);
+            _driverPillTimer = setInterval(() => {
+                const slide = document.getElementById('driver-pill-slide');
+                if (!slide) return;
+                _driverShowingNum = !_driverShowingNum;
+                slide.classList.toggle('show-number', _driverShowingNum);
+            }, 10000);
+        }
+        startDriverPillCycle();
+
+        function toggleDriverCard(e) { if (e) e.stopPropagation(); document.getElementById('driver-card').classList.toggle('expanded'); }
+        document.addEventListener('click', e => {
+            const card = document.getElementById('driver-card');
+            if (card && card.classList.contains('expanded') && !card.contains(e.target)) card.classList.remove('expanded');
+        });
+
+        function initiateCall(e) {
+            if (e) e.stopPropagation();
+            const ph = document.getElementById('driver-phone').innerText;
+            if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`;
+        }
+
+        function evaluateUpdateBadge(raw) {
+            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
+            if (!raw || raw === '---') { badge.innerText = 'UPDATE: N/A'; card.classList.add('outdated'); return; }
+            try {
+                const ut = new Date(raw), now = new Date();
+                badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
+                const h = now.getHours(); let ss = new Date(now);
+                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0); else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
+                if (ut >= ss) card.classList.remove('outdated'); else card.classList.add('outdated');
+            } catch (e) { badge.innerText = 'UPDATE: ERR'; }
+        }
+
+        // ── Flash News Logic ──
+        let _flashItems = [], _flashIdx = 0, _flashTimer = null, _flashProgressTimer = null, _flashHourTimer = null, _lastNoticeRaw = '';
+        const FLASH_ITEM_DURATION = 7000;
+
+        function showFlashNews(items, startIdx = 0) {
+            if (!items || items.length === 0) return;
+            _flashItems = items; _flashIdx = startIdx;
+            document.getElementById('flash-headline').innerText = items[_flashIdx] || '';
+            document.getElementById('flash-news-overlay').classList.add('visible');
+            _startFlashProgress();
+        }
+
+        function _startFlashProgress() {
+            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            if (_flashTimer) clearTimeout(_flashTimer);
+            const fill = document.getElementById('flash-progress-fill');
+            if (fill) fill.style.width = '0%';
+            const start = Date.now();
+            _flashProgressTimer = setInterval(() => {
+                if (fill) fill.style.width = Math.min(100, ((Date.now() - start) / FLASH_ITEM_DURATION) * 100) + '%';
+            }, 80);
+            _flashTimer = setTimeout(() => {
+                clearInterval(_flashProgressTimer);
+                _flashIdx++;
+                if (_flashIdx < _flashItems.length) { document.getElementById('flash-headline').innerText = _flashItems[_flashIdx]; _startFlashProgress(); } 
+                else dismissFlash();
+            }, FLASH_ITEM_DURATION);
+        }
+
+        function dismissFlash() {
+            if (_flashTimer) clearTimeout(_flashTimer); if (_flashProgressTimer) clearInterval(_flashProgressTimer);
+            document.getElementById('flash-news-overlay').classList.remove('visible');
+        }
+
+        function triggerFlashIfChanged(raw) {
+            if (!raw || raw.trim() === '') return;
+            const items = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
+            if (items.length === 0) return;
+            if (raw.trim() !== _lastNoticeRaw.trim()) {
+                _lastNoticeRaw = raw.trim();
+                setTimeout(() => showFlashNews(items, 0), 1200);
+                if (_flashHourTimer) clearInterval(_flashHourTimer);
+                _flashHourTimer = setInterval(() => { showFlashNews(items, 0); }, 3600000);
+            }
+        }
+
+        // ── Roster & Tech Parsing ──
         function parseStaff(raw) {
             if (!raw) return '<div class="staff-item" style="opacity:0.5; justify-content:center;">No Deployment</div>';
             return raw.split('\n').filter(l => l.trim() !== '').map(line => {
                 if (line.includes('|')) {
-                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '';
-                    return `<div class="staff-item"><span class="staff-name">${name}</span><span class="duty-badge">${duty}</span></div>`;
+                    const p = line.split('|'), n = p[0].trim(), d = p[1] ? p[1].trim() : '', dCode = d.toUpperCase();
+                    let bCls = 'badge-default';
+                    if (dCode.includes('M TPC')) bCls = 'badge-tpc-m'; else if (dCode.includes('E TPC')) bCls = 'badge-tpc-e'; else if (dCode.includes('N TPC')) bCls = 'badge-tpc-n';
+                    return `<div class="staff-item"><span class="staff-name">${n}</span><span class="duty-badge ${bCls}">${d}</span></div>`;
                 }
                 return `<div class="staff-item"><span class="staff-name">${line}</span></div>`;
             }).join('');
@@ -502,17 +756,17 @@
             if (!techRaw || techRaw.trim() === '') return '';
             const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
             if (names.length === 0) return '';
-            const chips = names.map(n => `<span class="tech-chip">${n}</span>`).join('');
-            return `<div class="tech-section">
-                        <div class="tech-title"><span class="material-symbols-rounded" style="font-size:14px;">engineering</span> Technicians</div>
-                        <div class="tech-chips">${chips}</div>
-                    </div>`;
+            const chipHtml = n => `<span class="tech-name-chip"><span class="tech-dot"></span>${n}</span>`;
+            if (names.length >= 3) {
+                const chips = names.map(chipHtml).join('');
+                return `<div class="tech-section"><div class="tech-title"><span class="material-symbols-rounded" style="font-size:14px;">engineering</span> Technicians On Duty</div><div class="tech-scroll-wrap"><div class="tech-scroll-track">${chips}${chips}</div></div></div>`;
+            } else {
+                return `<div class="tech-section"><div class="tech-title"><span class="material-symbols-rounded" style="font-size:14px;">engineering</span> Technicians On Duty</div><div class="tech-static">${names.map(chipHtml).join('')}</div></div>`;
+            }
         }
 
         function isShiftActive(shiftName) {
-            const now = new Date();
-            const totalMins = now.getHours() * 60 + now.getMinutes();
-            const m = (h, min) => h * 60 + min;
+            const now = new Date(), totalMins = now.getHours() * 60 + now.getMinutes(), m = (h, min) => h * 60 + min;
             if (shiftName === 'MORNING') return totalMins >= m(6, 30) && totalMins < m(14, 0);
             if (shiftName === 'EVENING') return totalMins >= m(14, 0) && totalMins < m(21, 30);
             if (shiftName === 'NIGHT') return totalMins >= m(21, 30) || totalMins < m(6, 30);
@@ -520,36 +774,37 @@
         }
 
         function buildShift(title, val, active, tpc, techRaw) {
-            const staffHtml = parseStaff(val);
-            const techHtml = buildTechSection(techRaw);
-            const cls = 'shift-' + title.toLowerCase();
-            const activeBadge = active ? `<div class="shift-active-badge"><span class="material-symbols-rounded" style="font-size:14px;">vital_signs</span> ACTIVE</div>` : '';
-            const tpcLabel = tpc ? `<span style="font-size:0.7rem; opacity:0.8;">TPC: ${tpc}</span>` : '';
-
+            const staffCount = (val && val.trim()) ? val.split('\n').filter(l => l.trim() !== '').length : 0;
+            const techCount = (techRaw && techRaw.trim()) ? techRaw.split('\n').filter(l => l.trim() !== '').length : 0;
+            const countBadge = (staffCount > 0 || techCount > 0) ? `<span class="shift-count-badge"><span class="material-symbols-rounded">group</span>${staffCount} <span style="opacity:0.4;margin:0 2px;">+</span> <span class="cnt-tech">${techCount}</span></span>` : '';
+            
             return `
-            <div class="shift-card ${cls}">
+            <div class="shift-card shift-${title.toLowerCase()} ${active ? 'm3-shift-active' : ''}">
                 <div class="shift-header">
-                    <div>${title} ${tpcLabel}</div>
-                    ${activeBadge}
+                    <div class="shift-label-wrap"><span class="shift-active-dot"></span>${title} ${countBadge}</div>
+                    ${tpc ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : ''}
                 </div>
-                <div class="staff-list">${staffHtml}</div>
-                ${techHtml}
+                <div class="staff-list">${parseStaff(val)}</div>
+                ${buildTechSection(techRaw)}
             </div>`;
         }
 
+        // ── Main Draw Function ──
         window.draw = function(data) {
             document.getElementById('refresh-indicator').innerText = `UPDATED: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
-
-            let staff = {
-                today: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
-                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
-            };
-            let mtrsStatus = '', tkrsStatus = '', dockRows = {};
+            
+            let staff = { today: {}, tomorrow: {} }, dockRows = {}, irRowItems = {}, irRowImages = {};
+            let mtrsStatus = '', tkrsStatus = '', stHtml = '', irWeather = '';
 
             data.forEach(item => {
                 const unit = (item.Unit || '').trim(), param = (item.Parameter || '').trim(), val = (item.Value || '').trim();
 
-                if (param === 'sheetab_R2C2') document.getElementById('ticker-text').innerText = val.replace(/\n/g, '  •  ');
+                if (param === 'sheetab_R2C2') {
+                    document.getElementById('ticker-head').innerText = 'IMPORTANT NOTICE';
+                    document.getElementById('ticker-text').innerText = val.replace(/\n/g, '   •   ');
+                    document.getElementById('ticker-popup').innerText = val;
+                    triggerFlashIfChanged(val);
+                }
 
                 // Staff
                 if (param === 'sheetab_R2C12') staff.today.gen = val;
@@ -576,6 +831,24 @@
 
                 if (param === 'sheetab_R2C33') mtrsStatus = val;
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
+                if (param === 'sheetab_R2C35') irWeather = val;
+                
+                // Rotator
+                if (unit === 'sheetab') {
+                    const c36 = param.match(/^sheetab_R(\d+)C36$/); if (c36) irRowItems[c36[1]] = val;
+                    const c37 = param.match(/^sheetab_R(\d+)C37$/); if (c37) irRowImages[c37[1]] = val;
+                }
+
+                // Station Temp
+                if (unit === 'StationTemp') {
+                    const p = val.split('|'), amb = parseFloat(p[0])||0, trfo = parseFloat(p[1])||0, isAlarm = amb>34 || trfo>80;
+                    stHtml += `<div class="stock-item ${isAlarm ? 'alarm' : ''}">
+                        <span class="stock-name">${param}</span>
+                        <span class="stock-val ${amb>34?'warn':'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${p[0]}°</span>
+                        <span class="stock-divider"></span>
+                        <span class="stock-val ${trfo>80?'warn':'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${p[1]}°</span>
+                    </div>`;
+                }
 
                 // Ops
                 if (unit === 'OpsBlock') {
@@ -588,86 +861,167 @@
                 }
 
                 if (unit === 'OpsSchedule') {
-                    const lines = val.split('\n').filter(l => l.trim() !== '');
-                    document.getElementById('maint-list').innerHTML = lines.map(l => `<div class="maint-list-item">${l}</div>`).join('');
+                    document.getElementById('maint-list').innerHTML = val.split('\n').filter(l => l.trim() !== '').map(l => `<div class="maint-list-item">${l}</div>`).join('');
                 }
 
-                // Driver
+                // Driver Popup
                 if (unit === 'DriverPopup') {
-                    const parts = val.split('|');
-                    document.getElementById('driver-name').innerText = parts[0] || '---';
-                    document.getElementById('driver-shift').innerText = `SHIFT: ${parts[2] || '---'}`;
+                    const p = val.split('|'), name = p[0]||'---', ph = p[1]||'---', sh = p[2]||'---';
+                    document.getElementById('driver-name').innerText = name;
+                    document.getElementById('driver-phone').innerText = ph;
+                    document.getElementById('driver-shift').innerText = `SHIFT: ${sh}`;
+                    document.getElementById('driver-pill-name').innerText = name;
+                    document.getElementById('driver-pill-num').innerText = ph !== '---' ? ph : `SHIFT: ${sh}`;
                 }
 
-                // Progress
-                if (param === 'sheetab_R2C27') {
-                    const pct = parseFloat(val);
-                    if (!isNaN(pct)) {
-                        const clamped = Math.min(100, Math.max(0, pct));
-                        document.getElementById('maint-progress-value').innerText = clamped.toFixed(1) + '%';
-                        setTimeout(() => { document.getElementById('maint-progress-fill').style.width = clamped + '%'; }, 100);
-                    }
-                }
+                if (param === 'sheetab_R2C1') evaluateUpdateBadge(val);
 
                 // Dock Data
-                const dockMatch = param.match(/^sheetab_R(\d+)C(29|30)$/);
-                if (dockMatch && unit === 'sheetab') {
-                    const r = dockMatch[1], c = dockMatch[2];
+                const dMatch = param.match(/^sheetab_R(\d+)C(29|30|31)$/);
+                if (dMatch) {
+                    const r = dMatch[1], c = dMatch[2];
                     if (!dockRows[r]) dockRows[r] = {};
                     if (c === '29') dockRows[r].label = val;
                     if (c === '30') dockRows[r].pct = val;
+                    if (c === '31') dockRows[r].icon = val;
+                }
+
+                // Progress + Remarks
+                if (param === 'sheetab_R2C28') { document.getElementById('maint-progress-popup-body').innerText = val.trim() || '—'; }
+                if (param === 'sheetab_R2C27') {
+                    const pct = parseFloat(val);
+                    const fillEl = document.getElementById('maint-progress-fill'), valEl = document.getElementById('maint-progress-value');
+                    if (!isNaN(pct)) {
+                        const clamped = Math.min(100, Math.max(0, pct));
+                        valEl.innerText = clamped.toFixed(1) + '%';
+                        setTimeout(() => { fillEl.style.width = clamped + '%'; }, 100);
+                        if (clamped >= 80) { fillEl.style.background = 'linear-gradient(90deg, var(--success), #A3F3DB)'; valEl.style.color = 'var(--success)'; }
+                        else if (clamped >= 50) { fillEl.style.background = 'linear-gradient(90deg, var(--secondary), var(--primary))'; valEl.style.color = 'var(--secondary)'; }
+                        else { fillEl.style.background = 'linear-gradient(90deg, var(--error), #FFD8D8)'; valEl.style.color = 'var(--error)'; }
+                    } else { valEl.innerText = '—'; fillEl.style.width = '0%'; }
                 }
             });
 
+            // Station Track
+            const stEl = document.getElementById('station-track');
+            if (stHtml) { stEl.innerHTML = stHtml + stHtml; stEl.style.animation = 'none'; stEl.offsetHeight; stEl.style.animation = ''; }
+
             // Gen Pills
-            document.getElementById('today-gen-pills').innerText = staff.today.gen.replace(/\|/g, '').trim() || 'General';
-            document.getElementById('tomorrow-gen-pills').innerText = staff.tomorrow.gen.replace(/\|/g, '').trim() || 'General';
+            document.getElementById('today-gen-pills').innerText = (staff.today.gen || '').replace(/\|/g, '').trim() || 'General';
+            document.getElementById('tomorrow-gen-pills').innerText = (staff.tomorrow.gen || '').replace(/\|/g, '').trim() || 'General';
 
             // Checklists
             const applyChk = (id, val) => {
                 const el = document.getElementById(id), icon = document.getElementById(id + '-icon'), stat = document.getElementById(id + '-status');
-                const filled = val && !val.toUpperCase().includes('NOT');
+                const filled = val && val !== '---' && val !== '0' && !val.toUpperCase().includes('NOT') && !val.toUpperCase().includes('EMPTY');
                 el.className = `chk-item ${filled ? 'chk-filled' : 'chk-empty'}`;
                 icon.innerText = filled ? 'check_circle' : 'pending';
-                stat.innerText = filled ? val : 'Pending';
+                stat.innerText = filled ? val : (val && val !== '---' ? val : 'Not Filled');
             };
             applyChk('chk-mtrs', mtrsStatus);
             applyChk('chk-tkrs', tkrsStatus);
 
             // Rosters
-            let td = buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn, staff.today.techMorn) +
-                     buildShift('EVENING', staff.today.eve, isShiftActive('EVENING'), staff.today.tpcEve, staff.today.techEve) +
-                     buildShift('NIGHT', staff.today.night, isShiftActive('NIGHT'), staff.today.tpcNight, staff.today.techNight);
+            document.getElementById('roster-today').innerHTML = 
+                buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn, staff.today.techMorn) +
+                buildShift('EVENING', staff.today.eve, isShiftActive('EVENING'), staff.today.tpcEve, staff.today.techEve) +
+                buildShift('NIGHT', staff.today.night, isShiftActive('NIGHT'), staff.today.tpcNight, staff.today.techNight);
             
-            let tm = buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn, staff.tomorrow.techMorn) +
-                     buildShift('EVENING', staff.tomorrow.eve, false, staff.tomorrow.tpcEve, staff.tomorrow.techEve) +
-                     buildShift('NIGHT', staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
+            document.getElementById('roster-tomorrow').innerHTML = 
+                buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn, staff.tomorrow.techMorn) +
+                buildShift('EVENING', staff.tomorrow.eve, false, staff.tomorrow.tpcEve, staff.tomorrow.techEve) +
+                buildShift('NIGHT', staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
 
-            document.getElementById('roster-today').innerHTML = td;
-            document.getElementById('roster-tomorrow').innerHTML = tm;
-
-            // Dock
-            const dockHtml = Object.values(dockRows).filter(d => d.label).map(d => {
-                const p = parseFloat(d.pct) || 0;
-                const col = p > 75 ? 'var(--success)' : p > 30 ? 'var(--secondary)' : 'var(--error)';
-                return `<div class="dock-item"><div class="dock-circle" style="border-color: ${col}; color: ${col}">${p}%</div><div class="dock-label">${d.label.substring(0,6)}</div></div>`;
-            }).join('');
-            document.getElementById('app-dock').innerHTML = dockHtml;
-
-            // Rotator (Simplified lively rotator)
-            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            document.getElementById('ir-headline').innerText = `Happy\n${days[new Date().getDay()]}!`;
-            document.getElementById('ir-icon').innerText = 'celebration';
+            buildAppDock(dockRows);
+            initInfoRotator(irWeather, irRowItems, irRowImages);
         };
 
-        // Fetch
-        function refreshData() {
-            const s = document.createElement('script');
-            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`;
-            document.body.appendChild(s);
+        // ── Dock Build ──
+        function buildAppDock(dockRows) {
+            const dock = document.getElementById('app-dock');
+            const rows = Object.keys(dockRows).map(Number).sort((a,b)=>a-b).filter(r => dockRows[r].label || dockRows[r].icon);
+            if (rows.length === 0) { dock.innerHTML = ''; return; }
+
+            const RADIUS = 24, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+            const itemsHtml = rows.map(r => {
+                const { label='', pct='', icon='' } = dockRows[r];
+                const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
+                const offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE;
+                const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
+                const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="dock-img-fallback" style="display:none;">${label.charAt(0)}</span>` : `<span class="dock-img-fallback">${label.charAt(0)||'?'}</span>`;
+                const warnBadge = pctNum < 20 ? `<span class="dock-warn-badge visible"></span>` : `<span class="dock-warn-badge"></span>`;
+                return `
+                <div class="dock-item">
+                    ${warnBadge}
+                    <div class="dock-icon-ring">
+                        <svg viewBox="0 0 56 56"><circle class="ring-track" cx="28" cy="28" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="28" cy="28" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE}" stroke-dashoffset="${offset}"/></svg>
+                        <div class="dock-img-wrap">${iconHtml}</div>
+                    </div>
+                    <div class="dock-label">${label}</div>
+                    <div class="dock-pct pct-${cls}">${pctNum.toFixed(0)}%</div>
+                </div>`;
+            }).join('');
+
+            const needsExpand = rows.length > 5;
+            const trackHtml = needsExpand ? `<div class="dock-scroll-track animated" id="dock-scroll-track">${itemsHtml}${itemsHtml}</div>` : `<div class="dock-scroll-track" id="dock-scroll-track">${itemsHtml}</div>`;
+            const expandBtn = needsExpand ? `<button class="dock-expand-btn visible" id="dock-expand-btn" onclick="toggleDockExpand(event)"><span class="material-symbols-rounded">expand_less</span></button>` : '';
+            dock.innerHTML = `<div class="dock-items-scroll">${trackHtml}</div>${expandBtn}`;
         }
-        setInterval(refreshData, 60000);
-        refreshData();
+
+        window.toggleDockExpand = function(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('app-dock'), btn = document.getElementById('dock-expand-btn'), track = document.getElementById('dock-scroll-track');
+            const expanded = dock.classList.toggle('dock-expanded');
+            if (btn) btn.classList.toggle('expanded', expanded);
+            if (track) expanded ? track.classList.remove('animated') : track.classList.add('animated');
+        }
+
+        // ── Info Rotator Logic ──
+        let _irTimer = null, _irIdx = 0, _irSlides = [];
+        const IR_INTERVAL = 5000, IR_FLIP_DUR = 400;
+
+        function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
+            if (_irTimer) clearTimeout(_irTimer); _irSlides = [];
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            _irSlides.push({ type: 'material', icon: 'calendar_today', headline: days[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) });
+
+            const rows = Object.keys(irRowItems || {}).map(Number).sort((a,b)=>a-b);
+            rows.forEach(r => {
+                const itemStr = (irRowItems[r]||'').trim(), imgStr = ((irRowImages||{})[r]||'').trim();
+                if (!itemStr) return;
+                const items = itemStr.split('\n').map(l=>l.trim()).filter(l=>l!==''), imgs = imgStr.split('\n').map(l=>l.trim());
+                items.forEach((line, i) => {
+                    const url = imgs[i] || '', hasImg = url.startsWith('http');
+                    let txt = line.includes('|') ? (line.split('|')[1]||line.split('|')[0]).trim() : line;
+                    _irSlides.push({ type: hasImg ? 'img' : 'none', icon: hasImg ? url : '', headline: txt, label: '' });
+                });
+            });
+            _irIdx = 0; _renderIRSlide(false);
+        }
+
+        function _renderIRSlide(flip) {
+            const slab = document.getElementById('ir-slab'), wrap = document.getElementById('ir-icon-wrap'), hl = document.getElementById('ir-headline'), lb = document.getElementById('ir-label'), dots = document.getElementById('ir-dots');
+            if (!slab) return;
+            const apply = () => {
+                const s = _irSlides[_irIdx], hasIcon = s.type !== 'none';
+                if (s.type === 'img') { wrap.style.display=''; wrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" onerror="this.parentElement.style.display='none';document.getElementById('ir-headline').classList.add('ir-headline-full');">`; }
+                else if (s.type === 'material') { wrap.style.display=''; wrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:46px!important;color:var(--primary);">${s.icon}</span>`; }
+                else { wrap.style.display='none'; wrap.innerHTML=''; }
+                
+                hl.textContent = s.headline; hl.classList.toggle('ir-headline-full', !hasIcon);
+                lb.textContent = s.label; lb.style.display = s.label ? '' : 'none';
+                dots.innerHTML = _irSlides.map((_,i) => `<div class="ir-dot${i===_irIdx?' ir-dot-active':''}"></div>`).join('');
+            };
+
+            if (!flip) { apply(); _scheduleNext(); return; }
+            slab.classList.remove('flipping-in'); slab.classList.add('flipping-out');
+            setTimeout(() => { apply(); slab.classList.remove('flipping-out'); slab.classList.add('flipping-in'); setTimeout(() => { slab.classList.remove('flipping-in'); _scheduleNext(); }, IR_FLIP_DUR); }, IR_FLIP_DUR);
+        }
+        function _scheduleNext() { if (_irTimer) clearTimeout(_irTimer); if (_irSlides.length <= 1) return; _irTimer = setTimeout(() => { _irIdx = (_irIdx + 1) % _irSlides.length; _renderIRSlide(true); }, IR_INTERVAL); }
+
+        // Fetch Data
+        function refreshData() { const s = document.createElement('script'); s.src = `${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s); }
+        setInterval(refreshData, 60000); refreshData(); updateClocks();
     </script>
 </body>
 </html>
