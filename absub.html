@@ -1185,6 +1185,179 @@
             .dock-label { font-size: 0.46rem; max-width: 44px; }
         }
 
+        /* ── INFO ROTATOR WIDGET — flip slab ── */
+
+        /* Outer anchor: fixed position only, no overflow clip (clip kills 3D) */
+        #info-rotator {
+            position: fixed;
+            bottom: 54px;
+            right: 10px;
+            z-index: 1000;
+            width: 172px;
+            /* 3-D perspective for child flip */
+            perspective: 700px;
+            perspective-origin: 50% 50%;
+        }
+
+        /* The glass slab that flips */
+        .ir-slab {
+            width: 100%;
+            height: 148px;          /* ← fixed height, no min/max */
+            border-radius: var(--radius-l);
+            /* glass */
+            background: rgba(22, 28, 40, 0.55);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.45),
+                0 2px 8px  rgba(0,0,0,0.25),
+                inset 0 1.5px 0 rgba(255,255,255,0.22),
+                inset 0 -1px 0 rgba(0,0,0,0.18);
+            backdrop-filter: blur(30px) saturate(1.9);
+            -webkit-backdrop-filter: blur(30px) saturate(1.9);
+            /* 3-D transform setup */
+            transform-style: preserve-3d;
+            transform-origin: 50% 50%;
+            /* default state */
+            transform: rotateX(0deg);
+            transition: none;             /* JS drives the flip */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 12px 10px;
+            gap: 4px;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .ir-slab::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            border-radius: var(--radius-l) var(--radius-l) 0 0;
+            background: linear-gradient(
+                180deg,
+                rgba(255,255,255,0.10) 0%,
+                rgba(255,255,255,0.02) 100%
+            );
+            pointer-events: none;
+        }
+        [data-theme="light"] .ir-slab {
+            background: rgba(255,255,255,0.52);
+            border-color: rgba(255,255,255,0.80);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.12),
+                0 2px 8px  rgba(0,0,0,0.08),
+                inset 0 1.5px 0 rgba(255,255,255,0.95);
+        }
+
+        /* flip-out: slab tilts backward on top edge (like flipping a card away) */
+        @keyframes ir-flip-out {
+            0%   { transform: rotateX(0deg);     opacity: 1; }
+            100% { transform: rotateX(-90deg);    opacity: 0.3; }
+        }
+        /* flip-in: new slab comes in from the front-bottom */
+        @keyframes ir-flip-in {
+            0%   { transform: rotateX(90deg);     opacity: 0.3; }
+            100% { transform: rotateX(0deg);      opacity: 1; }
+        }
+        .ir-slab.flipping-out {
+            animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+        .ir-slab.flipping-in {
+            animation: ir-flip-in  0.36s cubic-bezier(0, 0, 0.2, 1) forwards;
+        }
+
+        /* accent bar at top of slab */
+        .ir-accent-bar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white));
+            border-radius: var(--radius-l) var(--radius-l) 0 0;
+        }
+
+        /* icon — big */
+        .ir-icon-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1px;
+            flex-shrink: 0;
+        }
+        .ir-icon-wrap .material-symbols-rounded {
+            font-size: 36px !important;
+            color: var(--primary);
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48;
+            line-height: 1;
+        }
+        .ir-icon-img {
+            width: 42px; height: 42px;
+            border-radius: var(--radius-m);
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+        }
+
+        /* main headline — weather condition / day name / item text */
+        .ir-headline {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--on-surface);
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: -0.3px;
+            word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            max-width: 100%;
+        }
+        /* When no icon, headline gets more vertical room */
+        .ir-headline.ir-headline-full {
+            -webkit-line-clamp: 5;
+            font-size: 1.1rem;
+        }
+
+        /* small sub-label below headline */
+        .ir-label {
+            font-family: var(--font-body);
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            opacity: 0.7;
+            text-align: center;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* dot indicator — sits below the slab, outside it */
+        .ir-dots-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        .ir-dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.22);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.18); }
+        .ir-dot.ir-dot-active {
+            background: var(--primary);
+            transform: scale(1.4);
+        }
+
+        /* info-rotator mobile handled in unified @media blocks below */
+
         /* ── TICKER ── */
         .ticker-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
@@ -1370,80 +1543,383 @@
         .dock-toggle-btn {
             display: none;
         }
-        @media (max-width: 900px) {
-            .dock-toggle-btn {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                position: fixed;
-                bottom: 54px;
-                right: 10px;
-                z-index: 1002;
-                background: rgba(255,255,255,0.1);
-                border: 1px solid rgba(255,255,255,0.2);
-                color: var(--on-surface);
-                border-radius: var(--radius-full);
-                padding: 6px 12px 6px 10px;
-                font-family: var(--font-display);
-                font-size: 0.6rem;
-                font-weight: 900;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-                backdrop-filter: blur(16px);
-                -webkit-backdrop-filter: blur(16px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            [data-theme="light"] .dock-toggle-btn {
-                background: rgba(255,255,255,0.6);
-                border-color: rgba(255,255,255,0.8);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
-            }
-            .dock-toggle-btn:hover { transform: scale(1.04); }
-            .dock-toggle-icon { font-size: 18px !important; transition: transform 0.3s ease; }
-            .dock-toggle-btn.active .dock-toggle-icon { transform: rotate(180deg); }
+
+        /* ════════════════════════════════════════════════════
+           MOBILE-ONLY ENHANCEMENTS  (≤ 900px)
+           Desktop styles above are completely untouched.
+           ════════════════════════════════════════════════════ */
+
+        /* ── MOBILE NAV DRAWER ── */
+        .mob-drawer-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 9000;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .mob-drawer {
+            display: none;
+            position: fixed; top: 0; right: 0; bottom: 0;
+            width: min(82vw, 320px);
+            background: var(--surface);
+            z-index: 9001;
+            box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column;
+            overflow-y: auto;
+        }
+        .mob-drawer-header {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--surface-variant);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .mob-drawer-title {
+            font-family: var(--font-display);
+            font-weight: 900; font-size: 1.1rem;
+            color: var(--primary); letter-spacing: 0.5px;
+        }
+        .mob-drawer-close {
+            width: 36px; height: 36px;
+            background: var(--surface-variant);
+            border: none; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--on-surface); cursor: pointer;
+        }
+        .mob-drawer-body {
+            flex: 1; padding: 16px 16px 32px;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .mob-drawer-section-title {
+            font-family: var(--font-display);
+            font-size: 0.55rem; font-weight: 900;
+            letter-spacing: 1.8px; text-transform: uppercase;
+            color: var(--on-surface-variant); opacity: 0.55;
+            padding: 12px 4px 4px;
+        }
+        .mob-drawer-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 13px 16px;
+            border-radius: var(--radius-m);
+            background: var(--surface-variant);
+            cursor: pointer;
+            border: none;
+            text-align: left;
+            width: 100%;
+            transition: background 0.2s ease;
+            text-decoration: none;
+        }
+        .mob-drawer-item:active { background: var(--secondary-container); }
+        .mob-drawer-item .material-symbols-rounded {
+            font-size: 22px !important;
+            color: var(--primary);
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .mob-drawer-item-text {
+            flex: 1;
+        }
+        .mob-drawer-item-label {
+            font-family: var(--font-display);
+            font-weight: 800; font-size: 0.92rem;
+            color: var(--on-surface);
+        }
+        .mob-drawer-item-sub {
+            font-size: 0.7rem;
+            color: var(--on-surface-variant);
+            margin-top: 2px;
+        }
+        .mob-drawer-item.danger .material-symbols-rounded { color: var(--error); }
+        .mob-drawer-item.danger .mob-drawer-item-label { color: var(--error); }
+        .mob-drawer-divider {
+            height: 1px; background: var(--surface-variant);
+            margin: 6px 0;
+        }
+        /* Clock strip inside drawer */
+        .mob-drawer-clock {
+            display: flex; gap: 8px; padding: 12px 16px;
+            background: var(--surface-dim);
+            border-radius: var(--radius-m);
+            margin-bottom: 4px;
+            align-items: center;
+        }
+        .mob-drawer-clock .clock-unit {
+            background: var(--surface-variant);
+            border-radius: var(--radius-s);
+            flex: 1; min-width: 0;
+        }
+        .mob-drawer-clock .clock-val { font-size: 1.5rem; }
+
+        /* ── MOBILE BOTTOM TAB BAR ── */
+        .mob-tab-bar {
+            display: none;
+            position: fixed; bottom: 46px; left: 0; right: 0;
+            z-index: 998;
+            background: var(--surface);
+            border-top: 1px solid var(--surface-variant);
+            padding: 0 4px;
+            height: 56px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        }
+        .mob-tab-bar-inner {
+            display: flex; height: 100%;
+            align-items: stretch;
+        }
+        .mob-tab-item {
+            flex: 1;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 3px;
+            cursor: pointer;
+            border: none; background: none;
+            color: var(--on-surface-variant);
+            padding: 6px 4px;
+            transition: color 0.2s ease;
+            position: relative;
+            border-radius: var(--radius-m);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .mob-tab-item.active {
+            color: var(--primary);
+        }
+        .mob-tab-item.active::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%; transform: translateX(-50%);
+            width: 36px; height: 32px;
+            background: var(--primary-container);
+            border-radius: var(--radius-m);
+            z-index: -1;
+        }
+        .mob-tab-item .material-symbols-rounded {
+            font-size: 22px !important;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            transition: font-variation-settings 0.2s ease;
+        }
+        .mob-tab-item.active .material-symbols-rounded {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mob-tab-label {
+            font-family: var(--font-display);
+            font-size: 0.52rem; font-weight: 800;
+            letter-spacing: 0.4px; text-transform: uppercase;
+            line-height: 1;
         }
 
-        /* ── MOBILE RESPONSIVE ── */
+        /* ── MOBILE SECTION PANELS (tab content) ── */
+        .mob-section-panel {
+            display: none;
+        }
+        .mob-section-panel.active {
+            display: block;
+        }
+
+        /* ── COLLAPSIBLE CARD ── */
+        .mob-collapsible-header {
+            display: none; /* hidden on desktop, shown on mobile */
+        }
+        .mob-collapsible-body {
+            /* desktop: always visible */
+        }
+
+        /* ── MOBILE SHIFT HORIZONTAL SCROLL ── */
+        .mob-shift-scroll-wrap {
+            display: none; /* hidden on desktop */
+        }
+
+        /* ── MOBILE APPBAR HAMBURGER ── */
+        .mob-hamburger-btn {
+            display: none;
+            background: var(--surface-variant);
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: var(--radius-full);
+            align-items: center; justify-content: center;
+            color: var(--on-surface);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* ── MOBILE NOTICE BOTTOM SHEET ── */
+        .mob-notice-sheet {
+            display: none;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            z-index: 8000;
+            background: var(--surface);
+            border-radius: var(--radius-l) var(--radius-l) 0 0;
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+            padding: 0 0 80px;
+            transform: translateY(100%);
+            transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+        .mob-notice-sheet.open {
+            transform: translateY(0);
+        }
+        .mob-notice-handle {
+            width: 40px; height: 4px;
+            background: var(--outline);
+            opacity: 0.4;
+            border-radius: var(--radius-full);
+            margin: 12px auto 0;
+        }
+        .mob-notice-sheet-header {
+            padding: 14px 20px 10px;
+            font-family: var(--font-display);
+            font-weight: 900; font-size: 0.8rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--surface-variant);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .mob-notice-sheet-body {
+            padding: 16px 20px;
+            font-family: var(--font-body);
+            font-size: 0.9rem; font-weight: 600;
+            color: var(--on-surface);
+            line-height: 1.65;
+            white-space: pre-wrap;
+        }
+        .mob-notice-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 7999;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* ─────────────────────────────────────────────────── */
+
         @media (max-width: 900px) {
-            .dashboard-content {
-                grid-template-columns: 1fr;
-                padding-bottom: 200px;
-                padding-top: 8px;
+
+            /* ── Show mobile-only elements ── */
+            .mob-drawer-overlay { display: block; }
+            .mob-drawer { display: flex; }
+            .mob-tab-bar { display: flex; }
+            .mob-hamburger-btn { display: flex; }
+            .mob-notice-sheet { display: block; }
+            .mob-notice-overlay { display: block; pointer-events: none; }
+
+            /* ── App bar: clean minimal mobile bar ── */
+            .app-bar {
+                padding: 8px 12px;
+                margin: 8px 8px 0 8px;
+                border-radius: var(--radius-l);
+                flex-wrap: nowrap;
                 gap: 8px;
             }
-            .app-bar {
-                flex-wrap: wrap; padding: 10px 14px;
-                margin: 8px 8px 0 8px; gap: 6px;
-                justify-content: space-between; border-radius: var(--radius-l);
+            /* Hide desktop controls from appbar on mobile */
+            .top-controls { display: none !important; }
+            .middle-module {
+                flex: 1; margin: 0; height: 40px;
+                order: 0;
             }
-            .middle-module { order: 3; width: 100%; margin: 6px 0 0 0; height: 40px; }
             .logo-section img { height: 26px; }
-            .icon-btn { width: 38px; height: 38px; }
-            .clock-unit { min-width: 46px; padding: 2px 7px; }
-            .clock-val { font-size: 1.2rem; }
-            .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-            .driver-card { left: 8px; bottom: 46px; }
-            .driver-expanded { min-width: 200px; }
-            .fab-ab { width: 46px; height: 46px; bottom: 122px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
-            .ticker-head { padding: 0 14px; font-size: 0.72rem; }
-            .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
-            .deploy-header { flex-direction: column; gap: 8px; }
-            .general-info-pill { justify-content: flex-start; }
 
-            /* Dock on mobile: collapsed by default */
+            /* ── Dashboard layout: single column, padded for tab bar ── */
+            .dashboard-content {
+                grid-template-columns: 1fr;
+                padding: 8px 8px 120px 8px;
+                gap: 8px;
+            }
+
+            /* Sections hidden by default; JS shows active tab */
+            .left-column, .right-column {
+                gap: 8px;
+            }
+
+            /* Hide the default roster-grid; show horizontal scroll version on mobile */
+            .roster-grid {
+                display: none;
+            }
+            .mob-shift-scroll-wrap {
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px 0 12px;
+                scrollbar-width: none;
+            }
+            .mob-shift-scroll-wrap::-webkit-scrollbar { display: none; }
+            .mob-shift-scroll-wrap .m3-shift-card {
+                flex: 0 0 82vw;
+                max-width: 340px;
+                scroll-snap-align: start;
+            }
+
+            /* ── Collapsible card headers on mobile ── */
+            .mob-collapsible-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                padding: 2px 0 10px;
+            }
+            .mob-collapsible-chevron {
+                color: var(--on-surface-variant);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                font-size: 20px !important;
+            }
+            .mob-collapsible-header.collapsed .mob-collapsible-chevron {
+                transform: rotate(-90deg);
+            }
+            /* When collapsed, body is hidden */
+            .mob-collapsible-body.collapsed {
+                display: none;
+            }
+            /* On desktop the original deploy-header/card-header are visible */
+            /* On mobile we hide original header row and show our collapsible instead */
+            .deploy-header { display: none; }
+            .maint-header-wrapper { display: none; }
+
+            /* ── Card tweaks ── */
+            .m3-card {
+                padding: 12px;
+                border-radius: var(--radius-m);
+            }
+            .m3-shift-card { padding: 14px; }
+
+            /* Shift cards: make staff grid 1-col */
+            .staff-list { grid-template-columns: 1fr; gap: 4px; }
+            .m3-staff-item { padding: 7px 10px; }
+            .staff-name { font-size: 1rem; }
+
+            /* Maintenance checklist row */
+            .checklist-dual-row {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            /* ── Driver card: push up above tab bar ── */
+            .driver-card { left: 8px; bottom: 106px; }
+            .driver-expanded { min-width: 200px; }
+
+            /* ── FAB: reposition ── */
+            .fab-ab { width: 46px; height: 46px; bottom: 106px; right: 8px; font-size: 0.95rem; border-radius: 14px; }
+
+            /* ── Ticker ── */
+            .ticker-head { padding: 0 12px; font-size: 0.68rem; }
+            .ticker-popup { display: none !important; } /* replaced by bottom sheet on mobile */
+
+            /* ── Dock: hidden, replaced by tab ── */
+            .dock-toggle-btn { display: none !important; }
             .app-dock {
-                bottom: 46px;
+                bottom: 102px;
                 max-height: 0;
-                padding-top: 0;
-                padding-bottom: 0;
+                padding-top: 0; padding-bottom: 0;
                 overflow: hidden;
                 opacity: 0;
                 pointer-events: none;
+                left: 50%; transform: translateX(-50%);
             }
             .app-dock.dock-expanded {
-                bottom: 100px;
+                bottom: 115px;
                 max-height: 300px;
                 padding: 10px 14px;
                 opacity: 1;
@@ -1452,22 +1928,87 @@
                 border-radius: var(--radius-l);
             }
             .app-dock.dock-expanded .dock-items-scroll {
-                flex-wrap: wrap;
-                overflow: visible;
-                justify-content: center;
+                flex-wrap: wrap; overflow: visible; justify-content: center;
             }
             .app-dock.dock-expanded .dock-scroll-track {
-                flex-wrap: wrap;
-                animation: none !important;
-                justify-content: center;
+                flex-wrap: wrap; animation: none !important; justify-content: center;
             }
+
+            /* ── Info rotator: reposition above tab bar ── */
+            #info-rotator { bottom: 108px; right: 8px; width: 148px; }
+
+            /* Scroll indicators for swipe-able shift rows */
+            .mob-shift-hint {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: var(--font-display);
+                font-size: 0.55rem; font-weight: 800;
+                color: var(--on-surface-variant);
+                opacity: 0.5;
+                letter-spacing: 0.8px;
+                text-transform: uppercase;
+                padding: 0 0 2px;
+            }
+            .mob-shift-hint .material-symbols-rounded { font-size: 14px !important; }
         }
 
         @media (max-width: 600px) {
-            .roster-grid { grid-template-columns: 1fr; gap: 8px; }
-            .top-controls { gap: 6px; }
-            .m3-card { padding: 12px; }
-            .staff-name { font-size: 1.0625rem; }
+            .app-bar {
+                padding: 7px 10px;
+                margin: 6px 6px 0 6px;
+            }
+            .logo-section img { height: 23px; }
+            .middle-module { height: 36px; gap: 6px; }
+            .clock-container { gap: 4px; }
+            .clock-unit { min-width: 36px; padding: 1px 5px; }
+            .clock-val { font-size: 0.95rem; }
+            .clock-label { font-size: 0.42rem; letter-spacing: 0.8px; }
+            .dashboard-content { padding: 6px 6px 120px 6px; gap: 6px; }
+            .card-header { font-size: 0.82rem; gap: 6px; }
+            .gen-name-tag { font-size: 0.7rem; padding: 3px 9px; }
+            .gen-label-pill { font-size: 0.58rem; padding: 2px 8px; }
+            .m3-shift-label { font-size: 0.9rem; }
+            .ticker-head { padding: 0 10px; font-size: 0.62rem; }
+            .ticker-scroll { font-size: 0.82rem; }
+            .ops-badge { font-size: 0.7rem; padding: 3px 9px; }
+            .chk-d-label { font-size: 0.65rem; }
+            .chk-d-status { font-size: 0.52rem; }
+            #info-rotator { bottom: 108px; right: 6px; width: 136px; }
+            .mob-shift-scroll-wrap .m3-shift-card { flex: 0 0 88vw; }
+        }
+
+        @media (max-width: 400px) {
+            .clock-unit { min-width: 30px; padding: 1px 4px; }
+            .clock-val { font-size: 0.85rem; }
+            #info-rotator { width: 126px; }
+            .mob-shift-scroll-wrap .m3-shift-card { flex: 0 0 92vw; }
+        }
+
+        /* ── Swipe dot indicators ── */
+        .mob-swipe-dots {
+            display: none;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 4px;
+        }
+        @media (max-width: 900px) {
+            .mob-swipe-dots { display: flex; }
+        }
+        .mob-swipe-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--outline); opacity: 0.35;
+            transition: all 0.3s ease;
+        }
+        .mob-swipe-dot.active {
+            background: var(--primary); opacity: 1;
+            transform: scale(1.3);
+        }
+
+        /* ── Maintenance mobile panel ── */
+        @media (max-width: 900px) {
+            .unified-unit { gap: 8px; }
+            .maint-list { max-height: none; }
         }
     </style>
 </head>
@@ -1501,19 +2042,44 @@
             <button class="icon-btn" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span></button>
             <button class="icon-btn btn-off" onclick="manualOff(event)"><span class="material-symbols-rounded">power_settings_new</span></button>
         </div>
+        <!-- Mobile hamburger (hidden on desktop via CSS) -->
+        <button class="mob-hamburger-btn" onclick="openMobDrawer(event)" aria-label="Menu">
+            <span class="material-symbols-rounded" style="font-size:22px!important">menu</span>
+        </button>
     </header>
 
     <main class="dashboard-content">
         <div class="left-column">
             <!-- TODAY DEPLOYMENT -->
             <div class="m3-card">
+                <!-- Desktop header (hidden on mobile via CSS) -->
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
                     <div class="general-info-pill" id="today-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div id="roster-today" class="roster-grid"></div>
+                <!-- Mobile collapsible header -->
+                <div class="mob-collapsible-header" id="today-coll-hdr" onclick="mobToggleCollapsible('today-coll-hdr','today-coll-body')">
+                    <div class="card-header" style="font-size:0.9rem;gap:6px;">
+                        <span class="material-symbols-rounded" style="font-size:20px!important;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">today</span>
+                        TODAY DEPLOYMENT
+                    </div>
+                    <span class="material-symbols-rounded mob-collapsible-chevron">expand_more</span>
+                </div>
+                <!-- Mobile general info pills (shown below header on mobile) -->
+                <div class="general-info-pill" id="today-gen-pills-mob" style="display:none;padding-bottom:8px;"></div>
+                <div class="mob-collapsible-body" id="today-coll-body">
+                    <!-- Desktop grid (hidden on mobile) -->
+                    <div id="roster-today" class="roster-grid"></div>
+                    <!-- Mobile horizontal swipe -->
+                    <div class="mob-shift-hint">
+                        <span class="material-symbols-rounded">swipe</span>
+                        Swipe to view shifts
+                    </div>
+                    <div id="mob-roster-today" class="mob-shift-scroll-wrap"></div>
+                    <div id="mob-today-dots" class="mob-swipe-dots"></div>
+                </div>
             </div>
             <!-- TOMORROW DEPLOYMENT -->
             <div class="m3-card">
@@ -1523,7 +2089,24 @@
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div id="roster-tomorrow" class="roster-grid"></div>
+                <!-- Mobile collapsible header -->
+                <div class="mob-collapsible-header collapsed" id="tomorrow-coll-hdr" onclick="mobToggleCollapsible('tomorrow-coll-hdr','tomorrow-coll-body')">
+                    <div class="card-header" style="font-size:0.9rem;gap:6px;">
+                        <span class="material-symbols-rounded" style="font-size:20px!important;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">event_upcoming</span>
+                        TOMORROW DEPLOYMENT
+                    </div>
+                    <span class="material-symbols-rounded mob-collapsible-chevron">expand_more</span>
+                </div>
+                <div class="general-info-pill" id="tomorrow-gen-pills-mob" style="display:none;padding-bottom:8px;"></div>
+                <div class="mob-collapsible-body collapsed" id="tomorrow-coll-body">
+                    <div id="roster-tomorrow" class="roster-grid"></div>
+                    <div class="mob-shift-hint">
+                        <span class="material-symbols-rounded">swipe</span>
+                        Swipe to view shifts
+                    </div>
+                    <div id="mob-roster-tomorrow" class="mob-shift-scroll-wrap"></div>
+                    <div id="mob-tomorrow-dots" class="mob-swipe-dots"></div>
+                </div>
             </div>
         </div>
 
@@ -1536,44 +2119,60 @@
                         <div id="box-depot" class="ops-badge">DEPOT: ---</div>
                     </div>
                 </div>
-                <div class="maint-divider"></div>
-                <!-- Dual Checklist Status: MTRS + TKRS -->
-                <div id="checklist-dual" class="checklist-dual-row">
-                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                <!-- Mobile collapsible header for maintenance -->
+                <div class="mob-collapsible-header" id="maint-coll-hdr" onclick="mobToggleCollapsible('maint-coll-hdr','maint-coll-body')" style="border-bottom:1px solid var(--surface-variant);margin-bottom:8px;">
+                    <div style="flex:1;">
+                        <div class="card-header" style="font-size:0.9rem;gap:6px;margin-bottom:4px;">
+                            <span class="material-symbols-rounded" style="font-size:20px!important;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">construction</span>
+                            MAINTENANCE
                         </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-label">MTRS Checklist</div>
-                            <div class="chk-d-status" id="chk-mtrs-status">Not Filled</div>
+                        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                            <div id="mob-box-mainline" class="ops-badge" style="font-size:0.65rem;padding:2px 9px;">MAINLINE: ---</div>
+                            <div id="mob-box-depot" class="ops-badge" style="font-size:0.65rem;padding:2px 9px;">DEPOT: ---</div>
                         </div>
-                        <div class="chk-d-pill" id="chk-mtrs-pill">—</div>
                     </div>
-                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-label">TKRS Checklist</div>
-                            <div class="chk-d-status" id="chk-tkrs-status">Not Filled</div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-tkrs-pill">—</div>
-                    </div>
+                    <span class="material-symbols-rounded mob-collapsible-chevron">expand_more</span>
                 </div>
-                <div id="maint-list" class="maint-list"></div>
-                <div class="maint-progress-footer">
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                <div class="mob-collapsible-body" id="maint-coll-body">
+                    <div class="maint-divider"></div>
+                    <!-- Dual Checklist Status: MTRS + TKRS -->
+                    <div id="checklist-dual" class="checklist-dual-row">
+                        <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
+                            <div class="chk-d-check-wrap">
+                                <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                            </div>
+                            <div class="chk-d-body">
+                                <div class="chk-d-label">MTRS Checklist</div>
+                                <div class="chk-d-status" id="chk-mtrs-status">Not Filled</div>
+                            </div>
+                            <div class="chk-d-pill" id="chk-mtrs-pill">—</div>
+                        </div>
+                        <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
+                            <div class="chk-d-check-wrap">
+                                <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
+                            </div>
+                            <div class="chk-d-body">
+                                <div class="chk-d-label">TKRS Checklist</div>
+                                <div class="chk-d-status" id="chk-tkrs-status">Not Filled</div>
+                            </div>
+                            <div class="chk-d-pill" id="chk-tkrs-pill">—</div>
+                        </div>
                     </div>
-                    <div class="maint-progress-meta">
-                        <span class="maint-progress-label">Maintenance Progress</span>
-                        <span id="maint-progress-value" class="maint-progress-value">—</span>
+                    <div id="maint-list" class="maint-list"></div>
+                    <div class="maint-progress-footer">
+                        <div class="maint-progress-popup">
+                            <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                            <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                        </div>
+                        <div class="maint-progress-meta">
+                            <span class="maint-progress-label">Maintenance Progress</span>
+                            <span id="maint-progress-value" class="maint-progress-value">—</span>
+                        </div>
+                        <div class="maint-progress-track">
+                            <div id="maint-progress-fill" class="maint-progress-fill"></div>
+                        </div>
+                        <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                     </div>
-                    <div class="maint-progress-track">
-                        <div id="maint-progress-fill" class="maint-progress-fill"></div>
-                    </div>
-                    <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                 </div>
             </div>
         </div>
@@ -1655,6 +2254,17 @@
         <span class="dock-toggle-label">CONSUMABLES</span>
     </button>
 
+    <!-- ── INFO ROTATOR WIDGET ── -->
+    <div id="info-rotator">
+        <div class="ir-slab" id="ir-slab">
+            <div class="ir-accent-bar"></div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-headline" id="ir-headline">—</div>
+            <div class="ir-label"   id="ir-label"></div>
+        </div>
+        <div class="ir-dots-row" id="ir-dots"></div>
+    </div>
+
     <footer class="ticker-bar">
         <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
         <div id="ticker-body" class="ticker-body">
@@ -1662,6 +2272,115 @@
         </div>
         <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
     </footer>
+
+    <!-- ── MOBILE DRAWER OVERLAY ── -->
+    <div class="mob-drawer-overlay" id="mob-drawer-overlay" onclick="closeMobDrawer()"></div>
+
+    <!-- ── MOBILE SIDE DRAWER ── -->
+    <div class="mob-drawer" id="mob-drawer">
+        <div class="mob-drawer-header">
+            <div class="mob-drawer-title">KMRL SUBSTATION</div>
+            <button class="mob-drawer-close" onclick="closeMobDrawer()">
+                <span class="material-symbols-rounded" style="font-size:20px!important">close</span>
+            </button>
+        </div>
+        <div class="mob-drawer-body">
+            <!-- Clock inside drawer -->
+            <div class="mob-drawer-clock">
+                <div class="clock-unit" style="flex:1;background:transparent;align-items:center;">
+                    <div id="mob-clk-h" class="clock-val">00</div>
+                    <div class="clock-label">HRS</div>
+                </div>
+                <div style="font-family:var(--font-display);font-weight:900;font-size:1.4rem;opacity:0.4;">:</div>
+                <div class="clock-unit" style="flex:1;background:transparent;align-items:center;">
+                    <div id="mob-clk-m" class="clock-val">00</div>
+                    <div class="clock-label">MIN</div>
+                </div>
+                <div style="font-family:var(--font-display);font-weight:900;font-size:1.4rem;opacity:0.4;">:</div>
+                <div class="clock-unit" style="flex:1;background:transparent;align-items:center;">
+                    <div id="mob-clk-s" class="clock-val">00</div>
+                    <div class="clock-label">SEC</div>
+                </div>
+            </div>
+
+            <div class="mob-drawer-section-title">Controls</div>
+            <button class="mob-drawer-item" onclick="toggleThemeMob(event)">
+                <span class="material-symbols-rounded" id="mob-theme-icon">dark_mode</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Toggle Theme</div>
+                    <div class="mob-drawer-item-sub" id="mob-theme-sub">Switch to light mode</div>
+                </div>
+            </button>
+            <button class="mob-drawer-item" onclick="toggleGridMob(event)">
+                <span class="material-symbols-rounded">monitoring</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Station Temps</div>
+                    <div class="mob-drawer-item-sub">Toggle temperature ticker</div>
+                </div>
+            </button>
+            <button class="mob-drawer-item" onclick="goFullscreen(event);closeMobDrawer()">
+                <span class="material-symbols-rounded">fullscreen</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Fullscreen</div>
+                    <div class="mob-drawer-item-sub">Enter or exit fullscreen</div>
+                </div>
+            </button>
+            <button class="mob-drawer-item" onclick="mobOpenConsumables(event)">
+                <span class="material-symbols-rounded">inventory_2</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Consumables</div>
+                    <div class="mob-drawer-item-sub">View stock levels</div>
+                </div>
+            </button>
+
+            <div class="mob-drawer-section-title">Notices</div>
+            <button class="mob-drawer-item" onclick="mobOpenNoticeSheet(event)">
+                <span class="material-symbols-rounded">campaign</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Important Notice</div>
+                    <div class="mob-drawer-item-sub">Read full notice</div>
+                </div>
+            </button>
+
+            <div class="mob-drawer-divider"></div>
+            <button class="mob-drawer-item danger" onclick="manualOffMob(event)">
+                <span class="material-symbols-rounded">power_settings_new</span>
+                <div class="mob-drawer-item-text">
+                    <div class="mob-drawer-item-label">Screen Off</div>
+                    <div class="mob-drawer-item-sub">Tap anywhere to wake</div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ── MOBILE BOTTOM TAB BAR ── -->
+    <nav class="mob-tab-bar">
+        <div class="mob-tab-bar-inner">
+            <button class="mob-tab-item active" id="mob-tab-today" onclick="mobSwitchTab('today',event)">
+                <span class="material-symbols-rounded">today</span>
+                <span class="mob-tab-label">Today</span>
+            </button>
+            <button class="mob-tab-item" id="mob-tab-tomorrow" onclick="mobSwitchTab('tomorrow',event)">
+                <span class="material-symbols-rounded">event_upcoming</span>
+                <span class="mob-tab-label">Tomorrow</span>
+            </button>
+            <button class="mob-tab-item" id="mob-tab-maint" onclick="mobSwitchTab('maint',event)">
+                <span class="material-symbols-rounded">construction</span>
+                <span class="mob-tab-label">Maintenance</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ── MOBILE NOTICE BOTTOM SHEET ── -->
+    <div class="mob-notice-overlay" id="mob-notice-overlay" onclick="closeMobNoticeSheet()"></div>
+    <div class="mob-notice-sheet" id="mob-notice-sheet">
+        <div class="mob-notice-handle"></div>
+        <div class="mob-notice-sheet-header">
+            <span class="material-symbols-rounded" style="font-size:18px!important;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 24">campaign</span>
+            IMPORTANT NOTICE
+        </div>
+        <div class="mob-notice-sheet-body" id="mob-notice-sheet-body">Loading...</div>
+    </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
@@ -1690,11 +2409,14 @@
                 const btn  = document.getElementById('dock-toggle-btn');
                 if (dock) dock.classList.remove('dock-expanded');
                 if (btn)  btn.classList.remove('active');
+                closeMobDrawer();
+                closeMobNoticeSheet();
             }
         }
         // ── Driver pill: alternate name ↔ number every 10s ──
         let _driverPillTimer = null;
         let _driverShowingNum = false;
+        let _mobNoticeText = '';
         function startDriverPillCycle() {
             if (_driverPillTimer) clearInterval(_driverPillTimer);
             _driverPillTimer = setInterval(() => {
@@ -1981,6 +2703,10 @@
             text.innerText = names;
             const popup = document.getElementById('ticker-popup');
             if (popup) popup.innerText = rawText !== null ? rawText : names;
+            // Store for mobile notice sheet
+            _mobNoticeText = rawText !== null ? rawText : names;
+            const mobNoticeBody = document.getElementById('mob-notice-sheet-body');
+            if (mobNoticeBody) mobNoticeBody.innerText = _mobNoticeText || '—';
             requestAnimationFrame(() => {
                 const tw = text.scrollWidth, cw = body.offsetWidth;
                 if (tw > cw - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; }
@@ -1998,8 +2724,11 @@
             };
 
             let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
+            let irWeather = '', irItems = '', irImages = '';
             // Dock items: keyed by row number
             const dockRows = {};
+            // Info rotator C36/C37: collect by row, starting from row 2
+            const irRowItems = {}, irRowImages = {};
 
             data.forEach(item => {
                 const unit  = (item.Unit      || '').trim(),
@@ -2041,6 +2770,21 @@
                 if (param === 'ChecklistStatus') chkStatus = val;
                 if (param === 'sheetab_R2C33') mtrsStatus = val;
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
+                if (param === 'sheetab_R2C35') irWeather  = val;
+                if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
+                if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
+
+                // Collect additional rows C36 and C37 (r3, r4, r5...)
+                const c36Match = param.match(/^sheetab_R(\d+)C36$/);
+                if (c36Match && unit === 'sheetab') {
+                    const row = parseInt(c36Match[1], 10);
+                    if (row >= 3) irRowItems[row] = val;
+                }
+                const c37Match = param.match(/^sheetab_R(\d+)C37$/);
+                if (c37Match && unit === 'sheetab') {
+                    const row = parseInt(c37Match[1], 10);
+                    if (row >= 3) irRowImages[row] = val;
+                }
                 if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
 
                 if (unit === 'StationTemp') {
@@ -2059,8 +2803,10 @@
                     const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
                     const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
                     mEl.innerText = `MAINLINE: ${m}`; dEl.innerText = `DEPOT: ${d}`;
-                    mEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    dEl.className = `ops-badge ${val.includes('ENERGISED') ? 'alert' : 'ok'}`;
+                    const mEnergised = m.toUpperCase().includes('ENERGISED');
+                    const dEnergised = d.toUpperCase().includes('ENERGISED');
+                    mEl.className = `ops-badge ${mEnergised ? 'alert' : 'ok'}`;
+                    dEl.className = `ops-badge ${dEnergised ? 'alert' : 'ok'}`;
                 }
 
                 if (unit === 'OpsSchedule') {
@@ -2169,6 +2915,11 @@
             const tomorrowPills = document.getElementById('tomorrow-gen-pills');
             todayPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
             tomorrowPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
+            // Mobile pills mirrors
+            const todayPillsMob = document.getElementById('today-gen-pills-mob');
+            const tomorrowPillsMob = document.getElementById('tomorrow-gen-pills-mob');
+            if (todayPillsMob) todayPillsMob.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
+            if (tomorrowPillsMob) tomorrowPillsMob.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
 
             // Build shift cards with correct time logic
             tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn,  staff.today.techMorn);
@@ -2179,11 +2930,34 @@
             tmHtml += buildShift('EVENING', staff.tomorrow.eve,  false, staff.tomorrow.tpcEve,   staff.tomorrow.techEve);
             tmHtml += buildShift('NIGHT',   staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
 
-            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
-            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+            if (tdHtml) {
+                document.getElementById('roster-today').innerHTML = tdHtml;
+                // Mirror to mobile scroll
+                const mobToday = document.getElementById('mob-roster-today');
+                if (mobToday) { mobToday.innerHTML = tdHtml; buildSwipeDots(3, 'mob-today-dots', 'mob-roster-today'); }
+                // Show mobile pills on mobile
+                if (todayPillsMob) todayPillsMob.style.display = window.innerWidth <= 900 ? 'flex' : 'none';
+            }
+            if (tmHtml) {
+                document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+                const mobTomorrow = document.getElementById('mob-roster-tomorrow');
+                if (mobTomorrow) { mobTomorrow.innerHTML = tmHtml; buildSwipeDots(3, 'mob-tomorrow-dots', 'mob-roster-tomorrow'); }
+                if (tomorrowPillsMob) tomorrowPillsMob.style.display = window.innerWidth <= 900 ? 'flex' : 'none';
+            }
+
+            // Mirror ops badges to mobile
+            const mobMainline = document.getElementById('mob-box-mainline');
+            const mobDepot    = document.getElementById('mob-box-depot');
+            const mEl2 = document.getElementById('box-mainline');
+            const dEl2 = document.getElementById('box-depot');
+            if (mobMainline && mEl2) { mobMainline.innerText = mEl2.innerText; mobMainline.className = mEl2.className; mobMainline.style.cssText = 'font-size:0.65rem;padding:2px 9px;'; }
+            if (mobDepot    && dEl2) { mobDepot.innerText    = dEl2.innerText;    mobDepot.className    = dEl2.className;    mobDepot.style.cssText    = 'font-size:0.65rem;padding:2px 9px;'; }
 
             // ── Build App Dock ──
             buildAppDock(dockRows);
+
+            // ── Info Rotator ──
+            initInfoRotator(irWeather, irRowItems, irRowImages);
         };
 
         function buildAppDock(dockRows) {
@@ -2288,9 +3062,19 @@
 
         function updateClocks() {
             const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
-            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
-            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
-            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            const hh = String(h).padStart(2, '0');
+            const mm = String(m).padStart(2, '0');
+            const ss = String(s).padStart(2, '0');
+            document.getElementById('clk-h').innerText = hh;
+            document.getElementById('clk-m').innerText = mm;
+            document.getElementById('clk-s').innerText = ss;
+            // Mobile drawer clock
+            const mh = document.getElementById('mob-clk-h');
+            const mm2 = document.getElementById('mob-clk-m');
+            const ms = document.getElementById('mob-clk-s');
+            if (mh) mh.innerText = hh;
+            if (mm2) mm2.innerText = mm;
+            if (ms) ms.innerText = ss;
             document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
             document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
             document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
@@ -2313,7 +3097,358 @@
             const text = document.getElementById('ticker-text'),
                   popup = document.getElementById('ticker-popup');
             updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null);
+            // On resize to mobile, restore correct tab layout
+            if (window.innerWidth <= 900) {
+                mobSwitchTab(_mobActiveTab || 'today', null);
+                // Show mobile pills if data is loaded
+                const tp = document.getElementById('today-gen-pills-mob');
+                const tpp = document.getElementById('tomorrow-gen-pills-mob');
+                if (tp)  tp.style.display  = 'flex';
+                if (tpp) tpp.style.display = 'flex';
+            } else {
+                // Restore desktop layout
+                document.querySelector('.left-column').style.display  = '';
+                document.querySelector('.right-column').style.display = '';
+                const tp = document.getElementById('today-gen-pills-mob');
+                const tpp = document.getElementById('tomorrow-gen-pills-mob');
+                if (tp)  tp.style.display  = 'none';
+                if (tpp) tpp.style.display = 'none';
+            }
         };
+
+        // ── Mobile: tap ticker bar to open notice sheet ──
+        document.addEventListener('DOMContentLoaded', () => {
+            const ticker = document.querySelector('.ticker-bar');
+            if (ticker) {
+                ticker.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 900) {
+                        e.stopPropagation();
+                        mobOpenNoticeSheet(null);
+                    }
+                });
+            }
+        });
+        // ── INFO ROTATOR ENGINE — glass slab flip ──
+        let _irTimer = null, _irIdx = 0, _irSlides = [];
+        const IR_INTERVAL = 5000;
+        const IR_FLIP_DUR = 360; // ms — must match CSS animation duration
+
+        const WEATHER_ICONS = {
+            'rain': 'rainy', 'drizzle': 'rainy', 'shower': 'rainy',
+            'thunder': 'thunderstorm', 'lightning': 'thunderstorm', 'storm': 'thunderstorm',
+            'cloud': 'partly_cloudy_day', 'overcast': 'cloud', 'cloudy': 'partly_cloudy_day',
+            'sun': 'sunny', 'clear': 'sunny', 'fair': 'sunny', 'bright': 'sunny',
+            'fog': 'foggy', 'mist': 'foggy', 'haze': 'foggy', 'smoke': 'foggy',
+            'snow': 'ac_unit', 'hail': 'hail', 'sleet': 'weather_mix',
+            'wind': 'air', 'breezy': 'air', 'gust': 'air',
+            'hot': 'thermostat', 'humid': 'humidity_mid', 'dry': 'wb_sunny',
+        };
+
+        function _weatherIcon(text) {
+            if (!text) return 'wb_cloudy';
+            const t = text.toLowerCase();
+            for (const [kw, icon] of Object.entries(WEATHER_ICONS)) {
+                if (t.includes(kw)) return icon;
+            }
+            return 'wb_cloudy';
+        }
+
+        // Each slide is a plain data object: { iconType, icon, headline, label }
+        // iconType: 'material' | 'img' | 'none'
+        function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
+            if (_irTimer) clearTimeout(_irTimer);
+            _irSlides = [];
+
+            // ── Slide 1: Day of week (always shown) ──
+            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            _irSlides.push({
+                iconType: 'material',
+                icon: 'calendar_today',
+                headline: DAYS[new Date().getDay()],
+                label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+            });
+
+            // ── Slides 2-N: Custom items from C36 rows (r2, r3, r4...) ──
+            // irRowItems and irRowImages are objects keyed by row number
+            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
+
+            rowNums.forEach(rowNum => {
+                const rawItem = (irRowItems[rowNum] || '').trim();
+                const rawImg  = ((irRowImages || {})[rowNum] || '').trim();
+                if (!rawItem) return;
+
+                // Each cell may contain multiple lines — each line = one slide
+                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== '');
+                const imageLines = rawImg.split('\n').map(l => l.trim());
+
+                itemLines.forEach((line, i) => {
+                    const imgUrl = imageLines[i] || '';
+                    const hasImg = imgUrl.startsWith('http');
+                    let text = line;
+                    if (line.includes('|')) {
+                        const p = line.split('|');
+                        text = (p[1] || p[0]).trim();
+                    }
+                    _irSlides.push({
+                        iconType: hasImg ? 'img' : 'none',
+                        icon: hasImg ? imgUrl : '',
+                        headline: text,
+                        label: '',
+                    });
+                });
+            });
+
+            document.getElementById('info-rotator').style.display = '';
+            _irIdx = 0;
+            _renderIRSlide(false);
+        }
+
+        function _renderIRSlide(withFlip) {
+            const slab     = document.getElementById('ir-slab');
+            const iconWrap = document.getElementById('ir-icon-wrap');
+            const headline = document.getElementById('ir-headline');
+            const label    = document.getElementById('ir-label');
+            const dotsEl   = document.getElementById('ir-dots');
+            if (!slab) return;
+
+            function _applySlide() {
+                const s = _irSlides[_irIdx];
+                const hasIcon = s.iconType === 'img' || s.iconType === 'material';
+
+                // Icon
+                if (s.iconType === 'img') {
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt=""
+                        onerror="this.parentElement.style.display='none';document.getElementById('ir-headline').classList.add('ir-headline-full');">`;
+                } else if (s.iconType === 'material') {
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:36px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`;
+                } else {
+                    // no icon — hide wrap, give full space to text
+                    iconWrap.style.display = 'none';
+                    iconWrap.innerHTML = '';
+                }
+
+                // Headline — class and font-size based on icon presence & text length
+                headline.textContent = s.headline;
+                headline.classList.remove('ir-headline-full');
+                if (!hasIcon || s.iconType === 'none') {
+                    headline.classList.add('ir-headline-full');
+                }
+                // Dynamic font size based on text length
+                const len = s.headline.length;
+                let fs;
+                if (!hasIcon || s.iconType === 'none') {
+                    // no icon: more room, can go bigger
+                    fs = len <= 10 ? '1.5rem' : len <= 20 ? '1.2rem' : len <= 40 ? '0.98rem' : '0.82rem';
+                } else {
+                    // with icon: less vertical room
+                    fs = len <= 10 ? '1.25rem' : len <= 20 ? '1.05rem' : len <= 40 ? '0.88rem' : '0.74rem';
+                }
+                headline.style.fontSize = fs;
+
+                // Label
+                label.textContent = s.label;
+                label.style.display = s.label ? '' : 'none';
+
+                // Dots
+                dotsEl.innerHTML = _irSlides.map((_, i) =>
+                    `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`
+                ).join('');
+            }
+
+            if (!withFlip) {
+                _applySlide();
+                _scheduleNext();
+                return;
+            }
+
+            // FLIP OUT
+            slab.classList.remove('flipping-in');
+            slab.classList.add('flipping-out');
+
+            setTimeout(() => {
+                // Swap content mid-flip (slab is hidden at 90°)
+                _applySlide();
+
+                // FLIP IN
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+
+                // Clean up after flip-in completes
+                setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleNext();
+                }, IR_FLIP_DUR);
+
+            }, IR_FLIP_DUR);
+        }
+
+        function _scheduleNext() {
+            if (_irTimer) clearTimeout(_irTimer);
+            if (_irSlides.length <= 1) return; // nothing to rotate
+            _irTimer = setTimeout(() => {
+                _irIdx = (_irIdx + 1) % _irSlides.length;
+                _renderIRSlide(true);
+            }, IR_INTERVAL);
+        }
+
+        // ════════════════════════════════════════════════════
+        //  MOBILE-ONLY JS
+        // ════════════════════════════════════════════════════
+
+        // ── Mobile Drawer ──
+        function openMobDrawer(e) {
+            if (e) e.stopPropagation();
+            const overlay = document.getElementById('mob-drawer-overlay');
+            const drawer  = document.getElementById('mob-drawer');
+            overlay.style.opacity = '1'; overlay.style.pointerEvents = 'auto';
+            drawer.style.transform = 'translateX(0)';
+            const cur = document.documentElement.getAttribute('data-theme');
+            const icon = document.getElementById('mob-theme-icon');
+            const sub  = document.getElementById('mob-theme-sub');
+            if (icon) icon.innerText = cur === 'dark' ? 'light_mode' : 'dark_mode';
+            if (sub)  sub.innerText  = cur === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        }
+        function closeMobDrawer() {
+            const overlay = document.getElementById('mob-drawer-overlay');
+            const drawer  = document.getElementById('mob-drawer');
+            if (overlay) { overlay.style.opacity = '0'; overlay.style.pointerEvents = 'none'; }
+            if (drawer)  drawer.style.transform = 'translateX(100%)';
+        }
+        function toggleThemeMob(e) {
+            if (e) e.stopPropagation();
+            toggleTheme(null);
+            const cur = document.documentElement.getAttribute('data-theme');
+            const icon = document.getElementById('mob-theme-icon');
+            const sub  = document.getElementById('mob-theme-sub');
+            if (icon) icon.innerText = cur === 'dark' ? 'light_mode' : 'dark_mode';
+            if (sub)  sub.innerText  = cur === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+        }
+        function toggleGridMob(e) { if (e) e.stopPropagation(); toggleGrid(null); closeMobDrawer(); }
+        function manualOffMob(e) { if (e) e.stopPropagation(); closeMobDrawer(); setTimeout(() => manualOff(null), 300); }
+        function mobOpenConsumables(e) {
+            if (e) e.stopPropagation();
+            closeMobDrawer();
+            const dock = document.getElementById('app-dock');
+            if (dock && !dock.classList.contains('dock-expanded')) dock.classList.add('dock-expanded');
+        }
+
+        // ── Mobile Collapsible ──
+        function mobToggleCollapsible(headerId, bodyId) {
+            if (window.innerWidth > 900) return;
+            const hdr  = document.getElementById(headerId);
+            const body = document.getElementById(bodyId);
+            if (!hdr || !body) return;
+            const isCollapsed = hdr.classList.contains('collapsed');
+            hdr.classList.toggle('collapsed', !isCollapsed);
+            body.classList.toggle('collapsed', !isCollapsed);
+        }
+
+        // ── Mobile Tab Switching ──
+        let _mobActiveTab = 'today';
+        function mobSwitchTab(tab, e) {
+            if (e) e.stopPropagation();
+            if (window.innerWidth > 900) return;
+            _mobActiveTab = tab;
+            ['today','tomorrow','maint'].forEach(t => {
+                const btn = document.getElementById('mob-tab-' + t);
+                if (btn) btn.classList.toggle('active', t === tab);
+            });
+            const leftCol  = document.querySelector('.left-column');
+            const rightCol = document.querySelector('.right-column');
+            if (tab === 'today') {
+                if (leftCol)  leftCol.style.display  = 'flex';
+                if (rightCol) rightCol.style.display = 'none';
+                const hdr = document.getElementById('today-coll-hdr');
+                const bdy = document.getElementById('today-coll-body');
+                const hdr2 = document.getElementById('tomorrow-coll-hdr');
+                const bdy2 = document.getElementById('tomorrow-coll-body');
+                if (hdr && bdy)   { hdr.classList.remove('collapsed');  bdy.classList.remove('collapsed'); }
+                if (hdr2 && bdy2) { hdr2.classList.add('collapsed');   bdy2.classList.add('collapsed'); }
+            } else if (tab === 'tomorrow') {
+                if (leftCol)  leftCol.style.display  = 'flex';
+                if (rightCol) rightCol.style.display = 'none';
+                const hdr2 = document.getElementById('tomorrow-coll-hdr');
+                const bdy2 = document.getElementById('tomorrow-coll-body');
+                const hdr = document.getElementById('today-coll-hdr');
+                const bdy = document.getElementById('today-coll-body');
+                if (hdr2 && bdy2) { hdr2.classList.remove('collapsed'); bdy2.classList.remove('collapsed'); }
+                if (hdr && bdy)   { hdr.classList.add('collapsed');    bdy.classList.add('collapsed'); }
+            } else if (tab === 'maint') {
+                if (leftCol)  leftCol.style.display  = 'none';
+                if (rightCol) rightCol.style.display = 'flex';
+                const hdr = document.getElementById('maint-coll-hdr');
+                const bdy = document.getElementById('maint-coll-body');
+                if (hdr && bdy) { hdr.classList.remove('collapsed'); bdy.classList.remove('collapsed'); }
+            }
+        }
+        function initMobTabLayout() {
+            if (window.innerWidth > 900) return;
+            mobSwitchTab('today', null);
+        }
+        initMobTabLayout();
+
+        // ── Mobile Notice Sheet ──
+        function mobOpenNoticeSheet(e) {
+            if (e) e.stopPropagation();
+            closeMobDrawer();
+            const sheet   = document.getElementById('mob-notice-sheet');
+            const overlay = document.getElementById('mob-notice-overlay');
+            const body    = document.getElementById('mob-notice-sheet-body');
+            if (body && _mobNoticeText) body.innerText = _mobNoticeText;
+            if (overlay) { overlay.style.pointerEvents = 'auto'; overlay.style.background = 'rgba(0,0,0,0.4)'; }
+            if (sheet)   sheet.classList.add('open');
+        }
+        function closeMobNoticeSheet() {
+            const sheet   = document.getElementById('mob-notice-sheet');
+            const overlay = document.getElementById('mob-notice-overlay');
+            if (overlay) { overlay.style.pointerEvents = 'none'; overlay.style.background = 'transparent'; }
+            if (sheet)   sheet.classList.remove('open');
+        }
+
+        // ── Swipe dot indicators ──
+        function buildSwipeDots(count, dotContainerId, scrollWrapId) {
+            if (count <= 1) return;
+            const dotsEl = document.getElementById(dotContainerId);
+            if (!dotsEl) return;
+            dotsEl.innerHTML = Array.from({length: count}, (_, i) =>
+                `<div class="mob-swipe-dot ${i === 0 ? 'active' : ''}"></div>`
+            ).join('');
+            const wrap = document.getElementById(scrollWrapId);
+            if (!wrap) return;
+            wrap.addEventListener('scroll', () => {
+                const cards = wrap.querySelectorAll('.m3-shift-card');
+                if (!cards.length) return;
+                const cardWidth = cards[0].offsetWidth + 10;
+                const idx = Math.min(Math.round(wrap.scrollLeft / cardWidth), count - 1);
+                const dots = dotsEl.querySelectorAll('.mob-swipe-dot');
+                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+            }, {passive: true});
+        }
+
+        // ── Mobile: tap ticker bar to open notice sheet ──
+        document.addEventListener('DOMContentLoaded', () => {
+            const ticker = document.querySelector('.ticker-bar');
+            if (ticker) {
+                ticker.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 900) { e.stopPropagation(); mobOpenNoticeSheet(null); }
+                });
+            }
+        });
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 900) {
+                mobSwitchTab(_mobActiveTab || 'today', null);
+            } else {
+                const lc = document.querySelector('.left-column');
+                const rc = document.querySelector('.right-column');
+                if (lc) lc.style.display = '';
+                if (rc) rc.style.display = '';
+            }
+        });
+
     </script>
 </body>
 </html>
