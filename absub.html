@@ -142,56 +142,55 @@
         .clock-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
         .clock-label { font-size: 0.55rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1.2px; }
 
-        /* ── FAILURES DISPLAY (next to clock, clock-unit style) ── */
+        /* ── FAILURES DISPLAY — pie ring is the pill outline ── */
         .failures-pill {
-            display: flex; align-items: center; gap: 6px;
-            background: var(--surface-variant);
-            border-radius: var(--radius-m);
-            padding: 3px 10px;
-            cursor: default;
-            flex-shrink: 0;
-            transition: background 0.4s ease, border-color 0.4s ease;
-            border: 2px solid transparent;
-        }
-        .failures-pill.has-open {
-            background: rgba(186,26,26,0.22);
-            border-color: rgba(255,100,80,0.45);
-        }
-        /* Donut chart */
-        .failures-donut {
-            flex-shrink: 0;
+            position: relative;
             display: flex; align-items: center; justify-content: center;
+            cursor: default; flex-shrink: 0;
+            /* size matches clock-unit height */
+            width: 58px; height: 58px;
+            transition: filter 0.4s ease;
         }
-        .failures-donut svg { display: block; }
-        .failures-donut .fd-track { fill: none; stroke: rgba(255,255,255,0.10); stroke-width: 3.5; }
-        [data-theme="light"] .failures-donut .fd-track { stroke: rgba(0,0,0,0.10); }
-        .failures-donut .fd-closed { fill: none; stroke: var(--success); stroke-width: 3.5; stroke-linecap: round;
-            transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1); transform-origin: center; transform: rotate(-90deg); }
-        .failures-donut .fd-open   { fill: none; stroke: var(--error);   stroke-width: 3.5; stroke-linecap: round;
-            transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1); transform-origin: center; transform: rotate(-90deg); }
-        /* Numbers block */
-        .failures-nums {
-            display: flex; flex-direction: column; align-items: center;
+        /* The SVG ring sits as the full pill border */
+        .failures-ring-svg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: visible;
         }
+        .fd-track  { fill: none; stroke: var(--surface-dim); stroke-width: 5; }
+        .fd-closed { fill: none; stroke: var(--success); stroke-width: 5; stroke-linecap: butt;
+            transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1); }
+        .fd-open   { fill: none; stroke: var(--error);   stroke-width: 5; stroke-linecap: butt;
+            transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1); }
+        /* Inner content */
+        .failures-inner {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: var(--surface-variant);
+            border-radius: 50%;
+            width: 44px; height: 44px;
+        }
+        .failures-pill.has-open .failures-inner { background: rgba(186,26,26,0.20); }
         .failures-counts {
-            display: flex; align-items: baseline; gap: 2px;
+            display: flex; align-items: baseline; gap: 1px;
             font-family: var(--font-display); font-weight: 900;
-            font-size: 1.4rem; line-height: 1.1;
+            font-size: 1rem; line-height: 1;
         }
         .failures-count-open   { color: var(--error); }
-        .failures-count-sep    { color: var(--on-surface-variant); font-size: 1rem; opacity: 0.5; }
+        .failures-count-sep    { color: var(--on-surface-variant); font-size: 0.7rem; opacity: 0.5; }
         .failures-count-closed { color: var(--success); }
         .failures-pill-label {
-            font-size: 0.55rem; font-weight: 700;
-            color: var(--on-surface-variant); letter-spacing: 1.2px;
-            white-space: nowrap;
+            font-size: 0.42rem; font-weight: 700;
+            color: var(--on-surface-variant); letter-spacing: 0.8px;
+            white-space: nowrap; text-transform: uppercase;
+            line-height: 1;
         }
         /* Attention animation on change */
         @keyframes fail-burst {
-            0%   { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0.6); }
-            30%  { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(255,100,80,0.4); }
-            60%  { transform: scale(0.97); box-shadow: 0 0 0 4px rgba(255,100,80,0.2); }
-            100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0); }
+            0%   { filter: drop-shadow(0 0 0px   rgba(255,100,80,0)); }
+            30%  { filter: drop-shadow(0 0 8px   rgba(255,100,80,0.7)); }
+            60%  { filter: drop-shadow(0 0 4px   rgba(255,100,80,0.4)); }
+            100% { filter: drop-shadow(0 0 0px   rgba(255,100,80,0)); }
         }
         .failures-pill.burst { animation: fail-burst 0.7s ease forwards; }
 
@@ -1941,9 +1940,10 @@
             .general-info-pill { justify-content: flex-start; }
             .card-header { font-size: 0.88rem; }
             .m3-card { padding: 12px; }
-            .failures-pill { padding: 3px 8px; }
-            .failures-counts { font-size: 1.2rem; }
-            .failures-pill-label { font-size: 0.5rem; }
+            .failures-pill { width: 50px; height: 50px; }
+            .failures-inner { width: 38px; height: 38px; }
+            .failures-counts { font-size: 0.88rem; }
+            .failures-pill-label { font-size: 0.38rem; }
             .hamburger-menu { right: 0; }
 
             /* Dock on mobile: collapsed by default */
@@ -2010,9 +2010,10 @@
             .ops-rot-pill, .cons-pill { padding: 2px 7px 2px 5px; }
             .ops-rot-label, .ops-rot-status,
             .cons-pill-row .cons-row-name { font-size: 0.6rem; }
-            .failures-pill { padding: 2px 6px; }
-            .failures-counts { font-size: 1rem; }
-            .failures-pill-label { font-size: 0.48rem; }
+            .failures-pill { width: 44px; height: 44px; }
+            .failures-inner { width: 33px; height: 33px; }
+            .failures-counts { font-size: 0.78rem; }
+            .failures-pill-label { font-size: 0.35rem; }
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
 
@@ -2051,24 +2052,27 @@
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
-            <!-- Failures display — clock-unit style with donut chart -->
+            <!-- Failures display — pie ring outline, numbers + label inside -->
             <div id="failures-pill" class="failures-pill" title="Open/Closed Failures">
-                <div class="failures-donut">
-                    <svg id="failures-donut-svg" width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                        <circle class="fd-track" cx="16" cy="16" r="11"/>
-                        <circle class="fd-closed" id="fd-closed-arc" cx="16" cy="16" r="11"
-                            stroke-dasharray="69.12" stroke-dashoffset="69.12"/>
-                        <circle class="fd-open" id="fd-open-arc" cx="16" cy="16" r="11"
-                            stroke-dasharray="69.12" stroke-dashoffset="69.12"/>
-                    </svg>
-                </div>
-                <div class="failures-nums">
+                <!-- SVG ring is the pill border; r=26 so circumference=163.36 -->
+                <svg class="failures-ring-svg" viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="fd-track"  cx="29" cy="29" r="26"/>
+                    <!-- closed arc (green): starts at top -->
+                    <circle class="fd-closed" id="fd-closed-arc" cx="29" cy="29" r="26"
+                        stroke-dasharray="163.36" stroke-dashoffset="163.36"
+                        transform="rotate(-90 29 29)"/>
+                    <!-- open arc (red): follows closed arc -->
+                    <circle class="fd-open"   id="fd-open-arc"   cx="29" cy="29" r="26"
+                        stroke-dasharray="163.36" stroke-dashoffset="163.36"
+                        transform="rotate(-90 29 29)"/>
+                </svg>
+                <div class="failures-inner">
                     <div class="failures-counts">
-                        <span class="failures-count-open"  id="failures-open-num">0</span>
+                        <span class="failures-count-open"   id="failures-open-num">0</span>
                         <span class="failures-count-sep">/</span>
                         <span class="failures-count-closed" id="failures-closed-num">0</span>
                     </div>
-                    <div class="failures-pill-label">OPEN / CLOSED</div>
+                    <div class="failures-pill-label">FAILURES</div>
                 </div>
             </div>
         </div>
@@ -2400,7 +2404,7 @@
             const openArc    = document.getElementById('fd-open-arc');
             if (!pill || !openNum || !closedNum) return;
 
-            const CIRC = 69.12; // 2π × r=11
+            const CIRC = 163.36; // 2π × r=26
 
             if (!raw || raw.trim() === '' || raw.trim() === '---') {
                 openNum.textContent   = '0';
@@ -2421,19 +2425,19 @@
             closedNum.textContent = closedCount;
             pill.classList.toggle('has-open', hasOpen);
 
-            // Donut arcs: closed (green) starts at top (-90°), open (red) follows
             if (total > 0 && closedArc && openArc) {
-                const closedFrac = closedCount / total;
-                const openFrac   = openCount   / total;
-                const closedDash = closedFrac * CIRC;
-                const openDash   = openFrac   * CIRC;
-                // closed arc: starts at 0° (top, -90deg via CSS transform)
-                closedArc.style.strokeDasharray  = CIRC;
+                const closedDash = (closedCount / total) * CIRC;
+                const openDash   = (openCount   / total) * CIRC;
+
+                // Closed arc: green, starts at top (SVG transform already -90°)
+                closedArc.setAttribute('stroke-dasharray', CIRC);
                 closedArc.style.strokeDashoffset = CIRC - closedDash;
-                // open arc: starts where closed ends — offset by closed segment
-                const openStartOffset = CIRC - closedDash;
-                openArc.style.strokeDasharray  = `${openDash} ${CIRC - openDash}`;
-                openArc.style.strokeDashoffset = openStartOffset;
+
+                // Open arc: red, starts where closed ends — rotate by closed degrees
+                const closedDeg = (closedCount / total) * 360;
+                openArc.setAttribute('transform', `rotate(${-90 + closedDeg} 29 29)`);
+                openArc.setAttribute('stroke-dasharray', CIRC);
+                openArc.style.strokeDashoffset = CIRC - openDash;
             } else if (closedArc && openArc) {
                 closedArc.style.strokeDashoffset = CIRC;
                 openArc.style.strokeDashoffset   = CIRC;
