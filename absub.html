@@ -115,10 +115,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin: 0 20px;
+            gap: 8px;
+            margin: 0 16px;
             height: 44px;
-            overflow: hidden;
+            overflow: visible;
         }
         .checklist-container {
             flex: 1; min-width: 0; height: 100%;
@@ -141,7 +141,64 @@
         }
         .clock-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
         .clock-label { font-size: 0.55rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1.2px; }
-        .top-controls { display: flex; gap: 8px; }
+
+        /* ── FAILURES PILL (next to clock) ── */
+        .failures-pill {
+            display: flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: var(--radius-full);
+            padding: 3px 10px 3px 7px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            cursor: default;
+            flex-shrink: 0;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        [data-theme="light"] .failures-pill {
+            background: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.7);
+        }
+        .failures-pill.has-open {
+            background: rgba(186,26,26,0.18);
+            border-color: rgba(255,100,80,0.5);
+        }
+        .failures-pill-icon {
+            font-size: 13px !important;
+            color: var(--on-surface-variant);
+            flex-shrink: 0;
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+        }
+        .failures-pill.has-open .failures-pill-icon { color: var(--error); }
+        .failures-pill-text {
+            overflow: hidden; height: 1rem;
+            display: flex; flex-direction: column;
+            position: relative; min-width: 0;
+        }
+        .failures-pill-slide {
+            display: flex; flex-direction: column;
+            transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .failures-pill-slide.show-detail { transform: translateY(-50%); }
+        .failures-pill-label, .failures-pill-detail {
+            font-family: var(--font-display); font-weight: 900;
+            font-size: 0.68rem; white-space: nowrap;
+            line-height: 1rem; letter-spacing: 0.4px;
+            color: var(--on-surface);
+        }
+        .failures-pill.has-open .failures-pill-label,
+        .failures-pill.has-open .failures-pill-detail { color: var(--error); }
+        /* Attention animation on change */
+        @keyframes fail-burst {
+            0%   { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0.6); }
+            30%  { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(255,100,80,0.4); }
+            60%  { transform: scale(0.97); box-shadow: 0 0 0 4px rgba(255,100,80,0.2); }
+            100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0); }
+        }
+        .failures-pill.burst { animation: fail-burst 0.7s ease forwards; }
+
+        /* ── HAMBURGER / TOP CONTROLS ── */
+        .top-controls { display: flex; gap: 8px; position: relative; }
         .icon-btn {
             background: var(--surface-variant); color: var(--on-surface);
             border: none; width: 40px; height: 40px;
@@ -152,6 +209,54 @@
         .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
         .btn-grid-active { background: var(--primary); color: var(--surface); }
         .btn-off { background: var(--error-container); color: var(--on-error-container); }
+        /* Hamburger menu panel */
+        .hamburger-menu {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background: rgba(22,28,37,0.9);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: var(--radius-l);
+            backdrop-filter: blur(32px) saturate(2);
+            -webkit-backdrop-filter: blur(32px) saturate(2);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3),
+                        inset 0 1px 0 rgba(255,255,255,0.18);
+            padding: 8px;
+            display: flex; flex-direction: column; gap: 4px;
+            min-width: 180px;
+            pointer-events: none; opacity: 0;
+            transform: translateY(6px) scale(0.97);
+            transform-origin: top right;
+            transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.4,0,0.2,1);
+            z-index: 500;
+        }
+        [data-theme="light"] .hamburger-menu {
+            background: rgba(255,255,255,0.92);
+            border-color: rgba(255,255,255,0.85);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.09),
+                        inset 0 1px 0 rgba(255,255,255,0.95);
+        }
+        .hamburger-menu.open { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
+        .hm-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 14px; border-radius: var(--radius-m);
+            font-family: var(--font-display); font-weight: 800;
+            font-size: 0.75rem; letter-spacing: 0.5px;
+            color: var(--on-surface); cursor: pointer;
+            border: none; background: transparent;
+            width: 100%; text-align: left;
+            transition: background 0.15s ease;
+        }
+        .hm-item:hover { background: var(--surface-variant); }
+        .hm-item .material-symbols-rounded { font-size: 18px !important; color: var(--primary); flex-shrink: 0; }
+        .hm-item.hm-danger { color: var(--error); }
+        .hm-item.hm-danger .material-symbols-rounded { color: var(--error); }
+        .hm-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 3px 8px; }
+        [data-theme="light"] .hm-divider { background: rgba(0,0,0,0.07); }
+        .hm-active-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--primary); margin-left: auto; flex-shrink: 0;
+            display: none;
+        }
+        .hm-active-dot.visible { display: block; }
 
         /* ── STATION TEMP TRACK (lives inside checklist-container) ── */
         .station-track {
@@ -501,92 +606,81 @@
         .chk-empty .chk-label { color: var(--on-warning-container); }
         .chk-empty .chk-status-text { color: var(--on-warning-container); }
 
-        /* ── DUAL CHECKLIST (MTRS + TKRS) ── */
+        /* ── DUAL CHECKLIST (MTRS + TKRS) — compact rotating pills ── */
         .checklist-dual-row {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-shrink: 0;
         }
+        /* Each checklist item is now a compact pill like the driver/ops pills */
         .chk-dual-item {
             flex: 1;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 9px;
-            border-radius: var(--radius-m);
-            padding: 9px 12px;
-            border: 1.5px solid transparent;
-            transition: all 0.35s ease;
+            gap: 5px;
+            border-radius: var(--radius-full);
+            padding: 5px 10px 5px 7px;
+            border: 1px solid transparent;
+            transition: background 0.35s ease, border-color 0.35s ease;
             min-width: 0;
-            position: relative;
             overflow: hidden;
+            /* glass pill base */
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+        [data-theme="light"] .chk-dual-item {
+            background: rgba(255,255,255,0.55);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.85);
         }
         .chk-d-filled {
-            background: var(--success-container);
-            border-color: var(--success);
+            background: rgba(114,212,138,0.15) !important;
+            border-color: rgba(114,212,138,0.45) !important;
         }
         .chk-d-empty {
-            background: var(--warning-container);
-            border-color: var(--warning);
+            background: rgba(255,177,200,0.12) !important;
+            border-color: rgba(255,177,200,0.4) !important;
         }
+        /* Icon circle */
         .chk-d-check-wrap {
+            width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
+        .chk-d-filled .chk-d-check-wrap { background: rgba(114,212,138,0.2); }
+        .chk-d-empty  .chk-d-check-wrap { background: rgba(255,177,200,0.18); }
         .chk-d-icon {
-            font-size: 22px !important;
+            font-size: 13px !important;
             transition: color 0.3s ease;
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
         }
         .chk-d-filled .chk-d-icon { color: var(--success); }
         .chk-d-empty .chk-d-icon  { color: var(--warning); }
-        .chk-d-body { flex: 1; min-width: 0; }
-        .chk-d-label {
+        /* Sliding text body */
+        .chk-d-body {
+            flex: 1; min-width: 0;
+            overflow: hidden; height: 1rem;
+            position: relative;
+        }
+        .chk-d-slide {
+            display: flex; flex-direction: column;
+            transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chk-d-slide.show-status { transform: translateY(-50%); }
+        .chk-d-label, .chk-d-status {
             font-family: var(--font-display);
-            font-size: 0.72rem;
-            font-weight: 900;
+            font-size: 0.68rem; font-weight: 900;
+            white-space: nowrap; line-height: 1rem;
             letter-spacing: 0.4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow: hidden; text-overflow: ellipsis;
         }
-        .chk-d-filled .chk-d-label { color: var(--on-success-container); }
-        .chk-d-empty .chk-d-label  { color: var(--on-warning-container); }
-        .chk-d-status {
-            font-family: var(--font-body);
-            font-size: 0.58rem;
-            font-weight: 700;
-            opacity: 0.8;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            letter-spacing: 0.2px;
-            margin-top: 1px;
-        }
-        .chk-d-filled .chk-d-status { color: var(--on-success-container); }
-        .chk-d-empty .chk-d-status  { color: var(--on-warning-container); }
-        .chk-d-pill {
-            font-family: var(--font-display);
-            font-size: 0.53rem;
-            font-weight: 900;
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            padding: 2px 7px;
-            border-radius: var(--radius-full);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .chk-d-filled .chk-d-pill {
-            background: rgba(114,212,138,0.22);
-            color: var(--success);
-            border: 1px solid rgba(114,212,138,0.4);
-        }
-        .chk-d-empty .chk-d-pill {
-            background: rgba(255,177,200,0.18);
-            color: var(--warning);
-            border: 1px solid rgba(255,177,200,0.35);
-        }
+        .chk-d-filled .chk-d-label,
+        .chk-d-filled .chk-d-status { color: var(--success); }
+        .chk-d-empty .chk-d-label,
+        .chk-d-empty .chk-d-status  { color: var(--warning); }
+        /* Hide old pill badge — replaced by slide */
+        .chk-d-pill { display: none; }
 
         /* ── RIGHT COLUMN: Maintenance ── */
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
@@ -600,14 +694,13 @@
         .ops-rot-pill {
             display: inline-flex; align-items: center; gap: 5px;
             border-radius: var(--radius-full);
-            padding: 3px 10px 3px 7px;
-            box-shadow: var(--shadow-1);
+            padding: 5px 10px 5px 7px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
             border: 1px solid transparent;
             cursor: default;
             overflow: hidden;
             position: relative;
             min-width: 0;
-            max-width: 130px;
             flex-shrink: 0;
             transition: background 0.4s ease, border-color 0.4s ease;
         }
@@ -668,11 +761,10 @@
             cursor: pointer;
             overflow: hidden;
             position: relative;
-            min-width: 0;
-            max-width: 150px;
             flex-shrink: 0;
             transition: background 0.2s ease, transform 0.15s ease;
             user-select: none;
+            /* width is set by JS to the max natural width across all items */
         }
         .cons-pill:hover { transform: scale(1.04); }
         .cons-pill:active { transform: scale(0.97); }
@@ -695,6 +787,7 @@
             position: relative;
             min-width: 0;
             flex: 1;
+            /* width stretches to match fixed pill width */
         }
         .cons-pill-slide {
             display: flex; flex-direction: column;
@@ -1850,6 +1943,9 @@
             .general-info-pill { justify-content: flex-start; }
             .card-header { font-size: 0.88rem; }
             .m3-card { padding: 12px; }
+            .failures-pill { padding: 3px 8px 3px 6px; }
+            .failures-pill-label, .failures-pill-detail { font-size: 0.62rem; }
+            .hamburger-menu { right: 0; }
 
             /* Dock on mobile: collapsed by default */
             .app-dock {
@@ -1912,9 +2008,13 @@
             .m3-shift-label { font-size: 0.9rem; }
             .ticker-head { padding: 0 10px; font-size: 0.62rem; }
             .ticker-scroll { font-size: 0.82rem; }
-            .ops-badge { font-size: 0.7rem; padding: 3px 9px; }
-            .chk-d-label { font-size: 0.65rem; }
-            .chk-d-status { font-size: 0.52rem; }
+            .ops-rot-pill, .cons-pill { padding: 2px 7px 2px 5px; }
+            .ops-rot-label, .ops-rot-status,
+            .cons-pill-row .cons-row-name { font-size: 0.6rem; }
+            .failures-pill { padding: 2px 7px 2px 5px; }
+            .failures-pill-label, .failures-pill-detail { font-size: 0.6rem; }
+            .chk-d-label { font-size: 0.62rem; }
+            .chk-d-status { font-size: 0.62rem; }
 
             /* Info rotator on small mobile */
             #info-rotator { bottom: 46px; right: 6px; width: 136px; }
@@ -1951,12 +2051,43 @@
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
+            <!-- Failures pill — sits right of clock, blends into middle module -->
+            <div id="failures-pill" class="failures-pill" title="Open/Closed Failures">
+                <span class="material-symbols-rounded failures-pill-icon">report_problem</span>
+                <div class="failures-pill-text">
+                    <div class="failures-pill-slide" id="failures-slide">
+                        <span class="failures-pill-label" id="failures-label">FAILURES</span>
+                        <span class="failures-pill-detail" id="failures-detail">---</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="top-controls">
-            <button class="icon-btn" onclick="toggleTheme(event)"><span class="material-symbols-rounded" id="theme-icon">dark_mode</span></button>
-            <button id="btn-grid" class="icon-btn" onclick="toggleGrid(event)"><span class="material-symbols-rounded">monitoring</span></button>
-            <button class="icon-btn" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span></button>
-            <button class="icon-btn btn-off" onclick="manualOff(event)"><span class="material-symbols-rounded">power_settings_new</span></button>
+            <!-- Single hamburger button -->
+            <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
+                <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
+            </button>
+            <!-- Hamburger menu panel -->
+            <div class="hamburger-menu" id="hamburger-menu">
+                <button class="hm-item" onclick="toggleTheme(event);closeHamburger()">
+                    <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
+                    <span id="hm-theme-label">Toggle Theme</span>
+                </button>
+                <button class="hm-item" id="hm-grid-btn" onclick="toggleGrid(event);closeHamburger()">
+                    <span class="material-symbols-rounded">monitoring</span>
+                    <span>Station Feed</span>
+                    <span class="hm-active-dot" id="hm-grid-dot"></span>
+                </button>
+                <button class="hm-item" onclick="goFullscreen(event);closeHamburger()">
+                    <span class="material-symbols-rounded">fullscreen</span>
+                    <span>Fullscreen</span>
+                </button>
+                <div class="hm-divider"></div>
+                <button class="hm-item hm-danger" onclick="manualOff(event);closeHamburger()">
+                    <span class="material-symbols-rounded">power_settings_new</span>
+                    <span>Screen Off</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -2021,27 +2152,31 @@
                     </div>
                 </div>
                 <div class="maint-divider"></div>
-                <!-- Dual Checklist Status: MTRS + TKRS -->
+                <!-- Dual Checklist Status: MTRS + TKRS — compact rotating pills -->
                 <div id="checklist-dual" class="checklist-dual-row">
                     <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
                         <div class="chk-d-check-wrap">
                             <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
                         </div>
                         <div class="chk-d-body">
-                            <div class="chk-d-label">MTRS Checklist</div>
-                            <div class="chk-d-status" id="chk-mtrs-status">Not Filled</div>
+                            <div class="chk-d-slide" id="chk-mtrs-slide">
+                                <span class="chk-d-label">MTRS</span>
+                                <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
+                            </div>
                         </div>
-                        <div class="chk-d-pill" id="chk-mtrs-pill">—</div>
+                        <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
                     </div>
                     <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
                         <div class="chk-d-check-wrap">
                             <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
                         </div>
                         <div class="chk-d-body">
-                            <div class="chk-d-label">TKRS Checklist</div>
-                            <div class="chk-d-status" id="chk-tkrs-status">Not Filled</div>
+                            <div class="chk-d-slide" id="chk-tkrs-slide">
+                                <span class="chk-d-label">TKRS</span>
+                                <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
+                            </div>
                         </div>
-                        <div class="chk-d-pill" id="chk-tkrs-pill">—</div>
+                        <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
                     </div>
                 </div>
                 <div id="maint-list" class="maint-list"></div>
@@ -2177,7 +2312,6 @@
         function initTheme() {
             const saved = localStorage.getItem('kmrl_theme') || 'dark';
             document.documentElement.setAttribute('data-theme', saved);
-            document.getElementById('theme-icon').innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
         }
         initTheme();
 
@@ -2187,8 +2321,15 @@
             const nxt = cur === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', nxt);
             localStorage.setItem('kmrl_theme', nxt);
-            document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
+            const icon = document.getElementById('theme-icon');
+            if (icon) icon.innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
         }
+        function initThemeIcon() {
+            const saved = localStorage.getItem('kmrl_theme') || 'dark';
+            const icon = document.getElementById('theme-icon');
+            if (icon) icon.innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
+        }
+        initThemeIcon();
         function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() {
@@ -2214,6 +2355,77 @@
             }, 8000);
         }
         startOpsPillCycle();
+
+        // ── Hamburger menu ──
+        function toggleHamburger(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('hamburger-menu');
+            const btn  = document.getElementById('hamburger-btn');
+            const icon = document.getElementById('hamburger-icon');
+            const open = menu.classList.toggle('open');
+            icon.innerText = open ? 'close' : 'menu';
+        }
+        function closeHamburger() {
+            const menu = document.getElementById('hamburger-menu');
+            const icon = document.getElementById('hamburger-icon');
+            if (menu) { menu.classList.remove('open'); }
+            if (icon) icon.innerText = 'menu';
+        }
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('hamburger-menu');
+            const btn  = document.getElementById('hamburger-btn');
+            if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                closeHamburger();
+            }
+        });
+
+        // ── Failures pill rotation ──
+        let _failuresPillTimer = null;
+        let _failuresShowingDetail = false;
+        let _failuresLastRaw = null;
+        function startFailuresPillCycle() {
+            if (_failuresPillTimer) clearInterval(_failuresPillTimer);
+            _failuresPillTimer = setInterval(() => {
+                _failuresShowingDetail = !_failuresShowingDetail;
+                const slide = document.getElementById('failures-slide');
+                if (slide) slide.classList.toggle('show-detail', _failuresShowingDetail);
+            }, 8000);
+        }
+        startFailuresPillCycle();
+
+        function updateFailuresPill(raw) {
+            // raw format: "open/closed" e.g. "3/12"
+            const pill  = document.getElementById('failures-pill');
+            const label = document.getElementById('failures-label');
+            const detail = document.getElementById('failures-detail');
+            if (!pill || !label || !detail) return;
+
+            if (!raw || raw.trim() === '' || raw.trim() === '---') {
+                label.textContent = 'FAILURES';
+                detail.textContent = '---';
+                pill.classList.remove('has-open');
+                return;
+            }
+
+            const parts = raw.trim().split('/');
+            const openCount  = parseInt(parts[0]) || 0;
+            const closedCount = parseInt(parts[1]) || 0;
+            const hasOpen = openCount > 0;
+
+            label.textContent  = hasOpen ? openCount + ' OPEN' : 'ALL CLEAR';
+            detail.textContent = closedCount + ' CLOSED';
+
+            pill.classList.toggle('has-open', hasOpen);
+
+            // Attention burst only when value changes
+            if (_failuresLastRaw !== raw) {
+                _failuresLastRaw = raw;
+                pill.classList.remove('burst');
+                void pill.offsetWidth; // reflow
+                pill.classList.add('burst');
+                setTimeout(() => pill.classList.remove('burst'), 900);
+            }
+        }
 
         // ── Driver pill: alternate name ↔ number every 10s ──
         let _driverPillTimer = null;
@@ -2362,11 +2574,11 @@
 
         function toggleGrid(e) {
             if (e) e.stopPropagation();
-            const chk = document.getElementById('checklist-container'),
-                  btn = document.getElementById('btn-grid');
+            const chk = document.getElementById('checklist-container');
+            const dot = document.getElementById('hm-grid-dot');
             const isHidden = chk.style.visibility === 'hidden';
             chk.style.visibility = isHidden ? 'visible' : 'hidden';
-            btn.classList.toggle('btn-grid-active', !isHidden ? false : true);
+            if (dot) dot.classList.toggle('visible', !isHidden);
             if (isHidden) {
                 const t = document.getElementById('station-track');
                 t.style.animation = 'none'; t.offsetHeight; t.style.animation = null;
@@ -2567,6 +2779,7 @@
                 if (param === 'ChecklistStatus') chkStatus = val;
                 if (param === 'sheetab_R2C33') mtrsStatus = val;
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
+                if (param === 'sheetab_R2C38' && unit === 'sheetab') updateFailuresPill(val);
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
                 if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
@@ -2679,7 +2892,7 @@
                 const item   = document.getElementById(id);
                 const icon   = document.getElementById(id + '-icon');
                 const status = document.getElementById(id + '-status');
-                const pill   = document.getElementById(id + '-pill');
+                const slide  = document.getElementById(id + '-slide');
                 if (!item) return;
                 const val = (rawVal || '').trim();
                 const isFilled = val !== '' && val !== '---' && val !== '0' &&
@@ -2687,16 +2900,22 @@
                                  !val.toUpperCase().includes('EMPTY');
                 item.className = 'chk-dual-item ' + (isFilled ? 'chk-d-filled' : 'chk-d-empty');
                 icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank';
-                if (isFilled) {
-                    status.innerText = val;
-                    pill.innerText = 'FILLED';
-                } else {
-                    status.innerText = val !== '' && val !== '---' ? val : 'Not Filled';
-                    pill.innerText = 'PENDING';
-                }
+                if (status) status.textContent = isFilled ? val : (val !== '' && val !== '---' ? val : 'Not Filled');
             }
             applyChkDual('chk-mtrs', mtrsStatus);
             applyChkDual('chk-tkrs', tkrsStatus);
+
+            // Start checklist pill rotation cycle (if not already started)
+            if (!window._chkPillTimer) {
+                let _chkShowingStatus = false;
+                window._chkPillTimer = setInterval(() => {
+                    _chkShowingStatus = !_chkShowingStatus;
+                    ['chk-mtrs-slide','chk-tkrs-slide'].forEach(sid => {
+                        const s = document.getElementById(sid);
+                        if (s) s.classList.toggle('show-status', _chkShowingStatus);
+                    });
+                }, 8000);
+            }
 
             // Tech names marquee (for ticker bar only, no longer shown in checklist-container)
             // (techNames variable kept for any future use but not displayed in appbar)
@@ -2821,12 +3040,38 @@
             if (_consPillTimer) clearInterval(_consPillTimer);
             if (_consRows.length === 0) return;
 
-            function _renderConsPillSlide() {
-                const slide = document.getElementById('cons-pill-slide');
-                if (!slide) return;
+            const slide = document.getElementById('cons-pill-slide');
+            const pill  = document.getElementById('cons-pill');
+            if (!slide || !pill) return;
 
-                // Build all rows as stacked divs
-                const rowsHtml = _consRows.map((item, i) => {
+            // Helper to build a row element
+            function _makeRowEl(item) {
+                const { label = '', pct = '', icon = '' } = item;
+                const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
+                const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
+                const iconEl = icon && icon.startsWith('http')
+                    ? `<img src="${icon}" alt="" style="width:11px;height:11px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">`
+                    : `<span class="material-symbols-rounded cons-row-icon" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20">inventory_2</span>`;
+                return `${iconEl}<span class="cons-row-name">${label}</span><span class="cons-row-pct ${cls}">${pctNum.toFixed(0)}%</span>`;
+            }
+
+            // Measure max natural width: render all rows simultaneously, find widest
+            slide.innerHTML = _consRows.map((item, i) =>
+                `<span class="cons-pill-row" style="display:inline-flex;position:absolute;visibility:hidden;white-space:nowrap">${_makeRowEl(item)}</span>`
+            ).join('');
+
+            // After paint, measure and set fixed width
+            requestAnimationFrame(() => {
+                let maxW = 0;
+                slide.querySelectorAll('.cons-pill-row').forEach(el => {
+                    maxW = Math.max(maxW, el.scrollWidth);
+                });
+                // Apply fixed width to text area (add small buffer)
+                slide.style.width = (maxW + 2) + 'px';
+                slide.style.position = '';
+
+                // Now build proper display rows
+                slide.innerHTML = _consRows.map((item, i) => {
                     const { label = '', pct = '', icon = '' } = item;
                     const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
                     const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
@@ -2835,12 +3080,10 @@
                         : `<span class="material-symbols-rounded cons-row-icon" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20">inventory_2</span>`;
                     return `<span class="cons-pill-row" style="display:${i===0?'inline-flex':'none'}" data-cons-idx="${i}">
                         ${iconEl}
-                        <span class="cons-row-name">${label.length > 12 ? label.slice(0,11)+'…' : label}</span>
+                        <span class="cons-row-name">${label}</span>
                         <span class="cons-row-pct ${cls}">${pctNum.toFixed(0)}%</span>
                     </span>`;
                 }).join('');
-
-                slide.innerHTML = rowsHtml;
 
                 if (_consRows.length <= 1) return;
 
@@ -2852,9 +3095,7 @@
                     idx = (idx + 1) % rows.length;
                     rows[idx].style.display = 'inline-flex';
                 }, 4000);
-            }
-
-            _renderConsPillSlide();
+            });
         }
 
         function openConsOverlay(e) {
