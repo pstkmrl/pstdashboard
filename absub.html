@@ -206,53 +206,75 @@
         .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
 
         /* ── MAINT COUNTER BOXES (Corrective / Activity counts) ── */
-        .maint-counts-row {
+        /* ── MAINTENANCE COUNTS FLOATING DOCK ── */
+        #maint-counts-dock {
+            position: fixed;
+            bottom: 54px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
             display: flex;
             gap: 6px;
-            margin-top: 6px;
+            align-items: stretch;
+            /* Glass pill — matches driver-pill language */
+            background: rgba(22, 28, 40, 0.6);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: var(--radius-l);
+            box-shadow:
+                0 12px 40px rgba(0,0,0,0.45),
+                0 3px 10px rgba(0,0,0,0.25),
+                inset 0 1.5px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.15);
+            backdrop-filter: blur(28px) saturate(1.9);
+            -webkit-backdrop-filter: blur(28px) saturate(1.9);
+            padding: 10px 14px;
         }
-        .maint-count-box {
-            flex: 1;
+        [data-theme="light"] #maint-counts-dock {
+            background: rgba(255,255,255,0.62);
+            border-color: rgba(255,255,255,0.82);
+            box-shadow:
+                0 12px 32px rgba(0,0,0,0.12),
+                0 3px 8px rgba(0,0,0,0.07),
+                inset 0 1.5px 0 rgba(255,255,255,0.95);
+        }
+        .mcd-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            background: var(--surface-variant);
-            border-radius: var(--radius-m);
-            padding: 6px 10px;
-            min-width: 0;
+            gap: 2px;
+            padding: 0 14px;
+            min-width: 72px;
         }
-        .maint-count-val {
+        .mcd-item:not(:last-child) {
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        [data-theme="light"] .mcd-item:not(:last-child) {
+            border-color: rgba(0,0,0,0.08);
+        }
+        .mcd-val {
             font-family: var(--font-display);
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 900;
             line-height: 1;
             color: var(--on-surface);
-            flex-shrink: 0;
-            min-width: 2ch;
+            letter-spacing: -0.5px;
+        }
+        .mcd-label {
+            font-family: var(--font-display);
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            white-space: nowrap;
             text-align: center;
         }
-        .maint-count-body {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        .maint-count-label {
-            font-family: var(--font-display);
-            font-size: 0.65rem;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-            color: var(--on-surface);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .maint-count-sub {
-            font-size: 0.52rem;
-            font-weight: 600;
-            color: var(--on-surface-variant);
-            letter-spacing: 0.5px;
-            opacity: 0.7;
-            white-space: nowrap;
+        /* Subtle separator between dock and ticker */
+        @media (max-width: 600px) {
+            #maint-counts-dock { gap: 0; padding: 8px 8px; bottom: 46px; }
+            .mcd-item { padding: 0 10px; min-width: 58px; }
+            .mcd-val { font-size: 1.5rem; }
+            .mcd-label { font-size: 0.5rem; }
         }
 
         /* ── HAMBURGER / TOP CONTROLS ── */
@@ -2348,26 +2370,26 @@
                     </div>
                     <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                 </div>
-                <!-- Corrective & Activity counts -->
-                <div class="maint-counts-row">
-                    <div class="maint-count-box">
-                        <div class="maint-count-val" id="maint-corrective-val">—</div>
-                        <div class="maint-count-body">
-                            <span class="maint-count-label">CORRECTIVE</span>
-                            <span class="maint-count-sub">MAINTENANCE</span>
-                        </div>
-                    </div>
-                    <div class="maint-count-box">
-                        <div class="maint-count-val" id="maint-activity-val">—</div>
-                        <div class="maint-count-body">
-                            <span class="maint-count-label">ACTIVITIES</span>
-                            <span class="maint-count-sub">MAINTENANCE</span>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     </main>
+
+    <!-- ── MAINTENANCE COUNTS FLOATING DOCK ── -->
+    <div id="maint-counts-dock">
+        <div class="mcd-item">
+            <div class="mcd-val" id="maint-preventive-val">—</div>
+            <div class="mcd-label">Preventive<br>Maintenance</div>
+        </div>
+        <div class="mcd-item">
+            <div class="mcd-val" id="maint-corrective-val">—</div>
+            <div class="mcd-label">Corrective<br>Maintenance</div>
+        </div>
+        <div class="mcd-item">
+            <div class="mcd-val" id="maint-activity-val">—</div>
+            <div class="mcd-label">Activities</div>
+        </div>
+    </div>
 
     <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
         <!-- Expanded panel (pops above) -->
@@ -2943,6 +2965,10 @@
                 }
                 if (param === 'sheetab_R2C40' && unit === 'sheetab') {
                     const el = document.getElementById('maint-activity-val');
+                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
+                }
+                if (param === 'sheetab_R2C41' && unit === 'sheetab') {
+                    const el = document.getElementById('maint-preventive-val');
                     if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
                 }
                 if (param === 'sheetab_R2C35') irWeather  = val;
