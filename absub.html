@@ -150,55 +150,31 @@
             border-radius: var(--radius-m);
             padding: 3px 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 0;
             flex-shrink: 0;
             cursor: default;
-            position: relative;
-            transition: background 0.4s ease;
         }
-        /* Square segmented border drawn via SVG overlay */
-        .failures-sq-border {
-            position: absolute; inset: 0;
-            pointer-events: none;
-            overflow: visible;
-            border-radius: var(--radius-m);
+        .fail-title {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--on-surface-variant);
+            letter-spacing: 1px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            line-height: 1.3;
         }
-        .fsb-track {
-            fill: none;
-            stroke: rgba(255,255,255,0.1);
-            stroke-width: 4;
-            stroke-linejoin: round;
-        }
-        [data-theme="light"] .fsb-track { stroke: rgba(0,0,0,0.09); }
-        .fsb-closed {
-            fill: none;
-            stroke: var(--success);
-            stroke-width: 4;
-            stroke-linejoin: round;
-            stroke-linecap: butt;
-            transition: stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1);
-        }
-        .fsb-open {
-            fill: none;
-            stroke: var(--error);
-            stroke-width: 4;
-            stroke-linejoin: round;
-            stroke-linecap: butt;
-            transition: stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1), stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1);
-        }
-        /* Numbers */
         .failures-nums {
             display: flex;
             align-items: center;
             gap: 6px;
-            position: relative; z-index: 1;
         }
         .fail-num-block {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 28px;
+            min-width: 24px;
         }
         .fail-val {
             font-family: var(--font-display);
@@ -206,13 +182,13 @@
             font-weight: 900;
             line-height: 1.1;
         }
-        .fail-val.open-val  { color: var(--error); }
+        .fail-val.open-val   { color: var(--error); }
         .fail-val.closed-val { color: var(--success); }
         .fail-lbl {
-            font-size: 0.55rem;
+            font-size: 0.48rem;
             font-weight: 700;
             color: var(--on-surface-variant);
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             white-space: nowrap;
         }
         .fail-sep {
@@ -228,6 +204,56 @@
             100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0); }
         }
         .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
+
+        /* ── MAINT COUNTER BOXES (Corrective / Activity counts) ── */
+        .maint-counts-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .maint-count-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface-variant);
+            border-radius: var(--radius-m);
+            padding: 6px 10px;
+            min-width: 0;
+        }
+        .maint-count-val {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--on-surface);
+            flex-shrink: 0;
+            min-width: 2ch;
+            text-align: center;
+        }
+        .maint-count-body {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .maint-count-label {
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: var(--on-surface);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .maint-count-sub {
+            font-size: 0.52rem;
+            font-weight: 600;
+            color: var(--on-surface-variant);
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
 
         /* ── HAMBURGER / TOP CONTROLS ── */
         .top-controls { display: flex; gap: 8px; position: relative; }
@@ -2054,7 +2080,7 @@
             .general-info-pill { justify-content: flex-start; }
             .card-header { font-size: 0.88rem; }
             .m3-card { padding: 12px; }
-            .failures-pill { padding: 3px 8px; gap: 5px; }
+            .failures-pill { padding: 2px 8px; }
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
 
@@ -2122,9 +2148,8 @@
             .ops-rot-pill, .cons-pill { padding: 2px 7px 2px 5px; }
             .ops-rot-label, .ops-rot-status,
             .cons-pill-row .cons-row-name { font-size: 0.6rem; }
-            .failures-pill { padding: 2px 6px; gap: 4px; }
-            .fail-val { font-size: 0.95rem; }
-            .fail-lbl { font-size: 0.48rem; }
+            .failures-pill { padding: 2px 6px; }
+            .fail-val { font-size: 0.9rem; }
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
 
@@ -2163,16 +2188,9 @@
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
-            <!-- Failures block — clock-unit style with square segmented border -->
+            <!-- Failures block — clock-unit style -->
             <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
-                <!-- Square segmented border SVG — updated by JS -->
-                <svg class="failures-sq-border" id="failures-sq-svg" viewBox="0 0 100 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect class="fsb-track"  x="2" y="2" width="96" height="46" rx="5" id="fsb-track-el"/>
-                    <rect class="fsb-closed" x="2" y="2" width="96" height="46" rx="5" id="fsb-closed-el"
-                          stroke-dasharray="0 284" stroke-dashoffset="0"/>
-                    <rect class="fsb-open"   x="2" y="2" width="96" height="46" rx="5" id="fsb-open-el"
-                          stroke-dasharray="0 284" stroke-dashoffset="0"/>
-                </svg>
+                <div class="fail-title">Failures</div>
                 <div class="failures-nums">
                     <div class="fail-num-block">
                         <div class="fail-val closed-val" id="fail-closed-val">—</div>
@@ -2329,6 +2347,23 @@
                         <div id="maint-progress-fill" class="maint-progress-fill"></div>
                     </div>
                     <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
+                </div>
+                <!-- Corrective & Activity counts -->
+                <div class="maint-counts-row">
+                    <div class="maint-count-box">
+                        <div class="maint-count-val" id="maint-corrective-val">—</div>
+                        <div class="maint-count-body">
+                            <span class="maint-count-label">CORRECTIVE</span>
+                            <span class="maint-count-sub">MAINTENANCE</span>
+                        </div>
+                    </div>
+                    <div class="maint-count-box">
+                        <div class="maint-count-val" id="maint-activity-val">—</div>
+                        <div class="maint-count-body">
+                            <span class="maint-count-label">ACTIVITIES</span>
+                            <span class="maint-count-sub">MAINTENANCE</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2515,54 +2550,28 @@
             }
         });
 
-        // ── Failures pill rotation ──
+        // ── Failures block ──
         let _failuresLastRaw = null;
-        // Perimeter of the rect path: 2*(96+46) = 284 (viewBox units)
-        const FAIL_PERIM = 284;
 
         function updateFailuresPill(raw) {
             // raw format: "open/closed" e.g. "3/12"
-            const pill      = document.getElementById('failures-pill');
-            const openEl    = document.getElementById('fail-open-val');
-            const closedEl  = document.getElementById('fail-closed-val');
-            const closedSeg = document.getElementById('fsb-closed-el');
-            const openSeg   = document.getElementById('fsb-open-el');
+            const pill     = document.getElementById('failures-pill');
+            const openEl   = document.getElementById('fail-open-val');
+            const closedEl = document.getElementById('fail-closed-val');
             if (!pill || !openEl || !closedEl) return;
 
             if (!raw || raw.trim() === '' || raw.trim() === '---') {
                 openEl.textContent   = '—';
                 closedEl.textContent = '—';
-                if (closedSeg) closedSeg.setAttribute('stroke-dasharray', '0 ' + FAIL_PERIM);
-                if (openSeg)   openSeg.setAttribute('stroke-dasharray',   '0 ' + FAIL_PERIM);
                 return;
             }
 
-            const parts      = raw.trim().split('/');
-            const openCount  = parseInt(parts[0]) || 0;
-            const closedCount= parseInt(parts[1]) || 0;
-            const total      = openCount + closedCount;
+            const parts       = raw.trim().split('/');
+            const openCount   = parseInt(parts[0]) || 0;
+            const closedCount = parseInt(parts[1]) || 0;
 
             openEl.textContent   = openCount;
             closedEl.textContent = closedCount;
-
-            // Segmented square border: green (closed) from offset 0, red (open) follows
-            if (closedSeg && openSeg) {
-                if (total === 0) {
-                    closedSeg.setAttribute('stroke-dasharray', '0 ' + FAIL_PERIM);
-                    openSeg.setAttribute('stroke-dasharray',   '0 ' + FAIL_PERIM);
-                } else {
-                    const closedLen = Math.round((closedCount / total) * FAIL_PERIM);
-                    const openLen   = Math.round((openCount   / total) * FAIL_PERIM);
-                    const gap       = FAIL_PERIM - closedLen;
-                    const gap2      = FAIL_PERIM - openLen;
-                    // closed segment starts at top-left (offset 0)
-                    closedSeg.setAttribute('stroke-dasharray',  closedLen + ' ' + gap);
-                    closedSeg.setAttribute('stroke-dashoffset', '0');
-                    // open segment follows immediately after closed segment
-                    openSeg.setAttribute('stroke-dasharray',  openLen + ' ' + gap2);
-                    openSeg.setAttribute('stroke-dashoffset', -closedLen);
-                }
-            }
 
             // Attention burst only when value changes
             if (_failuresLastRaw !== raw) {
@@ -2927,6 +2936,15 @@
                 if (param === 'sheetab_R2C33') mtrsStatus = val;
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
                 if (param === 'sheetab_R2C38' && unit === 'sheetab') updateFailuresPill(val);
+
+                if (param === 'sheetab_R2C39' && unit === 'sheetab') {
+                    const el = document.getElementById('maint-corrective-val');
+                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
+                }
+                if (param === 'sheetab_R2C40' && unit === 'sheetab') {
+                    const el = document.getElementById('maint-activity-val');
+                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
+                }
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
                 if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
