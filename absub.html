@@ -206,17 +206,112 @@
         .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
 
         /* ── MAINT COUNTER BOXES (Corrective / Activity counts) ── */
-        /* ── MAINTENANCE COUNTS FLOATING DOCK ── */
+        /* ── MAINTENANCE COUNTS — integrated under progress bar ── */
         #maint-counts-dock {
+            display: flex;
+            align-items: stretch;
+            border-radius: var(--radius-m);
+            overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        [data-theme="light"] #maint-counts-dock { border-color: rgba(0,0,0,0.07); }
+        .mcd-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 10px 8px;
+            background: var(--surface-variant);
+            position: relative;
+        }
+        .mcd-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 20%; bottom: 20%;
+            width: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+        [data-theme="light"] .mcd-item:not(:last-child)::after { background: rgba(0,0,0,0.08); }
+        .mcd-val {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--on-surface);
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+        .mcd-label {
+            font-family: var(--font-display);
+            font-size: 0.54rem;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            white-space: nowrap;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* ── MAINT COUNT CHANGE — centre-screen burst overlay ── */
+        #mcd-burst-overlay {
+            position: fixed; inset: 0; z-index: 9970;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #mcd-burst-overlay.visible { opacity: 1; }
+        .mcd-burst-card {
+            background: rgba(22,28,40,0.82);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: var(--radius-l);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 6px 24px rgba(0,0,0,0.3),
+                        inset 0 1.5px 0 rgba(255,255,255,0.22);
+            backdrop-filter: blur(36px) saturate(2);
+            -webkit-backdrop-filter: blur(36px) saturate(2);
+            padding: 28px 44px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            transform: scale(0.6);
+            transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        [data-theme="light"] .mcd-burst-card {
+            background: rgba(255,255,255,0.88);
+            border-color: rgba(255,255,255,0.9);
+        }
+        #mcd-burst-overlay.visible .mcd-burst-card { transform: scale(1); }
+        .mcd-burst-val {
+            font-family: var(--font-display);
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--primary);
+            letter-spacing: -2px;
+        }
+        .mcd-burst-label {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+        }
+        @keyframes mcd-val-pop {
+            0%   { transform: scale(1);   }
+            40%  { transform: scale(1.18); color: var(--primary); }
+            100% { transform: scale(1);   }
+        }
+        .mcd-val.popping { animation: mcd-val-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+        /* ── STOCK AVAILABILITY DOCK (bottom-right, beside info-rotator) ── */
+        #stock-dock {
             position: fixed;
             bottom: 54px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 192px; /* sits to the left of info-rotator (172px wide + 10px gap + 10px margin) */
             z-index: 1000;
-            display: flex;
-            gap: 6px;
-            align-items: stretch;
-            /* Glass pill — matches driver-pill language */
+            width: 172px; /* matches info-rotator width */
             background: rgba(22, 28, 40, 0.6);
             border: 1px solid rgba(255,255,255,0.16);
             border-radius: var(--radius-l);
@@ -227,54 +322,110 @@
                 inset 0 -1px 0 rgba(0,0,0,0.15);
             backdrop-filter: blur(28px) saturate(1.9);
             -webkit-backdrop-filter: blur(28px) saturate(1.9);
-            padding: 10px 14px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
         }
-        [data-theme="light"] #maint-counts-dock {
+        [data-theme="light"] #stock-dock {
             background: rgba(255,255,255,0.62);
             border-color: rgba(255,255,255,0.82);
-            box-shadow:
-                0 12px 32px rgba(0,0,0,0.12),
-                0 3px 8px rgba(0,0,0,0.07),
-                inset 0 1.5px 0 rgba(255,255,255,0.95);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 3px 8px rgba(0,0,0,0.07),
+                        inset 0 1.5px 0 rgba(255,255,255,0.95);
         }
-        .mcd-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 0 14px;
-            min-width: 72px;
+        #stock-dock:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.55), 0 4px 14px rgba(0,0,0,0.3),
+                            inset 0 1.5px 0 rgba(255,255,255,0.2); }
+        #stock-dock.has-low {
+            border-color: rgba(255,100,80,0.5);
+            animation: cons-low-pulse 3s ease-in-out infinite;
         }
-        .mcd-item:not(:last-child) {
-            border-right: 1px solid rgba(255,255,255,0.1);
+        /* Inner layout */
+        .sdock-header {
+            display: flex; align-items: center; gap: 7px;
+            padding: 8px 12px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-        [data-theme="light"] .mcd-item:not(:last-child) {
-            border-color: rgba(0,0,0,0.08);
+        [data-theme="light"] .sdock-header { border-color: rgba(0,0,0,0.07); }
+        .sdock-header-icon {
+            font-size: 14px !important; color: var(--primary);
+            font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20;
+            flex-shrink: 0;
         }
-        .mcd-val {
-            font-family: var(--font-display);
-            font-size: 2rem;
-            font-weight: 900;
-            line-height: 1;
-            color: var(--on-surface);
-            letter-spacing: -0.5px;
+        #stock-dock.has-low .sdock-header-icon { color: var(--error); }
+        .sdock-title {
+            font-family: var(--font-display); font-weight: 900;
+            font-size: 0.6rem; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--primary);
+            flex: 1;
         }
-        .mcd-label {
-            font-family: var(--font-display);
-            font-size: 0.55rem;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: var(--on-surface-variant);
-            white-space: nowrap;
-            text-align: center;
+        #stock-dock.has-low .sdock-title { color: var(--error); }
+        .sdock-low-badge {
+            background: var(--error); color: #fff;
+            font-family: var(--font-display); font-weight: 900;
+            font-size: 0.5rem; letter-spacing: 0.5px;
+            padding: 1px 5px; border-radius: var(--radius-full);
+            display: none; flex-shrink: 0;
         }
-        /* Subtle separator between dock and ticker */
-        @media (max-width: 600px) {
-            #maint-counts-dock { gap: 0; padding: 8px 8px; bottom: 46px; }
-            .mcd-item { padding: 0 10px; min-width: 58px; }
+        #stock-dock.has-low .sdock-low-badge { display: inline-block; }
+        /* Rotating item body */
+        .sdock-body {
+            padding: 7px 12px 10px;
+            overflow: hidden; height: 2.4rem;
+            position: relative;
+        }
+        .sdock-row {
+            display: flex; align-items: center; gap: 6px;
+            height: 1.2rem; line-height: 1.2rem;
+            font-family: var(--font-display); font-weight: 800;
+            font-size: 0.8rem; white-space: nowrap;
+        }
+        .sdock-row-icon {
+            font-size: 13px !important; flex-shrink: 0; color: var(--on-surface-variant);
+            font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20;
+        }
+        .sdock-row-name { color: var(--on-surface); flex: 1; overflow: hidden; text-overflow: ellipsis; }
+        .sdock-row-pct { font-size: 0.75rem; font-weight: 900; flex-shrink: 0; }
+        .sdock-row-pct.high { color: var(--success); }
+        .sdock-row-pct.mid  { color: var(--primary); }
+        .sdock-row-pct.low  { color: var(--error); }
+        .sdock-row-warn {
+            font-size: 12px !important; color: var(--error);
+            animation: warn-pulse 2s infinite; flex-shrink: 0;
+            font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20;
+        }
+        .sdock-sub {
+            font-family: var(--font-display); font-size: 0.52rem; font-weight: 700;
+            color: var(--on-surface-variant); opacity: 0.6; letter-spacing: 0.5px;
+            line-height: 1.2rem; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        /* Notice flash */
+        .sdock-notice {
+            position: absolute; inset: 0;
+            background: rgba(186,26,26,0.25);
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .sdock-notice.visible { opacity: 1; }
+        .sdock-notice-text {
+            font-family: var(--font-display); font-weight: 900; font-size: 0.6rem;
+            color: #fff; letter-spacing: 0.6px; text-transform: uppercase;
+        }
+        .sdock-notice .material-symbols-rounded {
+            font-size: 14px !important; color: #fff;
+            animation: warn-pulse 1.5s infinite;
+            font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20;
+        }
+
+        @media (max-width: 900px) {
+            #stock-dock { right: 10px; bottom: 54px; width: 160px; }
+            #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
-            .mcd-label { font-size: 0.5rem; }
+        }
+        @media (max-width: 600px) {
+            #stock-dock { display: none; } /* cons-pill in header takes over on mobile */
+            .mcd-val { font-size: 1.3rem; }
+            .mcd-label { font-size: 0.48rem; }
         }
 
         /* ── HAMBURGER / TOP CONTROLS ── */
@@ -385,6 +536,11 @@
         }
         .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        @media (min-width: 901px) {
+            .dashboard-content { align-items: stretch; overflow-y: hidden; }
+            .left-column { height: auto; }
+            .right-column { height: auto; align-self: stretch; }
+        }
 
         /* ── M3 CARD ── */
         .m3-card {
@@ -764,6 +920,20 @@
 
         /* ── RIGHT COLUMN: Maintenance ── */
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
+        /* Schedule list: height matches both deployment cards combined on desktop */
+        .maint-list {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--surface-variant) transparent;
+        }
+        /* On desktop, right-column height is locked to left-column */
+        @media (min-width: 901px) {
+            .right-column { align-self: stretch; }
+            .unified-unit { height: 100%; }
+            .maint-list { overflow-y: auto; }
+        }
         .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
         .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; }
         @media (max-width: 480px) {
@@ -2307,26 +2477,6 @@
                         </div>
                         </div>
                     </div>
-                <!-- Consumables availability banner — full width below header pills -->
-                <div id="cons-pill" class="cons-pill" onclick="openConsOverlay(event)" title="Tap to view full consumables list">
-                    <span class="material-symbols-rounded cons-pill-icon">inventory_2</span>
-                    <div class="cons-pill-label-col">
-                        <span class="cons-pill-heading">STOCK STATUS</span>
-                        <span class="cons-pill-subhead">AVAILABILITY</span>
-                    </div>
-                    <div class="cons-pill-text">
-                        <div class="cons-pill-slide" id="cons-pill-slide">
-                            <span class="cons-pill-row"><span class="cons-row-name">Loading…</span></span>
-                        </div>
-                    </div>
-                    <span class="cons-low-badge" id="cons-low-badge">LOW</span>
-                    <span class="material-symbols-rounded cons-pill-chevron">chevron_right</span>
-                    <!-- 50-min notice overlay -->
-                    <div class="cons-pill-notice" id="cons-pill-notice">
-                        <span class="material-symbols-rounded">notifications_active</span>
-                        <span class="cons-pill-notice-text">Consumables Status — Tap to Review</span>
-                    </div>
-                </div>
                 <div class="maint-divider"></div>
                 <!-- Dual Checklist Status: MTRS + TKRS — compact rotating pills -->
                 <div id="checklist-dual" class="checklist-dual-row">
@@ -2370,24 +2520,51 @@
                     </div>
                     <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                 </div>
+                <!-- Maintenance counts integrated below progress bar -->
+                <div id="maint-counts-dock">
+                    <div class="mcd-item">
+                        <div class="mcd-val" id="maint-preventive-val">—</div>
+                        <div class="mcd-label">Preventive<br>Maintenance</div>
+                    </div>
+                    <div class="mcd-item">
+                        <div class="mcd-val" id="maint-corrective-val">—</div>
+                        <div class="mcd-label">Corrective<br>Maintenance</div>
+                    </div>
+                    <div class="mcd-item">
+                        <div class="mcd-val" id="maint-activity-val">—</div>
+                        <div class="mcd-label">Activities</div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </main>
 
-    <!-- ── MAINTENANCE COUNTS FLOATING DOCK ── -->
-    <div id="maint-counts-dock">
-        <div class="mcd-item">
-            <div class="mcd-val" id="maint-preventive-val">—</div>
-            <div class="mcd-label">Preventive<br>Maintenance</div>
+
+    <!-- ── MCD BURST OVERLAY ── -->
+    <div id="mcd-burst-overlay">
+        <div class="mcd-burst-card">
+            <div class="mcd-burst-val" id="mcd-burst-val">—</div>
+            <div class="mcd-burst-label" id="mcd-burst-label">—</div>
         </div>
-        <div class="mcd-item">
-            <div class="mcd-val" id="maint-corrective-val">—</div>
-            <div class="mcd-label">Corrective<br>Maintenance</div>
+    </div>
+
+    <!-- ── STOCK AVAILABILITY DOCK (bottom-right, beside info-rotator) ── -->
+    <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
+        <div class="sdock-header">
+            <span class="material-symbols-rounded sdock-header-icon">inventory_2</span>
+            <span class="sdock-title">Stock Availability</span>
+            <span class="sdock-low-badge" id="sdock-low-badge">LOW</span>
         </div>
-        <div class="mcd-item">
-            <div class="mcd-val" id="maint-activity-val">—</div>
-            <div class="mcd-label">Activities</div>
+        <div class="sdock-body" style="position:relative;">
+            <div id="sdock-slide-wrap" style="position:relative;height:2.4rem;overflow:hidden;">
+                <div id="sdock-row-a" class="sdock-row"><span class="sdock-sub">Loading…</span></div>
+                <div id="sdock-row-b" class="sdock-row" style="position:absolute;top:1.2rem;left:0;right:0;opacity:0;"></div>
+            </div>
+            <div class="sdock-notice" id="sdock-notice">
+                <span class="material-symbols-rounded">notifications_active</span>
+                <span class="sdock-notice-text">Stock Updated</span>
+            </div>
         </div>
     </div>
 
@@ -2959,18 +3136,9 @@
                 if (param === 'sheetab_R2C34') tkrsStatus = val;
                 if (param === 'sheetab_R2C38' && unit === 'sheetab') updateFailuresPill(val);
 
-                if (param === 'sheetab_R2C39' && unit === 'sheetab') {
-                    const el = document.getElementById('maint-corrective-val');
-                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
-                }
-                if (param === 'sheetab_R2C40' && unit === 'sheetab') {
-                    const el = document.getElementById('maint-activity-val');
-                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
-                }
-                if (param === 'sheetab_R2C41' && unit === 'sheetab') {
-                    const el = document.getElementById('maint-preventive-val');
-                    if (el) el.textContent = (val && val.trim() && val.trim() !== '---') ? val.trim() : '—';
-                }
+                if (param === 'sheetab_R2C39' && unit === 'sheetab') updateMaintCount('maint-corrective-val', val, 'Corrective Maintenance');
+                if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
+                if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
                 if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
@@ -3181,6 +3349,9 @@
             // Build rotating pill slides
             _buildConsPillSlides();
 
+            // Build stock dock (bottom-right floating)
+            _buildStockDock(_consRows);
+
             // Build overlay list
             const listEl = document.getElementById('cons-panel-list');
             if (listEl) {
@@ -3286,7 +3457,7 @@
                     notice.classList.remove('visible');
                     openConsOverlay(null);
                 }, 3500);
-            }, 50 * 60 * 1000); // every 50 minutes
+            }, 40 * 60 * 1000); // every 40 minutes
         }
 
         function openConsOverlay(e) {
@@ -3299,8 +3470,118 @@
             if (ov) ov.classList.remove('visible');
         }
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeConsOverlay();
+            if (e.key === 'Escape') { closeConsOverlay(); }
         });
+
+        // ── Maint count animated update ──
+        const _mcdPrevVals = {};
+        function updateMaintCount(id, raw, label) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const newVal = (raw && raw.trim() && raw.trim() !== '---') ? raw.trim() : '—';
+            const prev = _mcdPrevVals[id];
+            _mcdPrevVals[id] = newVal;
+            if (prev === undefined) { el.textContent = newVal; return; } // first load
+            if (prev === newVal) return; // no change
+            el.textContent = newVal;
+            // Pop animation on the val element
+            el.classList.remove('popping');
+            void el.offsetWidth;
+            el.classList.add('popping');
+            setTimeout(() => el.classList.remove('popping'), 700);
+            // Burst overlay
+            showMcdBurst(newVal, label);
+        }
+
+        let _mcdBurstTimer = null;
+        function showMcdBurst(val, label) {
+            const ov = document.getElementById('mcd-burst-overlay');
+            const bv = document.getElementById('mcd-burst-val');
+            const bl = document.getElementById('mcd-burst-label');
+            if (!ov || !bv || !bl) return;
+            if (_mcdBurstTimer) { clearTimeout(_mcdBurstTimer); ov.classList.remove('visible'); void ov.offsetWidth; }
+            bv.textContent = val;
+            bl.textContent = label;
+            ov.classList.add('visible');
+            _mcdBurstTimer = setTimeout(() => {
+                ov.classList.remove('visible');
+                _mcdBurstTimer = null;
+            }, 2200);
+        }
+
+        // ── Stock Dock (bottom-right floating dock) ──
+        let _sdockTimer   = null;
+        let _sdockNoticeTimer = null;
+        let _sdockIdx = 0;
+        let _sdockRows = [];
+        let _sdockPrevHash = null;
+
+        function _buildStockDock(rows) {
+            _sdockRows = rows;
+            const dock = document.getElementById('stock-dock');
+            const badge = document.getElementById('sdock-low-badge');
+            if (!dock) return;
+
+            const hasLow = rows.some(r => (parseFloat(r.pct)||0) < 20);
+            dock.classList.toggle('has-low', hasLow);
+            if (badge) badge.textContent = hasLow ? rows.filter(r => (parseFloat(r.pct)||0) < 20).length + ' LOW' : '';
+
+            // Build hash for change detection
+            const hash = rows.map(r => r.label + r.pct).join('|');
+            const changed = hash !== _sdockPrevHash;
+            _sdockPrevHash = hash;
+
+            // Start rotation
+            if (_sdockTimer) clearInterval(_sdockTimer);
+            _sdockIdx = 0;
+            _renderSdockRow();
+            if (rows.length > 1) {
+                _sdockTimer = setInterval(() => {
+                    _sdockIdx = (_sdockIdx + 1) % _sdockRows.length;
+                    _renderSdockRow();
+                }, 4000);
+            }
+
+            // On change: flash notice + open overlay
+            if (changed) {
+                const notice = document.getElementById('sdock-notice');
+                if (notice) {
+                    notice.classList.add('visible');
+                    setTimeout(() => { notice.classList.remove('visible'); openConsOverlay(null); }, 2000);
+                }
+            }
+
+            // 40-min periodic notice
+            if (_sdockNoticeTimer) clearInterval(_sdockNoticeTimer);
+            _sdockNoticeTimer = setInterval(() => {
+                const notice = document.getElementById('sdock-notice');
+                if (notice) {
+                    notice.classList.add('visible');
+                    setTimeout(() => { notice.classList.remove('visible'); openConsOverlay(null); }, 2500);
+                }
+            }, 40 * 60 * 1000);
+        }
+
+        function _renderSdockRow() {
+            const rowA = document.getElementById('sdock-row-a');
+            if (!rowA || !_sdockRows.length) return;
+            const item = _sdockRows[_sdockIdx];
+            const { label = '', pct = '', icon = '' } = item;
+            const pctNum = Math.min(100, Math.max(0, parseFloat(pct)||0));
+            const cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
+            const isLow = pctNum < 20;
+            const iconEl = icon && icon.startsWith('http')
+                ? '<img src="' + icon + '" alt="" style="width:12px;height:12px;border-radius:50%;object-fit:cover;flex-shrink:0;">'
+                : '<span class="material-symbols-rounded sdock-row-icon">inventory_2</span>';
+            const warnEl = isLow ? '<span class="material-symbols-rounded sdock-row-warn">warning</span>' : '';
+            rowA.innerHTML = iconEl +
+                '<span class="sdock-row-name">' + label + '</span>' +
+                '<span class="sdock-row-pct ' + cls + '">' + pctNum.toFixed(0) + '%</span>' +
+                warnEl;
+            // Sub-label (total count)
+            const sub = document.getElementById('sdock-sub');
+            if (sub) sub.textContent = '(' + (_sdockIdx + 1) + ' of ' + _sdockRows.length + ')';
+        }
 
         function toggleDockExpand(e) {
             if (e) e.stopPropagation();
