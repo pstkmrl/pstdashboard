@@ -2118,7 +2118,7 @@
             const s = document.createElement('script'); s.id = 'api-script';
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s);
         }
-        setInterval(refreshData, 60000); refreshData(); updateClocks();
+        setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
         let _irTimer = null, _irIdx = 0, _irSlides = [];
