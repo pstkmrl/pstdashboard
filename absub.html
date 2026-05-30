@@ -206,38 +206,28 @@
         .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
 
         /* ── MAINT COUNTER BOXES (Corrective / Activity counts) ── */
-        /* ── MAINTENANCE COUNTS — integrated under progress bar ── */
+        /* ── MAINTENANCE COUNTS — horizontal row inside footer ── */
         #maint-counts-dock {
             display: flex;
-            align-items: stretch;
-            border-radius: var(--radius-m);
-            overflow: hidden;
-            margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+            flex-shrink: 0;
         }
-        [data-theme="light"] #maint-counts-dock { border-color: rgba(0,0,0,0.07); }
         .mcd-item {
-            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 3px;
-            padding: 10px 8px;
-            background: var(--surface-variant);
-            position: relative;
+            gap: 1px;
+            padding: 0 10px;
+            border-right: 1px solid rgba(255,255,255,0.08);
         }
-        .mcd-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0; top: 20%; bottom: 20%;
-            width: 1px;
-            background: rgba(255,255,255,0.1);
-        }
-        [data-theme="light"] .mcd-item:not(:last-child)::after { background: rgba(0,0,0,0.08); }
+        .mcd-item:first-child { padding-left: 0; }
+        .mcd-item:last-child { border-right: none; }
+        [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.07); }
         .mcd-val {
             font-family: var(--font-display);
-            font-size: 1.9rem;
+            font-size: 1.2rem;
             font-weight: 900;
             line-height: 1;
             color: var(--on-surface);
@@ -246,14 +236,14 @@
         }
         .mcd-label {
             font-family: var(--font-display);
-            font-size: 0.54rem;
+            font-size: 0.48rem;
             font-weight: 800;
-            letter-spacing: 0.7px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             color: var(--on-surface-variant);
-            white-space: nowrap;
             text-align: center;
             line-height: 1.3;
+            white-space: nowrap;
         }
 
         /* ── MAINT COUNT CHANGE — centre-screen burst overlay ── */
@@ -537,9 +527,8 @@
         .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         @media (min-width: 901px) {
-            .dashboard-content { align-items: stretch; overflow-y: hidden; }
+            .dashboard-content { align-items: flex-start; overflow-y: auto; }
             .left-column { height: auto; }
-            .right-column { height: auto; align-self: stretch; }
         }
 
         /* ── M3 CARD ── */
@@ -920,7 +909,7 @@
 
         /* ── RIGHT COLUMN: Maintenance ── */
         .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; }
-        /* Schedule list: height matches both deployment cards combined on desktop */
+        /* Schedule list scrolls within available space */
         .maint-list {
             flex: 1;
             min-height: 0;
@@ -928,11 +917,15 @@
             scrollbar-width: thin;
             scrollbar-color: var(--surface-variant) transparent;
         }
-        /* On desktop, right-column height is locked to left-column */
+        /* Desktop: maint card stops at info-rotator top (bottom=202px from page bottom) */
         @media (min-width: 901px) {
-            .right-column { align-self: stretch; }
-            .unified-unit { height: 100%; }
-            .maint-list { overflow-y: auto; }
+            .right-column { align-self: flex-start; }
+            .unified-unit {
+                max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 202px - 20px);
+                display: flex; flex-direction: column;
+                overflow: hidden;
+            }
+            .maint-list { overflow-y: auto; flex: 1; min-height: 0; }
         }
         .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
         .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; }
@@ -2085,11 +2078,12 @@
         /* ── MAINTENANCE PROGRESS BAR (bottom of right column) ── */
         .maint-progress-footer {
             margin-top: auto;
-            padding-top: 14px;
+            padding-top: 12px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
         }
+        /* Title row: label left, value right */
         .maint-progress-meta {
             display: flex;
             justify-content: space-between;
@@ -2097,9 +2091,9 @@
         }
         .maint-progress-label {
             font-family: var(--font-display);
-            font-size: 0.58rem;
+            font-size: 0.56rem;
             font-weight: 900;
-            letter-spacing: 1.4px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             color: var(--on-surface-variant);
             opacity: 0.65;
@@ -2111,9 +2105,18 @@
             color: var(--primary);
             letter-spacing: 0.5px;
         }
+        /* Second row: counts left, bar right */
+        .maint-progress-right {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
         .maint-progress-track {
             position: relative;
-            height: 3px;
+            flex: 1;
+            height: 8px;
             background: var(--surface-variant);
             border-radius: var(--radius-full);
             overflow: hidden;
@@ -2130,21 +2133,25 @@
             content: '';
             position: absolute;
             top: 0; right: 0;
-            width: 24px; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35));
+            width: 32px; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
             border-radius: var(--radius-full);
         }
         .maint-refresh-stamp {
-            font-size: 0.58rem;
+            font-size: 0.55rem;
             font-weight: 600;
             color: var(--outline);
             opacity: 0.55;
             text-align: right;
             letter-spacing: 0.4px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
+        /* Divider kept for compatibility but unused */
+        .maint-footer-divider { display: none; }
 
         /* ── MAINTENANCE PROGRESS POPUP ── */
-        .maint-progress-footer { position: relative; }
+        .maint-progress-right { position: relative; }
         .maint-progress-popup {
             position: absolute;
             bottom: calc(100% + 10px);
@@ -2160,7 +2167,7 @@
             transition: opacity 0.22s ease, transform 0.22s ease;
             z-index: 200;
         }
-        .maint-progress-footer:hover .maint-progress-popup {
+        .maint-progress-right:hover .maint-progress-popup {
             opacity: 1;
             transform: translateY(0);
         }
@@ -2511,28 +2518,31 @@
                         <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
                         <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
                     </div>
+                    <!-- Title row -->
                     <div class="maint-progress-meta">
                         <span class="maint-progress-label">Maintenance Progress</span>
                         <span id="maint-progress-value" class="maint-progress-value">—</span>
                     </div>
-                    <div class="maint-progress-track">
-                        <div id="maint-progress-fill" class="maint-progress-fill"></div>
-                    </div>
-                    <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
-                </div>
-                <!-- Maintenance counts integrated below progress bar -->
-                <div id="maint-counts-dock">
-                    <div class="mcd-item">
-                        <div class="mcd-val" id="maint-preventive-val">—</div>
-                        <div class="mcd-label">Preventive<br>Maintenance</div>
-                    </div>
-                    <div class="mcd-item">
-                        <div class="mcd-val" id="maint-corrective-val">—</div>
-                        <div class="mcd-label">Corrective<br>Maintenance</div>
-                    </div>
-                    <div class="mcd-item">
-                        <div class="mcd-val" id="maint-activity-val">—</div>
-                        <div class="mcd-label">Activities</div>
+                    <!-- Counts + bar row -->
+                    <div class="maint-progress-right">
+                        <div id="maint-counts-dock">
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-preventive-val">—</div>
+                                <div class="mcd-label">Preventive<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-corrective-val">—</div>
+                                <div class="mcd-label">Corrective<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-activity-val">—</div>
+                                <div class="mcd-label">Activities<br>Jobcards</div>
+                            </div>
+                        </div>
+                        <div class="maint-progress-track">
+                            <div id="maint-progress-fill" class="maint-progress-fill"></div>
+                        </div>
+                        <div id="refresh-indicator" class="maint-refresh-stamp">UPDATED: ---</div>
                     </div>
                 </div>
 
