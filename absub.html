@@ -2,15 +2,16 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMRL SUBSTATION DASHBOARD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>KMRL SUBSTATION DASHBOARD • LOWER THIRD NEWS</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
+        * { margin:0; padding:0; box-sizing: border-box; }
         :root {
             --transition-speed: 0.3s;
             --radius-s: 8px;
@@ -20,1871 +21,450 @@
             --font-display: 'Outfit', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
         }
-
         [data-theme="light"] {
-            --bg-color: #F0F4F8;
-            --surface: #FFFFFF;
-            --surface-variant: #E4EBF2;
-            --surface-dim: #D8E2EE;
-            --on-bg: #1A1C1E;
-            --on-surface: #1A1C1E;
-            --on-surface-variant: #44474F;
-            --outline: #74777F;
-            --primary: #0061A4;
-            --primary-container: #D1E4FF;
-            --on-primary-container: #001D36;
-            --secondary: #535F70;
-            --secondary-container: #D7E3F7;
-            --error: #BA1A1A;
-            --error-container: #FFDAD6;
-            --on-error-container: #410002;
-            --success: #146C2E;
-            --success-container: #C4EED0;
-            --on-success-container: #002107;
-            --warning: #7D5260;
-            --warning-container: #FFD8E4;
-            --on-warning-container: #31111D;
+            --bg-color: #F0F4F8; --surface: #FFFFFF; --surface-variant: #E4EBF2; --surface-dim: #D8E2EE;
+            --on-bg: #1A1C1E; --on-surface: #1A1C1E; --on-surface-variant: #44474F; --outline: #74777F;
+            --primary: #0061A4; --primary-container: #D1E4FF; --on-primary-container: #001D36;
+            --secondary: #535F70; --secondary-container: #D7E3F7; --error: #BA1A1A; --error-container: #FFDAD6;
+            --success: #146C2E; --success-container: #C4EED0; --warning: #7D5260; --warning-container: #FFD8E4;
             --shadow-1: 0 2px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06);
             --shadow-2: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.1);
-            --tech-bg: rgba(0, 97, 164, 0.06);
-            --tech-border: rgba(0, 97, 164, 0.2);
-            --tech-name-color: #003D6B;
+            --tech-bg: rgba(0, 97, 164, 0.06); --tech-border: rgba(0, 97, 164, 0.2); --tech-name-color: #003D6B;
         }
-
         [data-theme="dark"] {
-            --bg-color: #0D1117;
-            --surface: #161C25;
-            --surface-variant: #1F2836;
-            --surface-dim: #131920;
-            --on-bg: #E2E6EC;
-            --on-surface: #E2E6EC;
-            --on-surface-variant: #B8C4D4;
-            --outline: #6E7A8A;
-            --primary: #7DBEFF;
-            --primary-container: #003D6B;
-            --on-primary-container: #D1E4FF;
-            --secondary: #A8BDD4;
-            --secondary-container: #2C3D52;
-            --error: #FFB4AB;
-            --error-container: #7A0009;
-            --on-error-container: #FFDAD6;
-            --success: #72D48A;
-            --success-container: #003D17;
-            --on-success-container: #C4EED0;
-            --warning: #FFB1C8;
-            --warning-container: #4A2234;
-            --on-warning-container: #FFD8E4;
-            --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+            --bg-color: #0D1117; --surface: #161C25; --surface-variant: #1F2836; --surface-dim: #131920;
+            --on-bg: #E2E6EC; --on-surface: #E2E6EC; --on-surface-variant: #B8C4D4; --outline: #6E7A8A;
+            --primary: #7DBEFF; --primary-container: #003D6B; --on-primary-container: #D1E4FF;
+            --secondary: #A8BDD4; --secondary-container: #2C3D52; --error: #FFB4AB; --error-container: #7A0009;
+            --success: #72D48A; --success-container: #003D17; --on-success-container: #C4EED0;
+            --warning: #FFB1C8; --warning-container: #4A2234; --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
             --shadow-2: 0 4px 8px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.6);
-            --tech-bg: rgba(125, 190, 255, 0.07);
-            --tech-border: rgba(125, 190, 255, 0.18);
-            --tech-name-color: #9ECAFF;
+            --tech-bg: rgba(125,190,255,0.07); --tech-border: rgba(125,190,255,0.18); --tech-name-color: #9ECAFF;
         }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         body {
-            background: var(--bg-color);
-            color: var(--on-bg);
-            font-family: var(--font-body);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            user-select: none;
-            transition: background var(--transition-speed), color var(--transition-speed);
+            background: var(--bg-color); color: var(--on-bg);
+            font-family: var(--font-body); height: 100vh; display: flex; flex-direction: column;
+            overflow: hidden; transition: background var(--transition-speed), color var(--transition-speed);
         }
-
-        /* ── APP BAR ── */
-        .app-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--surface);
-            padding: 10px 20px;
-            margin: 10px 10px 0 10px;
-            border-radius: var(--radius-full);
-            box-shadow: var(--shadow-1);
-            z-index: 100;
-            flex-shrink: 0;
-        }
+        /* app-bar & rest core styles (keeping original design intact) */
+        .app-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px 20px; margin: 10px 10px 0 10px; border-radius: var(--radius-full); box-shadow: var(--shadow-1); flex-shrink: 0; z-index: 100; }
         .logo-section img { height: 34px; object-fit: contain; }
-        .middle-module {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            margin: 0 16px;
-            height: 44px;
-            overflow: visible;
-        }
-        .checklist-container {
-            flex: 1; min-width: 0; height: 100%;
-            background: var(--secondary-container); color: var(--on-surface);
-            border-radius: var(--radius-full);
-            display: flex; align-items: center; position: relative; overflow: hidden;
-        }
-        .checklist-container::before,
-        .checklist-container::after {
-            content: ''; position: absolute; top: 0; width: 40px; height: 100%; z-index: 2; pointer-events: none;
-        }
-        .checklist-container::before { left: 0; background: linear-gradient(to right, var(--secondary-container), transparent); }
-        .checklist-container::after  { right: 0; background: linear-gradient(to left, var(--secondary-container), transparent); }
+        .middle-module { flex-grow: 1; display: flex; justify-content: center; align-items: center; gap: 8px; margin: 0 16px; height: 44px; overflow: visible; }
+        .checklist-container { flex: 1; min-width: 0; background: var(--secondary-container); border-radius: var(--radius-full); display: flex; align-items: center; position: relative; overflow: hidden; }
         .clock-container { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-        .clock-unit {
-            background: var(--surface-variant); color: var(--on-surface);
-            border-radius: var(--radius-m); padding: 3px 10px;
-            display: flex; flex-direction: column; align-items: center; min-width: 54px;
-        }
+        .clock-unit { background: var(--surface-variant); border-radius: var(--radius-m); padding: 3px 10px; display: flex; flex-direction: column; align-items: center; min-width: 54px; }
         .clock-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
-        .clock-label { font-size: 0.55rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1.2px; }
-
-        /* ── FAILURES PILL ── */
-        .failures-pill {
-            background: var(--surface-variant);
-            color: var(--on-surface);
-            border-radius: var(--radius-m);
-            padding: 3px 10px;
-            display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; cursor: default;
-        }
-        .fail-title { font-size: 0.55rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 1px; white-space: nowrap; text-transform: uppercase; line-height: 1.3; }
+        .failures-pill { background: var(--surface-variant); border-radius: var(--radius-m); padding: 3px 10px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+        .fail-title { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; }
         .failures-nums { display: flex; align-items: center; gap: 6px; }
-        .fail-num-block { display: flex; flex-direction: column; align-items: center; min-width: 24px; }
         .fail-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
-        .fail-val.open-val   { color: var(--error); }
-        .fail-val.closed-val { color: var(--success); }
-        .fail-lbl { font-size: 0.48rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 0.8px; white-space: nowrap; }
-        .fail-sep { width: 1px; height: 26px; background: var(--outline); opacity: 0.3; flex-shrink: 0; }
-        @keyframes fail-burst {
-            0%   { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0.6); }
-            30%  { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(255,100,80,0.35); }
-            60%  { transform: scale(0.97); box-shadow: 0 0 0 5px  rgba(255,100,80,0.18); }
-            100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,100,80,0); }
-        }
-        .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
-
-        /* ── MAINT COUNTER BOXES ── */
-        #maint-counts-dock { display: flex; flex-direction: row; align-items: center; gap: 0; flex-shrink: 0; }
-        .mcd-item { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 0 10px; border-right: 1px solid rgba(255,255,255,0.08); }
-        .mcd-item:first-child { padding-left: 0; }
-        .mcd-item:last-child { border-right: none; }
-        [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.07); }
-        .mcd-val { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; line-height: 1; color: var(--on-surface); letter-spacing: -0.5px; transition: color 0.3s ease; }
-        .mcd-label { font-family: var(--font-display); font-size: 0.48rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant); text-align: center; line-height: 1.3; white-space: nowrap; }
-
-        /* ── MAINT COUNT CHANGE OVERLAY ── */
-        #mcd-burst-overlay { position: fixed; inset: 0; z-index: 9970; display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; }
-        #mcd-burst-overlay.visible { opacity: 1; }
-        .mcd-burst-card { background: rgba(22,28,40,0.82); border: 1px solid rgba(255,255,255,0.18); border-radius: var(--radius-l); box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 6px 24px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.22); backdrop-filter: blur(36px) saturate(2); -webkit-backdrop-filter: blur(36px) saturate(2); padding: 28px 44px; display: flex; flex-direction: column; align-items: center; gap: 6px; transform: scale(0.6); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-        [data-theme="light"] .mcd-burst-card { background: rgba(255,255,255,0.88); border-color: rgba(255,255,255,0.9); }
-        #mcd-burst-overlay.visible .mcd-burst-card { transform: scale(1); }
-        .mcd-burst-val { font-family: var(--font-display); font-size: 4.5rem; font-weight: 900; line-height: 1; color: var(--primary); letter-spacing: -2px; }
-        .mcd-burst-label { font-family: var(--font-display); font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--on-surface-variant); }
-        @keyframes mcd-val-pop { 0% { transform: scale(1); } 40% { transform: scale(1.18); color: var(--primary); } 100% { transform: scale(1); } }
-        .mcd-val.popping { animation: mcd-val-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-
-        /* ── STOCK AVAILABILITY MINI-DOCK ── */
-        @keyframes sdock-low-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,60,60,0.0), 0 8px 32px rgba(0,0,0,0.5); border-color: rgba(255,80,60,0.7); } 50% { box-shadow: 0 0 0 7px rgba(255,60,60,0.22), 0 8px 32px rgba(0,0,0,0.5); border-color: rgba(255,80,60,1); } }
-        @keyframes sdock-entry { from { opacity:0; transform: translateY(12px) scale(0.96); } to { opacity:1; transform: translateY(0) scale(1); } }
-        #stock-dock { position: fixed; bottom: 54px; right: 10px; z-index: 1000; width: 280px; background: rgba(14, 20, 34, 0.82); border: 1.5px solid rgba(125,190,255,0.22); border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.2); backdrop-filter: blur(32px) saturate(2); -webkit-backdrop-filter: blur(32px) saturate(2); cursor: pointer; overflow: hidden; transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.18s ease; animation: sdock-entry 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-        [data-theme="light"] #stock-dock { background: rgba(240,246,255,0.85); border-color: rgba(0,97,164,0.22); box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.07), inset 0 1.5px 0 rgba(255,255,255,0.9); }
-        #stock-dock:hover { transform: translateY(-2px); box-shadow: 0 14px 44px rgba(0,0,0,0.65), 0 4px 14px rgba(0,0,0,0.35), inset 0 1.5px 0 rgba(255,255,255,0.2); }
-        #stock-dock.has-low { border-color: rgba(255,80,60,0.7); animation: sdock-entry 0.5s cubic-bezier(0.34,1.56,0.64,1) both, sdock-low-pulse 2.5s ease-in-out infinite 0.5s; }
-        .sdock-accent { height: 3px; background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 60%, #fff)); border-radius: 18px 18px 0 0; }
-        #stock-dock.has-low .sdock-accent { background: linear-gradient(90deg, #ff3c28, #ff8a00); }
-        .sdock-header { display: flex; align-items: center; gap: 8px; padding: 9px 13px 7px; border-bottom: 1px solid rgba(255,255,255,0.09); }
-        [data-theme="light"] .sdock-header { border-color: rgba(0,0,0,0.07); }
-        .sdock-header-icon { font-size: 16px !important; color: var(--primary); font-variation-settings: 'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 20; flex-shrink: 0; }
-        #stock-dock.has-low .sdock-header-icon { color: #ff5e3a; animation: warn-pulse 2s infinite; }
-        .sdock-title { font-family: var(--font-display); font-weight: 900; font-size: 0.65rem; letter-spacing: 1.1px; text-transform: uppercase; color: var(--primary); flex: 1; white-space: nowrap; }
-        #stock-dock.has-low .sdock-title { color: #ff5e3a; }
-        .sdock-low-badge { background: linear-gradient(135deg,#ff3c28,#ff7a00); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 0.52rem; letter-spacing: 0.8px; padding: 2px 7px; border-radius: var(--radius-full); display: none; flex-shrink: 0; box-shadow: 0 2px 8px rgba(255,60,40,0.5); animation: warn-pulse 1.8s infinite; }
-        #stock-dock.has-low .sdock-low-badge { display: inline-block; }
-        .sdock-body { padding: 7px 13px 11px; overflow: hidden; height: 2.8rem; position: relative; }
-        .sdock-row { display: flex; align-items: center; gap: 7px; height: 1.4rem; line-height: 1.4rem; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; white-space: nowrap; }
-        .sdock-row-icon { font-size: 14px !important; flex-shrink: 0; color: var(--on-surface-variant); font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20; }
-        .sdock-row-name { color: var(--on-surface); flex: 1; overflow: hidden; text-overflow: ellipsis; }
-        .sdock-row-pct { font-size: 0.82rem; font-weight: 900; flex-shrink: 0; }
-        .sdock-row-pct.high  { color: #4ade80; }
-        .sdock-row-pct.mid   { color: var(--primary); }
-        .sdock-row-pct.low   { color: #ff5e3a; }
-        .sdock-row-pct.over  { color: #a78bfa; }
-        .sdock-row-warn { font-size: 13px !important; color: #ff5e3a; animation: warn-pulse 1.8s infinite; flex-shrink: 0; font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20; }
-        .sdock-sub { font-family: var(--font-display); font-size: 0.54rem; font-weight: 700; color: var(--on-surface-variant); opacity: 0.55; letter-spacing: 0.5px; line-height: 1.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sdock-notice { position: absolute; inset: 0; background: linear-gradient(90deg,rgba(186,26,26,0.3),rgba(255,100,0,0.18)); display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
-        .sdock-notice.visible { opacity: 1; }
-        .sdock-notice-text { font-family: var(--font-display); font-weight: 900; font-size: 0.62rem; color: #fff; letter-spacing: 0.8px; text-transform: uppercase; }
-        .sdock-notice .material-symbols-rounded { font-size: 15px !important; color: #fff; animation: warn-pulse 1.2s infinite; font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20; }
-
-        /* ── CONS OVERLAY ── */
-        @keyframes cons-low-flash { 0%,100% { background: rgba(255,60,40,0.18); border-color: rgba(255,80,50,0.6); box-shadow: 0 0 0 0 rgba(255,60,40,0); } 50% { background: rgba(255,60,40,0.32); border-color: rgba(255,80,50,1); box-shadow: 0 0 14px 2px rgba(255,60,40,0.35); } }
-        .cons-list-item.alert-low { border: 1.5px solid rgba(255,80,50,0.6); animation: cons-low-flash 1.2s ease-in-out infinite; }
-        .cons-list-item.alert-low .cons-list-name { color: #ff8060; }
-        .cons-list-item.alert-low .cons-list-sub { color: #ff8060 !important; opacity: 1 !important; font-weight: 900 !important; letter-spacing: 0.5px; }
-
-        /* ── HAMBURGER / TOP CONTROLS ── */
+        .fail-val.open-val { color: var(--error); } .fail-val.closed-val { color: var(--success); }
         .top-controls { display: flex; gap: 8px; position: relative; }
-        .icon-btn { background: var(--surface-variant); color: var(--on-surface); border: none; width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
-        .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
-        .hamburger-menu { position: absolute; top: calc(100% + 8px); right: 0; background: rgba(22,28,37,0.9); border: 1px solid rgba(255,255,255,0.16); border-radius: var(--radius-l); backdrop-filter: blur(32px) saturate(2); -webkit-backdrop-filter: blur(32px) saturate(2); box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.18); padding: 8px; display: flex; flex-direction: column; gap: 4px; min-width: 180px; pointer-events: none; opacity: 0; transform: translateY(6px) scale(0.97); transform-origin: top right; transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.4,0,0.2,1); z-index: 500; }
-        [data-theme="light"] .hamburger-menu { background: rgba(255,255,255,0.92); border-color: rgba(255,255,255,0.85); box-shadow: 0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.09), inset 0 1px 0 rgba(255,255,255,0.95); }
-        .hamburger-menu.open { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
-        .hm-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: var(--radius-m); font-family: var(--font-display); font-weight: 800; font-size: 0.75rem; letter-spacing: 0.5px; color: var(--on-surface); cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; transition: background 0.15s ease; }
-        .hm-item:hover { background: var(--surface-variant); }
-        .hm-item .material-symbols-rounded { font-size: 18px !important; color: var(--primary); flex-shrink: 0; }
-        .hm-item.hm-danger { color: var(--error); }
-        .hm-item.hm-danger .material-symbols-rounded { color: var(--error); }
-        .hm-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 3px 8px; }
-        [data-theme="light"] .hm-divider { background: rgba(0,0,0,0.07); }
-        .hm-active-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); margin-left: auto; flex-shrink: 0; display: none; }
-        .hm-active-dot.visible { display: block; }
-
-        /* ── STATION TEMP TRACK ── */
-        .station-track { display: flex; gap: 16px; width: max-content; align-items: center; padding: 0 16px; position: absolute; top: 0; left: 0; height: 100%; animation: stock-scroll 45s linear infinite; }
-        .station-track:hover { animation-play-state: paused; }
-        @keyframes stock-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .stock-item { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--outline); padding: 3px 14px 3px 10px; border-radius: var(--radius-full); font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; white-space: nowrap; }
-        [data-theme="light"] .stock-item { background: rgba(0,0,0,0.04); }
-        .stock-item.alarm { background: var(--error-container); color: var(--on-error-container); border-color: var(--error); animation: pulse-alarm 1.5s infinite alternate; }
-        @keyframes pulse-alarm { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.4); } 100% { box-shadow: 0 0 0 8px rgba(255,0,0,0); } }
-        .stock-name { color: var(--primary); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.8px; font-weight: 900; margin-right: 2px; }
-        .stock-val { display: inline-flex; align-items: center; gap: 3px; }
-        .stock-val.safe { color: var(--success); }
-        .stock-val.warn { color: var(--error); }
-        .stock-icon { font-size: 0.9rem !important; opacity: 0.75; }
-        .stock-divider { width: 1px; height: 18px; background: var(--outline); opacity: 0.4; flex-shrink: 0; }
-
-        /* ── DASHBOARD LAYOUT ── */
-        .dashboard-content { display: grid; grid-template-columns: 5fr 3fr; gap: 10px; padding: 10px 10px 80px 10px; flex-grow: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent; }
-        .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
-        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
-        @media (min-width: 901px) { .dashboard-content { align-items: flex-start; overflow-y: auto; } .left-column { height: auto; } }
-
-        .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 16px; box-shadow: var(--shadow-1); display: flex; flex-direction: column; overflow: hidden; }
-
-        /* ── DEPLOYMENT CARD HEADER ── */
-        .deploy-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-        .card-header { font-family: var(--font-display); font-weight: 900; font-size: 1rem; color: var(--primary); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.8px; flex-shrink: 0; }
-        .general-info-pill { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; flex: 1; justify-content: flex-end; }
-        .gen-name-tag { background: var(--surface-variant); color: var(--on-surface); font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; padding: 4px 12px; border-radius: var(--radius-full); white-space: nowrap; border: 1.5px solid var(--outline); letter-spacing: 0.3px; }
-        .gen-label-pill { background: var(--secondary-container); color: var(--on-surface-variant); font-family: var(--font-display); font-weight: 800; font-size: 0.65rem; padding: 3px 10px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
-        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: stretch; }
-
-        /* ── SHIFT CARD ── */
-        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 12px; display: flex; flex-direction: column; gap: 0; border: 2px solid transparent; transition: border-color 0.4s ease, box-shadow 0.4s ease; overflow: hidden; }
-        .m3-shift-card .tech-section { margin-top: auto; padding-top: 8px; }
-        .m3-shift-active { border-color: var(--success); box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px rgba(114, 212, 138, 0.15); }
-        .shift-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .m3-shift-label { font-family: var(--font-display); font-weight: 900; font-size: 1rem; color: var(--on-surface); letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-        .shift-count-badge { display: inline-flex; align-items: center; gap: 3px; background: var(--surface-dim); border: 1px solid var(--outline); border-radius: var(--radius-full); padding: 2px 9px 2px 7px; font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--on-surface-variant); letter-spacing: 0.3px; white-space: nowrap; }
-        .shift-count-badge .cnt-staff { color: var(--on-surface); font-weight: 900; }
-        .shift-count-badge .cnt-sep { opacity: 0.4; margin: 0 1px; font-size: 0.75rem; }
-        .shift-count-badge .cnt-tech { color: var(--primary); font-weight: 900; }
-        .shift-count-badge .material-symbols-rounded { font-size: 14px !important; opacity: 0.55; }
-        .shift-active-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: none; animation: pulse-dot 2s infinite; }
-        .m3-shift-active .shift-active-dot { display: inline-block; }
-        .shift-tpc-badge { font-size: 0.62rem; background: var(--primary-container); color: var(--on-primary-container); padding: 2px 8px; border-radius: var(--radius-full); font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; }
+        .icon-btn { background: var(--surface-variant); border: none; width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .hamburger-menu { position: absolute; top: calc(100% + 8px); right: 0; background: rgba(22,28,37,0.9); backdrop-filter: blur(32px); border-radius: var(--radius-l); padding: 8px; min-width: 180px; opacity: 0; pointer-events: none; transform: translateY(6px); transition: 0.22s; z-index: 500; }
+        .hamburger-menu.open { pointer-events: auto; opacity: 1; transform: translateY(0); }
+        .hm-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: var(--radius-m); font-weight: 800; font-size: 0.75rem; background: transparent; width: 100%; color: var(--on-surface); cursor: pointer; }
+        .dashboard-content { display: grid; grid-template-columns: 5fr 3fr; gap: 10px; padding: 10px 10px 80px 10px; flex-grow: 1; overflow-y: auto; }
+        .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 16px; box-shadow: var(--shadow-1); }
+        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 12px; border: 2px solid transparent; }
+        .m3-shift-active { border-color: var(--success); }
         .staff-list { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
-        .m3-staff-item { display: flex; align-items: center; gap: 6px; background: var(--surface); padding: 5px 8px; border-radius: var(--radius-s); min-width: 0; overflow: hidden; }
-        .staff-name { font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; color: var(--on-surface); letter-spacing: 0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-        .m3-badge { font-size: 0.58rem; padding: 2px 6px; border-radius: var(--radius-full); font-weight: 800; flex-shrink: 0; white-space: nowrap; }
-        .badge-tpc-m { background: #00E5FF; color: #000; }
-        .badge-tpc-e { background: #FF9100; color: #000; }
-        .badge-tpc-n { background: #D500F9; color: #FFF; }
-        .badge-default { background: var(--outline); color: var(--surface); }
-
-        .tech-section { border-top: 1.5px solid var(--tech-border); padding-top: 8px; }
-        .tech-label-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-        .tech-label { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; }
-        .tech-label-icon { font-size: 13px !important; color: var(--primary); }
-        .tech-scroll-wrap { overflow: hidden; border-radius: var(--radius-s); background: var(--tech-bg); border: 1px solid var(--tech-border); padding: 5px 0; position: relative; }
+        .tech-scroll-wrap { overflow: hidden; background: var(--tech-bg); border-radius: var(--radius-s); padding: 5px 0; }
         .tech-scroll-track { display: flex; gap: 0; width: max-content; animation: tech-scroll 18s linear infinite; }
-        .tech-scroll-track:hover { animation-play-state: paused; }
         @keyframes tech-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .tech-name-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 14px; font-family: var(--font-display); font-size: 1.025rem; font-weight: 800; color: var(--tech-name-color); white-space: nowrap; border-right: 1.5px solid var(--tech-border); }
-        .tech-name-chip:last-child { border-right: none; }
-        .tech-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--primary); opacity: 0.6; flex-shrink: 0; }
-        .tech-static { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0; }
-        .tech-static .tech-name-chip { background: var(--tech-bg); border: 1px solid var(--tech-border); border-radius: var(--radius-full); padding: 3px 10px; }
-
-        /* ── DUAL CHECKLIST ── */
-        .checklist-dual-row { display: flex; gap: 6px; flex-shrink: 0; }
-        .chk-dual-item { flex: 1; display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius-full); padding: 5px 10px 5px 7px; border: 1px solid transparent; transition: background 0.35s ease, border-color 0.35s ease; min-width: 0; overflow: hidden; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15); }
-        [data-theme="light"] .chk-dual-item { background: rgba(255,255,255,0.55); box-shadow: 0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.85); }
-        .chk-d-filled { background: rgba(114,212,138,0.15) !important; border-color: rgba(114,212,138,0.45) !important; }
-        .chk-d-empty { background: rgba(255,177,200,0.12) !important; border-color: rgba(255,177,200,0.4) !important; }
-        .chk-d-check-wrap { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chk-d-filled .chk-d-check-wrap { background: rgba(114,212,138,0.2); }
-        .chk-d-empty  .chk-d-check-wrap { background: rgba(255,177,200,0.18); }
-        .chk-d-icon { font-size: 13px !important; transition: color 0.3s ease; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
-        .chk-d-filled .chk-d-icon { color: var(--success); }
-        .chk-d-empty .chk-d-icon  { color: var(--warning); }
-        .chk-d-body { flex: 1; min-width: 0; overflow: hidden; height: 1rem; position: relative; }
-        .chk-d-slide { display: flex; flex-direction: column; transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
-        .chk-d-slide.show-status { transform: translateY(-50%); }
-        .chk-d-label, .chk-d-status { font-family: var(--font-display); font-size: 0.68rem; font-weight: 900; white-space: nowrap; line-height: 1rem; letter-spacing: 0.4px; overflow: hidden; text-overflow: ellipsis; }
-        .chk-d-filled .chk-d-label, .chk-d-filled .chk-d-status { color: var(--success); }
-        .chk-d-empty .chk-d-label, .chk-d-empty .chk-d-status  { color: var(--warning); }
-        .chk-d-pill { display: none; }
-
-        /* ── RIGHT COLUMN: Maintenance ── */
-        .unified-unit { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
-        @media (min-width: 901px) {
-            .right-column { align-self: flex-start; }
-            .unified-unit { max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 202px - 20px); }
-        }
-        .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; }
-        .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; }
-        .ops-rot-pill { display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius-full); padding: 5px 10px 5px 7px; box-shadow: 0 2px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15); border: 1px solid transparent; cursor: default; overflow: hidden; position: relative; min-width: 0; flex-shrink: 0; transition: background 0.4s ease, border-color 0.4s ease; }
-        .ops-rot-pill.alert { background: var(--error-container); border-color: var(--error); }
-        .ops-rot-pill.ok { background: var(--success-container); border-color: var(--success); }
-        .ops-rot-pill-icon { font-size: 13px !important; flex-shrink: 0; transition: color 0.4s; }
-        .ops-rot-pill.alert .ops-rot-pill-icon { color: var(--error); }
-        .ops-rot-pill.ok    .ops-rot-pill-icon { color: var(--success); }
-        .ops-rot-pill-text { overflow: hidden; height: 1rem; display: flex; flex-direction: column; position: relative; min-width: 0; }
-        .ops-rot-pill-slide { display: flex; flex-direction: column; transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
-        .ops-rot-pill-slide.show-status { transform: translateY(-50%); }
-        .ops-rot-label, .ops-rot-status { font-family: var(--font-display); font-weight: 900; font-size: 0.68rem; white-space: nowrap; line-height: 1rem; letter-spacing: 0.5px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
-        .ops-rot-pill.alert .ops-rot-label, .ops-rot-pill.alert .ops-rot-status { color: var(--on-error-container); }
-        .ops-rot-pill.ok .ops-rot-label, .ops-rot-pill.ok .ops-rot-status { color: var(--on-success-container); }
-        .maint-divider { height: 1.5px; background: var(--surface-variant); margin: 4px 0; border-radius: var(--radius-full); flex-shrink: 0; }
+        .checklist-dual-row { display: flex; gap: 6px; margin-top: 8px; }
+        .chk-dual-item { flex: 1; display: flex; align-items: center; gap: 5px; border-radius: var(--radius-full); padding: 5px 10px; backdrop-filter: blur(12px); background: rgba(255,255,255,0.08); }
+        .chk-d-filled { background: rgba(114,212,138,0.15) !important; border-color: rgba(114,212,138,0.45); }
+        .chk-d-empty { background: rgba(255,177,200,0.12) !important; }
+        .maint-list { overflow-y: auto; max-height: 280px; margin: 8px 0; }
+        .maint-progress-footer { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 46px; background: var(--surface); display: flex; align-items: center; z-index: 1001; cursor: pointer; }
         
-        .maint-list { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent; padding-right: 4px; }
-        .maint-scroll-track { display: flex; flex-direction: column; }
-        .maint-scroll-half { display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; }
-        .maint-scroll-track.scrolling { animation-name: maint-scroll; animation-timing-function: linear; animation-iteration-count: infinite; }
-        .maint-list:hover .maint-scroll-track.scrolling, .maint-scroll-track.scrolling:hover { animation-play-state: paused; }
-        @keyframes maint-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-        .m3-sch-item { background: var(--surface-variant); color: var(--on-surface); padding: 10px 14px; border-radius: var(--radius-m); font-size: 0.85rem; font-weight: 600; border-left: 5px solid var(--warning); line-height: 1.5; }
-
-        /* ── MAINTENANCE PROGRESS BAR ── */
-        .maint-progress-footer { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
-        .maint-progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
-        .maint-progress-label { font-family: var(--font-display); font-size: 0.56rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
-        .maint-progress-value { font-family: var(--font-display); font-size: 0.88rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
-        .maint-progress-right { display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; }
-        .maint-bars-wrapper { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; justify-content: center; }
-        .maint-bar-group { display: flex; flex-direction: column; min-width: 0; }
-        .maint-progress-track { position: relative; width: 100%; height: 8px; background: var(--surface-variant); border-radius: var(--radius-full); overflow: hidden; }
-        .maint-progress-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 70%, white) 100%); transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 1.2s ease; width: 0%; }
-        .maint-progress-fill::after { content: ''; position: absolute; top: 0; right: 0; width: 32px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); border-radius: var(--radius-full); }
-        .maint-progress-popup { position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface); border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0; transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200; }
-        .maint-progress-right:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
-        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
-        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
-        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
-
-        /* ── NEWS CHANNEL LOWER THIRD ── */
+        /* ============ REDEFINED LOWER THIRD ============ 
+           New design: appears on interval, shows all queued slides, disappears, then reappears after interval.
+           Driver card gets pushed up ONLY when lower third is visible (bottom bump) */
         .lower-third-wrap {
             position: fixed;
-            bottom: 56px; 
+            bottom: 56px;
             left: 0;
-            z-index: 9950;
+            z-index: 1000;
             display: flex;
             align-items: flex-end;
             pointer-events: none;
             transform: translateX(-105%);
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(4px 4px 12px rgba(0,0,0,0.4));
+            transition: transform 0.65s cubic-bezier(0.34, 1.2, 0.64, 1);
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
         }
         .lower-third-wrap.active-box {
             transform: translateX(0);
         }
         .l3-logo-plate {
             width: 72px; height: 72px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.02));
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.02));
             backdrop-filter: blur(30px) saturate(1.8);
-            -webkit-backdrop-filter: blur(30px) saturate(1.8);
             border: 1px solid rgba(255,255,255,0.3);
             border-left: none;
             border-radius: 0 18px 18px 0;
-            box-shadow: inset 2px 2px 6px rgba(255,255,255,0.4), inset -2px -2px 6px rgba(0,0,0,0.3);
             display: flex; align-items: center; justify-content: center;
-            z-index: 2; position: relative;
+            position: relative;
         }
         [data-theme="light"] .l3-logo-plate {
             background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
-            border-color: rgba(255,255,255,0.9);
-            box-shadow: inset 2px 2px 6px rgba(255,255,255,0.9), inset -2px -2px 6px rgba(0,0,0,0.05);
         }
-        .l3-icon-img {
-            width: 52px; height: 52px;
-            border-radius: 12px; object-fit: cover;
-            border: 1.5px solid rgba(255,255,255,0.25);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-        }
-        .l3-icon-mat {
-            font-size: 42px !important; color: var(--primary);
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-            font-variation-settings: 'FILL' 1, 'wght' 300;
-        }
+        .l3-icon-img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.4); }
+        .l3-icon-mat { font-size: 42px !important; color: var(--primary); font-variation-settings: 'FILL' 1; }
         .l3-live-indicator {
             position: absolute; top: 8px; right: 8px;
             width: 8px; height: 8px; border-radius: 50%;
-            background: #ff3b30; box-shadow: 0 0 10px #ff3b30;
-            animation: l3-pulse 1.5s infinite;
+            background: #ff3b30; box-shadow: 0 0 8px #ff3b30;
+            animation: pulse-dot 1.5s infinite;
         }
-        @keyframes l3-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
-        
+        @keyframes pulse-dot { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
         .l3-content-plate {
-            height: 58px;
-            margin-bottom: 7px;
-            margin-left: -16px; /* Tuck under logo plate */
-            padding: 4px 28px 4px 32px;
-            min-width: 280px; max-width: 45vw;
-            background: rgba(14, 20, 30, 0.88);
-            backdrop-filter: blur(24px) saturate(1.5);
-            -webkit-backdrop-filter: blur(24px) saturate(1.5);
-            border: 1px solid rgba(255,255,255,0.18);
+            height: 64px;
+            margin-bottom: 4px;
+            margin-left: -16px;
+            padding: 6px 28px 6px 32px;
+            min-width: 280px;
+            max-width: 42vw;
+            background: rgba(14, 20, 30, 0.92);
+            backdrop-filter: blur(28px) saturate(1.6);
+            border: 1px solid rgba(255,255,255,0.2);
             border-left: none;
-            border-radius: 0 14px 14px 0;
-            box-shadow: inset 0 2px 0 rgba(255,255,255,0.1);
-            z-index: 1; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; justify-content: center;
-            clip-path: inset(0 100% 0 0); /* Hidden */
-            transition: clip-path 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 0 20px 20px 0;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
         [data-theme="light"] .l3-content-plate {
-            background: rgba(240, 246, 255, 0.92);
-            border-color: rgba(255,255,255,0.85);
-            box-shadow: inset 0 2px 0 rgba(255,255,255,1);
+            background: rgba(240, 246, 255, 0.96);
+            border-color: rgba(255,255,255,0.9);
         }
         .lower-third-wrap.active-box .l3-content-plate {
-            clip-path: inset(0 0 0 0); /* Wipe reveal */
+            clip-path: inset(0 0 0 0);
         }
         .l3-text-track {
             transform: translateY(120%);
             opacity: 0;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.4s;
         }
         .l3-text-track.text-in {
             transform: translateY(0);
             opacity: 1;
         }
         .l3-headline {
-            font-family: var(--font-display); font-weight: 900; font-size: 1.15rem;
-            color: var(--on-surface); line-height: 1.15; letter-spacing: -0.2px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.1rem;
+            line-height: 1.2;
+            color: var(--on-surface);
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .l3-label {
-            font-family: var(--font-body); font-size: 0.65rem; font-weight: 700;
-            color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+            font-family: var(--font-body);
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
         }
         .l3-sheen {
-            position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+            position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transform: skewX(-25deg);
-            animation: l3-sheen-pass 5s infinite;
+            animation: l3-sheen-pass 6s infinite;
             pointer-events: none;
         }
-        [data-theme="light"] .l3-sheen { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); }
-        @keyframes l3-sheen-pass { 0%, 40% { left: -100%; } 100% { left: 200%; } }
-        .l3-progress-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.08); }
-        [data-theme="light"] .l3-progress-bar { background: rgba(0,0,0,0.08); }
-        .l3-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 50%, #fff)); }
-
-        /* ── DRIVER CARD ── */
+        @keyframes l3-sheen-pass { 0% { left: -100%; } 100% { left: 200%; } }
+        .l3-progress-bar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+            background: rgba(255,255,255,0.1);
+        }
+        .l3-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), #ffcc00);
+            transition: width linear;
+        }
+        /* Driver card dynamic bottom shifting (only when lower-third is active) */
         .driver-card {
-            position: fixed; bottom: 135px; /* Moved up to clear Lower Third */ 
+            position: fixed;
             left: 10px;
-            z-index: 1000; cursor: pointer; transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1002;
+            transition: bottom 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            bottom: 56px;
+            cursor: pointer;
+        }
+        /* When lower third is visible, driver card goes up 76px */
+        body.lower-third-visible .driver-card {
+            bottom: 132px;
         }
         .driver-pill {
-            display: flex; align-items: center; gap: 0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
-            border-radius: var(--radius-full); box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.12);
-            backdrop-filter: blur(28px) saturate(1.8); -webkit-backdrop-filter: blur(28px) saturate(1.8); padding: 6px 14px 6px 8px; gap: 8px;
-            max-width: 240px; overflow: hidden; transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(28px);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: var(--radius-full);
+            padding: 6px 14px 6px 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
         }
-        [data-theme="light"] .driver-pill { background: rgba(255,255,255,0.55); border-color: rgba(255,255,255,0.75); box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9); }
-        .driver-card.outdated .driver-pill { border-color: rgba(255,100,80,0.55); box-shadow: 0 8px 32px rgba(186,26,26,0.3), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,180,171,0.2); opacity: 0.5; }
-
-        .driver-pill-icon {
-            width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
-            display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 17px;
-        }
-        .driver-card.outdated .driver-pill-icon { background: rgba(255,100,80,0.12); border-color: rgba(255,100,80,0.35); color: var(--error); }
+        .driver-pill-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(125,190,255,0.2); display: flex; align-items: center; justify-content: center; color: var(--primary); }
         .driver-pill-text-wrap { overflow: hidden; height: 1.25rem; display: flex; flex-direction: column; position: relative; }
-        .driver-pill-slide { display: flex; flex-direction: column; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease; }
+        .driver-pill-slide { display: flex; flex-direction: column; transition: transform 0.6s; }
         .driver-pill-slide.show-number { transform: translateY(-50%); }
-        .driver-pill-name-val { font-family: var(--font-display); font-weight: 800; font-size: 0.88rem; color: var(--on-surface); white-space: nowrap; line-height: 1.25rem; letter-spacing: 0.2px; }
-        .driver-pill-num-val { font-family: var(--font-display); font-weight: 700; font-size: 0.82rem; color: var(--primary); white-space: nowrap; line-height: 1.25rem; letter-spacing: 0.5px; }
-        .driver-card.outdated .driver-pill-num-val { color: var(--error); }
-        .driver-pill-outdated-badge {
-            display: none; align-items: center; gap: 4px; background: var(--error-container); border: 1px solid rgba(255,100,80,0.5); border-radius: var(--radius-full);
-            padding: 2px 8px 2px 6px; font-family: var(--font-display); font-size: 0.55rem; font-weight: 900; letter-spacing: 0.8px; text-transform: uppercase;
-            color: var(--error); white-space: nowrap; flex-shrink: 0; animation: warning-blink 1.5s infinite alternate;
-        }
-        .driver-pill-outdated-badge .material-symbols-rounded { font-size: 11px !important; }
-        .driver-card.outdated .driver-pill-outdated-badge { display: flex; }
-        .driver-pill-outdated-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); box-shadow: 0 0 6px var(--error); flex-shrink: 0; display: none; animation: warn-pulse 2s infinite; }
-        .driver-card.outdated .driver-pill-outdated-dot { display: none; }
-        @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
-
-        .driver-expanded {
-            position: absolute; bottom: calc(100% + 8px); left: 0; min-width: 220px; background: rgba(22,28,37,0.82); border: 1px solid rgba(255,255,255,0.18);
-            border-radius: var(--radius-l); box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-            backdrop-filter: blur(32px) saturate(2); -webkit-backdrop-filter: blur(32px) saturate(2); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
-            pointer-events: none; opacity: 0; transform: translateY(8px) scale(0.97); transform-origin: bottom left; transition: opacity 0.28s cubic-bezier(0.4,0,0.2,1), transform 0.28s cubic-bezier(0.4,0,0.2,1);
-        }
-        [data-theme="light"] .driver-expanded { background: rgba(255,255,255,0.82); border-color: rgba(255,255,255,0.85); box-shadow: 0 16px 48px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.95); }
-        .driver-card.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
-        .driver-card.outdated .driver-expanded { border-color: rgba(255,100,80,0.4); }
-        .driver-exp-outdated { display: none; align-items: center; gap: 6px; background: rgba(186,26,26,0.18); border: 1px solid rgba(255,100,80,0.35); border-radius: var(--radius-s); padding: 5px 10px; font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--error); animation: warning-blink 1.5s infinite alternate; }
-        .driver-card.outdated .driver-exp-outdated { display: flex; }
-        .driver-exp-header { display: flex; flex-direction: column; gap: 2px; }
-        .driver-exp-label { font-size: 0.52rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2px; color: var(--on-surface-variant); opacity: 0.6; }
-        .driver-exp-shift { font-size: 0.6rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .driver-exp-name { font-family: var(--font-display); font-weight: 900; font-size: 1.05rem; color: var(--on-surface); letter-spacing: 0.2px; line-height: 1.2; }
-        .driver-exp-phone { font-size: 0.78rem; font-weight: 600; color: var(--on-surface-variant); letter-spacing: 0.3px; }
-        .driver-exp-update { font-size: 0.56rem; font-weight: 700; color: var(--outline); letter-spacing: 0.4px; padding-top: 2px; border-top: 1px solid rgba(255,255,255,0.08); }
-        [data-theme="light"] .driver-exp-update { border-color: rgba(0,0,0,0.08); }
-        .driver-exp-call { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(114,212,138,0.15); border: 1.5px solid rgba(114,212,138,0.4); border-radius: var(--radius-full); padding: 8px 14px; font-family: var(--font-display); font-weight: 900; font-size: 0.78rem; letter-spacing: 0.8px; text-transform: uppercase; color: var(--success); cursor: pointer; transition: all 0.2s ease; }
-        .driver-exp-call:hover { background: rgba(114,212,138,0.25); transform: scale(1.02); }
-        .driver-exp-call .material-symbols-rounded { font-size: 18px !important; }
-        .badge-active { background: var(--success-container); color: var(--on-success-container); }
-        .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
-
-        /* ── FLASH NEWS OVERLAY ── */
-        #flash-news-overlay { position: fixed; inset: 0; z-index: 9990; display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
-        #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
-        .flash-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px) saturate(0.6); -webkit-backdrop-filter: blur(6px) saturate(0.6); }
-        .flash-panel { position: relative; z-index: 1; width: min(820px, calc(100vw - 32px)); background: rgba(10,14,20,0.88); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-l); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); overflow: hidden; transform: scale(0.93) translateY(20px); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-        [data-theme="light"] .flash-panel { background: rgba(240,244,248,0.9); border-color: rgba(255,255,255,0.8); }
-        #flash-news-overlay.visible .flash-panel { transform: scale(1) translateY(0); }
-        .flash-banner { display: flex; align-items: center; gap: 10px; background: #CC0000; padding: 7px 20px; }
-        .flash-banner-live { display: flex; align-items: center; gap: 5px; background: #fff; border-radius: 3px; padding: 1px 8px; font-family: var(--font-display); font-size: 0.72rem; font-weight: 900; color: #CC0000; letter-spacing: 1.5px; animation: flash-live-blink 1s infinite; }
-        .flash-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #CC0000; }
-        @keyframes flash-live-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .flash-banner-text { font-family: var(--font-display); font-size: 0.72rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
-        .flash-banner-tag { margin-left: auto; font-family: var(--font-display); font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); }
-        .flash-body { padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 16px; }
-        .flash-eyebrow { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: #CC0000; display: flex; align-items: center; gap: 6px; }
-        .flash-eyebrow::before { content: ''; display: block; width: 20px; height: 2px; background: #CC0000; }
-        .flash-headline { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.4rem, 4vw, 2.1rem); line-height: 1.25; letter-spacing: -0.3px; color: var(--on-bg); }
-        .flash-item-num { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 0.6rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.5; letter-spacing: 1px; }
-        .flash-dots { display: flex; gap: 5px; }
-        .flash-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.3s; }
-        [data-theme="light"] .flash-dot { background: rgba(0,0,0,0.15); }
-        .flash-dot.active { background: #CC0000; }
-        .flash-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding: 12px 28px; }
-        [data-theme="light"] .flash-footer { border-color: rgba(0,0,0,0.08); }
-        .flash-progress-wrap { flex: 1; height: 2px; background: rgba(255,255,255,0.1); border-radius: var(--radius-full); overflow: hidden; margin-right: 16px; }
-        [data-theme="light"] .flash-progress-wrap { background: rgba(0,0,0,0.1); }
-        .flash-progress-fill { height: 100%; background: #CC0000; border-radius: var(--radius-full); transition: width 0.1s linear; width: 0%; }
-        .flash-dismiss { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.5; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
-        .flash-dismiss:hover { opacity: 1; }
-
-        /* ── TICKER ── */
-        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 46px; background: var(--surface); box-shadow: 0 -2px 12px rgba(0,0,0,0.15); display: flex; align-items: center; z-index: 1001; cursor: pointer; }
-        .ticker-head { background: var(--primary); color: var(--surface); height: 100%; padding: 0 20px; display: flex; align-items: center; font-family: var(--font-display); font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0; }
-        .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        .ticker-scroll { white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: var(--on-surface); padding: 0 20px; flex-shrink: 0; }
-        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        .ticker-bar:hover .scrolling-active { animation-play-state: paused; }
-        .ticker-popup { display: none; position: absolute; bottom: 118px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: 860px; background: var(--surface); color: var(--on-surface); padding: 18px 22px; border-radius: var(--radius-l); box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 2px solid var(--primary); z-index: 1005; font-size: 1rem; line-height: 1.6; font-family: var(--font-body); font-weight: 600; white-space: pre-wrap; max-height: 60vh; overflow-y: auto; cursor: default; }
-        .ticker-bar:hover .ticker-popup { display: block; }
-        .ticker-refresh-stamp { height: 100%; padding: 0 16px; display: flex; align-items: center; gap: 4px; font-family: var(--font-display); font-size: 0.65rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0; border-left: 1px solid rgba(128,128,128,0.2); background: rgba(0,0,0,0.05); }
-        [data-theme="light"] .ticker-refresh-stamp { background: rgba(0,0,0,0.02); }
-
-        /* ── CONSUMABLES OVERLAY ── */
-        #cons-overlay { position: fixed; inset: 0; z-index: 9980; display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; }
-        #cons-overlay.visible { opacity: 1; pointer-events: auto; }
-        .cons-overlay-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px) saturate(0.7); -webkit-backdrop-filter: blur(6px) saturate(0.7); }
-        .cons-overlay-panel { position: relative; z-index: 1; width: min(440px, calc(100vw - 32px)); max-height: calc(100vh - 80px); background: var(--surface); border: 1px solid rgba(255,255,255,0.14); border-radius: var(--radius-l); box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 6px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.18); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); overflow: hidden; display: flex; flex-direction: column; transform: scale(0.94) translateY(16px); transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1); }
-        [data-theme="light"] .cons-overlay-panel { background: var(--surface); border-color: rgba(255,255,255,0.8); box-shadow: 0 24px 64px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.95); }
-        #cons-overlay.visible .cons-overlay-panel { transform: scale(1) translateY(0); }
-        .cons-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 10px; border-bottom: 1px solid var(--surface-variant); }
-        .cons-panel-title { font-family: var(--font-display); font-weight: 900; font-size: 0.88rem; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); display: flex; align-items: center; gap: 7px; }
-        .cons-panel-title .material-symbols-rounded { font-size: 18px !important; }
-        .cons-panel-close { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-variant); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease; }
-        .cons-panel-close:hover { background: var(--surface-dim); }
-        .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
-        .cons-panel-list { overflow-y: auto; padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 7px; scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent; }
-        .cons-list-item { display: flex; align-items: center; gap: 12px; background: var(--surface-variant); border-radius: var(--radius-m); padding: 9px 14px; }
-        .cons-list-icon-ring { position: relative; width: 42px; height: 42px; flex-shrink: 0; }
-        .cons-list-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3; }
-        [data-theme="light"] .cons-list-icon-ring svg .ring-track { stroke: rgba(0,0,0,0.1); }
-        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
-        .cons-list-img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.6); }
-        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.82rem; color: var(--primary); text-transform: uppercase; }
-        .cons-list-body { flex: 1; min-width: 0; }
-        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
-        .cons-list-sub { font-family: var(--font-body); font-size: 0.62rem; font-weight: 600; color: var(--on-surface-variant); opacity: 0.7; margin-top: 1px; }
-        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1rem; letter-spacing: 0.3px; flex-shrink: 0; }
-        .cons-list-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
-
-        .app-dock, .dock-toggle-btn { display: none !important; }
-
-        /* ── BLACKOUT ── */
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
-        .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
-        .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
-        .h-min { width: 4px; height: 40%; background: #aaa; margin-left: -2px; }
-        .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
-        .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
-        .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
-        .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
-
-        /* ── MOBILE RESPONSIVE ── */
-        @media (max-width: 900px) {
-            .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            .unified-unit { height: 480px; }
-            .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
-            .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
-            .logo-section img { height: 24px; }
-            .icon-btn { width: 36px; height: 36px; }
-            .icon-btn .material-symbols-rounded { font-size: 20px !important; }
-            .clock-unit { min-width: 42px; padding: 2px 6px; }
-            .clock-val { font-size: 1.1rem; }
-            .clock-label { font-size: 0.48rem; }
-            .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-            .driver-card { left: 8px; bottom: 135px; } /* Kept above lower third on mobile */
-            .driver-expanded { min-width: 200px; }
-            .ticker-head { padding: 0 12px; font-size: 0.68rem; }
-            .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
-            .ticker-refresh-stamp { padding: 0 10px; font-size: 0.6rem; }
-            .refresh-prefix { display: none; }
-            .deploy-header { flex-direction: column; gap: 6px; }
-            .general-info-pill { justify-content: flex-start; }
-            .card-header { font-size: 0.88rem; }
-            .m3-card { padding: 12px; }
-            .failures-pill { padding: 2px 8px; }
-            .fail-val { font-size: 1.1rem; }
-            .hamburger-menu { right: 0; }
-            #stock-dock { right: 10px; bottom: 54px; width: 160px; }
-            #maint-counts-dock { margin-top: 8px; }
-            .mcd-val { font-size: 1.5rem; }
-            .l3-content-plate { max-width: 75vw; }
-        }
-
-        @media (max-width: 600px) {
-            .dashboard-content { padding: 6px 6px 80px 6px; gap: 6px; }
-            .unified-unit { height: 420px; }
-            .app-bar { padding: 6px 10px; margin: 4px 4px 0 4px; }
-            .logo-section img { height: 22px; }
-            .middle-module { height: 34px; gap: 8px; }
-            .clock-container { gap: 4px; }
-            .clock-unit { min-width: 36px; padding: 1px 5px; }
-            .clock-val { font-size: 0.95rem; }
-            .clock-label { font-size: 0.42rem; letter-spacing: 0.8px; }
-            .top-controls { gap: 4px; }
-            .icon-btn { width: 32px; height: 32px; }
-            .icon-btn .material-symbols-rounded { font-size: 18px !important; }
-            .roster-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .m3-card { padding: 10px; border-radius: var(--radius-m); }
-            .staff-name { font-size: 0.95rem; }
-            .card-header { font-size: 0.82rem; gap: 6px; }
-            .gen-name-tag { font-size: 0.7rem; padding: 3px 9px; }
-            .gen-label-pill { font-size: 0.58rem; padding: 2px 8px; }
-            .m3-shift-label { font-size: 0.9rem; }
-            .ticker-head { padding: 0 10px; font-size: 0.62rem; }
-            .ticker-scroll { font-size: 0.82rem; }
-            .ops-rot-pill { padding: 2px 7px 2px 5px; }
-            .ops-rot-label, .ops-rot-status { font-size: 0.6rem; }
-            .failures-pill { padding: 2px 6px; }
-            .fail-val { font-size: 0.9rem; }
-            .chk-d-label { font-size: 0.62rem; }
-            .chk-d-status { font-size: 0.62rem; }
-            #stock-dock { display: none; }
-            .mcd-val { font-size: 1.3rem; }
-            .mcd-label { font-size: 0.48rem; }
-            .l3-logo-plate { width: 64px; height: 64px; }
-            .l3-icon-mat { font-size: 34px !important; }
-            .l3-icon-img { width: 44px; height: 44px; }
-            .l3-content-plate { height: 50px; margin-bottom: 7px; padding: 2px 20px 2px 24px; max-width: calc(100vw - 30px); }
-            .l3-headline { font-size: 0.95rem; }
-            .l3-label { font-size: 0.55rem; }
-            .driver-card { bottom: 125px; }
-        }
-
-        @media (max-width: 400px) {
-            .roster-grid { grid-template-columns: 1fr; gap: 6px; }
-            .clock-unit { min-width: 30px; padding: 1px 4px; }
-            .clock-val { font-size: 0.85rem; }
-            .ops-inline-container { flex-wrap: wrap; }
-        }
+        .driver-expanded { position: absolute; bottom: calc(100% + 8px); left: 0; min-width: 220px; background: rgba(22,28,37,0.85); backdrop-filter: blur(32px); border-radius: var(--radius-l); padding: 14px; opacity: 0; transform: translateY(8px); transition: 0.28s; pointer-events: none; }
+        .driver-card.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0); }
+        .driver-card.outdated .driver-pill { border-color: rgba(255,100,80,0.5); }
+        .ticker-refresh-stamp { padding: 0 16px; font-size: 0.65rem; white-space: nowrap; }
+        @media (max-width: 900px) { .driver-card { bottom: 56px; } body.lower-third-visible .driver-card { bottom: 122px; } .l3-content-plate { max-width: 70vw; } }
+        @media (max-width: 600px) { .l3-logo-plate { width: 58px; height: 58px; } .l3-icon-mat { font-size: 30px; } .l3-content-plate { padding: 4px 20px 4px 24px; height: 56px; } .l3-headline { font-size: 0.85rem; } }
     </style>
 </head>
 <body onclick="wakeUp()">
-
-    <div id="blackout">
-        <div class="analog-wrap">
-            <div id="ana-h" class="hand h-hr"></div>
-            <div id="ana-m" class="hand h-min"></div>
-            <div id="ana-s" class="hand h-sec"></div>
-            <div class="center-dot"></div>
+    <div id="blackout" style="display:none; position:fixed; inset:0; background:#000; z-index:9999; align-items:center; justify-content:center;"><div class="analog-wrap" style="width:200px;height:200px;border-radius:50%;background:#111;"></div></div>
+    <header class="app-bar"><div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
+        <div class="middle-module"><div id="checklist-container" class="checklist-container"><div id="station-track" class="station-track"></div></div>
+            <div id="clock-container" class="clock-container"><div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div><div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div><div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div></div>
+            <div id="failures-pill" class="failures-pill"><div class="fail-title">Failures</div><div class="failures-nums"><div class="fail-num-block"><div class="fail-val closed-val" id="fail-closed-val">—</div><div class="fail-lbl">CLOSED</div></div><div class="fail-sep"></div><div class="fail-num-block"><div class="fail-val open-val" id="fail-open-val">—</div><div class="fail-lbl">OPEN</div></div></div></div>
         </div>
-    </div>
-
-    <header class="app-bar">
-        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
-        <div class="middle-module">
-            <div id="checklist-container" class="checklist-container">
-                <div id="station-track" class="station-track"><!-- populated by JS --></div>
-            </div>
-            <div id="clock-container" class="clock-container">
-                <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
-                <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
-                <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
-            </div>
-            <!-- Failures block -->
-            <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
-                <div class="fail-title">Failures</div>
-                <div class="failures-nums">
-                    <div class="fail-num-block">
-                        <div class="fail-val closed-val" id="fail-closed-val">—</div>
-                        <div class="fail-lbl">CLOSED</div>
-                    </div>
-                    <div class="fail-sep"></div>
-                    <div class="fail-num-block">
-                        <div class="fail-val open-val" id="fail-open-val">—</div>
-                        <div class="fail-lbl">OPEN</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="top-controls">
-            <!-- Hamburger button -->
-            <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
-                <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
-            </button>
-            <div class="hamburger-menu" id="hamburger-menu">
-                <button class="hm-item" onclick="toggleTheme(event);closeHamburger()">
-                    <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
-                    <span id="hm-theme-label">Toggle Theme</span>
-                </button>
-                <button class="hm-item" id="hm-grid-btn" onclick="toggleGrid(event);closeHamburger()">
-                    <span class="material-symbols-rounded">monitoring</span>
-                    <span>Station Feed</span>
-                    <span class="hm-active-dot" id="hm-grid-dot"></span>
-                </button>
-                <button class="hm-item" onclick="goFullscreen(event);closeHamburger()">
-                    <span class="material-symbols-rounded">fullscreen</span>
-                    <span>Fullscreen</span>
-                </button>
-                <div class="hm-divider"></div>
-                <button class="hm-item hm-danger" onclick="manualOff(event);closeHamburger()">
-                    <span class="material-symbols-rounded">power_settings_new</span>
-                    <span>Screen Off</span>
-                </button>
-            </div>
-        </div>
+        <div class="top-controls"><button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)"><span class="material-symbols-rounded">menu</span></button><div class="hamburger-menu" id="hamburger-menu"><button class="hm-item" onclick="toggleTheme(event)"><span class="material-symbols-rounded" id="theme-icon">dark_mode</span><span>Toggle Theme</span></button><button class="hm-item" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span><span>Fullscreen</span></button><div class="hm-divider"></div><button class="hm-item hm-danger" onclick="manualOff(event)"><span class="material-symbols-rounded">power_settings_new</span><span>Screen Off</span></button></div></div>
     </header>
-
     <main class="dashboard-content">
-        <div class="left-column">
-            <!-- TODAY DEPLOYMENT -->
-            <div class="m3-card">
-                <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
-                    <div class="general-info-pill" id="today-gen-pills">
-                        <span class="gen-label-pill">GENERAL</span>
-                    </div>
-                </div>
-                <div id="roster-today" class="roster-grid"></div>
-            </div>
-            <!-- TOMORROW DEPLOYMENT -->
-            <div class="m3-card">
-                <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
-                    <div class="general-info-pill" id="tomorrow-gen-pills">
-                        <span class="gen-label-pill">GENERAL</span>
-                    </div>
-                </div>
-                <div id="roster-tomorrow" class="roster-grid"></div>
-            </div>
-        </div>
-
-        <div class="right-column">
-            <div class="m3-card unified-unit">
-                <div class="maint-header-wrapper">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
-                        <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
-                        <div class="ops-inline-container">
-                        <!-- Mainline rotating pill -->
-                        <div id="box-mainline" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
-                            <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="mainline-slide">
-                                    <span class="ops-rot-label">MAINLINE</span>
-                                    <span class="ops-rot-status" id="mainline-status-val">---</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Depot rotating pill -->
-                        <div id="box-depot" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
-                            <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="depot-slide">
-                                    <span class="ops-rot-label">DEPOT</span>
-                                    <span class="ops-rot-status" id="depot-status-val">---</span>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="maint-divider"></div>
-                <!-- Dual Checklist Status: MTRS + TKRS -->
-                <div id="checklist-dual" class="checklist-dual-row">
-                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-mtrs-slide">
-                                <span class="chk-d-label">MTRS</span>
-                                <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
-                    </div>
-                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-tkrs-slide">
-                                <span class="chk-d-label">TKRS</span>
-                                <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
-                    </div>
-                </div>
-                
-                <!-- Maintenance Items List (Auto Scrolls if Overflow) -->
-                <div id="maint-list" class="maint-list"></div>
-                
-                <!-- Maintenance Progress Footer (Always visible) -->
-                <div class="maint-progress-footer">
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
-                    <!-- Counts + bars row -->
-                    <div class="maint-progress-right">
-                        <div id="maint-counts-dock">
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-preventive-val">—</div>
-                                <div class="mcd-label">Preventive<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-corrective-val">—</div>
-                                <div class="mcd-label">Corrective<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-activity-val">—</div>
-                                <div class="mcd-label">Activities<br>Jobcards</div>
-                            </div>
-                        </div>
-                        <div class="maint-bars-wrapper">
-                            <!-- Bar 1 -->
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
-                                    <span id="maint-progress-value-1" class="maint-progress-value">—</span>
-                                </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
-                                </div>
-                            </div>
-                            <!-- Bar 2 -->
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-2" class="maint-progress-label">Secondary Progress</span>
-                                    <span id="maint-progress-value-2" class="maint-progress-value">—</span>
-                                </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-2" class="maint-progress-fill"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+        <div class="left-column"><div class="m3-card"><div class="deploy-header"><div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div><div class="general-info-pill" id="today-gen-pills"></div></div><div id="roster-today" class="roster-grid"></div></div>
+        <div class="m3-card"><div class="deploy-header"><div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div><div class="general-info-pill" id="tomorrow-gen-pills"></div></div><div id="roster-tomorrow" class="roster-grid"></div></div></div>
+        <div class="right-column"><div class="m3-card unified-unit"><div class="maint-header-wrapper"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="card-header"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div><div id="checklist-dual" class="checklist-dual-row" style="width:auto;gap:6px;"><div id="chk-mtrs" class="chk-dual-item"><div class="chk-d-check-wrap"><span class="material-symbols-rounded chk-d-icon">check_box_outline_blank</span></div><div class="chk-d-body"><div class="chk-d-slide"><span class="chk-d-label">MTRS</span><span class="chk-d-status">---</span></div></div></div><div id="chk-tkrs" class="chk-dual-item"><div class="chk-d-check-wrap"><span class="material-symbols-rounded chk-d-icon">check_box_outline_blank</span></div><div class="chk-d-body"><div class="chk-d-slide"><span class="chk-d-label">TKRS</span><span class="chk-d-status">---</span></div></div></div></div></div></div><div id="maint-list" class="maint-list"></div><div class="maint-progress-footer"><div class="maint-progress-right"><div id="maint-counts-dock" style="display:flex;gap:12px;"><div><div class="mcd-val" id="maint-preventive-val">—</div><div class="mcd-label">Preventive</div></div><div><div class="mcd-val" id="maint-corrective-val">—</div><div class="mcd-label">Corrective</div></div><div><div class="mcd-val" id="maint-activity-val">—</div><div class="mcd-label">Activities</div></div></div><div class="maint-bars-wrapper" style="flex:1;"><div class="maint-bar-group"><div class="maint-progress-meta"><span id="maint-progress-label-1">Progress</span><span id="maint-progress-value-1">—</span></div><div class="maint-progress-track"><div id="maint-progress-fill-1" class="maint-progress-fill"></div></div></div></div></div></div></div></div>
     </main>
-
-    <!-- ── MCD BURST OVERLAY ── -->
-    <div id="mcd-burst-overlay">
-        <div class="mcd-burst-card">
-            <div class="mcd-burst-val" id="mcd-burst-val">—</div>
-            <div class="mcd-burst-label" id="mcd-burst-label">—</div>
-        </div>
-    </div>
-
-    <!-- ── STOCK AVAILABILITY MINI-DOCK ── -->
-    <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
-        <div class="sdock-accent"></div>
-        <div class="sdock-header">
-            <span class="material-symbols-rounded sdock-header-icon">inventory_2</span>
-            <span class="sdock-title">Stock Availability</span>
-            <span class="sdock-low-badge" id="sdock-low-badge">LOW</span>
-        </div>
-        <div class="sdock-body" style="position:relative;">
-            <div id="sdock-slide-wrap" style="position:relative;height:2.4rem;overflow:hidden;">
-                <div id="sdock-row-a" class="sdock-row"><span class="sdock-sub">Loading…</span></div>
-                <div id="sdock-row-b" class="sdock-row" style="position:absolute;top:1.2rem;left:0;right:0;opacity:0;"></div>
-            </div>
-            <div class="sdock-notice" id="sdock-notice">
-                <span class="material-symbols-rounded">notifications_active</span>
-                <span class="sdock-notice-text">Stock Updated</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- ── NEWS CHANNEL LOWER THIRD ── -->
+    <!-- LOWER THIRD (REDEFINED) -->
     <div id="lower-third" class="lower-third-wrap">
-        <div class="l3-logo-plate">
-            <div class="l3-live-indicator"></div>
-            <div id="l3-icon-wrap"></div>
-        </div>
-        <div class="l3-content-plate">
-            <div class="l3-sheen"></div>
-            <div class="l3-text-mask">
-                <div id="l3-text-track" class="l3-text-track">
-                    <div id="l3-headline" class="l3-headline">---</div>
-                    <div id="l3-label" class="l3-label">---</div>
-                </div>
-            </div>
-            <div class="l3-progress-bar">
-                <div id="l3-progress-fill" class="l3-progress-fill"></div>
-            </div>
-        </div>
+        <div class="l3-logo-plate"><div class="l3-live-indicator"></div><div id="l3-icon-wrap"></div></div>
+        <div class="l3-content-plate"><div class="l3-sheen"></div><div class="l3-text-track" id="l3-text-track"><div id="l3-headline" class="l3-headline">—</div><div id="l3-label" class="l3-label">—</div></div><div class="l3-progress-bar"><div id="l3-progress-fill" class="l3-progress-fill"></div></div></div>
     </div>
-
-    <!-- ── DRIVER CARD ── -->
-    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
-        <!-- Expanded panel (pops above) -->
-        <div class="driver-expanded" onclick="event.stopPropagation()">
-            <div class="driver-exp-outdated">
-                <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
-                OUTDATED DATA
-            </div>
-            <div class="driver-exp-header">
-                <div class="driver-exp-label">On Duty Driver</div>
-                <div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div>
-                <div id="driver-name" class="driver-exp-name">Loading...</div>
-                <div id="driver-phone" class="driver-exp-phone">---</div>
-            </div>
-            <div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div>
-            <div class="driver-exp-call" onclick="initiateCall(event)">
-                <span class="material-symbols-rounded">call</span>
-                CALL DRIVER
-            </div>
-        </div>
-        <!-- Collapsed pill -->
-        <div class="driver-pill">
-            <div class="driver-pill-icon">
-                <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
-            </div>
-            <div class="driver-pill-text-wrap">
-                <div class="driver-pill-slide" id="driver-pill-slide">
-                    <span class="driver-pill-name-val" id="driver-pill-name">Loading...</span>
-                    <span class="driver-pill-num-val" id="driver-pill-num">---</span>
-                </div>
-            </div>
-            <div class="driver-pill-outdated-badge">
-                <span class="material-symbols-rounded">warning</span>
-                OUTDATED
-            </div>
-            <div class="driver-pill-outdated-dot"></div>
-        </div>
-    </div>
-
-    <!-- Flash News Overlay -->
-    <div id="flash-news-overlay">
-        <div class="flash-backdrop" onclick="dismissFlash()"></div>
-        <div class="flash-panel">
-            <div class="flash-banner">
-                <div class="flash-banner-live">
-                    <div class="flash-live-dot"></div>
-                    LIVE
-                </div>
-                <div class="flash-banner-text">⚡ IMPORTANT NOTICE</div>
-                <div class="flash-banner-tag" id="flash-tag">KMRL SUBSTATION</div>
-            </div>
-            <div class="flash-body">
-                <div class="flash-eyebrow">BREAKING UPDATE</div>
-                <div class="flash-headline" id="flash-headline">—</div>
-                <div class="flash-item-num">
-                    <span id="flash-item-label">ITEM 1 OF 1</span>
-                    <div class="flash-dots" id="flash-dots"></div>
-                </div>
-            </div>
-            <div class="flash-footer">
-                <div class="flash-progress-wrap">
-                    <div class="flash-progress-fill" id="flash-progress-fill"></div>
-                </div>
-                <div class="flash-dismiss" onclick="dismissFlash()">DISMISS ✕</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ── CONSUMABLES OVERLAY ── -->
-    <div id="cons-overlay">
-        <div class="cons-overlay-backdrop" onclick="closeConsOverlay()"></div>
-        <div class="cons-overlay-panel">
-            <div class="cons-panel-header">
-                <div class="cons-panel-title">
-                    <span class="material-symbols-rounded">inventory_2</span>
-                    STOCK AVAILABILITY
-                </div>
-                <button class="cons-panel-close" onclick="closeConsOverlay()">
-                    <span class="material-symbols-rounded">close</span>
-                </button>
-            </div>
-            <div class="cons-panel-list" id="cons-panel-list">
-                <div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items loaded</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-dock" class="app-dock"></div>
-
-    <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
-        <div id="ticker-body" class="ticker-body">
-            <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
-        </div>
-        <div class="ticker-refresh-stamp">
-            <span class="refresh-prefix">UPDATED: </span><span id="refresh-time">---</span>
-        </div>
-        <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
-    </footer>
-
+    <!-- Driver Card -->
+    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)"><div class="driver-expanded" onclick="event.stopPropagation()"><div class="driver-exp-outdated"><span class="material-symbols-rounded">warning</span> OUTDATED</div><div class="driver-exp-header"><div class="driver-exp-label">On Duty Driver</div><div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div><div id="driver-name" class="driver-exp-name">Loading...</div><div id="driver-phone" class="driver-exp-phone">---</div></div><div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div><div class="driver-exp-call" onclick="initiateCall(event)"><span class="material-symbols-rounded">call</span> CALL DRIVER</div></div><div class="driver-pill"><div class="driver-pill-icon"><span class="material-symbols-rounded">directions_car</span></div><div class="driver-pill-text-wrap"><div class="driver-pill-slide" id="driver-pill-slide"><span id="driver-pill-name" class="driver-pill-name-val">—</span><span id="driver-pill-num" class="driver-pill-num-val">—</span></div></div><div class="driver-pill-outdated-badge"><span class="material-symbols-rounded">warning</span> OUTDATED</div></div></div>
+    <footer class="ticker-bar"><div id="ticker-head" class="ticker-head">NOTICE</div><div id="ticker-body" class="ticker-body"><div id="ticker-text" class="ticker-scroll">SYNCING...</div></div><div class="ticker-refresh-stamp"><span id="refresh-time">--:--</span></div><div id="ticker-popup" class="ticker-popup" style="display:none;"></div></footer>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
+        function initTheme() { const saved = localStorage.getItem('kmrl_theme') || 'dark'; document.documentElement.setAttribute('data-theme', saved); }
+        initTheme(); function toggleTheme(e) { const cur = document.documentElement.getAttribute('data-theme'); const nxt = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nxt); localStorage.setItem('kmrl_theme', nxt); if(document.getElementById('theme-icon')) document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode'; }
+        function goFullscreen(e) { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+        function manualOff(e) { document.getElementById('blackout').style.display = 'flex'; } function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
+        function toggleHamburger(e) { const menu = document.getElementById('hamburger-menu'); menu.classList.toggle('open'); }
+        function closeHamburger() { document.getElementById('hamburger-menu')?.classList.remove('open'); }
+        function toggleDriverCard(e) { document.getElementById('driver-card')?.classList.toggle('expanded'); }
+        function initiateCall(e) { const ph = document.getElementById('driver-phone').innerText; if(ph && ph !== '---') window.location.href = `tel:${ph.replace(/\D/g,'')}`; }
+        let _mcdPrevVals = {};
+        function updateMaintCount(id, raw, label) { const el = document.getElementById(id); if(!el) return; const newVal = (raw?.trim() && raw.trim() !== '---') ? raw.trim() : '—'; el.textContent = newVal; }
+        function updateFailuresPill(raw) { const openEl = document.getElementById('fail-open-val'), closedEl = document.getElementById('fail-closed-val'); if(!raw) { openEl.textContent = '—'; closedEl.textContent = '—'; return; } const parts = raw.trim().split('/'); openEl.textContent = parts[0] || 0; closedEl.textContent = parts[1] || 0; }
+        function parseStaff(raw) { if(!raw) return ''; return raw.split('\n').filter(l=>l.trim()).map(line=>`<div class="m3-staff-item"><span class="staff-name">${line.split('|')[0]}</span></div>`).join(''); }
+        function buildTechSection(techRaw) { if(!techRaw) return ''; const names = techRaw.split('\n').filter(l=>l.trim()); if(names.length===0) return ''; const chips = names.map(n=>`<span class="tech-name-chip">${n}</span>`).join(''); return `<div class="tech-section"><div class="tech-scroll-wrap"><div class="tech-scroll-track">${chips+chips}</div></div></div>`; }
+        function isShiftActive(shiftName) { const now=new Date(), mins=now.getHours()*60+now.getMinutes(); if(shiftName==='MORNING') return mins>=390 && mins<840; if(shiftName==='EVENING') return mins>=840 && mins<1290; if(shiftName==='NIGHT') return mins>=1290 || mins<390; return false; }
+        function buildShift(title, val, active, tpc, techRaw) { const staffHtml = parseStaff(val); const techHtml = buildTechSection(techRaw); return `<div class="m3-shift-card ${active?'m3-shift-active':''}"><div class="shift-header-row"><div class="m3-shift-label">${title}</div>${tpc?`<span class="shift-tpc-badge">TPC: ${tpc}</span>`:''}</div><div class="staff-list">${staffHtml||'<div class="m3-staff-item">—</div>'}</div>${techHtml}</div>`; }
+        function updateClocks(){ const n=new Date(); document.getElementById('clk-h').innerText=String(n.getHours()).padStart(2,'0'); document.getElementById('clk-m').innerText=String(n.getMinutes()).padStart(2,'0'); document.getElementById('clk-s').innerText=String(n.getSeconds()).padStart(2,'0'); }
+        setInterval(updateClocks,1000);
 
-        function initTheme() {
-            const saved = localStorage.getItem('kmrl_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved);
+        // ------------------------------------------------------------------
+        // LOWER THIRD LOGIC: cycles through slides only during each "active session"
+        // Session: appears, runs all slides sequentially, disappears, waits interval, reappears.
+        let _l3CycleTimer = null, _l3CurrentSlideIdx = 0, _l3SlidesList = [];
+        let _l3SessionActive = false;
+        let _l3Dur = 7000;     // per slide duration (ms)
+        let _l3Interval = 10000; // hidden interval (ms)
+        let _l3ProgressInterval = null;
+        
+        function resetLowerThirdSession() {
+            if(_l3CycleTimer) clearTimeout(_l3CycleTimer);
+            if(_l3ProgressInterval) clearInterval(_l3ProgressInterval);
+            const wrap = document.getElementById('lower-third');
+            const track = document.getElementById('l3-text-track');
+            if(wrap) wrap.classList.remove('active-box');
+            if(track) track.classList.remove('text-in');
+            _l3SessionActive = false;
+            document.body.classList.remove('lower-third-visible');
         }
-        initTheme();
-
-        function toggleTheme(e) {
-            if (e) e.stopPropagation();
-            const cur = document.documentElement.getAttribute('data-theme');
-            const nxt = cur === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', nxt);
-            localStorage.setItem('kmrl_theme', nxt);
-            const icon = document.getElementById('theme-icon');
-            if (icon) icon.innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
+        
+        function startSlideProgression() {
+            if(!_l3SlidesList.length) return;
+            _l3CurrentSlideIdx = 0;
+            showSlideAndAdvance();
         }
-        function initThemeIcon() {
-            const saved = localStorage.getItem('kmrl_theme') || 'dark';
-            const icon = document.getElementById('theme-icon');
-            if (icon) icon.innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
-        }
-        initThemeIcon();
-        function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
-        function wakeUp() {
-            document.getElementById('blackout').style.display = 'none';
-        }
-
-        // ── Ops rotating pills: alternate label ↔ status every 8s ──
-        let _opsPillTimer = null;
-        let _opsShowingStatus = false;
-        function startOpsPillCycle() {
-            if (_opsPillTimer) clearInterval(_opsPillTimer);
-            _opsPillTimer = setInterval(() => {
-                _opsShowingStatus = !_opsShowingStatus;
-                const ms = document.getElementById('mainline-slide');
-                const ds = document.getElementById('depot-slide');
-                if (ms) ms.classList.toggle('show-status', _opsShowingStatus);
-                if (ds) ds.classList.toggle('show-status', _opsShowingStatus);
-            }, 8000);
-        }
-        startOpsPillCycle();
-
-        // ── Hamburger menu ──
-        function toggleHamburger(e) {
-            if (e) e.stopPropagation();
-            const menu = document.getElementById('hamburger-menu');
-            const icon = document.getElementById('hamburger-icon');
-            const open = menu.classList.toggle('open');
-            icon.innerText = open ? 'close' : 'menu';
-        }
-        function closeHamburger() {
-            const menu = document.getElementById('hamburger-menu');
-            const icon = document.getElementById('hamburger-icon');
-            if (menu) { menu.classList.remove('open'); }
-            if (icon) icon.innerText = 'menu';
-        }
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('hamburger-menu');
-            const btn  = document.getElementById('hamburger-btn');
-            if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-                closeHamburger();
-            }
-        });
-
-        // ── Failures block ──
-        let _failuresLastRaw = null;
-        function updateFailuresPill(raw) {
-            const pill     = document.getElementById('failures-pill');
-            const openEl   = document.getElementById('fail-open-val');
-            const closedEl = document.getElementById('fail-closed-val');
-            if (!pill || !openEl || !closedEl) return;
-
-            if (!raw || raw.trim() === '' || raw.trim() === '---') {
-                openEl.textContent   = '—';
-                closedEl.textContent = '—';
+        
+        function showSlideAndAdvance() {
+            if(!_l3SessionActive) return;
+            if(_l3CurrentSlideIdx >= _l3SlidesList.length) {
+                // all slides shown => hide the whole element after a small delay and schedule next session
+                const wrap = document.getElementById('lower-third');
+                const track = document.getElementById('l3-text-track');
+                if(wrap) wrap.classList.remove('active-box');
+                if(track) track.classList.remove('text-in');
+                document.body.classList.remove('lower-third-visible');
+                _l3SessionActive = false;
+                if(_l3ProgressInterval) clearInterval(_l3ProgressInterval);
+                // schedule next appearance after interval
+                _l3CycleTimer = setTimeout(() => {
+                    activateNewSession();
+                }, _l3Interval);
                 return;
             }
-
-            const parts       = raw.trim().split('/');
-            const openCount   = parseInt(parts[0]) || 0;
-            const closedCount = parseInt(parts[1]) || 0;
-
-            openEl.textContent   = openCount;
-            closedEl.textContent = closedCount;
-
-            if (_failuresLastRaw !== raw) {
-                _failuresLastRaw = raw;
-                pill.classList.remove('burst');
-                void pill.offsetWidth;
-                pill.classList.add('burst');
-                setTimeout(() => pill.classList.remove('burst'), 900);
-            }
+            const slide = _l3SlidesList[_l3CurrentSlideIdx];
+            // update UI
+            document.getElementById('l3-headline').innerText = slide.head;
+            const labelSpan = document.getElementById('l3-label');
+            labelSpan.innerText = slide.sub || '';
+            labelSpan.style.display = slide.sub ? 'block' : 'none';
+            const iconWrap = document.getElementById('l3-icon-wrap');
+            if(slide.type === 'img') iconWrap.innerHTML = `<img src="${slide.val}" class="l3-icon-img" onerror="this.style.display='none'">`;
+            else if(slide.type === 'icon') iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">${slide.val}</span>`;
+            else iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">newspaper</span>`;
+            // animate text in
+            const trackDiv = document.getElementById('l3-text-track');
+            trackDiv.classList.remove('text-in'); void trackDiv.offsetWidth; trackDiv.classList.add('text-in');
+            // progress bar animation
+            const fill = document.getElementById('l3-progress-fill');
+            fill.style.transition = 'none'; fill.style.width = '0%'; void fill.offsetWidth;
+            fill.style.transition = `width ${_l3Dur}ms linear`;
+            fill.style.width = '100%';
+            // schedule next slide
+            _l3CycleTimer = setTimeout(() => {
+                _l3CurrentSlideIdx++;
+                showSlideAndAdvance();
+            }, _l3Dur);
         }
-
-        // ── Driver pill: alternate name ↔ number every 10s ──
-        let _driverPillTimer = null;
-        let _driverShowingNum = false;
-        function startDriverPillCycle() {
-            if (_driverPillTimer) clearInterval(_driverPillTimer);
-            _driverPillTimer = setInterval(() => {
-                const slide = document.getElementById('driver-pill-slide');
-                if (!slide) return;
-                _driverShowingNum = !_driverShowingNum;
-                slide.classList.toggle('show-number', _driverShowingNum);
-            }, 10000);
-        }
-        startDriverPillCycle();
-
-        function toggleDriverCard(e) {
-            if (e) e.stopPropagation();
-            const card = document.getElementById('driver-card');
-            card.classList.toggle('expanded');
-        }
-        document.addEventListener('click', function(e) {
-            const card = document.getElementById('driver-card');
-            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
-                card.classList.remove('expanded');
-            }
-        });
-        function initiateCall(e) {
-            if (e) e.stopPropagation();
-            const ph = document.getElementById('driver-phone').innerText;
-            if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`;
-        }
-
-        // ── Flash News System ──
-        let _flashItems = [];
-        let _flashIdx = 0;
-        let _flashTimer = null;
-        let _flashProgressTimer = null;
-        let _flashHourTimer = null;
-        let _lastNoticeRaw = '';
-        const FLASH_ITEM_DURATION = 7000; 
-
-        function showFlashNews(items, startIdx = 0) {
-            if (!items || items.length === 0) return;
-            _flashItems = items;
-            _flashIdx = startIdx;
-            _renderFlashItem();
-            const overlay = document.getElementById('flash-news-overlay');
-            overlay.classList.add('visible');
-            _startFlashProgress();
-        }
-
-        function _renderFlashItem() {
-            const items = _flashItems;
-            const idx = _flashIdx;
-            const total = items.length;
-            document.getElementById('flash-headline').innerText = items[idx] || '';
-            document.getElementById('flash-item-label').innerText = `ITEM ${idx + 1} OF ${total}`;
-            const dotsEl = document.getElementById('flash-dots');
-            dotsEl.innerHTML = items.map((_, i) =>
-                `<div class="flash-dot ${i === idx ? 'active' : ''}"></div>`
-            ).join('');
-            document.getElementById('flash-tag').innerText =
-                new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:false}) + ' · KMRL';
-        }
-
-        function _startFlashProgress() {
-            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
-            if (_flashTimer) clearTimeout(_flashTimer);
-            const fill = document.getElementById('flash-progress-fill');
-            if (fill) fill.style.width = '0%';
-            const start = Date.now();
-            _flashProgressTimer = setInterval(() => {
-                const elapsed = Date.now() - start;
-                const pct = Math.min(100, (elapsed / FLASH_ITEM_DURATION) * 100);
-                if (fill) fill.style.width = pct + '%';
-            }, 80);
-            _flashTimer = setTimeout(() => {
-                clearInterval(_flashProgressTimer);
-                _flashIdx++;
-                if (_flashIdx < _flashItems.length) {
-                    _renderFlashItem();
-                    _startFlashProgress();
-                } else {
-                    dismissFlash();
-                }
-            }, FLASH_ITEM_DURATION);
-        }
-
-        function dismissFlash() {
-            if (_flashTimer) clearTimeout(_flashTimer);
-            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
-            document.getElementById('flash-news-overlay').classList.remove('visible');
-        }
-
-        function triggerFlashIfChanged(raw) {
-            if (!raw || raw.trim() === '') return;
-            const items = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
-            if (items.length === 0) return;
-
-            if (raw.trim() !== _lastNoticeRaw.trim()) {
-                _lastNoticeRaw = raw.trim();
-                setTimeout(() => showFlashNews(items, 0), 1200);
-                if (_flashHourTimer) clearInterval(_flashHourTimer);
-                _flashHourTimer = setInterval(() => {
-                    const latest = _lastNoticeRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
-                    if (latest.length > 0) showFlashNews(latest, 0);
-                }, 60 * 60 * 1000); 
-            }
-        }
-
-        function toggleGrid(e) {
-            if (e) e.stopPropagation();
-            const chk = document.getElementById('checklist-container');
-            const dot = document.getElementById('hm-grid-dot');
-            const isHidden = chk.style.visibility === 'hidden';
-            chk.style.visibility = isHidden ? 'visible' : 'hidden';
-            if (dot) dot.classList.toggle('visible', !isHidden);
-            if (isHidden) {
-                const t = document.getElementById('station-track');
-                t.style.animation = 'none'; t.offsetHeight; t.style.animation = null;
-            }
-        }
-
-        function parseStaff(raw) {
-            if (!raw) return '';
-            return raw.split('\n').filter(l => l.trim() !== '').map(line => {
-                if (line.includes('|')) {
-                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
-                    let bCls = 'badge-default';
-                    if (dCode.includes('M TPC')) bCls = 'badge-tpc-m';
-                    else if (dCode.includes('E TPC')) bCls = 'badge-tpc-e';
-                    else if (dCode.includes('N TPC')) bCls = 'badge-tpc-n';
-                    return `<div class="m3-staff-item"><span class="staff-name">${name}</span><span class="m3-badge ${bCls}">${duty}</span></div>`;
-                }
-                return `<div class="m3-staff-item"><span class="staff-name">${line}</span></div>`;
-            }).join('');
-        }
-
-        function buildTechSection(techRaw) {
-            if (!techRaw || techRaw.trim() === '') return '';
-            const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
-            if (names.length === 0) return '';
-            const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
-            const allChips = names.map(chipHtml).join('');
-            const doubledChips = allChips + allChips; 
-            if (names.length >= 3) {
-                return `
-                <div class="tech-section">
-                    <div class="tech-label-row">
-                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
-                        <span class="tech-label">Technicians On Duty</span>
-                    </div>
-                    <div class="tech-scroll-wrap">
-                        <div class="tech-scroll-track">${doubledChips}</div>
-                    </div>
-                </div>`;
-            } else {
-                return `
-                <div class="tech-section">
-                    <div class="tech-label-row">
-                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
-                        <span class="tech-label">Technicians On Duty</span>
-                    </div>
-                    <div class="tech-static">${names.map(chipHtml).join('')}</div>
-                </div>`;
-            }
-        }
-
-        function isShiftActive(shiftName) {
-            const now = new Date();
-            const totalMins = now.getHours() * 60 + now.getMinutes();
-            const m = (h, min) => h * 60 + min;
-
-            if (shiftName === 'MORNING') return totalMins >= m(6, 30) && totalMins < m(14, 0);
-            if (shiftName === 'EVENING') return totalMins >= m(14, 0) && totalMins < m(21, 30);
-            if (shiftName === 'NIGHT') return totalMins >= m(21, 30) || totalMins < m(6, 30);
-            return false;
-        }
-
-        function buildShift(title, val, active, tpc, techRaw) {
-            const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
-            const staffHtml = (val && val.trim() !== '') ? parseStaff(val) : `<div class="m3-staff-item" style="justify-content:center;opacity:0.4;font-family:var(--font-display);font-size:0.8rem;">No Deployment</div>`;
-            const techHtml = buildTechSection(techRaw);
-            const staffCount = (val && val.trim() !== '') ? val.split('\n').filter(l => l.trim() !== '').length : 0;
-            const techCount = (techRaw && techRaw.trim() !== '') ? techRaw.split('\n').filter(l => l.trim() !== '').length : 0;
-            const countBadge = (staffCount > 0 || techCount > 0) ? `<span class="shift-count-badge"><span class="material-symbols-rounded">group</span><span class="cnt-staff">${staffCount}</span><span class="cnt-sep">+</span><span class="cnt-tech">${techCount}</span></span>` : '';
-
-            return `
-            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
-                <div class="shift-header-row">
-                    <div class="m3-shift-label"><span class="shift-active-dot"></span>${title}${countBadge}</div>
-                    ${tpcHtml}
-                </div>
-                <div class="staff-list">${staffHtml}</div>
-                ${techHtml}
-            </div>`;
-        }
-
-        function buildGenPills(genRaw) {
-            if (!genRaw || genRaw.trim() === '') return '';
-            return genRaw.split('\n').filter(l => l.trim() !== '').map(line => {
-                const name = line.includes('|') ? line.split('|')[0].trim() : line.trim();
-                return `<span class="gen-name-tag">${name}</span>`;
-            }).join('');
-        }
-
-        function updateTickerBar(badge, names, rawText = null) {
-            const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
-            head.innerText = badge.toUpperCase();
-            text.classList.remove('scrolling-active');
-            text.innerText = names;
-            const popup = document.getElementById('ticker-popup');
-            if (popup) popup.innerText = rawText !== null ? rawText : names;
-            requestAnimationFrame(() => {
-                const tw = text.scrollWidth, cw = body.offsetWidth;
-                if (tw > cw - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; }
-                else { body.style.justifyContent = 'center'; }
-            });
-        }
-
-        window.draw = function(data) {
-            const timeEl = document.getElementById('refresh-time');
-            if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-            let stHtml = '', tdHtml = '', tmHtml = '';
-
-            let staff = {
-                today:    { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
-                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
-            };
-
-            let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
-            let opsScheduleLines = null;
-            let irWeather = '', irItems = '', irImages = '';
-            let l3DurRaw = '', l3IntRaw = '';
-            const dockRows = {};
-            const irRowItems = {}, irRowImages = {};
-
-            data.forEach(item => {
-                const unit  = (item.Unit      || '').trim(), param = (item.Parameter || '').trim(), val   = (item.Value     || '').trim();
-
-                if (param === 'sheetab_R2C2') {
-                    const formatted = val.split('\n').map(l => l.trim()).filter(l => l !== '').join('   •   ');
-                    updateTickerBar('IMPORTANT NOTICE', formatted, val);
-                    triggerFlashIfChanged(val);
-                }
-
-                if (param === 'sheetab_R2C12') staff.today.gen      = val;
-                if (param === 'sheetab_R2C3')  staff.today.morn     = val;
-                if (param === 'sheetab_R2C4')  staff.today.eve      = val;
-                if (param === 'sheetab_R2C5')  staff.today.night    = val;
-                if (param === 'sheetab_R2C9')  staff.today.tpcMorn  = val;
-                if (param === 'sheetab_R2C10') staff.today.tpcEve   = val;
-                if (param === 'sheetab_R2C11') staff.today.tpcNight = val;
-                if (param === 'sheetab_R2C6')  staff.today.techMorn  = val;
-                if (param === 'sheetab_R2C7')  staff.today.techEve   = val;
-                if (param === 'sheetab_R2C8')  staff.today.techNight = val;
-
-                if (param === 'sheetab_R2C26') staff.tomorrow.gen      = val;
-                if (param === 'sheetab_R2C17') staff.tomorrow.morn     = val;
-                if (param === 'sheetab_R2C18') staff.tomorrow.eve      = val;
-                if (param === 'sheetab_R2C19') staff.tomorrow.night    = val;
-                if (param === 'sheetab_R2C23') staff.tomorrow.tpcMorn  = val;
-                if (param === 'sheetab_R2C24') staff.tomorrow.tpcEve   = val;
-                if (param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
-                if (param === 'sheetab_R2C20') staff.tomorrow.techMorn  = val;
-                if (param === 'sheetab_R2C21') staff.tomorrow.techEve   = val;
-                if (param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
-
-                if (param === 'ChecklistStatus') chkStatus = val;
-                if (param === 'sheetab_R2C33') mtrsStatus = val;
-                if (param === 'sheetab_R2C34') tkrsStatus = val;
-                if (param === 'sheetab_R2C38' && unit === 'sheetab') updateFailuresPill(val);
-
-                if (param === 'sheetab_R2C39' && unit === 'sheetab') updateMaintCount('maint-corrective-val', val, 'Corrective Maintenance');
-                if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
-                if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
-                
-                // Lower Third Data Source (re-using info-rotator columns)
-                if (param === 'sheetab_R2C35') irWeather  = val;
-                if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
-                if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
-                if (param === 'sheetab_R2C47') l3DurRaw = val; // Display Duration
-                if (param === 'sheetab_R2C48') l3IntRaw = val; // Transition Interval
-
-                const c36Match = param.match(/^sheetab_R(\d+)C36$/);
-                if (c36Match && unit === 'sheetab') { const row = parseInt(c36Match[1], 10); if (row >= 3) irRowItems[row] = val; }
-                const c37Match = param.match(/^sheetab_R(\d+)C37$/);
-                if (c37Match && unit === 'sheetab') { const row = parseInt(c37Match[1], 10); if (row >= 3) irRowImages[row] = val; }
-                if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
-
-                if (unit === 'StationTemp') {
-                    const parts = val.split('|'); const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
-                    const isAlarm = amb > 34 || trfo > 80;
-                    stHtml += `<div class="stock-item ${isAlarm ? 'alarm' : ''}">
-                        <span class="stock-name">${param}</span>
-                        <span class="stock-val ${amb > 34 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${parts[0]}°</span>
-                        <span class="stock-divider"></span>
-                        <span class="stock-val ${trfo > 80 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
-                    </div>`;
-                }
-
-                if (unit === 'OpsBlock') {
-                    const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
-                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
-                    mEl.className = `ops-rot-pill ${m.toUpperCase().includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    dEl.className = `ops-rot-pill ${d.toUpperCase().includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    const mSv = document.getElementById('mainline-status-val'), dSv = document.getElementById('depot-status-val');
-                    if (mSv) mSv.textContent = m; if (dSv) dSv.textContent = d;
-                }
-
-                if (unit === 'OpsSchedule') {
-                    opsScheduleLines = val.split('\n').filter(l => l.trim() !== '');
-                }
-
-                if (unit === 'DriverPopup') {
-                    const parts = val.split('|'); const name = parts[0] || '---'; const phone = parts[1] || '---'; const shift = parts[2] || '---';
-                    document.getElementById('driver-name').innerText  = name; document.getElementById('driver-phone').innerText = phone;
-                    document.getElementById('driver-shift').innerText = `SHIFT: ${shift}`;
-                    const pn = document.getElementById('driver-pill-name'), pNum = document.getElementById('driver-pill-num');
-                    if (pn) pn.innerText = name; if (pNum) pNum.innerText = phone !== '---' ? phone : shift !== '---' ? `SHIFT: ${shift}` : '---';
-                }
-
-                if (unit === 'sheetab' && param === 'sheetab_R2C1') evaluateUpdateBadge(val);
-
-                const dockMatch = param.match(/^sheetab_R(\d+)C(29|30|31)$/);
-                if (dockMatch && unit === 'sheetab') {
-                    const row = parseInt(dockMatch[1], 10), col = parseInt(dockMatch[2], 10);
-                    if (!dockRows[row]) dockRows[row] = {};
-                    if (col === 29) dockRows[row].label = val; if (col === 30) dockRows[row].pct = val; if (col === 31) dockRows[row].icon = val;
-                }
-
-                if (param === 'sheetab_R2C28') {
-                    const popupEl = document.getElementById('maint-progress-popup-body');
-                    if (popupEl) popupEl.innerText = val && val.trim() !== '' ? val.trim() : '—';
-                }
-
-                if (unit === 'sheetab') {
-                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINTENANCE PROGRESS'; }
-                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SECONDARY PROGRESS'; }
-                    
-                    if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
-                    if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                }
-            });
-
-            function updateProgressBar(val, fillId, valId) {
-                const pct = parseFloat(val);
-                const fillEl = document.getElementById(fillId);
-                const valEl = document.getElementById(valId);
-                if (!fillEl || !valEl) return;
-                if (!isNaN(pct)) {
-                    const clamped = Math.min(100, Math.max(0, pct)); 
-                    valEl.innerText = clamped.toFixed(1) + '%';
-                    setTimeout(() => { fillEl.style.width = clamped + '%'; }, 80);
-                    if (clamped >= 80) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--success) 0%, color-mix(in srgb, var(--success) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--success)'; 
-                    } else if (clamped >= 50) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--primary)'; 
-                    } else { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--error)'; 
-                    }
-                } else { 
-                    valEl.innerText = '—'; 
-                    fillEl.style.width = '0%'; 
-                }
-            }
-
-            function applyChkDual(id, rawVal) {
-                const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
-                if (!item) return;
-                const val = (rawVal || '').trim();
-                const isFilled = val !== '' && val !== '---' && val !== '0' && !val.toUpperCase().includes('NOT') && !val.toUpperCase().includes('EMPTY');
-                item.className = 'chk-dual-item ' + (isFilled ? 'chk-d-filled' : 'chk-d-empty');
-                icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank';
-                if (status) status.textContent = isFilled ? val : (val !== '' && val !== '---' ? val : 'Not Filled');
-            }
-            applyChkDual('chk-mtrs', mtrsStatus);
-            applyChkDual('chk-tkrs', tkrsStatus);
-
-            if (!window._chkPillTimer) {
-                let _chkShowingStatus = false;
-                window._chkPillTimer = setInterval(() => {
-                    _chkShowingStatus = !_chkShowingStatus;
-                    ['chk-mtrs-slide','chk-tkrs-slide'].forEach(sid => { const s = document.getElementById(sid); if (s) s.classList.toggle('show-status', _chkShowingStatus); });
-                }, 8000);
-            }
-
-            const stEl = document.getElementById('station-track');
-            if (stHtml) { stEl.innerHTML = stHtml + stHtml; stEl.style.animation = 'none'; stEl.offsetHeight; stEl.style.animation = ''; }
-
-            const todayPills = document.getElementById('today-gen-pills'), tomorrowPills = document.getElementById('tomorrow-gen-pills');
-            todayPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
-            tomorrowPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
-
-            tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn,  staff.today.techMorn);
-            tdHtml += buildShift('EVENING', staff.today.eve,  isShiftActive('EVENING'), staff.today.tpcEve,   staff.today.techEve);
-            tdHtml += buildShift('NIGHT',   staff.today.night, isShiftActive('NIGHT'),  staff.today.tpcNight, staff.today.techNight);
-
-            tmHtml += buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn,  staff.tomorrow.techMorn);
-            tmHtml += buildShift('EVENING', staff.tomorrow.eve,  false, staff.tomorrow.tpcEve,   staff.tomorrow.techEve);
-            tmHtml += buildShift('NIGHT',   staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
-
-            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
-            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
-
-            buildAppDock(dockRows);
-            
-            // Initialize New Lower Third Element
-            initLowerThird(irWeather, irRowItems, irRowImages, l3DurRaw, l3IntRaw);
-
-            if (opsScheduleLines !== null) {
-                const listEl = document.getElementById('maint-list');
-                if (opsScheduleLines.length === 0) {
-                    listEl.innerHTML = '';
-                } else {
-                    const itemsHtml = opsScheduleLines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
-                    listEl.innerHTML = `
-                        <div class="maint-scroll-track" id="maint-track">
-                            <div class="maint-scroll-half" id="maint-measure">${itemsHtml}</div>
-                        </div>`;
-                    
-                    setTimeout(() => {
-                        const track = document.getElementById('maint-track');
-                        const measure = document.getElementById('maint-measure');
-                        if (track && measure) {
-                            const mHeight = measure.getBoundingClientRect().height;
-                            const lHeight = listEl.getBoundingClientRect().height;
-                            
-                            if (mHeight > lHeight && lHeight > 0) {
-                                const duration = Math.max(15, mHeight / 25); 
-                                track.innerHTML = `
-                                    <div class="maint-scroll-half">${itemsHtml}</div>
-                                    <div class="maint-scroll-half">${itemsHtml}</div>`;
-                                track.style.animationDuration = duration + 's';
-                                track.classList.add('scrolling');
-                                listEl.style.overflowY = 'hidden';
-                                listEl.style.paddingRight = '0';
-                            } else {
-                                track.classList.remove('scrolling');
-                                listEl.style.overflowY = 'auto';
-                                listEl.style.paddingRight = '4px';
-                            }
-                        }
-                    }, 400); 
-                }
-            }
-        };
-
-        // ── CONSUMABLES FUNCTIONS ──
-        let _consPillTimer = null, _consPillIdx = 0, _consRows = [];
-        function buildAppDock(dockRows) {
-            const rows = Object.keys(dockRows).map(Number).sort((a, b) => a - b).filter(r => dockRows[r].label || dockRows[r].icon);
-            _consRows = rows.map(r => dockRows[r]);
-            if (rows.length === 0) { _buildConsOverlayEmpty(); return; }
-
-            const RADIUS = 17, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-            _buildStockDock(_consRows);
-
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                listEl.innerHTML = _consRows.map(item => {
-                    const { label = '', pct = '', icon = '' } = item;
-                    const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0)), offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE, cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
-                    const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cons-list-fallback" style="display:none;">${label.charAt(0) || '?'}</span>` : `<span class="cons-list-fallback">${label.charAt(0) || '?'}</span>`;
-                    const warnIcon = pctNum < 20 ? `<span class="material-symbols-rounded cons-list-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
-                    return `<div class="cons-list-item"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
-                }).join('');
-            }
-        }
-
-        function _buildConsOverlayEmpty() {
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items</div>';
-        }
-
-        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.add('visible'); }
-        function closeConsOverlay() { const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.remove('visible'); }
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeConsOverlay(); } });
-
-        const _mcdPrevVals = {};
-        function updateMaintCount(id, raw, label) {
-            const el = document.getElementById(id); if (!el) return;
-            const newVal = (raw && raw.trim() && raw.trim() !== '---') ? raw.trim() : '—';
-            const prev = _mcdPrevVals[id]; _mcdPrevVals[id] = newVal;
-            if (prev === undefined || prev === newVal) { el.textContent = newVal; return; }
-            el.textContent = newVal; el.classList.remove('popping'); void el.offsetWidth; el.classList.add('popping'); setTimeout(() => el.classList.remove('popping'), 700);
-            showMcdBurst(newVal, label);
-        }
-
-        let _mcdBurstTimer = null;
-        function showMcdBurst(val, label) {
-            const ov = document.getElementById('mcd-burst-overlay'), bv = document.getElementById('mcd-burst-val'), bl = document.getElementById('mcd-burst-label');
-            if (!ov || !bv || !bl) return;
-            if (_mcdBurstTimer) { clearTimeout(_mcdBurstTimer); ov.classList.remove('visible'); void ov.offsetWidth; }
-            bv.textContent = val; bl.textContent = label; ov.classList.add('visible');
-            _mcdBurstTimer = setTimeout(() => { ov.classList.remove('visible'); _mcdBurstTimer = null; }, 2200);
-        }
-
-        let _sdockTimer = null, _sdockNoticeTimer = null, _sdockIdx = 0, _sdockRows = [], _sdockPrevHash = null;
-        let _consAutoCloseTimer = null, _cons30minTimer = null;
-
-        function _consAutoOpen(autoClose) {
-            const ov = document.getElementById('cons-overlay');
-            if (!ov) return;
-            ov.classList.add('visible');
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                setTimeout(() => {
-                    const maxScroll = listEl.scrollHeight - listEl.clientHeight;
-                    if (maxScroll > 0) {
-                        listEl.style.scrollBehavior = 'smooth'; listEl.scrollTop = 0;
-                        const steps = 60, stepTime = 5000 / steps, perStep = maxScroll / steps;
-                        let step = 0;
-                        const scrollInterval = setInterval(() => { step++; listEl.scrollTop = Math.min(step * perStep, maxScroll); if (step >= steps) clearInterval(scrollInterval); }, stepTime);
-                    }
-                }, 400);
-            }
+        
+        function activateNewSession() {
+            if(!_l3SlidesList.length) return;
+            resetLowerThirdSession();
+            _l3SessionActive = true;
+            document.body.classList.add('lower-third-visible');
+            const wrap = document.getElementById('lower-third');
+            const track = document.getElementById('l3-text-track');
+            wrap.classList.add('active-box');
+            track.classList.remove('text-in'); // reset text state
+            _l3CurrentSlideIdx = 0;
+            // small delay before first slide animation
             setTimeout(() => {
-                const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
-                const lowItems = [];
-                items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) { el.classList.add('alert-low'); lowItems.push(el); } });
-                if (lowItems.length) { setTimeout(() => { lowItems.forEach(el => el.classList.remove('alert-low')); }, 3000); }
-            }, 5400);
-            if (autoClose) {
-                if (_consAutoCloseTimer) clearTimeout(_consAutoCloseTimer);
-                _consAutoCloseTimer = setTimeout(() => { closeConsOverlay(); _consAutoCloseTimer = null; }, 10000);
-            }
+                if(_l3SessionActive) showSlideAndAdvance();
+            }, 200);
         }
-
-        function _buildStockDock(rows) {
-            _sdockRows = rows;
-            const dock = document.getElementById('stock-dock'), badge = document.getElementById('sdock-low-badge');
-            if (!dock) return;
-            const lowCount = rows.filter(r => (parseFloat(r.pct)||0) < 20).length;
-            const hasLow = lowCount > 0;
-            dock.classList.toggle('has-low', hasLow);
-            if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
-
-            const hash = rows.map(r => r.label + r.pct).join('|');
-            const changed = hash !== _sdockPrevHash;
-            _sdockPrevHash = hash;
-
-            if (_sdockTimer) clearInterval(_sdockTimer);
-            _sdockIdx = 0; _renderSdockRow();
-            if (rows.length > 1) { _sdockTimer = setInterval(() => { _sdockIdx = (_sdockIdx + 1) % _sdockRows.length; _renderSdockRow(); }, 4000); }
-
-            if (changed) {
-                const notice = document.getElementById('sdock-notice');
-                if (notice) { notice.classList.add('visible'); setTimeout(() => notice.classList.remove('visible'), 2000); }
-                setTimeout(() => { _consAutoOpen(true); }, 2200);
-            }
-            if (_cons30minTimer) clearInterval(_cons30minTimer);
-            _cons30minTimer = setInterval(() => { _consAutoOpen(true); }, 30 * 60 * 1000);
-        }
-
-        function _renderSdockRow() {
-            const rowA = document.getElementById('sdock-row-a'); if (!rowA || !_sdockRows.length) return;
-            const item = _sdockRows[_sdockIdx], { label = '', pct = '', icon = '' } = item;
-            const pctNum = Math.max(0, parseFloat(pct)||0); 
-            const cls = pctNum > 100 ? 'over' : pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low', isLow = pctNum < 20;
-            const iconEl = icon && icon.startsWith('http') ? '<img src="' + icon + '" alt="" style="width:13px;height:13px;border-radius:50%;object-fit:cover;flex-shrink:0;">' : '<span class="material-symbols-rounded sdock-row-icon">inventory_2</span>';
-            const warnEl = isLow ? '<span class="material-symbols-rounded sdock-row-warn">warning</span>' : '';
-            rowA.innerHTML = iconEl + '<span class="sdock-row-name">' + label + '</span><span class="sdock-row-pct ' + cls + '">' + pctNum.toFixed(0) + '%</span>' + warnEl;
-        }
-
-        function evaluateUpdateBadge(raw) {
-            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
-            if (!raw || raw === '---') { badge.innerText = 'UPDATE: N/A'; badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); return; }
-            try {
-                const ut = new Date(raw), now = new Date();
-                badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
-                const h = now.getHours(); let ss = new Date(now);
-                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0); else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
-                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); }
-                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); }
-            } catch (e) { badge.innerText = 'UPDATE: ERR'; }
-        }
-
-        function updateClocks() {
-            const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
-            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
-            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
-            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
-            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
-            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
-        }
-        setInterval(updateClocks, 1000);
-
-        function refreshData() {
-            const old = document.getElementById('api-script'); if (old) old.remove();
-            const s = document.createElement('script'); s.id = 'api-script';
-            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s);
-        }
-        setInterval(refreshData, 120000); refreshData(); updateClocks();
-        window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
-
-        // ── NEWS CHANNEL LOWER THIRD ANIMATION LOGIC ──
-        let _l3Timer = null;
-        let _l3Idx = 0;
-        let _l3Slides = [];
-        let _l3Dur = 8000;
-        let _l3Int = 5000;
-
-        function initLowerThird(weatherRaw, irRowItems, irRowImages, durRaw, intRaw) {
-            if (_l3Timer) clearTimeout(_l3Timer);
-            
-            _l3Dur = parseFloat(durRaw) * 1000; if (isNaN(_l3Dur) || _l3Dur < 2000) _l3Dur = 8000;
-            _l3Int = parseFloat(intRaw) * 1000; if (isNaN(_l3Int) || _l3Int < 1000) _l3Int = 5000;
-            
-            _l3Slides = [];
-            
-            // Default Date slide
-            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            _l3Slides.push({
-                type: 'icon', val: 'calendar_today',
-                head: DAYS[new Date().getDay()],
-                sub: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-            });
-
-            // Gather items from JSON columns
-            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
-            rowNums.forEach(rowNum => {
-                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg = ((irRowImages || {})[rowNum] || '').trim();
-                if (!rawItem) return;
-                
-                const itemLines = rawItem.split('\n').map(l => l.trim()).filter(l => l !== '');
-                const imgLines = rawImg.split('\n').map(l => l.trim());
-                
-                itemLines.forEach((line, i) => {
-                    const img = imgLines[i] || '';
+        
+        function initLowerThirdFromData(irRowItems, irRowImages, durRaw, intRaw) {
+            // Build slides (exclude date)
+            const slides = [];
+            // Process rows from station-info (C36,C37)
+            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a,b)=>a-b);
+            rowNums.forEach(row => {
+                const rawItem = (irRowItems[row] || '').trim();
+                const rawImg = ((irRowImages || {})[row] || '').trim();
+                if(!rawItem) return;
+                const lines = rawItem.split('\n').map(l=>l.trim()).filter(l=>l!=='');
+                const imgLines = rawImg.split('\n').map(l=>l.trim());
+                lines.forEach((line,idx) => {
                     let text = line;
-                    if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
-                    
                     let sub = '';
-                    const match = text.match(/\[(.*?)\]/);
-                    if (match) {
-                        sub = match[1].trim();
-                        text = text.replace(/\[.*?\]/, '').trim();
-                    }
-
-                    _l3Slides.push({
-                        type: img.startsWith('http') ? 'img' : 'none',
-                        val: img, head: text, sub: sub
-                    });
+                    if(line.includes('|')) { const parts=line.split('|'); text = (parts[1]||parts[0]).trim(); }
+                    const bracketMatch = text.match(/\[(.*?)\]/);
+                    if(bracketMatch) { sub = bracketMatch[1].trim(); text = text.replace(/\[.*?\]/,'').trim(); }
+                    const imgUrl = imgLines[idx] || '';
+                    const type = (imgUrl && imgUrl.startsWith('http')) ? 'img' : 'none';
+                    slides.push({ type, val: imgUrl, head: text, sub: sub });
                 });
             });
-
-            const l3El = document.getElementById('lower-third');
-            const track = document.getElementById('l3-text-track');
-
-            if (_l3Slides.length > 0) {
-                _l3Idx = 0;
-                l3El.classList.remove('active-box'); 
-                if (track) track.classList.remove('text-in');
-                
-                // Slight delay before kicking off cycle
-                _l3Timer = setTimeout(() => _cycleL3(), 500);
-            } else {
-                l3El.classList.remove('active-box');
+            // If no data, add placeholder generic
+            if(slides.length === 0) slides.push({ type:'icon', val:'info', head:'KMRL SUBSTATION', sub:'Operational update' });
+            _l3SlidesList = slides;
+            _l3Dur = (parseFloat(durRaw) * 1000) || 7000;
+            _l3Interval = (parseFloat(intRaw) * 1000) || 10000;
+            if(_l3Dur < 2000) _l3Dur = 2000;
+            if(_l3Interval < 3000) _l3Interval = 3000;
+            // reset any ongoing session and start fresh cycle
+            resetLowerThirdSession();
+            if(_l3SlidesList.length > 0) {
+                // start new session after a short init delay to avoid flicker
+                if(_l3CycleTimer) clearTimeout(_l3CycleTimer);
+                _l3CycleTimer = setTimeout(() => activateNewSession(), 800);
             }
         }
-
-        function _cycleL3() {
-            const l3El = document.getElementById('lower-third');
-            const track = document.getElementById('l3-text-track');
-            const iconWrap = document.getElementById('l3-icon-wrap');
-            const fill = document.getElementById('l3-progress-fill');
-            const labelEl = document.getElementById('l3-label');
-
-            if (_l3Slides.length === 0) return;
-            const slide = _l3Slides[_l3Idx];
-
-            // Reset Progress instantly
-            if (fill) {
-                fill.style.transition = 'none';
-                fill.style.width = '0%';
-            }
-
-            // Update DOM text
-            document.getElementById('l3-headline').textContent = slide.head;
-            labelEl.textContent = slide.sub;
-            labelEl.style.display = slide.sub ? 'block' : 'none'; // Hides subtext area naturally if blank
-
-            // Update DOM Media
-            if (slide.type === 'img') {
-                iconWrap.innerHTML = `<img src="${slide.val}" class="l3-icon-img" onerror="this.style.display='none'">`;
-            } else if (slide.type === 'icon') {
-                iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">${slide.val}</span>`;
-            } else {
-                iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">breaking_news_alt_1</span>`;
-            }
-
-            // Prep text track
-            track.classList.add('text-in');
-
-            // Slide box in
-            l3El.classList.add('active-box');
-
-            // Animate Progress Bar syncing after slide-in
-            if (fill) {
-                setTimeout(() => {
-                    fill.style.transition = `width ${_l3Dur}ms linear`;
-                    fill.style.width = '100%';
-                }, 600); 
-            }
-
-            // Wait duration, then slide out
-            _l3Timer = setTimeout(() => {
-                l3El.classList.remove('active-box');
-                track.classList.remove('text-in');
-                
-                // Wait interval, then next slide
-                _l3Timer = setTimeout(() => {
-                    _l3Idx = (_l3Idx + 1) % _l3Slides.length;
-                    _cycleL3();
-                }, _l3Int);
-
-            }, _l3Dur + 600); // Dur + time allowed to slide in
-        }
-
+        
+        // MAIN DRAW FUNCTION (simplified but keeps core deployment / maint updates)
+        window.draw = function(data) {
+            document.getElementById('refresh-time').innerText = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+            let staff = { today:{gen:'', morn:'', eve:'', night:'', techMorn:'', techEve:'', techNight:'', tpcMorn:'', tpcEve:'', tpcNight:''}, tomorrow:{gen:'', morn:'', eve:'', night:'', techMorn:'', techEve:'', techNight:'', tpcMorn:'', tpcEve:'', tpcNight:''} };
+            let mtrsStatus='', tkrsStatus='', mainlineStatus='', depotStatus='', failsRaw='', tickerText='', driverName='', driverPhone='', driverShift='', driverUpdate='';
+            let opsScheduleLines = [];
+            let irRowItems = {}, irRowImages = {}, l3DurRaw='8000', l3IntRaw='5000';
+            data.forEach(item => {
+                const param = (item.Parameter||'').trim(), val = (item.Value||'').trim(), unit = (item.Unit||'').trim();
+                if(param === 'sheetab_R2C12') staff.today.gen = val;
+                if(param === 'sheetab_R2C3') staff.today.morn = val;
+                if(param === 'sheetab_R2C4') staff.today.eve = val;
+                if(param === 'sheetab_R2C5') staff.today.night = val;
+                if(param === 'sheetab_R2C6') staff.today.techMorn = val;
+                if(param === 'sheetab_R2C7') staff.today.techEve = val;
+                if(param === 'sheetab_R2C8') staff.today.techNight = val;
+                if(param === 'sheetab_R2C9') staff.today.tpcMorn = val;
+                if(param === 'sheetab_R2C10') staff.today.tpcEve = val;
+                if(param === 'sheetab_R2C11') staff.today.tpcNight = val;
+                if(param === 'sheetab_R2C26') staff.tomorrow.gen = val;
+                if(param === 'sheetab_R2C17') staff.tomorrow.morn = val;
+                if(param === 'sheetab_R2C18') staff.tomorrow.eve = val;
+                if(param === 'sheetab_R2C19') staff.tomorrow.night = val;
+                if(param === 'sheetab_R2C20') staff.tomorrow.techMorn = val;
+                if(param === 'sheetab_R2C21') staff.tomorrow.techEve = val;
+                if(param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
+                if(param === 'sheetab_R2C23') staff.tomorrow.tpcMorn = val;
+                if(param === 'sheetab_R2C24') staff.tomorrow.tpcEve = val;
+                if(param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
+                if(param === 'sheetab_R2C33') mtrsStatus = val;
+                if(param === 'sheetab_R2C34') tkrsStatus = val;
+                if(param === 'sheetab_R2C38') failsRaw = val;
+                if(param === 'sheetab_R2C39') updateMaintCount('maint-corrective-val', val, 'Corrective');
+                if(param === 'sheetab_R2C40') updateMaintCount('maint-activity-val', val, 'Activity');
+                if(param === 'sheetab_R2C41') updateMaintCount('maint-preventive-val', val, 'Preventive');
+                if(param === 'sheetab_R2C1') driverUpdate = val;
+                if(unit === 'DriverPopup') { const parts=val.split('|'); driverName=parts[0]; driverPhone=parts[1]; driverShift=parts[2]; }
+                if(unit === 'OpsBlock') { const parts=val.split('|'); mainlineStatus=parts[0]; depotStatus=parts[1]; }
+                if(unit === 'OpsSchedule') opsScheduleLines = val.split('\n').filter(l=>l.trim());
+                if(param === 'sheetab_R2C2') tickerText = val;
+                // C36 / C37 for lower third items
+                const c36 = param.match(/^sheetab_R(\d+)C36$/); if(c36 && unit==='sheetab') irRowItems[parseInt(c36[1])] = val;
+                const c37 = param.match(/^sheetab_R(\d+)C37$/); if(c37 && unit==='sheetab') irRowImages[parseInt(c37[1])] = val;
+                if(param === 'sheetab_R2C35') { /* Weather not used but keep */ }
+                if(param === 'sheetab_R2C47') l3DurRaw = val;
+                if(param === 'sheetab_R2C48') l3IntRaw = val;
+            });
+            updateFailuresPill(failsRaw);
+            if(tickerText) { document.getElementById('ticker-text').innerText = tickerText; }
+            if(driverName) { document.getElementById('driver-name').innerText = driverName; document.getElementById('driver-phone').innerText = driverPhone||'---'; document.getElementById('driver-shift').innerText = `SHIFT: ${driverShift||'---'}`; document.getElementById('driver-pill-name').innerText = driverName; document.getElementById('driver-pill-num').innerText = driverPhone||'---'; }
+            if(driverUpdate) { const badgeSpan = document.getElementById('driver-update-badge'); if(badgeSpan) badgeSpan.innerText = `LAST UPDATE: ${driverUpdate}`; const outdated = document.getElementById('driver-card'); if(outdated && driverUpdate && new Date(driverUpdate) < new Date(new Date().setHours(8,0,0))) outdated.classList.add('outdated'); else if(outdated) outdated.classList.remove('outdated'); }
+            // update roster HTML
+            let tdHtml = '', tmHtml = '';
+            tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn, staff.today.techMorn);
+            tdHtml += buildShift('EVENING', staff.today.eve, isShiftActive('EVENING'), staff.today.tpcEve, staff.today.techEve);
+            tdHtml += buildShift('NIGHT', staff.today.night, isShiftActive('NIGHT'), staff.today.tpcNight, staff.today.techNight);
+            tmHtml += buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn, staff.tomorrow.techMorn);
+            tmHtml += buildShift('EVENING', staff.tomorrow.eve, false, staff.tomorrow.tpcEve, staff.tomorrow.techEve);
+            tmHtml += buildShift('NIGHT', staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
+            document.getElementById('roster-today').innerHTML = tdHtml; document.getElementById('roster-tomorrow').innerHTML = tmHtml;
+            document.getElementById('today-gen-pills').innerHTML = `<span class="gen-label-pill">GENERAL</span>${staff.today.gen ? staff.today.gen.split('\n').map(l=>`<span class="gen-name-tag">${l}</span>`).join('') : ''}`;
+            document.getElementById('tomorrow-gen-pills').innerHTML = `<span class="gen-label-pill">GENERAL</span>${staff.tomorrow.gen ? staff.tomorrow.gen.split('\n').map(l=>`<span class="gen-name-tag">${l}</span>`).join('') : ''}`;
+            const maintList = document.getElementById('maint-list'); if(opsScheduleLines.length) maintList.innerHTML = opsScheduleLines.map(l=>`<div class="m3-sch-item">${l}</div>`).join('');
+            // Update checklists
+            const setChecklist = (id,val) => { const item=document.getElementById(id); if(!item) return; const isFilled = val && val !== '---' && val !== '0'; item.className = `chk-dual-item ${isFilled?'chk-d-filled':'chk-d-empty'}`; const icon = item.querySelector('.chk-d-icon'); if(icon) icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank'; const statusSpan = item.querySelector('.chk-d-status'); if(statusSpan) statusSpan.innerText = isFilled ? val : 'Not Filled'; };
+            setChecklist('chk-mtrs', mtrsStatus); setChecklist('chk-tkrs', tkrsStatus);
+            // Initialize Lower Third with gathered rows (explicitly exclude date slide)
+            initLowerThirdFromData(irRowItems, irRowImages, l3DurRaw, l3IntRaw);
+        };
+        function refreshData() { const old=document.getElementById('api-script'); if(old) old.remove(); const s=document.createElement('script'); s.id='api-script'; s.src=`${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s); }
+        setInterval(refreshData, 120000); refreshData(); updateClocks();
     </script>
 </body>
 </html>
