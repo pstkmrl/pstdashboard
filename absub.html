@@ -1766,13 +1766,13 @@
         let _l3Idx = 0;
         let _l3Slides = [];
         let _l3Dur = 8000;
-        let _l3Int = 1000;
+        let _l3Int = 5000;
 
         function initLowerThird(weatherRaw, irRowItems, irRowImages, durRaw, intRaw) {
             if (_l3Timer) clearTimeout(_l3Timer);
             
-            _l3Dur = parseInt(durRaw); if (isNaN(_l3Dur) || _l3Dur < 2000) _l3Dur = 8000;
-            _l3Int = parseInt(intRaw); if (isNaN(_l3Int) || _l3Int < 500) _l3Int = 800; // Time text stays hidden between swaps
+            _l3Dur = parseFloat(durRaw) * 1000; if (isNaN(_l3Dur) || _l3Dur < 2000) _l3Dur = 8000;
+            _l3Int = parseFloat(intRaw) * 1000; if (isNaN(_l3Int) || _l3Int < 1000) _l3Int = 5000;
             
             _l3Slides = [];
             
@@ -1797,74 +1797,92 @@
                     const img = imgLines[i] || '';
                     let text = line;
                     if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
+                    
+                    let sub = '';
+                    const match = text.match(/\[(.*?)\]/);
+                    if (match) {
+                        sub = match[1].trim();
+                        text = text.replace(/\[.*?\]/, '').trim();
+                    }
+
                     _l3Slides.push({
                         type: img.startsWith('http') ? 'img' : 'none',
-                        val: img, head: text, sub: 'LATEST UPDATE'
+                        val: img, head: text, sub: sub
                     });
                 });
             });
 
             const l3El = document.getElementById('lower-third');
+            const track = document.getElementById('l3-text-track');
+
             if (_l3Slides.length > 0) {
                 _l3Idx = 0;
-                l3El.classList.add('active-box'); // Slide box onto screen
-                _cycleL3(true);
+                l3El.classList.remove('active-box'); 
+                if (track) track.classList.remove('text-in');
+                
+                // Slight delay before kicking off cycle
+                _l3Timer = setTimeout(() => _cycleL3(), 500);
             } else {
                 l3El.classList.remove('active-box');
             }
         }
 
-        function _cycleL3(isFirst = false) {
+        function _cycleL3() {
+            const l3El = document.getElementById('lower-third');
             const track = document.getElementById('l3-text-track');
             const iconWrap = document.getElementById('l3-icon-wrap');
             const fill = document.getElementById('l3-progress-fill');
+            const labelEl = document.getElementById('l3-label');
 
-            // Slide text out
-            if (!isFirst) track.classList.remove('text-in');
-            
+            if (_l3Slides.length === 0) return;
+            const slide = _l3Slides[_l3Idx];
+
             // Reset Progress instantly
             if (fill) {
                 fill.style.transition = 'none';
                 fill.style.width = '0%';
             }
 
-            // Wait for text to hide, then swap content and slide back in
-            const waitTime = isFirst ? 600 : _l3Int; // Longer wait on first run to let box slide in
-            
-            setTimeout(() => {
-                const slide = _l3Slides[_l3Idx];
-                
-                // Update DOM text
-                document.getElementById('l3-headline').textContent = slide.head;
-                document.getElementById('l3-label').textContent = slide.sub;
+            // Update DOM text
+            document.getElementById('l3-headline').textContent = slide.head;
+            labelEl.textContent = slide.sub;
+            labelEl.style.display = slide.sub ? 'block' : 'none'; // Hides subtext area naturally if blank
 
-                // Update DOM Media
-                if (slide.type === 'img') {
-                    iconWrap.innerHTML = `<img src="${slide.val}" class="l3-icon-img" onerror="this.style.display='none'">`;
-                } else if (slide.type === 'icon') {
-                    iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">${slide.val}</span>`;
-                } else {
-                    iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">breaking_news_alt_1</span>`;
-                }
+            // Update DOM Media
+            if (slide.type === 'img') {
+                iconWrap.innerHTML = `<img src="${slide.val}" class="l3-icon-img" onerror="this.style.display='none'">`;
+            } else if (slide.type === 'icon') {
+                iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">${slide.val}</span>`;
+            } else {
+                iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">breaking_news_alt_1</span>`;
+            }
 
-                // Slide text in
-                track.classList.add('text-in');
+            // Prep text track
+            track.classList.add('text-in');
 
-                // Animate Progress Bar
-                if (fill) {
-                    // Force reflow before applying transition
-                    void fill.offsetWidth;
+            // Slide box in
+            l3El.classList.add('active-box');
+
+            // Animate Progress Bar syncing after slide-in
+            if (fill) {
+                setTimeout(() => {
                     fill.style.transition = `width ${_l3Dur}ms linear`;
                     fill.style.width = '100%';
-                }
+                }, 600); 
+            }
 
-                // Schedule next slide
+            // Wait duration, then slide out
+            _l3Timer = setTimeout(() => {
+                l3El.classList.remove('active-box');
+                track.classList.remove('text-in');
+                
+                // Wait interval, then next slide
                 _l3Timer = setTimeout(() => {
                     _l3Idx = (_l3Idx + 1) % _l3Slides.length;
                     _cycleL3();
-                }, _l3Dur);
+                }, _l3Int);
 
-            }, waitTime);
+            }, _l3Dur + 600); // Dur + time allowed to slide in
         }
 
     </script>
