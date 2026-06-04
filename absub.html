@@ -2,405 +2,264 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>KMRL SUBSTATION DASHBOARD • LOWER THIRD NEWS</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>KMRL SUBSTATION • MAINTENANCE CORE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
     <style>
-        * { margin:0; padding:0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --transition-speed: 0.3s;
-            --radius-s: 8px;
-            --radius-m: 16px;
-            --radius-l: 24px;
-            --radius-full: 999px;
-            --font-display: 'Outfit', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.2s;
+            --radius-s: 8px; --radius-m: 16px; --radius-l: 24px; --radius-full: 999px;
+            --font-display: 'Outfit', sans-serif; --font-body: 'Plus Jakarta Sans', sans-serif;
         }
         [data-theme="light"] {
             --bg-color: #F0F4F8; --surface: #FFFFFF; --surface-variant: #E4EBF2; --surface-dim: #D8E2EE;
             --on-bg: #1A1C1E; --on-surface: #1A1C1E; --on-surface-variant: #44474F; --outline: #74777F;
-            --primary: #0061A4; --primary-container: #D1E4FF; --on-primary-container: #001D36;
-            --secondary: #535F70; --secondary-container: #D7E3F7; --error: #BA1A1A; --error-container: #FFDAD6;
-            --success: #146C2E; --success-container: #C4EED0; --warning: #7D5260; --warning-container: #FFD8E4;
+            --primary: #0061A4; --primary-container: #D1E4FF; --success: #146C2E; --success-container: #C4EED0;
+            --warning: #D45C00; --warning-container: #FFE3CC; --error: #BA1A1A;
             --shadow-1: 0 2px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06);
-            --shadow-2: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.1);
-            --tech-bg: rgba(0, 97, 164, 0.06); --tech-border: rgba(0, 97, 164, 0.2); --tech-name-color: #003D6B;
         }
         [data-theme="dark"] {
             --bg-color: #0D1117; --surface: #161C25; --surface-variant: #1F2836; --surface-dim: #131920;
             --on-bg: #E2E6EC; --on-surface: #E2E6EC; --on-surface-variant: #B8C4D4; --outline: #6E7A8A;
-            --primary: #7DBEFF; --primary-container: #003D6B; --on-primary-container: #D1E4FF;
-            --secondary: #A8BDD4; --secondary-container: #2C3D52; --error: #FFB4AB; --error-container: #7A0009;
-            --success: #72D48A; --success-container: #003D17; --on-success-container: #C4EED0;
-            --warning: #FFB1C8; --warning-container: #4A2234; --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
-            --shadow-2: 0 4px 8px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.6);
-            --tech-bg: rgba(125,190,255,0.07); --tech-border: rgba(125,190,255,0.18); --tech-name-color: #9ECAFF;
+            --primary: #7DBEFF; --primary-container: #003D6B; --success: #72D48A; --success-container: #003D17;
+            --warning: #FFB347; --warning-container: #3E2A00; --error: #FFB4AB;
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
         }
-        body {
-            background: var(--bg-color); color: var(--on-bg);
-            font-family: var(--font-body); height: 100vh; display: flex; flex-direction: column;
-            overflow: hidden; transition: background var(--transition-speed), color var(--transition-speed);
-        }
-        /* app-bar & rest core styles (keeping original design intact) */
-        .app-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px 20px; margin: 10px 10px 0 10px; border-radius: var(--radius-full); box-shadow: var(--shadow-1); flex-shrink: 0; z-index: 100; }
-        .logo-section img { height: 34px; object-fit: contain; }
-        .middle-module { flex-grow: 1; display: flex; justify-content: center; align-items: center; gap: 8px; margin: 0 16px; height: 44px; overflow: visible; }
-        .checklist-container { flex: 1; min-width: 0; background: var(--secondary-container); border-radius: var(--radius-full); display: flex; align-items: center; position: relative; overflow: hidden; }
-        .clock-container { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-        .clock-unit { background: var(--surface-variant); border-radius: var(--radius-m); padding: 3px 10px; display: flex; flex-direction: column; align-items: center; min-width: 54px; }
-        .clock-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
-        .failures-pill { background: var(--surface-variant); border-radius: var(--radius-m); padding: 3px 10px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-        .fail-title { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; }
-        .failures-nums { display: flex; align-items: center; gap: 6px; }
-        .fail-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
+        body { background: var(--bg-color); color: var(--on-bg); font-family: var(--font-body); height: 100vh; display: flex; flex-direction: column; overflow: hidden; transition: background var(--transition-speed); }
+        /* App bar (compact) */
+        .app-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 8px 18px; margin: 8px 10px 0 10px; border-radius: var(--radius-full); box-shadow: var(--shadow-1); flex-shrink: 0; }
+        .logo-section img { height: 32px; }
+        .clock-container { display: flex; gap: 5px; background: var(--surface-variant); padding: 4px 12px; border-radius: var(--radius-full); }
+        .clock-unit { text-align: center; min-width: 46px; }
+        .clock-val { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; line-height: 1.2; }
+        .clock-label { font-size: 0.5rem; font-weight: 700; letter-spacing: 0.8px; }
+        .failures-pill { background: var(--surface-variant); border-radius: var(--radius-full); padding: 4px 12px; display: flex; gap: 12px; align-items: center; }
+        .fail-val { font-weight: 900; font-size: 1.2rem; font-family: var(--font-display); }
         .fail-val.open-val { color: var(--error); } .fail-val.closed-val { color: var(--success); }
-        .top-controls { display: flex; gap: 8px; position: relative; }
-        .icon-btn { background: var(--surface-variant); border: none; width: 40px; height: 40px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .hamburger-menu { position: absolute; top: calc(100% + 8px); right: 0; background: rgba(22,28,37,0.9); backdrop-filter: blur(32px); border-radius: var(--radius-l); padding: 8px; min-width: 180px; opacity: 0; pointer-events: none; transform: translateY(6px); transition: 0.22s; z-index: 500; }
-        .hamburger-menu.open { pointer-events: auto; opacity: 1; transform: translateY(0); }
-        .hm-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: var(--radius-m); font-weight: 800; font-size: 0.75rem; background: transparent; width: 100%; color: var(--on-surface); cursor: pointer; }
-        .dashboard-content { display: grid; grid-template-columns: 5fr 3fr; gap: 10px; padding: 10px 10px 80px 10px; flex-grow: 1; overflow-y: auto; }
-        .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 16px; box-shadow: var(--shadow-1); }
-        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 12px; border: 2px solid transparent; }
+        .icon-btn { background: var(--surface-variant); border: none; width: 36px; height: 36px; border-radius: var(--radius-full); cursor: pointer; }
+        .dashboard-content { flex: 1; overflow-y: auto; padding: 10px; }
+        /* Tab navigation (mobile only) */
+        .mobile-tab-nav { display: none; background: var(--surface); border-radius: var(--radius-full); margin: 0 10px 8px 10px; padding: 4px; gap: 6px; }
+        .tab-btn { flex: 1; padding: 8px 0; border-radius: var(--radius-full); font-family: var(--font-display); font-weight: 800; font-size: 0.8rem; background: transparent; color: var(--on-surface-variant); border: none; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { background: var(--primary); color: var(--surface); box-shadow: var(--shadow-1); }
+        .desktop-layout { display: grid; grid-template-columns: 5fr 3fr; gap: 12px; }
+        .tab-pane { display: block; }
+        .tab-pane.hide-mobile { display: block; }
+        /* Cards */
+        .m3-card { background: var(--surface); border-radius: var(--radius-l); padding: 16px; box-shadow: var(--shadow-1); margin-bottom: 12px; }
+        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+        .m3-shift-card { background: var(--surface-variant); border-radius: var(--radius-m); padding: 10px; border: 2px solid transparent; }
         .m3-shift-active { border-color: var(--success); }
-        .staff-list { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
-        .tech-scroll-wrap { overflow: hidden; background: var(--tech-bg); border-radius: var(--radius-s); padding: 5px 0; }
-        .tech-scroll-track { display: flex; gap: 0; width: max-content; animation: tech-scroll 18s linear infinite; }
-        @keyframes tech-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .checklist-dual-row { display: flex; gap: 6px; margin-top: 8px; }
-        .chk-dual-item { flex: 1; display: flex; align-items: center; gap: 5px; border-radius: var(--radius-full); padding: 5px 10px; backdrop-filter: blur(12px); background: rgba(255,255,255,0.08); }
-        .chk-d-filled { background: rgba(114,212,138,0.15) !important; border-color: rgba(114,212,138,0.45); }
-        .chk-d-empty { background: rgba(255,177,200,0.12) !important; }
-        .maint-list { overflow-y: auto; max-height: 280px; margin: 8px 0; }
-        .maint-progress-footer { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
-        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 46px; background: var(--surface); display: flex; align-items: center; z-index: 1001; cursor: pointer; }
-        
-        /* ============ REDEFINED LOWER THIRD ============ 
-           New design: appears on interval, shows all queued slides, disappears, then reappears after interval.
-           Driver card gets pushed up ONLY when lower third is visible (bottom bump) */
-        .lower-third-wrap {
-            position: fixed;
-            bottom: 56px;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            align-items: flex-end;
-            pointer-events: none;
-            transform: translateX(-105%);
-            transition: transform 0.65s cubic-bezier(0.34, 1.2, 0.64, 1);
-            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+        .staff-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 6px 0; }
+        /* ========== MAINTENANCE CARD REDESIGN ========== */
+        .maint-flex-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; margin-top: 12px; }
+        /* Circular progress block */
+        .circular-stats { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .circular-item { text-align: center; min-width: 100px; }
+        .c-progress { position: relative; width: 90px; height: 90px; margin: 0 auto 6px; }
+        .c-progress svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .c-bg { stroke: var(--surface-dim); stroke-width: 8; fill: none; }
+        .c-fill { stroke: var(--success); stroke-width: 8; fill: none; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .c-fill.secondary { stroke: var(--warning); }
+        .c-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-display); font-weight: 900; font-size: 1.2rem; color: var(--on-surface); }
+        .circular-title { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; }
+        /* Rotating graphs area (Counts + 2 bar charts) */
+        .rotating-area { flex: 2; min-width: 200px; background: var(--surface-variant); border-radius: var(--radius-m); padding: 10px 12px; position: relative; overflow: hidden; height: 130px; }
+        .rot-slide-container { position: relative; width: 100%; height: 100%; }
+        .rot-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1); opacity: 0; transform: translateX(20px); pointer-events: none; }
+        .rot-slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; position: relative; }
+        .counts-grid { display: flex; justify-content: space-around; align-items: center; height: 100%; gap: 12px; }
+        .count-box { text-align: center; flex: 1; }
+        .count-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 900; color: var(--primary); line-height: 1; }
+        .count-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--on-surface-variant); }
+        .bar-chart-container { height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .bar-chart-title { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--on-surface); }
+        .bar-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .bar-label { width: 45px; font-size: 0.7rem; font-weight: 700; color: var(--on-surface-variant); }
+        .bar-track { flex: 1; height: 24px; background: var(--surface-dim); border-radius: var(--radius-full); overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #2ecc71, #27ae60); border-radius: var(--radius-full); transition: width 1s ease-out; }
+        .bar-fill.orange { background: linear-gradient(90deg, #f39c12, #e67e22); }
+        .bar-value { min-width: 40px; font-size: 0.75rem; font-weight: 800; color: var(--on-surface); text-align: right; }
+        /* Maintenance schedule list */
+        .maint-list { max-height: 240px; overflow-y: auto; margin-top: 12px; scrollbar-width: thin; }
+        .m3-sch-item { background: var(--surface-variant); border-radius: var(--radius-m); padding: 8px 12px; margin-bottom: 6px; border-left: 4px solid var(--primary); font-size: 0.8rem; font-weight: 600; }
+        /* Driver & ticker */
+        .driver-card { position: fixed; bottom: 56px; left: 12px; z-index: 1000; cursor: pointer; background: rgba(22,28,37,0.85); backdrop-filter: blur(20px); border-radius: var(--radius-full); padding: 6px 12px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); }
+        .ticker-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 44px; background: var(--surface); display: flex; align-items: center; z-index: 1001; font-size: 0.8rem; }
+        .ticker-head { background: var(--primary); color: var(--surface); padding: 0 20px; height: 100%; display: flex; align-items: center; font-weight: 900; }
+        @media (max-width: 860px) {
+            .desktop-layout { display: block; }
+            .mobile-tab-nav { display: flex; }
+            .tab-pane { display: none; }
+            .tab-pane.active-pane { display: block; }
+            .roster-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .maint-flex-row { flex-direction: column; }
+            .rotating-area { height: auto; min-height: 130px; }
         }
-        .lower-third-wrap.active-box {
-            transform: translateX(0);
+        @media (max-width: 550px) {
+            .app-bar { flex-wrap: wrap; gap: 8px; }
+            .clock-container { order: 2; }
+            .failures-pill { order: 1; }
         }
-        .l3-logo-plate {
-            width: 72px; height: 72px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.02));
-            backdrop-filter: blur(30px) saturate(1.8);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-left: none;
-            border-radius: 0 18px 18px 0;
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-        }
-        [data-theme="light"] .l3-logo-plate {
-            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
-        }
-        .l3-icon-img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.4); }
-        .l3-icon-mat { font-size: 42px !important; color: var(--primary); font-variation-settings: 'FILL' 1; }
-        .l3-live-indicator {
-            position: absolute; top: 8px; right: 8px;
-            width: 8px; height: 8px; border-radius: 50%;
-            background: #ff3b30; box-shadow: 0 0 8px #ff3b30;
-            animation: pulse-dot 1.5s infinite;
-        }
-        @keyframes pulse-dot { 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
-        .l3-content-plate {
-            height: 64px;
-            margin-bottom: 4px;
-            margin-left: -16px;
-            padding: 6px 28px 6px 32px;
-            min-width: 280px;
-            max-width: 42vw;
-            background: rgba(14, 20, 30, 0.92);
-            backdrop-filter: blur(28px) saturate(1.6);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-left: none;
-            border-radius: 0 20px 20px 0;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
-            z-index: 1;
-            position: relative;
-            overflow: hidden;
-            clip-path: inset(0 100% 0 0);
-            transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        [data-theme="light"] .l3-content-plate {
-            background: rgba(240, 246, 255, 0.96);
-            border-color: rgba(255,255,255,0.9);
-        }
-        .lower-third-wrap.active-box .l3-content-plate {
-            clip-path: inset(0 0 0 0);
-        }
-        .l3-text-track {
-            transform: translateY(120%);
-            opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.4s;
-        }
-        .l3-text-track.text-in {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .l3-headline {
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 1.1rem;
-            line-height: 1.2;
-            color: var(--on-surface);
-            letter-spacing: -0.2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .l3-label {
-            font-family: var(--font-body);
-            font-size: 0.62rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 2px;
-        }
-        .l3-sheen {
-            position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: skewX(-25deg);
-            animation: l3-sheen-pass 6s infinite;
-            pointer-events: none;
-        }
-        @keyframes l3-sheen-pass { 0% { left: -100%; } 100% { left: 200%; } }
-        .l3-progress-bar {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
-            background: rgba(255,255,255,0.1);
-        }
-        .l3-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary), #ffcc00);
-            transition: width linear;
-        }
-        /* Driver card dynamic bottom shifting (only when lower-third is active) */
-        .driver-card {
-            position: fixed;
-            left: 10px;
-            z-index: 1002;
-            transition: bottom 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            bottom: 56px;
-            cursor: pointer;
-        }
-        /* When lower third is visible, driver card goes up 76px */
-        body.lower-third-visible .driver-card {
-            bottom: 132px;
-        }
-        .driver-pill {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(28px);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: var(--radius-full);
-            padding: 6px 14px 6px 8px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-        }
-        .driver-pill-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(125,190,255,0.2); display: flex; align-items: center; justify-content: center; color: var(--primary); }
-        .driver-pill-text-wrap { overflow: hidden; height: 1.25rem; display: flex; flex-direction: column; position: relative; }
-        .driver-pill-slide { display: flex; flex-direction: column; transition: transform 0.6s; }
-        .driver-pill-slide.show-number { transform: translateY(-50%); }
-        .driver-expanded { position: absolute; bottom: calc(100% + 8px); left: 0; min-width: 220px; background: rgba(22,28,37,0.85); backdrop-filter: blur(32px); border-radius: var(--radius-l); padding: 14px; opacity: 0; transform: translateY(8px); transition: 0.28s; pointer-events: none; }
-        .driver-card.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0); }
-        .driver-card.outdated .driver-pill { border-color: rgba(255,100,80,0.5); }
-        .ticker-refresh-stamp { padding: 0 16px; font-size: 0.65rem; white-space: nowrap; }
-        @media (max-width: 900px) { .driver-card { bottom: 56px; } body.lower-third-visible .driver-card { bottom: 122px; } .l3-content-plate { max-width: 70vw; } }
-        @media (max-width: 600px) { .l3-logo-plate { width: 58px; height: 58px; } .l3-icon-mat { font-size: 30px; } .l3-content-plate { padding: 4px 20px 4px 24px; height: 56px; } .l3-headline { font-size: 0.85rem; } }
+        .tech-scroll-track { display: flex; gap: 8px; overflow-x: auto; }
+        .tech-name-chip { background: var(--primary-container); padding: 2px 12px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
     </style>
 </head>
-<body onclick="wakeUp()">
-    <div id="blackout" style="display:none; position:fixed; inset:0; background:#000; z-index:9999; align-items:center; justify-content:center;"><div class="analog-wrap" style="width:200px;height:200px;border-radius:50%;background:#111;"></div></div>
-    <header class="app-bar"><div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
-        <div class="middle-module"><div id="checklist-container" class="checklist-container"><div id="station-track" class="station-track"></div></div>
-            <div id="clock-container" class="clock-container"><div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div><div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div><div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div></div>
-            <div id="failures-pill" class="failures-pill"><div class="fail-title">Failures</div><div class="failures-nums"><div class="fail-num-block"><div class="fail-val closed-val" id="fail-closed-val">—</div><div class="fail-lbl">CLOSED</div></div><div class="fail-sep"></div><div class="fail-num-block"><div class="fail-val open-val" id="fail-open-val">—</div><div class="fail-lbl">OPEN</div></div></div></div>
-        </div>
-        <div class="top-controls"><button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)"><span class="material-symbols-rounded">menu</span></button><div class="hamburger-menu" id="hamburger-menu"><button class="hm-item" onclick="toggleTheme(event)"><span class="material-symbols-rounded" id="theme-icon">dark_mode</span><span>Toggle Theme</span></button><button class="hm-item" onclick="goFullscreen(event)"><span class="material-symbols-rounded">fullscreen</span><span>Fullscreen</span></button><div class="hm-divider"></div><button class="hm-item hm-danger" onclick="manualOff(event)"><span class="material-symbols-rounded">power_settings_new</span><span>Screen Off</span></button></div></div>
+<body>
+    <header class="app-bar">
+        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL" style="height:28px"></div>
+        <div class="clock-container"><div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HR</div></div><div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div><div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div></div>
+        <div class="failures-pill"><span class="fail-val closed-val" id="fail-closed-val">—</span><span style="opacity:0.4">|</span><span class="fail-val open-val" id="fail-open-val">—</span></div>
+        <button class="icon-btn" id="theme-toggle"><span class="material-symbols-rounded">dark_mode</span></button>
     </header>
-    <main class="dashboard-content">
-        <div class="left-column"><div class="m3-card"><div class="deploy-header"><div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div><div class="general-info-pill" id="today-gen-pills"></div></div><div id="roster-today" class="roster-grid"></div></div>
-        <div class="m3-card"><div class="deploy-header"><div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div><div class="general-info-pill" id="tomorrow-gen-pills"></div></div><div id="roster-tomorrow" class="roster-grid"></div></div></div>
-        <div class="right-column"><div class="m3-card unified-unit"><div class="maint-header-wrapper"><div style="display:flex;align-items:center;justify-content:space-between;"><div class="card-header"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div><div id="checklist-dual" class="checklist-dual-row" style="width:auto;gap:6px;"><div id="chk-mtrs" class="chk-dual-item"><div class="chk-d-check-wrap"><span class="material-symbols-rounded chk-d-icon">check_box_outline_blank</span></div><div class="chk-d-body"><div class="chk-d-slide"><span class="chk-d-label">MTRS</span><span class="chk-d-status">---</span></div></div></div><div id="chk-tkrs" class="chk-dual-item"><div class="chk-d-check-wrap"><span class="material-symbols-rounded chk-d-icon">check_box_outline_blank</span></div><div class="chk-d-body"><div class="chk-d-slide"><span class="chk-d-label">TKRS</span><span class="chk-d-status">---</span></div></div></div></div></div></div><div id="maint-list" class="maint-list"></div><div class="maint-progress-footer"><div class="maint-progress-right"><div id="maint-counts-dock" style="display:flex;gap:12px;"><div><div class="mcd-val" id="maint-preventive-val">—</div><div class="mcd-label">Preventive</div></div><div><div class="mcd-val" id="maint-corrective-val">—</div><div class="mcd-label">Corrective</div></div><div><div class="mcd-val" id="maint-activity-val">—</div><div class="mcd-label">Activities</div></div></div><div class="maint-bars-wrapper" style="flex:1;"><div class="maint-bar-group"><div class="maint-progress-meta"><span id="maint-progress-label-1">Progress</span><span id="maint-progress-value-1">—</span></div><div class="maint-progress-track"><div id="maint-progress-fill-1" class="maint-progress-fill"></div></div></div></div></div></div></div></div>
-    </main>
-    <!-- LOWER THIRD (REDEFINED) -->
-    <div id="lower-third" class="lower-third-wrap">
-        <div class="l3-logo-plate"><div class="l3-live-indicator"></div><div id="l3-icon-wrap"></div></div>
-        <div class="l3-content-plate"><div class="l3-sheen"></div><div class="l3-text-track" id="l3-text-track"><div id="l3-headline" class="l3-headline">—</div><div id="l3-label" class="l3-label">—</div></div><div class="l3-progress-bar"><div id="l3-progress-fill" class="l3-progress-fill"></div></div></div>
+
+    <!-- Mobile Tab Nav -->
+    <div class="mobile-tab-nav" id="mobile-tab-nav">
+        <button class="tab-btn active" data-tab="deploy-tab">DEPLOYMENT</button>
+        <button class="tab-btn" data-tab="maint-tab">MAINTENANCE</button>
     </div>
-    <!-- Driver Card -->
-    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)"><div class="driver-expanded" onclick="event.stopPropagation()"><div class="driver-exp-outdated"><span class="material-symbols-rounded">warning</span> OUTDATED</div><div class="driver-exp-header"><div class="driver-exp-label">On Duty Driver</div><div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div><div id="driver-name" class="driver-exp-name">Loading...</div><div id="driver-phone" class="driver-exp-phone">---</div></div><div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div><div class="driver-exp-call" onclick="initiateCall(event)"><span class="material-symbols-rounded">call</span> CALL DRIVER</div></div><div class="driver-pill"><div class="driver-pill-icon"><span class="material-symbols-rounded">directions_car</span></div><div class="driver-pill-text-wrap"><div class="driver-pill-slide" id="driver-pill-slide"><span id="driver-pill-name" class="driver-pill-name-val">—</span><span id="driver-pill-num" class="driver-pill-num-val">—</span></div></div><div class="driver-pill-outdated-badge"><span class="material-symbols-rounded">warning</span> OUTDATED</div></div></div>
-    <footer class="ticker-bar"><div id="ticker-head" class="ticker-head">NOTICE</div><div id="ticker-body" class="ticker-body"><div id="ticker-text" class="ticker-scroll">SYNCING...</div></div><div class="ticker-refresh-stamp"><span id="refresh-time">--:--</span></div><div id="ticker-popup" class="ticker-popup" style="display:none;"></div></footer>
+
+    <div class="dashboard-content">
+        <div class="desktop-layout" id="desktop-layout">
+            <!-- LEFT COLUMN (Deployments) -->
+            <div class="tab-pane active-pane" id="deploy-tab">
+                <div class="m3-card">
+                    <div class="card-header" style="font-weight:900; display:flex; gap:6px;"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
+                    <div id="roster-today" class="roster-grid"></div>
+                </div>
+                <div class="m3-card">
+                    <div class="card-header" style="font-weight:900;"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
+                    <div id="roster-tomorrow" class="roster-grid"></div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN (Maintenance Core with redesign) -->
+            <div class="tab-pane" id="maint-tab">
+                <div class="m3-card" style="padding: 16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div class="card-header" style="font-weight:900;"><span class="material-symbols-rounded">construction</span> MAINTENANCE CORE</div>
+                        <div id="checklist-dual" style="display:flex; gap:8px;">
+                            <div id="chk-mtrs" class="chk-badge" style="background:var(--surface-variant); border-radius:40px; padding:2px 12px; font-size:0.7rem; font-weight:800;">MTRS: --</div>
+                            <div id="chk-tkrs" class="chk-badge" style="background:var(--surface-variant); border-radius:40px; padding:2px 12px; font-size:0.7rem; font-weight:800;">TKRS: --</div>
+                        </div>
+                    </div>
+                    
+                    <!-- NEW FLEX ROW: Circular + Rotating Graphs -->
+                    <div class="maint-flex-row">
+                        <!-- Circular Progress Bars (2) -->
+                        <div class="circular-stats">
+                            <div class="circular-item" id="circ-progress-1">
+                                <div class="c-progress"><svg viewBox="0 0 100 100"><circle class="c-bg" cx="50" cy="50" r="42"></circle><circle class="c-fill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle></svg><div class="c-label" id="circ-val-1">0%</div></div>
+                                <div class="circular-title" id="circ-title-1">Progress</div>
+                            </div>
+                            <div class="circular-item" id="circ-progress-2">
+                                <div class="c-progress"><svg viewBox="0 0 100 100"><circle class="c-bg" cx="50" cy="50" r="42"></circle><circle class="c-fill secondary" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"></circle></svg><div class="c-label" id="circ-val-2">0%</div></div>
+                                <div class="circular-title" id="circ-title-2">Secondary</div>
+                            </div>
+                        </div>
+
+                        <!-- Rotating Area (Counts <-> Two Bar Charts) -->
+                        <div class="rotating-area">
+                            <div class="rot-slide-container">
+                                <!-- Slide 0: Counters -->
+                                <div class="rot-slide active" id="slide-counters">
+                                    <div class="counts-grid">
+                                        <div class="count-box"><div class="count-value" id="maint-preventive-val">—</div><div class="count-label">Preventive</div></div>
+                                        <div class="count-box"><div class="count-value" id="maint-corrective-val">—</div><div class="count-label">Corrective</div></div>
+                                        <div class="count-box"><div class="count-value" id="maint-activity-val">—</div><div class="count-label">Activities</div></div>
+                                    </div>
+                                </div>
+                                <!-- Slide 1: Bar Chart A (monthly from R2C45) -->
+                                <div class="rot-slide" id="slide-barchart-a">
+                                    <div class="bar-chart-container">
+                                        <div class="bar-chart-title" id="barchart-title-a">Monthly Target</div>
+                                        <div id="bar-a-container" style="width:100%"></div>
+                                    </div>
+                                </div>
+                                <!-- Slide 2: Bar Chart B (R2C46) -->
+                                <div class="rot-slide" id="slide-barchart-b">
+                                    <div class="bar-chart-container">
+                                        <div class="bar-chart-title" id="barchart-title-b">Resource Util</div>
+                                        <div id="bar-b-container" style="width:100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maintenance Schedule List -->
+                    <div class="maint-list" id="maint-list">
+                        <div style="text-align:center; opacity:0.5;">Loading schedule...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Driver Card (sticky) -->
+    <div id="driver-card" class="driver-card" style="bottom:56px;">
+        <span class="material-symbols-rounded" style="color:var(--primary)">directions_car</span>
+        <span id="driver-name-tag">Driver: ---</span>
+        <span id="driver-status" style="font-size:0.65rem; background:var(--error-container); border-radius:40px; padding:0 6px;">offline</span>
+    </div>
+    <footer class="ticker-bar"><div class="ticker-head">NOTICE</div><div id="ticker-text" style="flex:1; padding:0 12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">SYNCING...</div><div style="padding:0 12px; font-size:0.6rem;" id="refresh-time">--:--</div></footer>
+
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
-        function initTheme() { const saved = localStorage.getItem('kmrl_theme') || 'dark'; document.documentElement.setAttribute('data-theme', saved); }
-        initTheme(); function toggleTheme(e) { const cur = document.documentElement.getAttribute('data-theme'); const nxt = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nxt); localStorage.setItem('kmrl_theme', nxt); if(document.getElementById('theme-icon')) document.getElementById('theme-icon').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode'; }
-        function goFullscreen(e) { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function manualOff(e) { document.getElementById('blackout').style.display = 'flex'; } function wakeUp() { document.getElementById('blackout').style.display = 'none'; }
-        function toggleHamburger(e) { const menu = document.getElementById('hamburger-menu'); menu.classList.toggle('open'); }
-        function closeHamburger() { document.getElementById('hamburger-menu')?.classList.remove('open'); }
-        function toggleDriverCard(e) { document.getElementById('driver-card')?.classList.toggle('expanded'); }
-        function initiateCall(e) { const ph = document.getElementById('driver-phone').innerText; if(ph && ph !== '---') window.location.href = `tel:${ph.replace(/\D/g,'')}`; }
-        let _mcdPrevVals = {};
-        function updateMaintCount(id, raw, label) { const el = document.getElementById(id); if(!el) return; const newVal = (raw?.trim() && raw.trim() !== '---') ? raw.trim() : '—'; el.textContent = newVal; }
-        function updateFailuresPill(raw) { const openEl = document.getElementById('fail-open-val'), closedEl = document.getElementById('fail-closed-val'); if(!raw) { openEl.textContent = '—'; closedEl.textContent = '—'; return; } const parts = raw.trim().split('/'); openEl.textContent = parts[0] || 0; closedEl.textContent = parts[1] || 0; }
-        function parseStaff(raw) { if(!raw) return ''; return raw.split('\n').filter(l=>l.trim()).map(line=>`<div class="m3-staff-item"><span class="staff-name">${line.split('|')[0]}</span></div>`).join(''); }
-        function buildTechSection(techRaw) { if(!techRaw) return ''; const names = techRaw.split('\n').filter(l=>l.trim()); if(names.length===0) return ''; const chips = names.map(n=>`<span class="tech-name-chip">${n}</span>`).join(''); return `<div class="tech-section"><div class="tech-scroll-wrap"><div class="tech-scroll-track">${chips+chips}</div></div></div>`; }
-        function isShiftActive(shiftName) { const now=new Date(), mins=now.getHours()*60+now.getMinutes(); if(shiftName==='MORNING') return mins>=390 && mins<840; if(shiftName==='EVENING') return mins>=840 && mins<1290; if(shiftName==='NIGHT') return mins>=1290 || mins<390; return false; }
-        function buildShift(title, val, active, tpc, techRaw) { const staffHtml = parseStaff(val); const techHtml = buildTechSection(techRaw); return `<div class="m3-shift-card ${active?'m3-shift-active':''}"><div class="shift-header-row"><div class="m3-shift-label">${title}</div>${tpc?`<span class="shift-tpc-badge">TPC: ${tpc}</span>`:''}</div><div class="staff-list">${staffHtml||'<div class="m3-staff-item">—</div>'}</div>${techHtml}</div>`; }
-        function updateClocks(){ const n=new Date(); document.getElementById('clk-h').innerText=String(n.getHours()).padStart(2,'0'); document.getElementById('clk-m').innerText=String(n.getMinutes()).padStart(2,'0'); document.getElementById('clk-s').innerText=String(n.getSeconds()).padStart(2,'0'); }
-        setInterval(updateClocks,1000);
-
-        // ------------------------------------------------------------------
-        // LOWER THIRD LOGIC: cycles through slides only during each "active session"
-        // Session: appears, runs all slides sequentially, disappears, waits interval, reappears.
-        let _l3CycleTimer = null, _l3CurrentSlideIdx = 0, _l3SlidesList = [];
-        let _l3SessionActive = false;
-        let _l3Dur = 7000;     // per slide duration (ms)
-        let _l3Interval = 10000; // hidden interval (ms)
-        let _l3ProgressInterval = null;
+        let rotateInterval = null;
+        let currentRotateIdx = 0;
+        const slides = ['slide-counters', 'slide-barchart-a', 'slide-barchart-b'];
         
-        function resetLowerThirdSession() {
-            if(_l3CycleTimer) clearTimeout(_l3CycleTimer);
-            if(_l3ProgressInterval) clearInterval(_l3ProgressInterval);
-            const wrap = document.getElementById('lower-third');
-            const track = document.getElementById('l3-text-track');
-            if(wrap) wrap.classList.remove('active-box');
-            if(track) track.classList.remove('text-in');
-            _l3SessionActive = false;
-            document.body.classList.remove('lower-third-visible');
+        function startRotator() { if(rotateInterval) clearInterval(rotateInterval); rotateInterval = setInterval(() => { currentRotateIdx = (currentRotateIdx + 1) % slides.length; updateActiveSlide(); }, 8000); }
+        function updateActiveSlide() { slides.forEach((id, idx) => { const el = document.getElementById(id); if(el) { if(idx === currentRotateIdx) el.classList.add('active'); else el.classList.remove('active'); } }); }
+        
+        // Circular progress updater
+        function updateCircularProgress(elementId, percent, labelId, valueId, isSecondary = false) {
+            const radius = 42; const circumference = 2 * Math.PI * radius; const offset = circumference - (percent / 100) * circumference;
+            const circle = document.querySelector(`#${elementId} .c-fill`);
+            if(circle) { circle.style.strokeDasharray = circumference; circle.style.strokeDashoffset = offset; }
+            const valSpan = document.getElementById(valueId); if(valSpan) valSpan.innerText = Math.round(percent) + '%';
         }
         
-        function startSlideProgression() {
-            if(!_l3SlidesList.length) return;
-            _l3CurrentSlideIdx = 0;
-            showSlideAndAdvance();
-        }
-        
-        function showSlideAndAdvance() {
-            if(!_l3SessionActive) return;
-            if(_l3CurrentSlideIdx >= _l3SlidesList.length) {
-                // all slides shown => hide the whole element after a small delay and schedule next session
-                const wrap = document.getElementById('lower-third');
-                const track = document.getElementById('l3-text-track');
-                if(wrap) wrap.classList.remove('active-box');
-                if(track) track.classList.remove('text-in');
-                document.body.classList.remove('lower-third-visible');
-                _l3SessionActive = false;
-                if(_l3ProgressInterval) clearInterval(_l3ProgressInterval);
-                // schedule next appearance after interval
-                _l3CycleTimer = setTimeout(() => {
-                    activateNewSession();
-                }, _l3Interval);
-                return;
-            }
-            const slide = _l3SlidesList[_l3CurrentSlideIdx];
-            // update UI
-            document.getElementById('l3-headline').innerText = slide.head;
-            const labelSpan = document.getElementById('l3-label');
-            labelSpan.innerText = slide.sub || '';
-            labelSpan.style.display = slide.sub ? 'block' : 'none';
-            const iconWrap = document.getElementById('l3-icon-wrap');
-            if(slide.type === 'img') iconWrap.innerHTML = `<img src="${slide.val}" class="l3-icon-img" onerror="this.style.display='none'">`;
-            else if(slide.type === 'icon') iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">${slide.val}</span>`;
-            else iconWrap.innerHTML = `<span class="material-symbols-rounded l3-icon-mat">newspaper</span>`;
-            // animate text in
-            const trackDiv = document.getElementById('l3-text-track');
-            trackDiv.classList.remove('text-in'); void trackDiv.offsetWidth; trackDiv.classList.add('text-in');
-            // progress bar animation
-            const fill = document.getElementById('l3-progress-fill');
-            fill.style.transition = 'none'; fill.style.width = '0%'; void fill.offsetWidth;
-            fill.style.transition = `width ${_l3Dur}ms linear`;
-            fill.style.width = '100%';
-            // schedule next slide
-            _l3CycleTimer = setTimeout(() => {
-                _l3CurrentSlideIdx++;
-                showSlideAndAdvance();
-            }, _l3Dur);
-        }
-        
-        function activateNewSession() {
-            if(!_l3SlidesList.length) return;
-            resetLowerThirdSession();
-            _l3SessionActive = true;
-            document.body.classList.add('lower-third-visible');
-            const wrap = document.getElementById('lower-third');
-            const track = document.getElementById('l3-text-track');
-            wrap.classList.add('active-box');
-            track.classList.remove('text-in'); // reset text state
-            _l3CurrentSlideIdx = 0;
-            // small delay before first slide animation
-            setTimeout(() => {
-                if(_l3SessionActive) showSlideAndAdvance();
-            }, 200);
-        }
-        
-        function initLowerThirdFromData(irRowItems, irRowImages, durRaw, intRaw) {
-            // Build slides (exclude date)
-            const slides = [];
-            // Process rows from station-info (C36,C37)
-            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a,b)=>a-b);
-            rowNums.forEach(row => {
-                const rawItem = (irRowItems[row] || '').trim();
-                const rawImg = ((irRowImages || {})[row] || '').trim();
-                if(!rawItem) return;
-                const lines = rawItem.split('\n').map(l=>l.trim()).filter(l=>l!=='');
-                const imgLines = rawImg.split('\n').map(l=>l.trim());
-                lines.forEach((line,idx) => {
-                    let text = line;
-                    let sub = '';
-                    if(line.includes('|')) { const parts=line.split('|'); text = (parts[1]||parts[0]).trim(); }
-                    const bracketMatch = text.match(/\[(.*?)\]/);
-                    if(bracketMatch) { sub = bracketMatch[1].trim(); text = text.replace(/\[.*?\]/,'').trim(); }
-                    const imgUrl = imgLines[idx] || '';
-                    const type = (imgUrl && imgUrl.startsWith('http')) ? 'img' : 'none';
-                    slides.push({ type, val: imgUrl, head: text, sub: sub });
-                });
+        function buildBarChart(containerId, dataPoints, isOrange = false) {
+            const container = document.getElementById(containerId); if(!container) return;
+            if(!dataPoints || dataPoints.length === 0) { container.innerHTML = '<div style="font-size:0.7rem;">No data</div>'; return; }
+            let html = '';
+            dataPoints.slice(0,3).forEach(item => { let val = parseFloat(item.value) || 0; let maxVal = 100; let widthPercent = Math.min(100, (val / maxVal) * 100);
+                html += `<div class="bar-item"><span class="bar-label">${item.label}</span><div class="bar-track"><div class="bar-fill ${isOrange ? 'orange' : ''}" style="width: ${widthPercent}%;"></div></div><span class="bar-value">${val}</span></div>`;
             });
-            // If no data, add placeholder generic
-            if(slides.length === 0) slides.push({ type:'icon', val:'info', head:'KMRL SUBSTATION', sub:'Operational update' });
-            _l3SlidesList = slides;
-            _l3Dur = (parseFloat(durRaw) * 1000) || 7000;
-            _l3Interval = (parseFloat(intRaw) * 1000) || 10000;
-            if(_l3Dur < 2000) _l3Dur = 2000;
-            if(_l3Interval < 3000) _l3Interval = 3000;
-            // reset any ongoing session and start fresh cycle
-            resetLowerThirdSession();
-            if(_l3SlidesList.length > 0) {
-                // start new session after a short init delay to avoid flicker
-                if(_l3CycleTimer) clearTimeout(_l3CycleTimer);
-                _l3CycleTimer = setTimeout(() => activateNewSession(), 800);
-            }
+            container.innerHTML = html;
+            setTimeout(() => { container.querySelectorAll('.bar-fill').forEach(el => { const w = el.style.width; el.style.width = '0%'; setTimeout(() => { el.style.width = w; }, 50); }); }, 100);
         }
         
-        // MAIN DRAW FUNCTION (simplified but keeps core deployment / maint updates)
+        // Theme
+        const toggleBtn = document.getElementById('theme-toggle'); toggleBtn.onclick = () => { const cur = document.documentElement.getAttribute('data-theme'); const nxt = cur === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', nxt); localStorage.setItem('kmrl_theme', nxt); toggleBtn.querySelector('span').innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode'; };
+        (()=>{ const saved = localStorage.getItem('kmrl_theme') || 'dark'; document.documentElement.setAttribute('data-theme', saved); toggleBtn.querySelector('span').innerText = saved === 'dark' ? 'light_mode' : 'dark_mode'; })();
+        
+        // Tab logic mobile
+        const tabBtns = document.querySelectorAll('.tab-btn'); const panes = { 'deploy-tab': document.getElementById('deploy-tab'), 'maint-tab': document.getElementById('maint-tab') };
+        tabBtns.forEach(btn => { btn.onclick = () => { const target = btn.dataset.tab; tabBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); Object.keys(panes).forEach(p => { panes[p].classList.remove('active-pane'); }); if(panes[target]) panes[target].classList.add('active-pane'); }; });
+        
+        // Helper staff rendering
+        function parseStaff(raw) { if(!raw) return ''; return raw.split('\n').filter(l=>l.trim()).map(line=>`<div class="m3-staff-item"><span class="staff-name">${line.split('|')[0]}</span></div>`).join(''); }
+        function buildTechSection(techRaw) { if(!techRaw) return ''; const names = techRaw.split('\n').filter(l=>l.trim()); if(names.length===0) return ''; return `<div class="tech-scroll-track">${names.map(n=>`<span class="tech-name-chip">${n}</span>`).join('')}</div>`; }
+        function isShiftActive(shiftName) { const now=new Date(), mins=now.getHours()*60+now.getMinutes(); if(shiftName==='MORNING') return mins>=390 && mins<840; if(shiftName==='EVENING') return mins>=840 && mins<1290; if(shiftName==='NIGHT') return mins>=1290 || mins<390; return false; }
+        function buildShift(title, val, active, tpc, techRaw) { const staffHtml = parseStaff(val) || '<div class="m3-staff-item">—</div>'; const techHtml = buildTechSection(techRaw); return `<div class="m3-shift-card ${active?'m3-shift-active':''}"><div class="shift-header-row"><div class="m3-shift-label">${title}</div>${tpc?`<span class="shift-tpc-badge">TPC: ${tpc}</span>`:''}</div><div class="staff-list">${staffHtml}</div>${techHtml ? `<div class="tech-section">${techHtml}</div>` : ''}</div>`; }
+        
+        let barChartAData = [{label:'Jan', value:0},{label:'Feb', value:0}];
+        let barChartBData = [{label:'Week1', value:0},{label:'Week2', value:0}];
+        let barTitleA = 'Monthly KPI', barTitleB = 'Utilization';
+        
         window.draw = function(data) {
             document.getElementById('refresh-time').innerText = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
             let staff = { today:{gen:'', morn:'', eve:'', night:'', techMorn:'', techEve:'', techNight:'', tpcMorn:'', tpcEve:'', tpcNight:''}, tomorrow:{gen:'', morn:'', eve:'', night:'', techMorn:'', techEve:'', techNight:'', tpcMorn:'', tpcEve:'', tpcNight:''} };
-            let mtrsStatus='', tkrsStatus='', mainlineStatus='', depotStatus='', failsRaw='', tickerText='', driverName='', driverPhone='', driverShift='', driverUpdate='';
-            let opsScheduleLines = [];
-            let irRowItems = {}, irRowImages = {}, l3DurRaw='8000', l3IntRaw='5000';
+            let mtrs='', tkrs='', failsRaw='', preventive=0, corrective=0, activity=0, opsLines=[], driverName='', tickerMsg='';
+            let progPercent1 = 0, progPercent2 = 0, progTitle1='Progress', progTitle2='Secondary';
+            let rawBarA = '', rawBarB = '', rawTitleA = '', rawTitleB = '';
             data.forEach(item => {
                 const param = (item.Parameter||'').trim(), val = (item.Value||'').trim(), unit = (item.Unit||'').trim();
                 if(param === 'sheetab_R2C12') staff.today.gen = val;
@@ -423,29 +282,43 @@
                 if(param === 'sheetab_R2C23') staff.tomorrow.tpcMorn = val;
                 if(param === 'sheetab_R2C24') staff.tomorrow.tpcEve = val;
                 if(param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
-                if(param === 'sheetab_R2C33') mtrsStatus = val;
-                if(param === 'sheetab_R2C34') tkrsStatus = val;
+                if(param === 'sheetab_R2C33') mtrs = val;
+                if(param === 'sheetab_R2C34') tkrs = val;
                 if(param === 'sheetab_R2C38') failsRaw = val;
-                if(param === 'sheetab_R2C39') updateMaintCount('maint-corrective-val', val, 'Corrective');
-                if(param === 'sheetab_R2C40') updateMaintCount('maint-activity-val', val, 'Activity');
-                if(param === 'sheetab_R2C41') updateMaintCount('maint-preventive-val', val, 'Preventive');
-                if(param === 'sheetab_R2C1') driverUpdate = val;
-                if(unit === 'DriverPopup') { const parts=val.split('|'); driverName=parts[0]; driverPhone=parts[1]; driverShift=parts[2]; }
-                if(unit === 'OpsBlock') { const parts=val.split('|'); mainlineStatus=parts[0]; depotStatus=parts[1]; }
-                if(unit === 'OpsSchedule') opsScheduleLines = val.split('\n').filter(l=>l.trim());
-                if(param === 'sheetab_R2C2') tickerText = val;
-                // C36 / C37 for lower third items
-                const c36 = param.match(/^sheetab_R(\d+)C36$/); if(c36 && unit==='sheetab') irRowItems[parseInt(c36[1])] = val;
-                const c37 = param.match(/^sheetab_R(\d+)C37$/); if(c37 && unit==='sheetab') irRowImages[parseInt(c37[1])] = val;
-                if(param === 'sheetab_R2C35') { /* Weather not used but keep */ }
-                if(param === 'sheetab_R2C47') l3DurRaw = val;
-                if(param === 'sheetab_R2C48') l3IntRaw = val;
+                if(param === 'sheetab_R2C39') preventive = parseFloat(val) || 0;
+                if(param === 'sheetab_R2C40') activity = parseFloat(val) || 0;
+                if(param === 'sheetab_R2C41') corrective = parseFloat(val) || 0;
+                if(param === 'sheetab_R2C27') progPercent1 = parseFloat(val) || 0;
+                if(param === 'sheetab_R2C44') progPercent2 = parseFloat(val) || 0;
+                if(param === 'sheetab_R1C27') progTitle1 = val || 'Progress';
+                if(param === 'sheetab_R1C44') progTitle2 = val || 'Secondary';
+                // NEW: R2C45 and R2C46 with titles R1C45, R1C46
+                if(param === 'sheetab_R2C45') rawBarA = val;
+                if(param === 'sheetab_R2C46') rawBarB = val;
+                if(param === 'sheetab_R1C45') rawTitleA = val;
+                if(param === 'sheetab_R1C46') rawTitleB = val;
+                if(unit === 'OpsSchedule') opsLines = val.split('\n').filter(l=>l.trim());
+                if(unit === 'DriverPopup') { const parts=val.split('|'); driverName=parts[0]; }
+                if(param === 'sheetab_R2C2') tickerMsg = val;
             });
-            updateFailuresPill(failsRaw);
-            if(tickerText) { document.getElementById('ticker-text').innerText = tickerText; }
-            if(driverName) { document.getElementById('driver-name').innerText = driverName; document.getElementById('driver-phone').innerText = driverPhone||'---'; document.getElementById('driver-shift').innerText = `SHIFT: ${driverShift||'---'}`; document.getElementById('driver-pill-name').innerText = driverName; document.getElementById('driver-pill-num').innerText = driverPhone||'---'; }
-            if(driverUpdate) { const badgeSpan = document.getElementById('driver-update-badge'); if(badgeSpan) badgeSpan.innerText = `LAST UPDATE: ${driverUpdate}`; const outdated = document.getElementById('driver-card'); if(outdated && driverUpdate && new Date(driverUpdate) < new Date(new Date().setHours(8,0,0))) outdated.classList.add('outdated'); else if(outdated) outdated.classList.remove('outdated'); }
-            // update roster HTML
+            document.getElementById('fail-open-val').innerText = failsRaw ? failsRaw.split('/')[0] || '0' : '—'; document.getElementById('fail-closed-val').innerText = failsRaw ? failsRaw.split('/')[1] || '0' : '—';
+            document.getElementById('maint-preventive-val').innerText = preventive; document.getElementById('maint-corrective-val').innerText = corrective; document.getElementById('maint-activity-val').innerText = activity;
+            document.getElementById('chk-mtrs').innerHTML = `MTRS: ${mtrs && mtrs !== '---' ? '✓' : '○'} ${mtrs !== '---' ? mtrs : 'pending'}`;
+            document.getElementById('chk-tkrs').innerHTML = `TKRS: ${tkrs && tkrs !== '---' ? '✓' : '○'} ${tkrs !== '---' ? tkrs : 'pending'}`;
+            updateCircularProgress('circ-progress-1', progPercent1, null, 'circ-val-1', false); updateCircularProgress('circ-progress-2', progPercent2, null, 'circ-val-2', true);
+            document.getElementById('circ-title-1').innerText = progTitle1; document.getElementById('circ-title-2').innerText = progTitle2;
+            
+            // Parse bar data (format: "Jan:85|Feb:92" or line separated)
+            if(rawBarA) { const items = rawBarA.split('|').map(p => { let [lab,val]=p.split(':'); return {label:lab?.trim()||'Data', value:parseFloat(val)||0}; }); if(items.length) barChartAData = items; }
+            if(rawBarB) { const items = rawBarB.split('|').map(p => { let [lab,val]=p.split(':'); return {label:lab?.trim()||'Data', value:parseFloat(val)||0}; }); if(items.length) barChartBData = items; }
+            if(rawTitleA) barTitleA = rawTitleA; if(rawTitleB) barTitleB = rawTitleB;
+            document.getElementById('barchart-title-a').innerText = barTitleA; document.getElementById('barchart-title-b').innerText = barTitleB;
+            buildBarChart('bar-a-container', barChartAData, false); buildBarChart('bar-b-container', barChartBData, true);
+            
+            // Ticker & Driver
+            if(tickerMsg) document.getElementById('ticker-text').innerText = tickerMsg;
+            if(driverName) { document.getElementById('driver-name-tag').innerHTML = `🚗 ${driverName}`; document.getElementById('driver-status').innerText = 'active'; document.getElementById('driver-status').style.background = 'var(--success-container)'; }
+            // Roster HTML
             let tdHtml = '', tmHtml = '';
             tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn, staff.today.techMorn);
             tdHtml += buildShift('EVENING', staff.today.eve, isShiftActive('EVENING'), staff.today.tpcEve, staff.today.techEve);
@@ -454,17 +327,13 @@
             tmHtml += buildShift('EVENING', staff.tomorrow.eve, false, staff.tomorrow.tpcEve, staff.tomorrow.techEve);
             tmHtml += buildShift('NIGHT', staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
             document.getElementById('roster-today').innerHTML = tdHtml; document.getElementById('roster-tomorrow').innerHTML = tmHtml;
-            document.getElementById('today-gen-pills').innerHTML = `<span class="gen-label-pill">GENERAL</span>${staff.today.gen ? staff.today.gen.split('\n').map(l=>`<span class="gen-name-tag">${l}</span>`).join('') : ''}`;
-            document.getElementById('tomorrow-gen-pills').innerHTML = `<span class="gen-label-pill">GENERAL</span>${staff.tomorrow.gen ? staff.tomorrow.gen.split('\n').map(l=>`<span class="gen-name-tag">${l}</span>`).join('') : ''}`;
-            const maintList = document.getElementById('maint-list'); if(opsScheduleLines.length) maintList.innerHTML = opsScheduleLines.map(l=>`<div class="m3-sch-item">${l}</div>`).join('');
-            // Update checklists
-            const setChecklist = (id,val) => { const item=document.getElementById(id); if(!item) return; const isFilled = val && val !== '---' && val !== '0'; item.className = `chk-dual-item ${isFilled?'chk-d-filled':'chk-d-empty'}`; const icon = item.querySelector('.chk-d-icon'); if(icon) icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank'; const statusSpan = item.querySelector('.chk-d-status'); if(statusSpan) statusSpan.innerText = isFilled ? val : 'Not Filled'; };
-            setChecklist('chk-mtrs', mtrsStatus); setChecklist('chk-tkrs', tkrsStatus);
-            // Initialize Lower Third with gathered rows (explicitly exclude date slide)
-            initLowerThirdFromData(irRowItems, irRowImages, l3DurRaw, l3IntRaw);
+            const maintListDiv = document.getElementById('maint-list'); if(opsLines.length) maintListDiv.innerHTML = opsLines.map(l=>`<div class="m3-sch-item">${l}</div>`).join(''); else maintListDiv.innerHTML = '<div style="padding:10px;text-align:center;">No active schedule</div>';
         };
-        function refreshData() { const old=document.getElementById('api-script'); if(old) old.remove(); const s=document.createElement('script'); s.id='api-script'; s.src=`${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s); }
-        setInterval(refreshData, 120000); refreshData(); updateClocks();
+        
+        function refresh() { const s=document.createElement('script'); s.src=`${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s); setTimeout(()=>s.remove(),5000); }
+        setInterval(refresh, 90000); refresh(); 
+        setInterval(()=>{ const n=new Date(); document.getElementById('clk-h').innerText=String(n.getHours()).padStart(2,'0'); document.getElementById('clk-m').innerText=String(n.getMinutes()).padStart(2,'0'); document.getElementById('clk-s').innerText=String(n.getSeconds()).padStart(2,'0'); },1000);
+        startRotator();
     </script>
 </body>
 </html>
