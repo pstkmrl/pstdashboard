@@ -303,8 +303,8 @@
         }
         #stock-dock {
             position: fixed;
-            bottom: 54px;
-            right: 192px;
+            bottom: 100px;
+            right: 16px;
             z-index: 1000;
             width: 300px;
             background: rgba(14, 20, 34, 0.82);
@@ -812,15 +812,84 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS BAR (Footer remains permanently visible) ── */
+        /* ── MAINTENANCE PROGRESS FOOTER ── */
         .maint-progress-footer {
             margin-top: auto;
-            padding-top: 12px;
+            padding-top: 10px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            flex-shrink: 0; /* Important: Prevents footer compression on small screens */
+            gap: 8px;
+            flex-shrink: 0;
         }
+        /* Circular progress bars row */
+        .maint-circ-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .maint-circ-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+        .maint-circ-svg-wrap {
+            position: relative;
+            width: 68px; height: 68px;
+            flex-shrink: 0;
+        }
+        .maint-circ-svg-wrap svg {
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .maint-circ-track { fill: none; stroke: var(--surface-variant); stroke-width: 6; }
+        .maint-circ-fill {
+            fill: none; stroke-width: 6; stroke-linecap: round;
+            transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1), stroke 0.8s ease;
+        }
+        .maint-circ-center {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .maint-circ-pct {
+            font-family: var(--font-display); font-size: 0.82rem; font-weight: 900;
+            line-height: 1; letter-spacing: -0.5px;
+            transition: color 0.8s ease;
+        }
+        .maint-circ-name {
+            font-family: var(--font-display); font-size: 0.48rem; font-weight: 900;
+            letter-spacing: 1px; text-transform: uppercase; color: var(--on-surface-variant);
+            opacity: 0.7; text-align: center; line-height: 1.2;
+            max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        /* Counts + bar charts area — rotates between counts and charts */
+        .maint-footer-rotate-wrap {
+            position: relative;
+            overflow: hidden;
+            min-height: 68px;
+        }
+        .maint-footer-panel {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1);
+        }
+        .maint-footer-panel.hidden-up {
+            opacity: 0; transform: translateY(-20px); pointer-events: none;
+            position: absolute; top: 0; left: 0; right: 0;
+        }
+        .maint-footer-panel.hidden-down {
+            opacity: 0; transform: translateY(20px); pointer-events: none;
+            position: absolute; top: 0; left: 0; right: 0;
+        }
+
+        /* Enlarged counts */
         .maint-progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
         .maint-progress-label { font-family: var(--font-display); font-size: 0.56rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
         .maint-progress-value { font-family: var(--font-display); font-size: 0.88rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
@@ -1081,6 +1150,119 @@
         [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.18); }
         .ir-dot.ir-dot-active { background: var(--primary); transform: scale(1.4); }
 
+        /* ── BAR CHART STYLES ── */
+        .maint-bar-chart-wrap {
+            flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0;
+        }
+        .maint-bar-chart-title {
+            font-family: var(--font-display); font-size: 0.52rem; font-weight: 900;
+            letter-spacing: 1.5px; text-transform: uppercase; color: var(--on-surface-variant);
+            opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .maint-bar-chart-title::before {
+            content: '';
+            display: block; width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+        }
+        .maint-bar-chart-wrap:first-child .maint-bar-chart-title::before { background: #00C8FF; }
+        .maint-bar-chart-wrap:last-child  .maint-bar-chart-title::before { background: #7DFF9E; }
+
+        .bar-chart-canvas {
+            position: relative;
+            height: 52px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            padding-bottom: 14px;
+        }
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-width: 0;
+        }
+        .bar-col-bar {
+            width: 100%;
+            border-radius: 3px 3px 0 0;
+            min-height: 2px;
+            transition: height 1.2s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-col-bar::after {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 30%;
+            background: rgba(255,255,255,0.15); border-radius: 3px 3px 0 0;
+        }
+        .maint-bar-chart-wrap:first-child .bar-col-bar {
+            background: linear-gradient(180deg, #00E5FF 0%, #0088BB 100%);
+            box-shadow: 0 0 8px rgba(0,200,255,0.3);
+        }
+        .maint-bar-chart-wrap:last-child .bar-col-bar {
+            background: linear-gradient(180deg, #7DFF9E 0%, #28A044 100%);
+            box-shadow: 0 0 8px rgba(125,255,158,0.3);
+        }
+        .bar-col-label {
+            font-family: var(--font-display); font-size: 0.36rem; font-weight: 800;
+            color: var(--on-surface-variant); opacity: 0.55;
+            white-space: nowrap; text-align: center; letter-spacing: 0.2px;
+        }
+        .bar-chart-baseline {
+            position: absolute; bottom: 14px; left: 0; right: 0; height: 1px;
+            background: var(--outline); opacity: 0.3;
+        }
+        .bar-col-bar { transition: height 1.2s cubic-bezier(0.34,1.56,0.64,1); }
+
+        /* Enlarged MCD counts in rotate panel */
+        #maint-counts-dock-lg {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: 0;
+            width: 100%;
+        }
+        .mcd-lg-item {
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+            padding: 0 8px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            flex: 1;
+        }
+        .mcd-lg-item:last-child { border-right: none; }
+        [data-theme="light"] .mcd-lg-item { border-color: rgba(0,0,0,0.07); }
+        .mcd-lg-val {
+            font-family: var(--font-display); font-size: 2rem; font-weight: 900; line-height: 1;
+            color: var(--on-surface); letter-spacing: -1px;
+            transition: color 0.3s ease;
+        }
+        .mcd-lg-label {
+            font-family: var(--font-display); font-size: 0.45rem; font-weight: 800;
+            letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant);
+            text-align: center; line-height: 1.3; white-space: nowrap;
+        }
+
+        /* Remarks popup */
+        .maint-progress-popup {
+            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
+            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
+            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
+        }
+        .maint-progress-right:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
+        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
+        .maint-progress-right { display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; }
+        .maint-bars-wrapper { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; justify-content: center; }
+        .maint-bar-group { display: flex; flex-direction: column; min-width: 0; }
+        .maint-progress-track { position: relative; width: 100%; height: 8px; background: var(--surface-variant); border-radius: var(--radius-full); overflow: hidden; }
+        .maint-progress-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 70%, white) 100%); transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 1.2s ease; width: 0%; }
+        .maint-progress-fill::after { content: ''; position: absolute; top: 0; right: 0; width: 32px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); border-radius: var(--radius-full); }
+        .maint-progress-value { font-family: var(--font-display); font-size: 0.88rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
+
         /* ── BLACKOUT ── */
         #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
         .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
@@ -1119,8 +1301,8 @@
             .failures-pill { padding: 2px 8px; }
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
-            #info-rotator { bottom: 46px; right: 8px; width: 148px; }
-            #stock-dock { right: 10px; bottom: 54px; width: 160px; }
+            #info-rotator { bottom: 54px; left: 0; min-width: 240px; max-width: min(360px, 78vw); }
+            #stock-dock { right: 10px; bottom: 100px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
         }
@@ -1154,7 +1336,7 @@
             .fail-val { font-size: 0.9rem; }
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
-            #info-rotator { bottom: 46px; right: 6px; width: 136px; }
+            #info-rotator { bottom: 54px; left: 0; min-width: 180px; max-width: min(280px, 82vw); }
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
             .mcd-label { font-size: 0.48rem; }
@@ -1164,7 +1346,7 @@
             .roster-grid { grid-template-columns: 1fr; gap: 6px; }
             .clock-unit { min-width: 30px; padding: 1px 4px; }
             .clock-val { font-size: 0.85rem; }
-            #info-rotator { width: 126px; }
+            #info-rotator { min-width: 160px; max-width: min(240px, 88vw); }
             .ops-inline-container { flex-wrap: wrap; }
         }
     </style>
@@ -1323,45 +1505,84 @@
                 
                 <!-- Maintenance Progress Footer (Always visible) -->
                 <div class="maint-progress-footer">
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
-                    <!-- Counts + bars row -->
-                    <div class="maint-progress-right">
-                        <div id="maint-counts-dock">
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-preventive-val">—</div>
-                                <div class="mcd-label">Preventive<br>Maint.</div>
+                    <!-- Circular progress bars row -->
+                    <div class="maint-circ-row">
+                        <!-- Circle 1 -->
+                        <div class="maint-circ-item">
+                            <div class="maint-circ-svg-wrap">
+                                <svg viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="maint-circ-track" cx="34" cy="34" r="28"/>
+                                    <circle class="maint-circ-fill" id="circ-fill-1" cx="34" cy="34" r="28"
+                                        stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
+                                </svg>
+                                <div class="maint-circ-center">
+                                    <span class="maint-circ-pct" id="maint-progress-value-1">—</span>
+                                </div>
                             </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-corrective-val">—</div>
-                                <div class="mcd-label">Corrective<br>Maint.</div>
+                            <div class="maint-circ-name" id="maint-progress-label-1">PROGRESS</div>
+                        </div>
+                        <!-- Circle 2 -->
+                        <div class="maint-circ-item">
+                            <div class="maint-circ-svg-wrap">
+                                <svg viewBox="0 0 68 68" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="maint-circ-track" cx="34" cy="34" r="28"/>
+                                    <circle class="maint-circ-fill" id="circ-fill-2" cx="34" cy="34" r="28"
+                                        stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
+                                </svg>
+                                <div class="maint-circ-center">
+                                    <span class="maint-circ-pct" id="maint-progress-value-2">—</span>
+                                </div>
                             </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-activity-val">—</div>
-                                <div class="mcd-label">Activities<br>Jobcards</div>
+                            <div class="maint-circ-name" id="maint-progress-label-2">SECONDARY</div>
+                        </div>
+                        <!-- Remarks popup trigger area -->
+                        <div class="maint-progress-right" style="flex:1;min-width:0;">
+                            <div class="maint-progress-popup">
+                                <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                                <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                            </div>
+                            <div class="maint-bars-wrapper" style="display:none">
+                                <div class="maint-bar-group">
+                                    <div class="maint-progress-track"><div id="maint-progress-fill-1" class="maint-progress-fill"></div></div>
+                                </div>
+                                <div class="maint-bar-group">
+                                    <div class="maint-progress-track"><div id="maint-progress-fill-2" class="maint-progress-fill"></div></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="maint-bars-wrapper">
-                            <!-- Bar 1 -->
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
-                                    <span id="maint-progress-value-1" class="maint-progress-value">—</span>
+                    </div>
+
+                    <!-- Rotating panel: counts → bar charts → counts ... -->
+                    <div class="maint-footer-rotate-wrap" id="maint-footer-rotate">
+                        <!-- PANEL A: Enlarged counts -->
+                        <div class="maint-footer-panel" id="mfp-counts">
+                            <div id="maint-counts-dock" style="display:flex;flex-direction:row;align-items:center;justify-content:space-around;gap:0;width:100%;">
+                                <div class="mcd-item" style="flex:1">
+                                    <div class="mcd-val" id="maint-preventive-val" style="font-size:2rem;">—</div>
+                                    <div class="mcd-label">Preventive<br>Maint.</div>
                                 </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
+                                <div class="mcd-item" style="flex:1">
+                                    <div class="mcd-val" id="maint-corrective-val" style="font-size:2rem;">—</div>
+                                    <div class="mcd-label">Corrective<br>Maint.</div>
+                                </div>
+                                <div class="mcd-item" style="flex:1">
+                                    <div class="mcd-val" id="maint-activity-val" style="font-size:2rem;">—</div>
+                                    <div class="mcd-label">Activities<br>Jobcards</div>
                                 </div>
                             </div>
-                            <!-- Bar 2 -->
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-2" class="maint-progress-label">Secondary Progress</span>
-                                    <span id="maint-progress-value-2" class="maint-progress-value">—</span>
+                        </div>
+                        <!-- PANEL B: Bar charts -->
+                        <div class="maint-footer-panel hidden-down" id="mfp-charts">
+                            <div class="maint-bar-chart-wrap" id="bar-chart-1-wrap">
+                                <div class="maint-bar-chart-title" id="bar-chart-1-title">CHART 1</div>
+                                <div class="bar-chart-canvas" id="bar-chart-1-canvas">
+                                    <div class="bar-chart-baseline"></div>
                                 </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-2" class="maint-progress-fill"></div>
+                            </div>
+                            <div class="maint-bar-chart-wrap" id="bar-chart-2-wrap">
+                                <div class="maint-bar-chart-title" id="bar-chart-2-title">CHART 2</div>
+                                <div class="bar-chart-canvas" id="bar-chart-2-canvas">
+                                    <div class="bar-chart-baseline"></div>
                                 </div>
                             </div>
                         </div>
@@ -1490,14 +1711,30 @@
     <div id="app-dock" class="app-dock"></div>
 
     <!-- ── INFO ROTATOR WIDGET ── -->
-    <div id="info-rotator">
-        <div class="ir-slab" id="ir-slab">
-            <div class="ir-accent-bar"></div>
-            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
-            <div class="ir-headline" id="ir-headline">—</div>
-            <div class="ir-label"   id="ir-label"></div>
+    <div id="info-rotator" style="display:none">
+        <div class="lt-wrapper" id="lt-wrapper">
+            <div class="lt-logo-tab">
+                <img class="lt-logo-img" src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL" onerror="this.style.display='none'">
+                <div class="lt-live-dot"></div>
+            </div>
+            <div class="lt-body">
+                <div class="lt-accent-top"></div>
+                <div class="lt-scan"></div>
+                <div class="lt-channel-label">KMRL OPS</div>
+                <div class="lt-content">
+                    <div class="lt-eyebrow" id="lt-eyebrow">UPDATE</div>
+                    <div class="lt-headline-wrap">
+                        <div class="lt-headline" id="ir-headline">—</div>
+                    </div>
+                    <div class="lt-sub-row">
+                        <div class="lt-icon-wrap" id="ir-icon-wrap"></div>
+                        <div class="lt-label" id="ir-label"></div>
+                    </div>
+                </div>
+                <div class="lt-dots-row" id="ir-dots"></div>
+                <div class="lt-progress-strip" id="lt-progress-strip"></div>
+            </div>
         </div>
-        <div class="ir-dots-row" id="ir-dots"></div>
     </div>
 
     <footer class="ticker-bar">
@@ -1945,31 +2182,52 @@
                     
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
+
+                    // Bar chart titles from header row
+                    if (param === 'sheetab_R1C45') { _barTitle1 = val || 'CHART 1'; const t = document.getElementById('bar-chart-1-title'); if(t) t.textContent = _barTitle1; }
+                    if (param === 'sheetab_R1C46') { _barTitle2 = val || 'CHART 2'; const t = document.getElementById('bar-chart-2-title'); if(t) t.textContent = _barTitle2; }
+
+                    // Bar chart data from r2
+                    if (param === 'sheetab_R2C45') { _barData1 = parseBarData(val); }
+                    if (param === 'sheetab_R2C46') { _barData2 = parseBarData(val); }
+
+                    // Lower-third timing: r2c47 = display duration (seconds), r2c48 = interval (seconds)
+                    if (param === 'sheetab_R2C47') { const s = parseFloat(val); if (!isNaN(s) && s > 0) setLtTimings(s * 1000, null); }
+                    if (param === 'sheetab_R2C48') { const s = parseFloat(val); if (!isNaN(s) && s > 0) setLtTimings(null, s * 1000); }
                 }
             });
 
             function updateProgressBar(val, fillId, valId) {
+                // fillId maps to circ-fill-1 / circ-fill-2
+                const circFillMap = { 'maint-progress-fill-1': 'circ-fill-1', 'maint-progress-fill-2': 'circ-fill-2' };
+                const circId = circFillMap[fillId];
                 const pct = parseFloat(val);
-                const fillEl = document.getElementById(fillId);
                 const valEl = document.getElementById(valId);
-                if (!fillEl || !valEl) return;
+                if (!valEl) return;
+                const CIRC = 175.93; // 2 * PI * 28
                 if (!isNaN(pct)) {
-                    const clamped = Math.min(100, Math.max(0, pct)); 
+                    const clamped = Math.min(100, Math.max(0, pct));
                     valEl.innerText = clamped.toFixed(1) + '%';
-                    setTimeout(() => { fillEl.style.width = clamped + '%'; }, 80);
-                    if (clamped >= 80) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--success) 0%, color-mix(in srgb, var(--success) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--success)'; 
-                    } else if (clamped >= 50) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--primary)'; 
-                    } else { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--error)'; 
+                    let color, stroke;
+                    if (clamped >= 80)       { color = 'var(--success)'; stroke = '#72D48A'; }
+                    else if (clamped >= 50)  { color = 'var(--primary)'; stroke = '#7DBEFF'; }
+                    else                     { color = 'var(--error)';   stroke = '#FF8A80'; }
+                    valEl.style.color = color;
+                    // Update circular fill
+                    if (circId) {
+                        const circEl = document.getElementById(circId);
+                        if (circEl) {
+                            circEl.style.stroke = stroke;
+                            const offset = CIRC - (clamped / 100) * CIRC;
+                            setTimeout(() => { circEl.style.strokeDashoffset = offset.toFixed(2); }, 80);
+                        }
                     }
-                } else { 
-                    valEl.innerText = '—'; 
-                    fillEl.style.width = '0%'; 
+                    // Also update hidden linear fill for compatibility
+                    const fillEl = document.getElementById(fillId);
+                    if (fillEl) { fillEl.style.width = clamped + '%'; }
+                } else {
+                    valEl.innerText = '—';
+                    if (circId) { const circEl = document.getElementById(circId); if (circEl) circEl.style.strokeDashoffset = CIRC; }
                 }
             }
 
@@ -2233,62 +2491,219 @@
         setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
-        let _irTimer = null, _irIdx = 0, _irSlides = [];
-        const IR_INTERVAL = 5000; const IR_FLIP_DUR = 360; 
+        /* ── LOWER THIRD NEWS TICKER (replaces info-rotator) ── */
+        let _irTimer = null, _irIntervalTimer = null, _ltProgressTimer = null;
+        let _irIdx = 0, _irSlides = [];
+        let _ltDisplayDuration = 8000;  // ms each slide is shown (from r2c47)
+        let _ltInterval = 15000;        // ms between appearances (from r2c48)
+        let _ltVisible = false;
 
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
             if (_irTimer) clearTimeout(_irTimer);
+            if (_irIntervalTimer) clearInterval(_irIntervalTimer);
             _irSlides = [];
+
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            _irSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
+            _irSlides.push({
+                iconType: 'material', icon: 'calendar_today',
+                headline: DAYS[new Date().getDay()],
+                label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+                eyebrow: 'TODAY'
+            });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
-                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg  = ((irRowImages || {})[rowNum] || '').trim();
+                const rawItem = (irRowItems[rowNum] || '').trim();
+                const rawImg  = ((irRowImages || {})[rowNum] || '').trim();
                 if (!rawItem) return;
-                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== ''), imageLines = rawImg.split('\n').map(l => l.trim());
+                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== '');
+                const imageLines = rawImg.split('\n').map(l => l.trim());
                 itemLines.forEach((line, i) => {
                     const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
-                    let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
-                    _irSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
+                    let text = line, sub = '';
+                    if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); sub = p[0].trim(); }
+                    _irSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: sub, eyebrow: 'UPDATE' });
                 });
             });
 
-            document.getElementById('info-rotator').style.display = ''; _irIdx = 0; _renderIRSlide(false);
+            if (_irSlides.length === 0) return;
+            _irIdx = 0;
+            _ltShowSlide(true);  // show first slide immediately
         }
 
-        function _renderIRSlide(withFlip) {
-            const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
-            if (!slab) return;
+        function _ltShowSlide(immediate) {
+            if (_ltVisible && !immediate) return;
+            _ltApplyContent();
+            _ltEnter();
+        }
 
-            function _applySlide() {
-                const s = _irSlides[_irIdx], hasIcon = s.iconType === 'img' || s.iconType === 'material';
-                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';document.getElementById('ir-headline').classList.add('ir-headline-full');">`; }
-                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:36px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`; }
-                else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
+        function _ltApplyContent() {
+            const s = _irSlides[_irIdx];
+            const headline = document.getElementById('ir-headline');
+            const label    = document.getElementById('ir-label');
+            const iconWrap = document.getElementById('ir-icon-wrap');
+            const dotsEl   = document.getElementById('ir-dots');
+            const eyebrow  = document.getElementById('lt-eyebrow');
 
-                headline.textContent = s.headline; headline.classList.remove('ir-headline-full');
-                if (!hasIcon || s.iconType === 'none') { headline.classList.add('ir-headline-full'); }
-                const len = s.headline.length; let fs;
-                if (!hasIcon || s.iconType === 'none') { fs = len <= 10 ? '1.5rem' : len <= 20 ? '1.2rem' : len <= 40 ? '0.98rem' : '0.82rem'; }
-                else { fs = len <= 10 ? '1.25rem' : len <= 20 ? '1.05rem' : len <= 40 ? '0.88rem' : '0.74rem'; }
-                headline.style.fontSize = fs;
-                label.textContent = s.label; label.style.display = s.label ? '' : 'none';
-                dotsEl.innerHTML = _irSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
+            if (headline) {
+                headline.textContent = s.headline;
+                const len = s.headline.length;
+                headline.style.fontSize = len <= 18 ? '1rem' : len <= 35 ? '0.88rem' : '0.76rem';
+                // Force re-trigger animation
+                headline.style.animation = 'none'; headline.offsetWidth;
+                headline.style.animation = '';
             }
+            if (label) { label.textContent = s.label || ''; }
+            if (eyebrow) {
+                eyebrow.textContent = s.eyebrow || 'UPDATE';
+                eyebrow.style.animation = 'none'; eyebrow.offsetWidth; eyebrow.style.animation = '';
+            }
+            if (iconWrap) {
+                if (s.iconType === 'img') {
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<img src="${s.icon}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.style.display='none'">`;
+                } else if (s.iconType === 'material') {
+                    iconWrap.style.display = '';
+                    iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:13px!important;color:#00C8FF;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20">${s.icon}</span>`;
+                } else {
+                    iconWrap.style.display = 'none';
+                }
+            }
+            if (dotsEl) {
+                dotsEl.innerHTML = _irSlides.map((_, i) =>
+                    `<div class="lt-dot${i === _irIdx ? ' active' : ''}"></div>`
+                ).join('');
+            }
+        }
 
-            if (!withFlip) { _applySlide(); _scheduleNext(); return; }
-            slab.classList.remove('flipping-in'); slab.classList.add('flipping-out');
+        function _ltEnter() {
+            const el = document.getElementById('info-rotator');
+            const wrapper = document.getElementById('lt-wrapper');
+            if (!el || !wrapper) return;
+            el.style.display = '';
+            _ltVisible = true;
+            wrapper.classList.remove('exiting');
+            wrapper.classList.add('entering');
+
+            // Animate progress strip
+            _ltAnimateProgress(_ltDisplayDuration);
+
+            // Auto-hide after display duration, then schedule next appearance
+            if (_irTimer) clearTimeout(_irTimer);
+            _irTimer = setTimeout(() => {
+                _ltExit(() => {
+                    // After exit, wait interval then show next slide
+                    _irTimer = setTimeout(() => {
+                        _irIdx = (_irIdx + 1) % _irSlides.length;
+                        _ltShowSlide(true);
+                    }, _ltInterval);
+                });
+            }, _ltDisplayDuration);
+        }
+
+        function _ltExit(onDone) {
+            const wrapper = document.getElementById('lt-wrapper');
+            if (!wrapper) { if (onDone) onDone(); return; }
+            _ltVisible = false;
+            wrapper.classList.remove('entering');
+            wrapper.classList.add('exiting');
+            if (_ltProgressTimer) clearInterval(_ltProgressTimer);
+            const strip = document.getElementById('lt-progress-strip');
+            if (strip) strip.style.width = '0';
             setTimeout(() => {
-                _applySlide(); slab.classList.remove('flipping-out'); slab.classList.add('flipping-in');
-                setTimeout(() => { slab.classList.remove('flipping-in'); _scheduleNext(); }, IR_FLIP_DUR);
-            }, IR_FLIP_DUR);
+                const el = document.getElementById('info-rotator');
+                if (el) el.style.display = 'none';
+                wrapper.classList.remove('exiting');
+                if (onDone) onDone();
+            }, 420);
         }
 
-        function _scheduleNext() {
-            if (_irTimer) clearTimeout(_irTimer); if (_irSlides.length <= 1) return; 
-            _irTimer = setTimeout(() => { _irIdx = (_irIdx + 1) % _irSlides.length; _renderIRSlide(true); }, IR_INTERVAL);
+        function _ltAnimateProgress(duration) {
+            if (_ltProgressTimer) clearInterval(_ltProgressTimer);
+            const strip = document.getElementById('lt-progress-strip');
+            if (!strip) return;
+            strip.style.transition = 'none';
+            strip.style.width = '0';
+            strip.offsetWidth; // reflow
+            strip.style.transition = `width ${duration}ms linear`;
+            strip.style.width = '100%';
         }
+
+        // Called from draw() to update timings from r2c47 / r2c48 (values in seconds)
+        function setLtTimings(displayMs, intervalMs) {
+            if (displayMs !== null && displayMs !== undefined && !isNaN(displayMs) && displayMs > 1000) _ltDisplayDuration = displayMs;
+            if (intervalMs !== null && intervalMs !== undefined && !isNaN(intervalMs) && intervalMs > 1000) _ltInterval = intervalMs;
+        }
+
+        /* ── BAR CHART RENDERER ── */
+        let _barData1 = [], _barData2 = [];
+        let _barTitle1 = 'CHART 1', _barTitle2 = 'CHART 2';
+        let _footerRotateTimer = null;
+        let _footerShowingCharts = false;
+
+        function renderBarChart(canvasId, dataItems, colorClass) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const baseline = canvas.querySelector('.bar-chart-baseline');
+            // Remove old bars
+            canvas.querySelectorAll('.bar-col').forEach(el => el.remove());
+
+            if (!dataItems || dataItems.length === 0) return;
+            const maxVal = Math.max(...dataItems.map(d => d.val || 0), 1);
+            const maxH = 38; // px (above baseline label)
+
+            dataItems.forEach(item => {
+                const pct = Math.max(0, Math.min(1, (item.val || 0) / maxVal));
+                const barH = Math.max(2, Math.round(pct * maxH));
+                const col = document.createElement('div');
+                col.className = 'bar-col';
+                const bar = document.createElement('div');
+                bar.className = 'bar-col-bar';
+                bar.style.height = '2px'; // start at 0 for animation
+                bar.style.marginBottom = '14px'; // space for label
+                const lbl = document.createElement('div');
+                lbl.className = 'bar-col-label';
+                lbl.textContent = item.label || '';
+                col.appendChild(bar);
+                col.appendChild(lbl);
+                canvas.insertBefore(col, baseline);
+                // Animate in with delay
+                setTimeout(() => { bar.style.height = barH + 'px'; }, 80);
+            });
+        }
+
+        function parseBarData(raw) {
+            if (!raw || raw.trim() === '' || raw.trim() === '---') return [];
+            return raw.split('\n').map(l => l.trim()).filter(l => l !== '').map(line => {
+                const parts = line.split('|');
+                return { label: (parts[0] || '').trim(), val: parseFloat(parts[1] || '0') || 0 };
+            });
+        }
+
+        function _footerRotateTick() {
+            const countPanel  = document.getElementById('mfp-counts');
+            const chartPanel  = document.getElementById('mfp-charts');
+            if (!countPanel || !chartPanel) return;
+            _footerShowingCharts = !_footerShowingCharts;
+            if (_footerShowingCharts) {
+                countPanel.classList.add('hidden-up');
+                chartPanel.classList.remove('hidden-down');
+                chartPanel.classList.remove('hidden-up');
+                // Re-render charts on show for animation
+                renderBarChart('bar-chart-1-canvas', _barData1, 'blue');
+                renderBarChart('bar-chart-2-canvas', _barData2, 'green');
+            } else {
+                chartPanel.classList.add('hidden-down');
+                countPanel.classList.remove('hidden-up');
+                countPanel.classList.remove('hidden-down');
+            }
+        }
+
+        function startFooterRotate() {
+            if (_footerRotateTimer) clearInterval(_footerRotateTimer);
+            _footerRotateTimer = setInterval(_footerRotateTick, 8000);
+        }
+        startFooterRotate();
     </script>
 </body>
 </html>
