@@ -880,11 +880,11 @@
             gap: 10px;
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1);
         }
-        .maint-footer-panel.hidden-up {
+        .maint-footer-panel.fp-hidden-up {
             opacity: 0; transform: translateY(-20px); pointer-events: none;
             position: absolute; top: 0; left: 0; right: 0;
         }
-        .maint-footer-panel.hidden-down {
+        .maint-footer-panel.fp-hidden-down {
             opacity: 0; transform: translateY(20px); pointer-events: none;
             position: absolute; top: 0; left: 0; right: 0;
         }
@@ -1129,12 +1129,12 @@
             bottom: 54px; left: 0;
             z-index: 1010;
             pointer-events: none;
-            display: none;
         }
         .lt-wrapper {
             display: flex; flex-direction: row; align-items: stretch;
             min-width: 280px; max-width: min(600px, 52vw);
             filter: drop-shadow(0 6px 24px rgba(0,0,0,0.7)) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+            opacity: 0; transform: translateX(-105%);
         }
         /* Slide-in / slide-out */
         @keyframes lt-in  { 0%{transform:translateX(-105%);opacity:0} 65%{transform:translateX(3px);opacity:1} 100%{transform:translateX(0);opacity:1} }
@@ -2371,7 +2371,6 @@
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
 
-                    // Bar chart titles (r1 = header)
                     if (param === 'sheetab_R1C45') {
                         _barTitle1 = val||'CHART 1';
                         const t=document.getElementById('bar-chart-1-title');
@@ -2382,15 +2381,11 @@
                         const t=document.getElementById('bar-chart-2-title');
                         if(t) t.innerHTML=`<span class="bct-dot" style="background:#7DFF9E;"></span>${_barTitle2}`;
                     }
-                    /* Bar chart data: CSV "Month,Value" one per line */
                     if (param === 'sheetab_R2C45') {
                         _barData1 = parseBarData(val);
-                        if (_fRotState === 0) renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
                     }
                     if (param === 'sheetab_R2C46') {
                         _barData2 = parseBarData(val);
-                        /* Pre-render into the hidden panel so it's ready when rotated in */
-                        renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
                     }
                     /* r2c47 = interval between batches (seconds), r2c48 = per-item duration (seconds) */
                     if (param === 'sheetab_R2C47') { const s=parseFloat(val); if(!isNaN(s)&&s>0) setLtTimings(null, s*1000); }
@@ -2467,6 +2462,13 @@
 
             buildAppDock(dockRows);
             initInfoRotator(irWeather, irRowItems, irRowImages);
+
+            /* Render currently visible chart immediately */
+            if (_fRotState === 0 && _barData1 && _barData1.length > 0) {
+                renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
+            } else if (_fRotState === 1 && _barData2 && _barData2.length > 0) {
+                renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
+            }
 
             if (opsScheduleLines !== null) {
                 const listEl = document.getElementById('maint-list');
@@ -2700,12 +2702,11 @@
         let _ltItemMs   = 6000;    // per-slide duration  (from r2c48)
         let _ltIntervalMs = 20000; // gap between batches (from r2c47)
         let _ltRunning  = false;
+        let _lastIrHash = ''; // Prevents unnecessary reset on same data
 
         /* Called from draw() — builds slide list and starts the cycle */
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            if (_irTimer) { clearTimeout(_irTimer); _irTimer = null; }
-            _irSlides = [];
-            _ltRunning = false;
+            const tempSlides = [];
 
             /* Items from sheet cols 36/37 */
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a,b) => a-b);
@@ -2729,7 +2730,7 @@
                         desc     = p[0].trim();
                         headline = p.slice(1).join('|').trim();
                     }
-                    _irSlides.push({
+                    tempSlides.push({
                         eyebrow : 'UPDATE',
                         headline: headline,
                         desc    : desc,
@@ -2738,10 +2739,23 @@
                 });
             });
 
-            if (_irSlides.length === 0) return;
+            // Prevent reset if data hasn't changed at all
+            const hash = JSON.stringify(tempSlides);
+            if (hash === _lastIrHash) return;
+            _lastIrHash = hash;
+
+            if (_irTimer) { clearTimeout(_irTimer); _irTimer = null; }
+            _irSlides = tempSlides;
+            _ltRunning = false;
+
+            if (_irSlides.length === 0) {
+                _ltHideWrapper(); 
+                return; 
+            }
             _ltRunning = true;
-            /* Start first batch after a short boot delay */
-            _irTimer = setTimeout(_ltStartBatch, 1200);
+            
+            /* Start immediately after data updates / on first page load! */
+            _irTimer = setTimeout(_ltStartBatch, 200);
         }
 
         function setLtTimings(itemMs, intervalMs) {
@@ -2825,8 +2839,8 @@
         function _ltEnterWrapper() {
             const wrap = document.getElementById('lt-wrapper');
             if (!wrap) return;
-            wrap.classList.remove('lt-hiding');
-            wrap.classList.add('lt-visible');
+            wrap.classList.remove('lt-exiting');
+            wrap.classList.add('lt-entering');
             /* Progress strip */
             const strip = document.getElementById('lt-strip');
             if (strip) {
@@ -2866,10 +2880,9 @@
             const strip = document.getElementById('lt-strip');
             if (strip) { strip.style.transition='none'; strip.style.width='0'; }
             if (wrap) {
-                wrap.classList.remove('lt-visible');
-                wrap.classList.add('lt-hiding');
+                wrap.classList.remove('lt-entering');
+                wrap.classList.add('lt-exiting');
                 setTimeout(() => {
-                    wrap.classList.remove('lt-hiding');
                     if (onDone) onDone();
                 }, 420);
             } else {
@@ -2889,11 +2902,15 @@
 
         function _toShortMonth(s) {
             if (!s) return '';
-            const n = parseInt(s, 10);
-            if (!isNaN(n) && n >= 1 && n <= 12) return _MONTHS[n - 1];
-            const key = s.trim().slice(0, 3).toLowerCase();
+            const clean = s.trim();
+            // Test if it's strictly a number (can be 08 or 8)
+            if (/^\d+$/.test(clean)) {
+                const n = parseInt(clean, 10);
+                if (n >= 1 && n <= 12) return _MONTHS[n - 1];
+            }
+            const key = clean.slice(0, 3).toLowerCase();
             const found = _MONTHS.find(m => m.toLowerCase() === key);
-            return found || s.trim().slice(0, 4);
+            return found || clean.slice(0, 3);
         }
 
         function parseBarData(raw) {
@@ -2912,7 +2929,7 @@
                 /* month,value  or  value,month */
                 if (!isNaN(bNum) && isNaN(aNum))       results.push({ label: _toShortMonth(a), val: bNum });
                 else if (!isNaN(aNum) && isNaN(bNum))  results.push({ label: _toShortMonth(b), val: aNum });
-                else if (!isNaN(bNum))                  results.push({ label: _toShortMonth(a), val: bNum });
+                else if (!isNaN(bNum))                 results.push({ label: _toShortMonth(a), val: bNum });
             });
             return results;
         }
