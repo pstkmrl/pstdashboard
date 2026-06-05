@@ -2926,7 +2926,8 @@
                     }
                     if (param === 'sheetab_R2C46') {
                         _barData2 = parseBarData(val);
-                        if (_fRotState === 1) renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
+                        /* Pre-render into the hidden panel so it's ready when rotated in */
+                        renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
                     }
                     /* r2c47 = interval between batches (seconds), r2c48 = per-item duration (seconds) */
                     if (param === 'sheetab_R2C47') { const s=parseFloat(val); if(!isNaN(s)&&s>0) setLtTimings(null, s*1000); }
@@ -3514,12 +3515,13 @@
             if (_fRotState === 0) {
                 p0.classList.add('fp-hidden-up');
                 p1.classList.remove('fp-hidden-down','fp-hidden-up');
-                renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
+                /* Re-render in case data arrived after pre-render */
+                if (_barData2 && _barData2.length) renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
                 _fRotState = 1;
             } else {
                 p1.classList.add('fp-hidden-down');
                 p0.classList.remove('fp-hidden-up','fp-hidden-down');
-                renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
+                if (_barData1 && _barData1.length) renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
                 _fRotState = 0;
             }
         }
