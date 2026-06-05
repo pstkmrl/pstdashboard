@@ -750,8 +750,8 @@
                 max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 202px - 20px);
             }
         }
-        .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; }
-        .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; }
+        .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; max-width: 100%; }
+        .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; max-width: 100%; }
         
         .ops-rot-pill {
             display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius-full);
@@ -1137,7 +1137,29 @@
             .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
 
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            .unified-unit { height: calc(100vh - 190px) !important; max-height: none; }
+            
+            /* Enhanced Mobile Flex locking for Maint tab perfect fit */
+            .dashboard-content[data-active-tab="maint"] {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden !important; 
+                padding-bottom: 50px; 
+            }
+            .dashboard-content[data-active-tab="maint"] .right-column {
+                display: flex;
+                flex: 1;
+                min-height: 0;
+                width: 100%;
+            }
+            .unified-unit { 
+                flex: 1; 
+                height: auto !important; 
+                max-height: none !important; 
+                width: 100%; 
+                margin: 0; 
+            }
+            .ops-inline-container { flex-wrap: wrap; }
+
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
             .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
             .logo-section img { height: 24px; }
@@ -1173,7 +1195,6 @@
 
         @media (max-width: 600px) {
             .dashboard-content { padding: 6px 6px 80px 6px; gap: 6px; }
-            .unified-unit { height: calc(100vh - 180px) !important; max-height: none; }
             .app-bar { padding: 6px 10px; margin: 4px 4px 0 4px; }
             .logo-section img { height: 22px; }
             .middle-module { height: 34px; gap: 8px; }
@@ -1525,7 +1546,7 @@
 
     <div id="app-dock" class="app-dock"></div>
 
-    <div id="info-rotator">
+    <div id="info-rotator" style="display:none;">
         <div class="ir-slab" id="ir-slab">
             <div class="ir-accent-bar"></div>
             <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
@@ -2285,14 +2306,13 @@
         setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
-        let _irTimer = null, _irIdx = 0, _irSlides = [];
+        let _irTimer = null, _irIdx = 0, _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
         const IR_FLIP_DUR = 360; 
 
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            if (_irTimer) clearTimeout(_irTimer);
-            _irSlides = [];
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            _irSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
+            let currentSlides = [];
+            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
@@ -2302,68 +2322,98 @@
                 itemLines.forEach((line, i) => {
                     const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
                     let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
-                    _irSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
+                    currentSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
                 });
             });
 
-            document.getElementById('info-rotator').style.display = ''; _irIdx = 0; _renderIRSlide(false);
+            const newHash = JSON.stringify(currentSlides);
+            if (_irPrevHash === null) {
+                // First load
+                _irSlides = currentSlides;
+                _irPrevHash = newHash;
+                _startIrCycle(_irSlides, true);
+            } else if (_irPrevHash !== newHash) {
+                // Data changed: Compare and find newly added slides
+                let newSlides = currentSlides.filter(cs => !_irSlides.some(os => os.headline === cs.headline && os.icon === cs.icon));
+                _irSlides = currentSlides;
+                _irPrevHash = newHash;
+                if (newSlides.length > 0) {
+                    // Play only the new slides immediately
+                    _startIrCycle(newSlides, false);
+                }
+            }
         }
 
-        function _renderIRSlide(withFlip) {
+        function _startIrCycle(slidesToPlay, isIntervalLoop) {
+            if (_irTimer) clearTimeout(_irTimer);
+            
+            if (!slidesToPlay || slidesToPlay.length === 0) {
+                document.getElementById('info-rotator').style.display = 'none';
+                const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
+                return;
+            }
+
+            _irActiveSlides = slidesToPlay;
+            _irIdx = 0;
+            document.getElementById('info-rotator').style.display = '';
+            _renderIRSlide(true, isIntervalLoop);
+        }
+
+        function _renderIRSlide(animateIn, isIntervalLoop) {
             const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
             if (!slab) return;
 
+            const s = _irActiveSlides[_irIdx];
+            if (!s) return;
+
             function _applySlide() {
-                const s = _irSlides[_irIdx], hasIcon = s.iconType === 'img' || s.iconType === 'material';
                 if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
                 else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
                 else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
 
-                headline.textContent = s.headline; 
+                headline.textContent = s.headline;
                 label.textContent = s.label; label.style.display = s.label ? '' : 'none';
-                dotsEl.innerHTML = _irSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
+                dotsEl.innerHTML = _irActiveSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
             }
 
-            if (_irTimer) clearTimeout(_irTimer);
-
-            if (!withFlip) {
+            if (animateIn) {
+                _applySlide();
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+                _irTimer = setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleVanish(isIntervalLoop);
+                }, IR_FLIP_DUR);
+            } else {
                 _applySlide();
                 slab.classList.remove('flipping-out', 'flipping-in');
-                _scheduleVanish();
-                return;
+                _scheduleVanish(isIntervalLoop);
             }
-
-            // Animate IN
-            _applySlide();
-            slab.classList.remove('flipping-out');
-            slab.classList.add('flipping-in');
-            setTimeout(() => {
-                slab.classList.remove('flipping-in');
-                _scheduleVanish();
-            }, IR_FLIP_DUR);
         }
 
-        function _scheduleVanish() {
+        function _scheduleVanish(isIntervalLoop) {
             const dur = window._irDuration !== undefined ? window._irDuration : 5000;
             _irTimer = setTimeout(() => {
                 const slab = document.getElementById('ir-slab');
                 if (slab) {
                     slab.classList.add('flipping-out');
-                    setTimeout(() => {
-                        _scheduleNext();
+                    _irTimer = setTimeout(() => {
+                        _irIdx++;
+                        if (_irIdx < _irActiveSlides.length) {
+                            // Cycle to next slide in the active batch
+                            _renderIRSlide(true, isIntervalLoop);
+                        } else {
+                            // Batch complete -> Hide container & wait for interval to trigger full batch
+                            document.getElementById('info-rotator').style.display = 'none';
+                            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                            _irTimer = setTimeout(() => {
+                                _startIrCycle(_irSlides, true);
+                            }, interval);
+                        }
                     }, IR_FLIP_DUR);
                 }
             }, dur);
-        }
-
-        function _scheduleNext() {
-            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
-            _irTimer = setTimeout(() => {
-                if (_irSlides.length > 1) {
-                    _irIdx = (_irIdx + 1) % _irSlides.length;
-                }
-                _renderIRSlide(true);
-            }, interval);
         }
 
     </script>
