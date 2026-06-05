@@ -303,8 +303,8 @@
         }
         #stock-dock {
             position: fixed;
-            bottom: 100px;
-            right: 16px;
+            bottom: 54px;
+            right: 192px;
             z-index: 1000;
             width: 300px;
             background: rgba(14, 20, 34, 0.82);
@@ -319,7 +319,7 @@
             transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.18s ease;
             animation: sdock-entry 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
         }
-        [data-theme="light"] .stock-dock {
+        [data-theme="light"] #stock-dock {
             background: rgba(240,246,255,0.85);
             border-color: rgba(0,97,164,0.22);
             box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.07),
@@ -533,6 +533,9 @@
         .stock-val.warn { color: var(--error); }
         .stock-icon { font-size: 0.9rem !important; opacity: 0.75; }
         .stock-divider { width: 1px; height: 18px; background: var(--outline); opacity: 0.4; flex-shrink: 0; }
+
+        /* ── MOBILE TABS ── */
+        .mobile-tab-bar { display: none; }
 
         /* ── DASHBOARD LAYOUT ── */
         .dashboard-content {
@@ -812,84 +815,15 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER ── */
+        /* ── MAINTENANCE PROGRESS BAR (Footer remains permanently visible) ── */
         .maint-progress-footer {
             margin-top: auto;
-            padding-top: 10px;
+            padding-top: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex-shrink: 0;
+            gap: 6px;
+            flex-shrink: 0; /* Important: Prevents footer compression on small screens */
         }
-        /* Circular progress bars row */
-        .maint-circ-row {
-            display: flex;
-            flex-direction: row;
-            gap: 10px;
-            justify-content: center;
-            align-items: flex-end;
-        }
-        .maint-circ-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            flex: 1;
-        }
-        .maint-circ-svg-wrap {
-            position: relative;
-            width: 68px; height: 68px;
-            flex-shrink: 0;
-        }
-        .maint-circ-svg-wrap svg {
-            width: 100%; height: 100%;
-            transform: rotate(-90deg);
-        }
-        .maint-circ-track { fill: none; stroke: var(--surface-variant); stroke-width: 6; }
-        .maint-circ-fill {
-            fill: none; stroke-width: 6; stroke-linecap: round;
-            transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1), stroke 0.8s ease;
-        }
-        .maint-circ-center {
-            position: absolute; inset: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .maint-circ-pct {
-            font-family: var(--font-display); font-size: 0.82rem; font-weight: 900;
-            line-height: 1; letter-spacing: -0.5px;
-            transition: color 0.8s ease;
-        }
-        .maint-circ-name {
-            font-family: var(--font-display); font-size: 0.48rem; font-weight: 900;
-            letter-spacing: 1px; text-transform: uppercase; color: var(--on-surface-variant);
-            opacity: 0.7; text-align: center; line-height: 1.2;
-            max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        }
-
-        /* Counts + bar charts area — rotates between counts and charts */
-        .maint-footer-rotate-wrap {
-            position: relative;
-            overflow: hidden;
-            min-height: 68px;
-        }
-        .maint-footer-panel {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 10px;
-            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1);
-        }
-        .maint-footer-panel.fp-hidden-up {
-            opacity: 0; transform: translateY(-20px); pointer-events: none;
-            position: absolute; top: 0; left: 0; right: 0;
-        }
-        .maint-footer-panel.fp-hidden-down {
-            opacity: 0; transform: translateY(20px); pointer-events: none;
-            position: absolute; top: 0; left: 0; right: 0;
-        }
-
-        /* Enlarged counts */
         .maint-progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
         .maint-progress-label { font-family: var(--font-display); font-size: 0.56rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
         .maint-progress-value { font-family: var(--font-display); font-size: 0.88rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
@@ -1123,270 +1057,55 @@
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
-        /* ── NEWS LOWER-THIRD (info-rotator) ── */
-        #info-rotator {
-            position: fixed;
-            bottom: 54px; left: 0;
-            z-index: 1010;
-            pointer-events: none;
+        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
+        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: 340px; perspective: 700px; perspective-origin: 50% 50%; }
+        .ir-slab {
+            width: 100%; height: 80px; border-radius: var(--radius-m);
+            background: rgba(22, 28, 40, 0.65); border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.4), inset 0 1.5px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.18);
+            backdrop-filter: blur(30px) saturate(2); -webkit-backdrop-filter: blur(30px) saturate(2);
+            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 8px 12px; gap: 12px; box-sizing: border-box;
         }
-        .lt-wrapper {
-            display: flex; flex-direction: row; align-items: stretch;
-            min-width: 280px; max-width: min(600px, 52vw);
-            filter: drop-shadow(0 6px 24px rgba(0,0,0,0.7)) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
-            opacity: 0; transform: translateX(-105%);
+        [data-theme="light"] .ir-slab { background: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.85); box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.95); }
+        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.3; } }
+        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.3; } 100% { transform: rotateX(0deg); opacity: 1; } }
+        .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
+        .ir-accent-bar { position: absolute; top: 0; left: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white)); border-radius: var(--radius-m) 0 0 var(--radius-m); }
+        
+        .ir-icon-wrap {
+            width: 56px; height: 56px; border-radius: var(--radius-s); flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.15);
+            border: 1px solid rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
-        /* Slide-in / slide-out */
-        @keyframes lt-in  { 0%{transform:translateX(-105%);opacity:0} 65%{transform:translateX(3px);opacity:1} 100%{transform:translateX(0);opacity:1} }
-        @keyframes lt-out { 0%{transform:translateX(0);opacity:1} 100%{transform:translateX(-105%);opacity:0} }
-        @keyframes lt-wipe { 0%{clip-path:inset(0 100% 0 0)} 100%{clip-path:inset(0 0% 0 0)} }
-        @keyframes lt-live { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,210,255,0.7)} 50%{opacity:.55;box-shadow:0 0 0 4px rgba(0,210,255,0)} }
-        @keyframes lt-scan { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
-        .lt-wrapper.lt-entering { animation: lt-in .5s cubic-bezier(.34,1.56,.64,1) both; }
-        .lt-wrapper.lt-exiting  { animation: lt-out .35s cubic-bezier(.4,0,1,1) both; }
-
-        /* Logo slab – skeuomorphic brushed dark panel */
-        .lt-logo-slab {
-            flex-shrink: 0; width: 48px;
-            background: linear-gradient(170deg,#1c2638 0%,#111a2c 50%,#080e1c 100%);
-            border-top: 1.5px solid rgba(125,190,255,.5);
-            border-left: 1.5px solid rgba(125,190,255,.25);
-            border-bottom: 1.5px solid rgba(0,0,0,.7);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-            padding: 7px 4px;
-            position: relative; overflow: hidden;
+        [data-theme="light"] .ir-icon-wrap {
+            background: rgba(255,255,255,0.4); border-color: rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.8);
         }
-        .lt-logo-slab::before {
-            content:''; position:absolute; inset:0;
-            background: linear-gradient(100deg,rgba(255,255,255,.07) 0%,transparent 55%);
-            pointer-events:none;
+        .ir-icon-wrap .material-symbols-rounded { font-size: 32px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
+        .ir-icon-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+        
+        .ir-text-col { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; justify-content: center; }
+        .ir-headline {
+            font-family: var(--font-display); font-size: 0.95rem !important; font-weight: 900;
+            color: var(--on-surface); text-align: left; line-height: 1.2; letter-spacing: -0.2px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0;
         }
-        .lt-logo-img { width:32px; height:32px; object-fit:contain; filter:brightness(1.1) drop-shadow(0 1px 4px rgba(125,190,255,.45)); }
-        .lt-live-dot { width:6px; height:6px; border-radius:50%; background:#00D2FF; animation: lt-live 2s ease-in-out infinite; }
-
-        /* Body – glassmorphism */
-        .lt-body {
-            flex:1; min-width:0; position:relative; overflow:hidden;
-            background: linear-gradient(130deg,rgba(10,18,34,.9) 0%,rgba(6,12,26,.94) 100%);
-            border-top: 1.5px solid rgba(0,210,255,.35);
-            border-bottom: 1.5px solid rgba(0,0,0,.6);
-            border-right: 1.5px solid rgba(0,210,255,.18);
-            backdrop-filter: blur(24px) saturate(1.8);
-            -webkit-backdrop-filter: blur(24px) saturate(1.8);
+        .ir-label {
+            font-family: var(--font-body); font-size: 0.65rem; font-weight: 600;
+            color: var(--on-surface-variant); opacity: 0.8; text-align: left;
+            letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 2px;
         }
-        [data-theme="light"] .lt-body {
-            background: linear-gradient(130deg,rgba(215,232,255,.92) 0%,rgba(195,218,250,.95) 100%);
-            border-color: rgba(0,97,164,.4);
-        }
-        [data-theme="light"] .lt-logo-slab { background: linear-gradient(170deg,#003c78 0%,#001f4d 100%); }
-
-        /* Accent top line */
-        .lt-accent { position:absolute; top:0; left:0; right:0; height:2px;
-            background: linear-gradient(90deg,#00D2FF 0%,#7DBEFF 60%,rgba(125,190,255,.2) 100%); }
-
-        /* Scan shimmer */
-        .lt-scan { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-        .lt-scan::after { content:''; position:absolute; top:0; bottom:0; width:35%;
-            background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);
-            animation: lt-scan 3.8s ease-in-out infinite; }
-
-        /* Channel tag */
-        .lt-channel { position:absolute; top:4px; right:9px;
-            font-family:var(--font-display); font-size:.42rem; font-weight:900;
-            letter-spacing:2px; text-transform:uppercase; color:rgba(0,210,255,.6); }
-        [data-theme="light"] .lt-channel { color:rgba(0,97,164,.5); }
-
-        /* Content rows */
-        .lt-content { padding: 6px 12px 5px 10px; display:flex; flex-direction:column; gap:2px; }
-        .lt-eyebrow {
-            font-family:var(--font-display); font-size:.45rem; font-weight:900;
-            letter-spacing:2.5px; text-transform:uppercase; color:#00D2FF;
-            display:flex; align-items:center; gap:5px; white-space:nowrap;
-        }
-        [data-theme="light"] .lt-eyebrow { color:#0061A4; }
-        .lt-eyebrow::before { content:''; display:block; flex-shrink:0; width:12px; height:1.5px; background:#00D2FF; }
-        [data-theme="light"] .lt-eyebrow::before { background:#0061A4; }
-        .lt-headline {
-            font-family:var(--font-display); font-weight:900; font-size:.95rem;
-            line-height:1.2; color:#E2F0FF; white-space:nowrap;
-            overflow:hidden; text-overflow:ellipsis; letter-spacing:.1px;
-            animation: lt-wipe .45s ease both;
-        }
-        [data-theme="light"] .lt-headline { color:#001A36; }
-        .lt-sub {
-            display:flex; align-items:center; gap:6px; min-height:1rem;
-        }
-        .lt-icon-wrap {
-            flex-shrink:0; width:18px; height:18px; border-radius:50%;
-            background:rgba(0,210,255,.12); border:1px solid rgba(0,210,255,.3);
-            display:flex; align-items:center; justify-content:center; overflow:hidden;
-        }
-        .lt-icon-wrap img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-        .lt-icon-wrap .material-symbols-rounded { font-size:11px !important; color:#00D2FF;
-            font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20; }
-        .lt-label { font-family:var(--font-body); font-size:.58rem; font-weight:600;
-            color:rgba(190,215,255,.55); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        [data-theme="light"] .lt-label { color:rgba(0,40,90,.45); }
-
-        /* Dot indicators */
-        .lt-dots { display:flex; gap:4px; align-items:center; padding: 0 12px 5px 10px; }
-        .lt-dot { width:4px; height:4px; border-radius:50%; background:rgba(0,210,255,.22); transition: background .3s,transform .3s; }
-        .lt-dot.active { background:#00D2FF; transform:scale(1.6); }
-
-        /* Progress strip */
-        .lt-strip { position:absolute; bottom:0; left:0; height:2px; background:rgba(0,210,255,.5); transition:none; }
-
-        /* Mobile */
-        @media (max-width:900px)  { #info-rotator { bottom:54px; } .lt-wrapper { min-width:220px; max-width:min(340px,76vw); } .lt-logo-slab { width:38px; } .lt-logo-img { width:26px; height:26px; } .lt-headline { font-size:.82rem; } }
-        @media (max-width:600px)  { .lt-wrapper { min-width:180px; max-width:min(270px,82vw); } .lt-logo-slab { width:32px; } .lt-logo-img { width:22px; height:22px; } .lt-headline { font-size:.76rem; } .lt-content { padding:5px 8px 4px 7px; } }
-
-        /* ── MAINTENANCE PROGRESS FOOTER ── */
-        .maint-progress-footer {
-            margin-top: auto; padding-top: 8px;
-            display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
-        }
-
-        /* Single-row: circles + counts together */
-        .maint-footer-top-row {
-            display: flex; flex-direction: row; align-items: center;
-            gap: 8px; min-width: 0;
-        }
-        /* Circular rings */
-        .maint-circ-item {
-            display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0;
-        }
-        .maint-circ-svg-wrap { position: relative; width: 56px; height: 56px; }
-        .maint-circ-svg-wrap svg { width:100%; height:100%; transform: rotate(-90deg); }
-        .maint-circ-track { fill:none; stroke:var(--surface-variant); stroke-width:5; }
-        .maint-circ-fill { fill:none; stroke-width:5; stroke-linecap:round;
-            transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1), stroke .8s ease; }
-        .maint-circ-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
-        .maint-circ-pct { font-family:var(--font-display); font-size:.72rem; font-weight:900; line-height:1; transition:color .8s; }
-        .maint-circ-name { font-family:var(--font-display); font-size:.42rem; font-weight:900;
-            letter-spacing:.8px; text-transform:uppercase; color:var(--on-surface-variant);
-            opacity:.65; text-align:center; line-height:1.2; max-width:58px;
-            overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-        /* Separator */
-        .maint-footer-sep { width:1px; height:52px; background:var(--outline); opacity:.2; flex-shrink:0; }
-
-        /* Counts inline */
-        #maint-counts-dock {
-            display: flex; flex-direction: row; align-items: center; gap: 0; flex-shrink: 0;
-        }
-        .mcd-item {
-            display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 0 9px;
-            border-right: 1px solid rgba(255,255,255,.08);
-        }
-        .mcd-item:first-child { padding-left: 0; }
-        .mcd-item:last-child { border-right: none; }
-        [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,.07); }
-        .mcd-val { font-family:var(--font-display); font-size:1.6rem; font-weight:900; line-height:1;
-            color:var(--on-surface); letter-spacing:-1px; transition:color .3s; }
-        .mcd-label { font-family:var(--font-display); font-size:.44rem; font-weight:800;
-            letter-spacing:.5px; text-transform:uppercase; color:var(--on-surface-variant);
-            text-align:center; line-height:1.3; white-space:nowrap; }
-
-        /* Remarks popup */
-        .maint-progress-popup {
-            position:absolute; bottom:calc(100% + 8px); left:0; right:0;
-            background:var(--surface); border:1px solid var(--outline);
-            border-radius:var(--radius-m); padding:12px 14px;
-            box-shadow:0 8px 32px rgba(0,0,0,.18); pointer-events:none; opacity:0;
-            transform:translateY(6px); transition:opacity .22s,transform .22s; z-index:200;
-        }
-        .maint-footer-top-row:hover .maint-progress-popup { opacity:1; transform:translateY(0); }
-        .maint-popup-eyebrow { font-family:var(--font-display); font-size:.5rem; font-weight:900;
-            letter-spacing:1.5px; text-transform:uppercase; color:var(--on-surface-variant);
-            opacity:.55; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size:13px !important; opacity:.7; }
-        .maint-popup-body { font-family:var(--font-body); font-size:.82rem; font-weight:600;
-            color:var(--on-surface); line-height:1.55; white-space:pre-wrap; }
-
-        /* Hidden compat fills (for JS updateProgressBar) */
-        .maint-progress-track { display:none; }
-        .maint-progress-value { display:none; }
-        .maint-progress-fill { display:none; }
-
-        /* ── ROTATING FOOTER PANEL (counts ↔ chart1 ↔ chart2) ── */
-        .maint-footer-rotate-wrap {
-            position:relative; overflow:hidden; min-height:88px;
-        }
-        .maint-footer-panel {
-            width:100%; display:flex; flex-direction:row; align-items:flex-end; gap:8px;
-            transition: opacity .45s ease, transform .45s cubic-bezier(.4,0,.2,1);
-        }
-        .maint-footer-panel.fp-hidden-up   { opacity:0; transform:translateY(-18px); pointer-events:none; position:absolute; top:0; left:0; right:0; }
-        .maint-footer-panel.fp-hidden-down { opacity:0; transform:translateY(18px);  pointer-events:none; position:absolute; top:0; left:0; right:0; }
-
-        /* Bar chart */
-        .maint-bar-chart-wrap { flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
-        .maint-bar-chart-title {
-            font-family:var(--font-display); font-size:.48rem; font-weight:900;
-            letter-spacing:1.2px; text-transform:uppercase; color:var(--on-surface-variant);
-            opacity:.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-            display:flex; align-items:center; gap:4px;
-        }
-        .maint-bar-chart-title .bct-dot { width:7px; height:7px; border-radius:2px; flex-shrink:0; }
-        .bar-chart-canvas {
-            position: relative;
-            height: 72px;
-            display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            padding-bottom: 22px; /* space for month label */
-            overflow-x: auto;
-            overflow-y: visible;
-            scrollbar-width: none; /* hide scrollbar FF */
-        }
-        .bar-chart-canvas::-webkit-scrollbar { display: none; }
-        .bar-col {
-            display: flex; flex-direction: column; align-items: center;
-            gap: 0; flex-shrink: 0;
-            width: 20px; /* fixed narrow width */
-        }
-        .bar-col-bar {
-            width: 12px; /* narrow bar */
-            border-radius: 3px 3px 0 0; min-height: 2px;
-            transition: height 1.1s cubic-bezier(.34,1.56,.64,1);
-            position: relative; overflow: hidden; flex-shrink: 0;
-        }
-        .bar-col-bar::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%;
-            background: rgba(255,255,255,.22); border-radius: 3px 3px 0 0;
-        }
-        .bar-col-bar.bc1 {
-            background: linear-gradient(180deg, #00E5FF 0%, #0077AA 100%);
-            box-shadow: 0 0 8px rgba(0,200,255,.45), 0 2px 4px rgba(0,0,0,.3);
-        }
-        .bar-col-bar.bc2 {
-            background: linear-gradient(180deg, #7DFF9E 0%, #1E8A3C 100%);
-            box-shadow: 0 0 8px rgba(125,255,158,.45), 0 2px 4px rgba(0,0,0,.3);
-        }
-        .bar-col-val {
-            font-family: var(--font-display); font-size: .32rem; font-weight: 900;
-            line-height: 1; margin-bottom: 1px; text-align: center; white-space: nowrap;
-            letter-spacing: -.2px;
-        }
-        .bar-col-val.vc1 { color: #00C8EE; }
-        .bar-col-val.vc2 { color: #5FE87A; }
-        .bar-col-label {
-            font-family: var(--font-display); font-size: .3rem; font-weight: 800;
-            color: var(--on-surface-variant); opacity: .6;
-            white-space: nowrap; text-align: center; letter-spacing: .1px;
-            position: absolute; bottom: 5px; width: 20px;
-        }
-        .bar-chart-baseline {
-            position: absolute; bottom: 22px; left: 0; right: 0; height: 1px;
-            background: var(--outline); opacity: .3;
-        }
-
-        /* MCD burst overlay */
-        #maint-counts-dock { }
+        .ir-dots-row { display: flex; justify-content: flex-start; gap: 5px; margin-top: 5px; }
+        .ir-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.22); transition: background 0.3s ease, transform 0.3s ease; }
+        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.18); }
+        .ir-dot.ir-dot-active { background: var(--primary); transform: scale(1.4); }
 
         /* ── BLACKOUT ── */
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
-                /* ── BLACKOUT ── */
         #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
         .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
@@ -1399,9 +1118,26 @@
 
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
+            .mobile-tab-bar {
+                display: flex; gap: 8px; margin: 8px 12px 0; padding: 4px;
+                background: var(--surface); border-radius: var(--radius-full);
+                box-shadow: var(--shadow-1); z-index: 10; flex-shrink: 0;
+            }
+            .m-tab {
+                flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+                padding: 8px 12px; border: none; border-radius: var(--radius-full);
+                background: transparent; color: var(--on-surface-variant);
+                font-family: var(--font-display); font-size: 0.8rem; font-weight: 800;
+                transition: all 0.3s ease; cursor: pointer;
+            }
+            .m-tab.active { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+            .m-tab .material-symbols-rounded { font-size: 16px !important; }
+
+            .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
+            .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
+
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            /* Bound unified unit explicitly to enforce flex scrolling on mobile */
-            .unified-unit { height: 480px; }
+            .unified-unit { height: calc(100vh - 190px) !important; max-height: none; }
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
             .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
             .logo-section img { height: 24px; }
@@ -1424,16 +1160,20 @@
             .failures-pill { padding: 2px 8px; }
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
-            #info-rotator { bottom: 54px; left: 0; }
-            #stock-dock { right: 10px; bottom: 100px; width: 160px; }
+            
+            #info-rotator { width: 320px; bottom: 46px; right: 8px; }
+            .ir-slab { height: 72px; padding: 6px 10px; gap: 10px; }
+            .ir-icon-wrap { width: 50px; height: 50px; }
+            .ir-headline { font-size: 0.88rem !important; }
+
+            #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
         }
 
         @media (max-width: 600px) {
             .dashboard-content { padding: 6px 6px 80px 6px; gap: 6px; }
-            /* Bound unified unit explicitly to enforce flex scrolling on mobile */
-            .unified-unit { height: 420px; }
+            .unified-unit { height: calc(100vh - 180px) !important; max-height: none; }
             .app-bar { padding: 6px 10px; margin: 4px 4px 0 4px; }
             .logo-section img { height: 22px; }
             .middle-module { height: 34px; gap: 8px; }
@@ -1459,7 +1199,9 @@
             .fail-val { font-size: 0.9rem; }
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
-            #info-rotator { bottom: 54px; left: 0; min-width: 180px; max-width: min(280px, 82vw); }
+            
+            #info-rotator { width: calc(100vw - 16px); bottom: 52px; right: 8px; z-index: 1005; }
+            
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
             .mcd-label { font-size: 0.48rem; }
@@ -1469,42 +1211,7 @@
             .roster-grid { grid-template-columns: 1fr; gap: 6px; }
             .clock-unit { min-width: 30px; padding: 1px 4px; }
             .clock-val { font-size: 0.85rem; }
-            #info-rotator { bottom: 54px; left: 0; }
             .ops-inline-container { flex-wrap: wrap; }
-        }
-
-        /* ══════════════════════════════════════════════════
-           MOBILE TAB SYSTEM  (≤900px only)
-        ══════════════════════════════════════════════════ */
-        .mob-tab-bar { display: none; }
-        @media (max-width: 900px) {
-            .mob-tab-bar {
-                display: flex; position: fixed; bottom: 54px; left: 0; right: 0;
-                z-index: 490; height: 42px;
-                background: var(--surface);
-                border-top: 1px solid var(--outline);
-                box-shadow: 0 -2px 12px rgba(0,0,0,0.22);
-            }
-            .mob-tab-btn {
-                flex: 1; display: flex; flex-direction: column; align-items: center;
-                justify-content: center; gap: 2px;
-                font-family: var(--font-display); font-size: .46rem; font-weight: 900;
-                letter-spacing: .8px; text-transform: uppercase;
-                color: var(--on-surface-variant); border: none; background: transparent;
-                cursor: pointer; transition: color .2s; padding: 0 4px;
-            }
-            .mob-tab-btn .material-symbols-rounded { font-size: 18px !important; font-variation-settings: 'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
-            .mob-tab-btn.mob-active { color: var(--primary); }
-            .mob-tab-btn.mob-active .material-symbols-rounded { font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
-            /* Tab panels — hide by default, show when active */
-            .mob-tab-panel { display: none !important; }
-            .mob-tab-panel.mob-active { display: block !important; }
-            /* Maintenance card full height */
-            .mob-tab-panel.mob-active .unified-unit { height: calc(100dvh - 180px); min-height: 400px; }
-        }
-        @media (min-width: 901px) {
-            .mob-tab-bar { display: none !important; }
-            .mob-tab-panel { display: contents !important; }
         }
     </style>
 </head>
@@ -1523,14 +1230,13 @@
         <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
         <div class="middle-module">
             <div id="checklist-container" class="checklist-container">
-                <div id="station-track" class="station-track"><!-- populated by JS --></div>
+                <div id="station-track" class="station-track"></div>
             </div>
             <div id="clock-container" class="clock-container">
                 <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
-            <!-- Failures block -->
             <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
                 <div class="fail-title">Failures</div>
                 <div class="failures-nums">
@@ -1547,7 +1253,6 @@
             </div>
         </div>
         <div class="top-controls">
-            <!-- Hamburger button -->
             <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
                 <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
             </button>
@@ -1574,21 +1279,17 @@
         </div>
     </header>
 
-    <main class="dashboard-content">
+    <div class="mobile-tab-bar">
+        <button class="m-tab active" onclick="switchMobileTab('overview')" data-tab="overview">
+            <span class="material-symbols-rounded">dashboard</span> Overview
+        </button>
+        <button class="m-tab" onclick="switchMobileTab('maint')" data-tab="maint">
+            <span class="material-symbols-rounded">construction</span> Maintenance
+        </button>
+    </div>
 
-        <!-- Mobile tab bar -->
-        <div class="mob-tab-bar" id="mob-tab-bar">
-            <button class="mob-tab-btn mob-active" id="mob-tab-dash" onclick="mobSwitchTab('dash')">
-                <span class="material-symbols-rounded">dashboard</span>DASHBOARD
-            </button>
-            <button class="mob-tab-btn" id="mob-tab-maint" onclick="mobSwitchTab('maint')">
-                <span class="material-symbols-rounded">construction</span>MAINTENANCE
-            </button>
-        </div>
-
-        <div class="mob-tab-panel mob-active" id="mob-panel-dash">
+    <main class="dashboard-content" data-active-tab="overview">
         <div class="left-column">
-            <!-- TODAY DEPLOYMENT -->
             <div class="m3-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
@@ -1598,7 +1299,6 @@
                 </div>
                 <div id="roster-today" class="roster-grid"></div>
             </div>
-            <!-- TOMORROW DEPLOYMENT -->
             <div class="m3-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
@@ -1609,16 +1309,13 @@
                 <div id="roster-tomorrow" class="roster-grid"></div>
             </div>
         </div>
-        </div><!-- /mob-panel-dash -->
 
-        <div class="mob-tab-panel" id="mob-panel-maint">
         <div class="right-column">
             <div class="m3-card unified-unit">
                 <div class="maint-header-wrapper">
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
                         <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
                         <div class="ops-inline-container">
-                        <!-- Mainline rotating pill -->
                         <div id="box-mainline" class="ops-rot-pill ok">
                             <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
                             <div class="ops-rot-pill-text">
@@ -1628,7 +1325,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Depot rotating pill -->
                         <div id="box-depot" class="ops-rot-pill ok">
                             <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
                             <div class="ops-rot-pill-text">
@@ -1643,7 +1339,6 @@
                 </div>
                 
                 <div class="maint-divider"></div>
-                <!-- Dual Checklist Status: MTRS + TKRS -->
                 <div id="checklist-dual" class="checklist-dual-row">
                     <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
                         <div class="chk-d-check-wrap">
@@ -1671,48 +1366,15 @@
                     </div>
                 </div>
                 
-                <!-- Maintenance Items List (Auto Scrolls if Overflow) -->
                 <div id="maint-list" class="maint-list"></div>
                 
-                <!-- Maintenance Progress Footer (Always visible) -->
                 <div class="maint-progress-footer">
-                    <!-- TOP ROW: circles + counts in one line, with remarks popup -->
-                    <div class="maint-footer-top-row" style="position:relative;">
-                        <div class="maint-progress-popup">
-                            <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                            <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                        </div>
-                        <!-- Circle 1 -->
-                        <div class="maint-circ-item">
-                            <div class="maint-circ-svg-wrap">
-                                <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="maint-circ-track" cx="28" cy="28" r="22"/>
-                                    <circle class="maint-circ-fill" id="circ-fill-1" cx="28" cy="28" r="22"
-                                        stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
-                                </svg>
-                                <div class="maint-circ-center">
-                                    <span class="maint-circ-pct" id="maint-progress-value-1">—</span>
-                                </div>
-                            </div>
-                            <div class="maint-circ-name" id="maint-progress-label-1">PROGRESS</div>
-                        </div>
-                        <!-- Circle 2 -->
-                        <div class="maint-circ-item">
-                            <div class="maint-circ-svg-wrap">
-                                <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="maint-circ-track" cx="28" cy="28" r="22"/>
-                                    <circle class="maint-circ-fill" id="circ-fill-2" cx="28" cy="28" r="22"
-                                        stroke-dasharray="138.23" stroke-dashoffset="138.23"/>
-                                </svg>
-                                <div class="maint-circ-center">
-                                    <span class="maint-circ-pct" id="maint-progress-value-2">—</span>
-                                </div>
-                            </div>
-                            <div class="maint-circ-name" id="maint-progress-label-2">SECONDARY</div>
-                        </div>
-                        <div class="maint-footer-sep"></div>
-                        <!-- Counts inline -->
-                        <div id="maint-counts-dock" style="display:flex;flex-direction:row;align-items:center;flex:1;">
+                    <div class="maint-progress-popup">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
+                    <div class="maint-progress-right">
+                        <div id="maint-counts-dock">
                             <div class="mcd-item">
                                 <div class="mcd-val" id="maint-preventive-val">—</div>
                                 <div class="mcd-label">Preventive<br>Maint.</div>
@@ -1726,34 +1388,23 @@
                                 <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
                         </div>
-                        <!-- Hidden compat fills -->
-                        <div style="display:none">
-                            <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
-                            <div id="maint-progress-fill-2" class="maint-progress-fill"></div>
-                        </div>
-                    </div>
-
-                    <!-- ROTATING PANEL: counts (always visible above) so rotate chart1 ↔ chart2 -->
-                    <div class="maint-footer-rotate-wrap">
-                        <!-- PANEL 0: Chart 1 -->
-                        <div class="maint-footer-panel" id="mfp-chart1">
-                            <div class="maint-bar-chart-wrap">
-                                <div class="maint-bar-chart-title" id="bar-chart-1-title">
-                                    <span class="bct-dot" style="background:#00D2FF;"></span>CHART 1
+                        <div class="maint-bars-wrapper">
+                            <div class="maint-bar-group">
+                                <div class="maint-progress-meta">
+                                    <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
+                                    <span id="maint-progress-value-1" class="maint-progress-value">—</span>
                                 </div>
-                                <div class="bar-chart-canvas" id="bar-chart-1-canvas">
-                                    <div class="bar-chart-baseline"></div>
+                                <div class="maint-progress-track">
+                                    <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- PANEL 1: Chart 2 -->
-                        <div class="maint-footer-panel fp-hidden-down" id="mfp-chart2">
-                            <div class="maint-bar-chart-wrap">
-                                <div class="maint-bar-chart-title" id="bar-chart-2-title">
-                                    <span class="bct-dot" style="background:#7DFF9E;"></span>CHART 2
+                            <div class="maint-bar-group">
+                                <div class="maint-progress-meta">
+                                    <span id="maint-progress-label-2" class="maint-progress-label">Secondary Progress</span>
+                                    <span id="maint-progress-value-2" class="maint-progress-value">—</span>
                                 </div>
-                                <div class="bar-chart-canvas" id="bar-chart-2-canvas">
-                                    <div class="bar-chart-baseline"></div>
+                                <div class="maint-progress-track">
+                                    <div id="maint-progress-fill-2" class="maint-progress-fill"></div>
                                 </div>
                             </div>
                         </div>
@@ -1762,10 +1413,8 @@
 
             </div>
         </div>
-        </div><!-- /mob-panel-maint -->
     </main>
 
-    <!-- ── MCD BURST OVERLAY ── -->
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
@@ -1773,7 +1422,6 @@
         </div>
     </div>
 
-    <!-- ── STOCK AVAILABILITY MINI-DOCK ── -->
     <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
         <div class="sdock-accent"></div>
         <div class="sdock-header">
@@ -1793,9 +1441,7 @@
         </div>
     </div>
 
-    <!-- ── DRIVER CARD ── -->
     <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
-        <!-- Expanded panel (pops above) -->
         <div class="driver-expanded" onclick="event.stopPropagation()">
             <div class="driver-exp-outdated">
                 <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
@@ -1813,7 +1459,6 @@
                 CALL DRIVER
             </div>
         </div>
-        <!-- Collapsed pill -->
         <div class="driver-pill">
             <div class="driver-pill-icon">
                 <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
@@ -1832,7 +1477,6 @@
         </div>
     </div>
 
-    <!-- Flash News Overlay -->
     <div id="flash-news-overlay">
         <div class="flash-backdrop" onclick="dismissFlash()"></div>
         <div class="flash-panel">
@@ -1861,7 +1505,6 @@
         </div>
     </div>
 
-    <!-- ── CONSUMABLES OVERLAY ── -->
     <div id="cons-overlay">
         <div class="cons-overlay-backdrop" onclick="closeConsOverlay()"></div>
         <div class="cons-overlay-panel">
@@ -1882,38 +1525,19 @@
 
     <div id="app-dock" class="app-dock"></div>
 
-    <!-- ── INFO ROTATOR WIDGET ── -->
     <div id="info-rotator">
-        <div class="lt-wrapper" id="lt-wrapper">
-            <!-- Logo slab -->
-            <div class="lt-logo-slab">
-                <img class="lt-logo-img" id="lt-logo-img"
-                    src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png"
-                    alt="KMRL"
-                    onerror="this.style.opacity='0'">
-                <div class="lt-live-dot"></div>
-            </div>
-            <!-- Body -->
-            <div class="lt-body">
-                <div class="lt-accent"></div>
-                <div class="lt-scan"></div>
-                <div class="lt-channel">KMRL OPS</div>
-                <div class="lt-content">
-                    <div class="lt-eyebrow" id="lt-eyebrow">UPDATE</div>
-                    <div class="lt-headline" id="lt-headline">—</div>
-                    <div class="lt-desc"    id="lt-desc"></div>
-                    <div class="lt-icon-row" id="lt-icon-row" style="display:none">
-                        <div class="lt-icon-wrap" id="lt-icon-wrap"></div>
-                    </div>
-                </div>
-                <div class="lt-dots" id="lt-dots"></div>
-                <div class="lt-strip" id="lt-strip"></div>
+        <div class="ir-slab" id="ir-slab">
+            <div class="ir-accent-bar"></div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-text-col">
+                <div class="ir-headline" id="ir-headline">—</div>
+                <div class="ir-label"   id="ir-label"></div>
+                <div class="ir-dots-row" id="ir-dots"></div>
             </div>
         </div>
     </div>
 
     <footer class="ticker-bar">
-    
         <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
@@ -1926,18 +1550,6 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
-
-        /* ── MOBILE TAB SWITCHING ── */
-        function mobSwitchTab(tab) {
-            const panels = { dash: 'mob-panel-dash', maint: 'mob-panel-maint' };
-            const btns   = { dash: 'mob-tab-dash',   maint: 'mob-tab-maint'  };
-            Object.keys(panels).forEach(key => {
-                const panel = document.getElementById(panels[key]);
-                const btn   = document.getElementById(btns[key]);
-                if (panel) panel.classList.toggle('mob-active', key===tab);
-                if (btn)   btn.classList.toggle('mob-active',   key===tab);
-            });
-        }
 
         function initTheme() {
             const saved = localStorage.getItem('kmrl_theme') || 'dark';
@@ -1964,6 +1576,15 @@
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() {
             document.getElementById('blackout').style.display = 'none';
+        }
+
+        // ── Mobile Tabs Switcher ──
+        function switchMobileTab(tabId) {
+            document.querySelectorAll('.m-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+            const dc = document.querySelector('.dashboard-content');
+            if(dc) dc.setAttribute('data-active-tab', tabId);
         }
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
@@ -2307,9 +1928,15 @@
                 if (param === 'sheetab_R2C39' && unit === 'sheetab') updateMaintCount('maint-corrective-val', val, 'Corrective Maintenance');
                 if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
                 if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
+                
+                // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
                 if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
+                
+                // Info Rotator Timing Parameters
+                if (param === 'sheetab_R2C48' && unit === 'sheetab') window._irDuration = (parseFloat(val) || 5) * 1000;
+                if (param === 'sheetab_R2C47' && unit === 'sheetab') window._irInterval = (parseFloat(val) || 5) * 1000;
 
                 const c36Match = param.match(/^sheetab_R(\d+)C36$/);
                 if (c36Match && unit === 'sheetab') { const row = parseInt(c36Match[1], 10); if (row >= 3) irRowItems[row] = val; }
@@ -2370,55 +1997,31 @@
                     
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-
-                    if (param === 'sheetab_R1C45') {
-                        _barTitle1 = val||'CHART 1';
-                        const t=document.getElementById('bar-chart-1-title');
-                        if(t) t.innerHTML=`<span class="bct-dot" style="background:#00D2FF;"></span>${_barTitle1}`;
-                    }
-                    if (param === 'sheetab_R1C46') {
-                        _barTitle2 = val||'CHART 2';
-                        const t=document.getElementById('bar-chart-2-title');
-                        if(t) t.innerHTML=`<span class="bct-dot" style="background:#7DFF9E;"></span>${_barTitle2}`;
-                    }
-                    if (param === 'sheetab_R2C45') {
-                        _barData1 = parseBarData(val);
-                    }
-                    if (param === 'sheetab_R2C46') {
-                        _barData2 = parseBarData(val);
-                    }
-                    /* r2c47 = interval between batches (seconds), r2c48 = per-item duration (seconds) */
-                    if (param === 'sheetab_R2C47') { const s=parseFloat(val); if(!isNaN(s)&&s>0) setLtTimings(null, s*1000); }
-                    if (param === 'sheetab_R2C48') { const s=parseFloat(val); if(!isNaN(s)&&s>0) setLtTimings(s*1000, null); }
                 }
             });
 
             function updateProgressBar(val, fillId, valId) {
-                const circFillMap = { 'maint-progress-fill-1': 'circ-fill-1', 'maint-progress-fill-2': 'circ-fill-2' };
-                const circId = circFillMap[fillId];
                 const pct = parseFloat(val);
+                const fillEl = document.getElementById(fillId);
                 const valEl = document.getElementById(valId);
-                if (!valEl) return;
-                const CIRC = 138.23; /* 2 * PI * 22 (r=22) */
+                if (!fillEl || !valEl) return;
                 if (!isNaN(pct)) {
-                    const clamped = Math.min(100, Math.max(0, pct));
+                    const clamped = Math.min(100, Math.max(0, pct)); 
                     valEl.innerText = clamped.toFixed(1) + '%';
-                    let color, stroke;
-                    if (clamped >= 80)       { color = 'var(--success)'; stroke = '#72D48A'; }
-                    else if (clamped >= 50)  { color = 'var(--primary)'; stroke = '#7DBEFF'; }
-                    else                     { color = 'var(--error)';   stroke = '#FF8A80'; }
-                    valEl.style.color = color;
-                    if (circId) {
-                        const circEl = document.getElementById(circId);
-                        if (circEl) {
-                            circEl.style.stroke = stroke;
-                            const offset = CIRC - (clamped/100)*CIRC;
-                            setTimeout(()=>{ circEl.style.strokeDashoffset = offset.toFixed(2); }, 80);
-                        }
+                    setTimeout(() => { fillEl.style.width = clamped + '%'; }, 80);
+                    if (clamped >= 80) { 
+                        fillEl.style.background = 'linear-gradient(90deg, var(--success) 0%, color-mix(in srgb, var(--success) 60%, white) 100%)'; 
+                        valEl.style.color = 'var(--success)'; 
+                    } else if (clamped >= 50) { 
+                        fillEl.style.background = 'linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%)'; 
+                        valEl.style.color = 'var(--primary)'; 
+                    } else { 
+                        fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)'; 
+                        valEl.style.color = 'var(--error)'; 
                     }
-                } else {
-                    valEl.innerText = '—';
-                    if (circId) { const c=document.getElementById(circId); if(c) c.style.strokeDashoffset=CIRC; }
+                } else { 
+                    valEl.innerText = '—'; 
+                    fillEl.style.width = '0%'; 
                 }
             }
 
@@ -2462,13 +2065,6 @@
 
             buildAppDock(dockRows);
             initInfoRotator(irWeather, irRowItems, irRowImages);
-
-            /* Render currently visible chart immediately */
-            if (_fRotState === 0 && _barData1 && _barData1.length > 0) {
-                renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
-            } else if (_fRotState === 1 && _barData2 && _barData2.length > 0) {
-                renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
-            }
 
             if (opsScheduleLines !== null) {
                 const listEl = document.getElementById('maint-list');
@@ -2689,321 +2285,86 @@
         setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
-        /* ── LOWER THIRD NEWS TICKER (replaces info-rotator) ── */
-        /* ══════════════════════════════════════════════════════════
-           NEWS LOWER-THIRD  — complete, self-contained implementation
-           ──────────────────────────────────────────────────────────
-           r2c47 = interval between appearance batches (seconds)
-           r2c48 = per-item display duration (seconds)
-        ══════════════════════════════════════════════════════════ */
-        let _irTimer    = null;
-        let _irIdx      = 0;
-        let _irSlides   = [];
-        let _ltItemMs   = 6000;    // per-slide duration  (from r2c48)
-        let _ltIntervalMs = 20000; // gap between batches (from r2c47)
-        let _ltRunning  = false;
-        let _lastIrHash = ''; // Prevents unnecessary reset on same data
+        let _irTimer = null, _irIdx = 0, _irSlides = [];
+        const IR_FLIP_DUR = 360; 
 
-        /* Called from draw() — builds slide list and starts the cycle */
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            const tempSlides = [];
+            if (_irTimer) clearTimeout(_irTimer);
+            _irSlides = [];
+            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            _irSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
-            /* Items from sheet cols 36/37 */
-            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a,b) => a-b);
+            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
-                const rawItem = (irRowItems[rowNum] || '').trim();
-                const rawImg  = ((irRowImages || {})[rowNum] || '').trim();
+                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg  = ((irRowImages || {})[rowNum] || '').trim();
                 if (!rawItem) return;
-                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(Boolean);
-                const imageLines = rawImg.split('\n').map(l => l.trim());
+                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== ''), imageLines = rawImg.split('\n').map(l => l.trim());
                 itemLines.forEach((line, i) => {
-                    const imgUrl = (imageLines[i] || '').trim();
-                    let headline = line, desc = '';
-                    /* Extract [description] from anywhere in the text */
-                    const bracketMatch = line.match(/^(.*?)\[([^\]]+)\](.*)$/);
-                    if (bracketMatch) {
-                        headline = (bracketMatch[1] + bracketMatch[3]).trim();
-                        desc     = bracketMatch[2].trim();
-                    } else if (line.includes('|')) {
-                        /* Legacy: "Label | Headline text" */
-                        const p = line.split('|');
-                        desc     = p[0].trim();
-                        headline = p.slice(1).join('|').trim();
-                    }
-                    tempSlides.push({
-                        eyebrow : 'UPDATE',
-                        headline: headline,
-                        desc    : desc,
-                        icon    : imgUrl.startsWith('http') ? 'img:' + imgUrl : 'material:info'
-                    });
+                    const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
+                    let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
+                    _irSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
                 });
             });
 
-            // Prevent reset if data hasn't changed at all
-            const hash = JSON.stringify(tempSlides);
-            if (hash === _lastIrHash) return;
-            _lastIrHash = hash;
+            document.getElementById('info-rotator').style.display = ''; _irIdx = 0; _renderIRSlide(false);
+        }
 
-            if (_irTimer) { clearTimeout(_irTimer); _irTimer = null; }
-            _irSlides = tempSlides;
-            _ltRunning = false;
+        function _renderIRSlide(withFlip) {
+            const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
+            if (!slab) return;
 
-            if (_irSlides.length === 0) {
-                _ltHideWrapper(); 
-                return; 
+            function _applySlide() {
+                const s = _irSlides[_irIdx], hasIcon = s.iconType === 'img' || s.iconType === 'material';
+                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
+                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
+                else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
+
+                headline.textContent = s.headline; 
+                label.textContent = s.label; label.style.display = s.label ? '' : 'none';
+                dotsEl.innerHTML = _irSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
             }
-            _ltRunning = true;
-            
-            /* Start immediately after data updates / on first page load! */
-            _irTimer = setTimeout(_ltStartBatch, 200);
-        }
 
-        function setLtTimings(itemMs, intervalMs) {
-            if (itemMs     !== null && !isNaN(itemMs)     && itemMs     > 500) _ltItemMs     = itemMs;
-            if (intervalMs !== null && !isNaN(intervalMs) && intervalMs > 500) _ltIntervalMs = intervalMs;
-        }
-
-        /* ── Show the whole batch (all slides), then hide and wait ── */
-        function _ltStartBatch() {
-            if (!_ltRunning || _irSlides.length === 0) return;
-            _irIdx = 0;
-            _ltShowSlide();
-        }
-
-        function _ltShowSlide() {
-            _ltApplyContent();
-            _ltEnterWrapper();
-            /* Schedule next */
             if (_irTimer) clearTimeout(_irTimer);
+
+            if (!withFlip) {
+                _applySlide();
+                slab.classList.remove('flipping-out', 'flipping-in');
+                _scheduleVanish();
+                return;
+            }
+
+            // Animate IN
+            _applySlide();
+            slab.classList.remove('flipping-out');
+            slab.classList.add('flipping-in');
+            setTimeout(() => {
+                slab.classList.remove('flipping-in');
+                _scheduleVanish();
+            }, IR_FLIP_DUR);
+        }
+
+        function _scheduleVanish() {
+            const dur = window._irDuration !== undefined ? window._irDuration : 5000;
             _irTimer = setTimeout(() => {
-                _irIdx++;
-                if (_irIdx < _irSlides.length) {
-                    /* More slides in batch — crossfade content, keep wrapper visible */
-                    _ltCrossfadeNext();
-                } else {
-                    /* Batch done — slide out, then wait interval */
-                    _ltHideWrapper(() => {
-                        if (_irTimer) clearTimeout(_irTimer);
-                        _irTimer = setTimeout(_ltStartBatch, _ltIntervalMs);
-                    });
+                const slab = document.getElementById('ir-slab');
+                if (slab) {
+                    slab.classList.add('flipping-out');
+                    setTimeout(() => {
+                        _scheduleNext();
+                    }, IR_FLIP_DUR);
                 }
-            }, _ltItemMs);
+            }, dur);
         }
 
-        function _ltApplyContent() {
-            const s = _irSlides[_irIdx];
-            const eyeEl  = document.getElementById('lt-eyebrow');
-            const headEl = document.getElementById('lt-headline');
-            const descEl = document.getElementById('lt-desc');
-            const iconRowEl = document.getElementById('lt-icon-row');
-            const iconWEl   = document.getElementById('lt-icon-wrap');
-            const dotsEl    = document.getElementById('lt-dots');
-
-            if (eyeEl)  eyeEl.textContent  = s.eyebrow  || 'UPDATE';
-            if (descEl) descEl.textContent  = s.desc     || '';
-
-            if (headEl) {
-                headEl.textContent = s.headline || '';
-                /* Adaptive font size */
-                const len = (s.headline || '').length;
-                headEl.style.fontSize = len <= 22 ? '1rem' : len <= 42 ? '.88rem' : '.76rem';
-                /* Trigger wipe animation */
-                headEl.classList.remove('lt-anim');
-                headEl.offsetWidth; /* reflow */
-                headEl.classList.add('lt-anim');
-            }
-
-            /* Icon */
-            if (iconRowEl && iconWEl) {
-                if (s.icon && s.icon.startsWith('img:')) {
-                    iconRowEl.style.display = '';
-                    iconWEl.innerHTML = `<img src="${s.icon.slice(4)}" alt=""
-                        onerror="this.closest('.lt-icon-row').style.display='none'">`;
-                } else if (s.icon && s.icon.startsWith('material:')) {
-                    iconRowEl.style.display = '';
-                    iconWEl.innerHTML =
-                        `<span class="material-symbols-rounded">${s.icon.slice(9)}</span>`;
-                } else {
-                    iconRowEl.style.display = 'none';
-                }
-            }
-
-            /* Dots */
-            if (dotsEl) {
-                dotsEl.innerHTML = _irSlides.map((_, i) =>
-                    `<div class="lt-dot${i === _irIdx ? ' active' : ''}"></div>`
-                ).join('');
-            }
-        }
-
-        function _ltEnterWrapper() {
-            const wrap = document.getElementById('lt-wrapper');
-            if (!wrap) return;
-            wrap.classList.remove('lt-exiting');
-            wrap.classList.add('lt-entering');
-            /* Progress strip */
-            const strip = document.getElementById('lt-strip');
-            if (strip) {
-                strip.style.transition = 'none';
-                strip.style.width = '0';
-                strip.offsetWidth;
-                strip.style.transition = `width ${_ltItemMs}ms linear`;
-                strip.style.width = '100%';
-            }
-        }
-
-        function _ltCrossfadeNext() {
-            /* Brief flash — just update content and restart strip */
-            const strip = document.getElementById('lt-strip');
-            if (strip) { strip.style.transition='none'; strip.style.width='0'; strip.offsetWidth; }
-            _ltApplyContent();
-            if (strip) {
-                strip.style.transition = `width ${_ltItemMs}ms linear`;
-                strip.style.width = '100%';
-            }
-            /* Reschedule */
-            if (_irTimer) clearTimeout(_irTimer);
+        function _scheduleNext() {
+            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
             _irTimer = setTimeout(() => {
-                _irIdx++;
-                if (_irIdx < _irSlides.length) {
-                    _ltCrossfadeNext();
-                } else {
-                    _ltHideWrapper(() => {
-                        _irTimer = setTimeout(_ltStartBatch, _ltIntervalMs);
-                    });
+                if (_irSlides.length > 1) {
+                    _irIdx = (_irIdx + 1) % _irSlides.length;
                 }
-            }, _ltItemMs);
+                _renderIRSlide(true);
+            }, interval);
         }
-
-        function _ltHideWrapper(onDone) {
-            const wrap  = document.getElementById('lt-wrapper');
-            const strip = document.getElementById('lt-strip');
-            if (strip) { strip.style.transition='none'; strip.style.width='0'; }
-            if (wrap) {
-                wrap.classList.remove('lt-entering');
-                wrap.classList.add('lt-exiting');
-                setTimeout(() => {
-                    if (onDone) onDone();
-                }, 420);
-            } else {
-                if (onDone) onDone();
-            }
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           BAR CHARTS  — CSV format: "Month,Value" (one per line)
-        ══════════════════════════════════════════════════════════ */
-        let _barData1 = [], _barData2 = [];
-        let _barTitle1 = 'CHART 1', _barTitle2 = 'CHART 2';
-        let _fRotTimer = null, _fRotState = 0; /* 0=chart1, 1=chart2 */
-
-        const _MONTHS = ['Jan','Feb','Mar','Apr','May','Jun',
-                         'Jul','Aug','Sep','Oct','Nov','Dec'];
-
-        function _toShortMonth(s) {
-            if (!s) return '';
-            const clean = s.trim();
-            // Test if it's strictly a number (can be 08 or 8)
-            if (/^\d+$/.test(clean)) {
-                const n = parseInt(clean, 10);
-                if (n >= 1 && n <= 12) return _MONTHS[n - 1];
-            }
-            const key = clean.slice(0, 3).toLowerCase();
-            const found = _MONTHS.find(m => m.toLowerCase() === key);
-            return found || clean.slice(0, 3);
-        }
-
-        function parseBarData(raw) {
-            if (!raw || !raw.trim() || raw.trim() === '---') return [];
-            const results = [];
-            raw.split('\n').forEach(line => {
-                line = line.trim();
-                if (!line) return;
-                /* Accept comma or pipe as delimiter */
-                const sep   = line.includes(',') ? ',' : line.includes('|') ? '|' : null;
-                if (!sep) return;
-                const parts = line.split(sep);
-                if (parts.length < 2) return;
-                const a = parts[0].trim(), b = parts[1].trim();
-                const aNum = parseFloat(a), bNum = parseFloat(b);
-                /* month,value  or  value,month */
-                if (!isNaN(bNum) && isNaN(aNum))       results.push({ label: _toShortMonth(a), val: bNum });
-                else if (!isNaN(aNum) && isNaN(bNum))  results.push({ label: _toShortMonth(b), val: aNum });
-                else if (!isNaN(bNum))                 results.push({ label: _toShortMonth(a), val: bNum });
-            });
-            return results;
-        }
-
-        function renderBarChart(canvasId, dataItems, colClass) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            canvas.querySelectorAll('.bar-col').forEach(el => el.remove());
-            if (!dataItems || dataItems.length === 0) return;
-            const maxVal = Math.max(...dataItems.map(d => d.val || 0), 1);
-            const maxH   = 46; /* px — usable bar height above baseline */
-            const valClass = colClass === 'bc1' ? 'vc1' : 'vc2';
-            dataItems.forEach((item, i) => {
-                const pct     = Math.max(0, Math.min(1, (item.val || 0) / maxVal));
-                const targetH = Math.max(3, Math.round(pct * maxH));
-                /* Format value: integer if whole, else 1dp */
-                const valStr  = Number.isInteger(item.val) || item.val % 1 === 0
-                                ? String(Math.round(item.val))
-                                : item.val.toFixed(1);
-                const col = document.createElement('div');
-                col.className = 'bar-col';
-                col.style.position = 'relative';
-                /* value label above bar */
-                const valEl = document.createElement('div');
-                valEl.className = `bar-col-val ${valClass}`;
-                valEl.textContent = valStr;
-                valEl.style.opacity = '0';
-                /* bar */
-                const bar = document.createElement('div');
-                bar.className = `bar-col-bar ${colClass}`;
-                bar.style.height = '3px';
-                /* month label — absolutely positioned at bottom */
-                const lbl = document.createElement('div');
-                lbl.className = 'bar-col-label';
-                lbl.textContent = item.label;
-                col.appendChild(valEl);
-                col.appendChild(bar);
-                col.appendChild(lbl);
-                canvas.insertBefore(col, canvas.querySelector('.bar-chart-baseline'));
-                /* Staggered grow + fade value in */
-                setTimeout(() => {
-                    bar.style.height = targetH + 'px';
-                    setTimeout(() => { valEl.style.opacity = '1'; valEl.style.transition = 'opacity .4s'; }, 400);
-                }, 60 + i * 35);
-            });
-        }
-
-        /* Rotate between chart1 and chart2 every 9s */
-        function _fRotTick() {
-            const p0 = document.getElementById('mfp-chart1');
-            const p1 = document.getElementById('mfp-chart2');
-            if (!p0 || !p1) return;
-            if (_fRotState === 0) {
-                p0.classList.add('fp-hidden-up');
-                p1.classList.remove('fp-hidden-down','fp-hidden-up');
-                /* Re-render in case data arrived after pre-render */
-                if (_barData2 && _barData2.length) renderBarChart('bar-chart-2-canvas', _barData2, 'bc2');
-                _fRotState = 1;
-            } else {
-                p1.classList.add('fp-hidden-down');
-                p0.classList.remove('fp-hidden-up','fp-hidden-down');
-                if (_barData1 && _barData1.length) renderBarChart('bar-chart-1-canvas', _barData1, 'bc1');
-                _fRotState = 0;
-            }
-        }
-
-        function startFooterRotate() {
-            if (_fRotTimer) clearInterval(_fRotTimer);
-            /* Render chart1 initially after data likely arrives */
-            setTimeout(() => renderBarChart('bar-chart-1-canvas', _barData1, 'bc1'), 1500);
-            _fRotTimer = setInterval(_fRotTick, 9000);
-        }
-        startFooterRotate();
-
 
     </script>
 </body>
