@@ -304,7 +304,7 @@
         #stock-dock {
             position: fixed;
             bottom: 54px;
-            right: 192px;
+            right: 8px;
             z-index: 1000;
             width: 300px;
             background: rgba(14, 20, 34, 0.82);
@@ -534,6 +534,9 @@
         .stock-icon { font-size: 0.9rem !important; opacity: 0.75; }
         .stock-divider { width: 1px; height: 18px; background: var(--outline); opacity: 0.4; flex-shrink: 0; }
 
+        /* ── MOBILE TABS ── */
+        .mobile-tab-bar { display: none; }
+
         /* ── DASHBOARD LAYOUT ── */
         .dashboard-content {
             display: grid;
@@ -747,8 +750,8 @@
                 max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 202px - 20px);
             }
         }
-        .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; }
-        .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; }
+        .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; max-width: 100%; }
+        .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; max-width: 100%; }
         
         .ops-rot-pill {
             display: inline-flex; align-items: center; gap: 5px; border-radius: var(--radius-full);
@@ -1054,30 +1057,51 @@
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
-        /* ── INFO ROTATOR WIDGET ── */
-        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1000; width: 172px; perspective: 700px; perspective-origin: 50% 50%; }
+        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
+        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: 500px; perspective: 700px; perspective-origin: 50% 50%; }
         .ir-slab {
-            width: 100%; height: 148px; border-radius: var(--radius-l);
-            background: rgba(22, 28, 40, 0.55); border: 1px solid rgba(255,255,255,0.18);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.25), inset 0 1.5px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.18);
-            backdrop-filter: blur(30px) saturate(1.9); -webkit-backdrop-filter: blur(30px) saturate(1.9);
-            transform-style: preserve-3d; transform-origin: 50% 50%; transform: rotateX(0deg); transition: none; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 12px 10px; gap: 4px; position: relative; box-sizing: border-box;
+            width: 100%; height: 120px; border-radius: var(--radius-m);
+            background: rgba(22, 28, 40, 0.65); border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 16px 32px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.4), inset 0 1.5px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.18);
+            backdrop-filter: blur(30px) saturate(2); -webkit-backdrop-filter: blur(30px) saturate(2);
+            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 8px 12px; gap: 12px; box-sizing: border-box;
         }
-        .ir-slab::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%; border-radius: var(--radius-l) var(--radius-l) 0 0; background: linear-gradient( 180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 100% ); pointer-events: none; }
-        [data-theme="light"] .ir-slab { background: rgba(255,255,255,0.52); border-color: rgba(255,255,255,0.80); box-shadow: 0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.95); }
+        [data-theme="light"] .ir-slab { background: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.85); box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.95); }
         @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.3; } }
         @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.3; } 100% { transform: rotateX(0deg); opacity: 1; } }
         .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
         .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
-        .ir-accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white)); border-radius: var(--radius-l) var(--radius-l) 0 0; }
-        .ir-icon-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 1px; flex-shrink: 0; }
-        .ir-icon-wrap .material-symbols-rounded { font-size: 36px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; line-height: 1; }
-        .ir-icon-img { width: 42px; height: 42px; border-radius: var(--radius-m); object-fit: cover; border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 3px 12px rgba(0,0,0,0.3); }
-        .ir-headline { font-family: var(--font-display); font-size: 1.2rem; font-weight: 900; color: var(--on-surface); text-align: center; line-height: 1.15; letter-spacing: -0.3px; word-break: break-word; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; max-width: 100%; }
-        .ir-headline.ir-headline-full { -webkit-line-clamp: 5; font-size: 1.1rem; }
-        .ir-label { font-family: var(--font-body); font-size: 0.62rem; font-weight: 600; color: var(--on-surface-variant); opacity: 0.7; text-align: center; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-        .ir-dots-row { display: flex; justify-content: center; gap: 5px; margin-top: 8px; }
-        .ir-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.22); transition: background 0.3s ease, transform 0.3s ease; }
+        .ir-accent-bar { position: absolute; top: 0; left: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), color-mix(in srgb, var(--primary) 50%, white)); border-radius: var(--radius-m) 0 0 var(--radius-m); }
+        
+        .ir-icon-wrap {
+            width: 56px; height: 56px; border-radius: var(--radius-s); flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.25);
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.15);
+            border: 1px solid rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        [data-theme="light"] .ir-icon-wrap {
+            background: rgba(255,255,255,0.4); border-color: rgba(0,0,0,0.1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,0.8);
+        }
+        .ir-icon-wrap .material-symbols-rounded { font-size: 32px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
+        .ir-icon-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+        
+        .ir-text-col { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; justify-content: center; }
+        .ir-headline {
+            font-family: var(--font-display); font-size: 1.4rem !important; font-weight: 1500;
+            color: var(--on-surface); text-align: left; line-height: 1.8; letter-spacing: -0.1px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin: 0;
+        }
+        .ir-label {
+            font-family: var(--font-body); font-size: 0.65rem; font-weight: 600;
+            color: var(--on-surface-variant); opacity: 0.8; text-align: left;
+            letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 2px;
+        }
+        .ir-dots-row { display: flex; justify-content: flex-start; gap: 5px; margin-top: 5px; }
+        .ir-dot { width: 1px; height: 1px; border-radius: 50%; background: rgba(255,255,255,0.22); transition: background 0.3s ease, transform 0.3s ease; }
         [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.18); }
         .ir-dot.ir-dot-active { background: var(--primary); transform: scale(1.4); }
 
@@ -1094,9 +1118,48 @@
 
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
+            .mobile-tab-bar {
+                display: flex; gap: 8px; margin: 8px 12px 0; padding: 4px;
+                background: var(--surface); border-radius: var(--radius-full);
+                box-shadow: var(--shadow-1); z-index: 10; flex-shrink: 0;
+            }
+            .m-tab {
+                flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+                padding: 8px 12px; border: none; border-radius: var(--radius-full);
+                background: transparent; color: var(--on-surface-variant);
+                font-family: var(--font-display); font-size: 0.8rem; font-weight: 800;
+                transition: all 0.3s ease; cursor: pointer;
+            }
+            .m-tab.active { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+            .m-tab .material-symbols-rounded { font-size: 16px !important; }
+
+            .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
+            .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
+
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            /* Bound unified unit explicitly to enforce flex scrolling on mobile */
-            .unified-unit { height: 480px; }
+            
+            /* Enhanced Mobile Flex locking for Maint tab perfect fit */
+            .dashboard-content[data-active-tab="maint"] {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden !important; 
+                padding-bottom: 50px; 
+            }
+            .dashboard-content[data-active-tab="maint"] .right-column {
+                display: flex;
+                flex: 1;
+                min-height: 0;
+                width: 100%;
+            }
+            .unified-unit { 
+                flex: 1; 
+                height: auto !important; 
+                max-height: none !important; 
+                width: 100%; 
+                margin: 0; 
+            }
+            .ops-inline-container { flex-wrap: wrap; }
+
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
             .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
             .logo-section img { height: 24px; }
@@ -1119,7 +1182,12 @@
             .failures-pill { padding: 2px 8px; }
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
-            #info-rotator { bottom: 46px; right: 8px; width: 148px; }
+            
+            #info-rotator { width: 320px; bottom: 46px; right: 8px; }
+            .ir-slab { height: 72px; padding: 6px 10px; gap: 10px; }
+            .ir-icon-wrap { width: 50px; height: 50px; }
+            .ir-headline { font-size: 0.88rem !important; }
+
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
@@ -1127,8 +1195,6 @@
 
         @media (max-width: 600px) {
             .dashboard-content { padding: 6px 6px 80px 6px; gap: 6px; }
-            /* Bound unified unit explicitly to enforce flex scrolling on mobile */
-            .unified-unit { height: 420px; }
             .app-bar { padding: 6px 10px; margin: 4px 4px 0 4px; }
             .logo-section img { height: 22px; }
             .middle-module { height: 34px; gap: 8px; }
@@ -1154,7 +1220,9 @@
             .fail-val { font-size: 0.9rem; }
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
-            #info-rotator { bottom: 46px; right: 6px; width: 136px; }
+            
+            #info-rotator { width: calc(100vw - 16px); bottom: 52px; right: 8px; z-index: 1005; }
+            
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
             .mcd-label { font-size: 0.48rem; }
@@ -1164,7 +1232,6 @@
             .roster-grid { grid-template-columns: 1fr; gap: 6px; }
             .clock-unit { min-width: 30px; padding: 1px 4px; }
             .clock-val { font-size: 0.85rem; }
-            #info-rotator { width: 126px; }
             .ops-inline-container { flex-wrap: wrap; }
         }
     </style>
@@ -1184,14 +1251,13 @@
         <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
         <div class="middle-module">
             <div id="checklist-container" class="checklist-container">
-                <div id="station-track" class="station-track"><!-- populated by JS --></div>
+                <div id="station-track" class="station-track"></div>
             </div>
             <div id="clock-container" class="clock-container">
                 <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
             </div>
-            <!-- Failures block -->
             <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
                 <div class="fail-title">Failures</div>
                 <div class="failures-nums">
@@ -1208,7 +1274,6 @@
             </div>
         </div>
         <div class="top-controls">
-            <!-- Hamburger button -->
             <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
                 <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
             </button>
@@ -1235,9 +1300,17 @@
         </div>
     </header>
 
-    <main class="dashboard-content">
+    <div class="mobile-tab-bar">
+        <button class="m-tab active" onclick="switchMobileTab('overview')" data-tab="overview">
+            <span class="material-symbols-rounded">dashboard</span> Overview
+        </button>
+        <button class="m-tab" onclick="switchMobileTab('maint')" data-tab="maint">
+            <span class="material-symbols-rounded">construction</span> Maintenance
+        </button>
+    </div>
+
+    <main class="dashboard-content" data-active-tab="overview">
         <div class="left-column">
-            <!-- TODAY DEPLOYMENT -->
             <div class="m3-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
@@ -1247,7 +1320,6 @@
                 </div>
                 <div id="roster-today" class="roster-grid"></div>
             </div>
-            <!-- TOMORROW DEPLOYMENT -->
             <div class="m3-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
@@ -1265,7 +1337,6 @@
                     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
                         <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
                         <div class="ops-inline-container">
-                        <!-- Mainline rotating pill -->
                         <div id="box-mainline" class="ops-rot-pill ok">
                             <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
                             <div class="ops-rot-pill-text">
@@ -1275,7 +1346,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Depot rotating pill -->
                         <div id="box-depot" class="ops-rot-pill ok">
                             <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
                             <div class="ops-rot-pill-text">
@@ -1290,7 +1360,6 @@
                 </div>
                 
                 <div class="maint-divider"></div>
-                <!-- Dual Checklist Status: MTRS + TKRS -->
                 <div id="checklist-dual" class="checklist-dual-row">
                     <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
                         <div class="chk-d-check-wrap">
@@ -1318,16 +1387,13 @@
                     </div>
                 </div>
                 
-                <!-- Maintenance Items List (Auto Scrolls if Overflow) -->
                 <div id="maint-list" class="maint-list"></div>
                 
-                <!-- Maintenance Progress Footer (Always visible) -->
                 <div class="maint-progress-footer">
                     <div class="maint-progress-popup">
                         <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
                         <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
                     </div>
-                    <!-- Counts + bars row -->
                     <div class="maint-progress-right">
                         <div id="maint-counts-dock">
                             <div class="mcd-item">
@@ -1344,7 +1410,6 @@
                             </div>
                         </div>
                         <div class="maint-bars-wrapper">
-                            <!-- Bar 1 -->
                             <div class="maint-bar-group">
                                 <div class="maint-progress-meta">
                                     <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
@@ -1354,7 +1419,6 @@
                                     <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
                                 </div>
                             </div>
-                            <!-- Bar 2 -->
                             <div class="maint-bar-group">
                                 <div class="maint-progress-meta">
                                     <span id="maint-progress-label-2" class="maint-progress-label">Secondary Progress</span>
@@ -1372,7 +1436,6 @@
         </div>
     </main>
 
-    <!-- ── MCD BURST OVERLAY ── -->
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
@@ -1380,7 +1443,6 @@
         </div>
     </div>
 
-    <!-- ── STOCK AVAILABILITY MINI-DOCK ── -->
     <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
         <div class="sdock-accent"></div>
         <div class="sdock-header">
@@ -1400,9 +1462,7 @@
         </div>
     </div>
 
-    <!-- ── DRIVER CARD ── -->
     <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
-        <!-- Expanded panel (pops above) -->
         <div class="driver-expanded" onclick="event.stopPropagation()">
             <div class="driver-exp-outdated">
                 <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
@@ -1420,7 +1480,6 @@
                 CALL DRIVER
             </div>
         </div>
-        <!-- Collapsed pill -->
         <div class="driver-pill">
             <div class="driver-pill-icon">
                 <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
@@ -1439,7 +1498,6 @@
         </div>
     </div>
 
-    <!-- Flash News Overlay -->
     <div id="flash-news-overlay">
         <div class="flash-backdrop" onclick="dismissFlash()"></div>
         <div class="flash-panel">
@@ -1468,7 +1526,6 @@
         </div>
     </div>
 
-    <!-- ── CONSUMABLES OVERLAY ── -->
     <div id="cons-overlay">
         <div class="cons-overlay-backdrop" onclick="closeConsOverlay()"></div>
         <div class="cons-overlay-panel">
@@ -1489,15 +1546,16 @@
 
     <div id="app-dock" class="app-dock"></div>
 
-    <!-- ── INFO ROTATOR WIDGET ── -->
-    <div id="info-rotator">
+    <div id="info-rotator" style="display:none;">
         <div class="ir-slab" id="ir-slab">
             <div class="ir-accent-bar"></div>
             <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
-            <div class="ir-headline" id="ir-headline">—</div>
-            <div class="ir-label"   id="ir-label"></div>
+            <div class="ir-text-col">
+                <div class="ir-headline" id="ir-headline">—</div>
+                <div class="ir-label"   id="ir-label"></div>
+                <div class="ir-dots-row" id="ir-dots"></div>
+            </div>
         </div>
-        <div class="ir-dots-row" id="ir-dots"></div>
     </div>
 
     <footer class="ticker-bar">
@@ -1539,6 +1597,15 @@
         function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
         function wakeUp() {
             document.getElementById('blackout').style.display = 'none';
+        }
+
+        // ── Mobile Tabs Switcher ──
+        function switchMobileTab(tabId) {
+            document.querySelectorAll('.m-tab').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+            const dc = document.querySelector('.dashboard-content');
+            if(dc) dc.setAttribute('data-active-tab', tabId);
         }
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
@@ -1882,9 +1949,15 @@
                 if (param === 'sheetab_R2C39' && unit === 'sheetab') updateMaintCount('maint-corrective-val', val, 'Corrective Maintenance');
                 if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
                 if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
+                
+                // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
                 if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
+                
+                // Info Rotator Timing Parameters
+                if (param === 'sheetab_R2C48' && unit === 'sheetab') window._irDuration = (parseFloat(val) || 5) * 1000;
+                if (param === 'sheetab_R2C47' && unit === 'sheetab') window._irInterval = (parseFloat(val) || 5) * 1000;
 
                 const c36Match = param.match(/^sheetab_R(\d+)C36$/);
                 if (c36Match && unit === 'sheetab') { const row = parseInt(c36Match[1], 10); if (row >= 3) irRowItems[row] = val; }
@@ -2233,14 +2306,13 @@
         setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
-        let _irTimer = null, _irIdx = 0, _irSlides = [];
-        const IR_INTERVAL = 5000; const IR_FLIP_DUR = 360; 
+        let _irTimer = null, _irIdx = 0, _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
+        const IR_FLIP_DUR = 360; 
 
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            if (_irTimer) clearTimeout(_irTimer);
-            _irSlides = [];
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            _irSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
+            let currentSlides = [];
+            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
@@ -2250,45 +2322,100 @@
                 itemLines.forEach((line, i) => {
                     const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
                     let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
-                    _irSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
+                    currentSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
                 });
             });
 
-            document.getElementById('info-rotator').style.display = ''; _irIdx = 0; _renderIRSlide(false);
+            const newHash = JSON.stringify(currentSlides);
+            if (_irPrevHash === null) {
+                // First load
+                _irSlides = currentSlides;
+                _irPrevHash = newHash;
+                _startIrCycle(_irSlides, true);
+            } else if (_irPrevHash !== newHash) {
+                // Data changed: Compare and find newly added slides
+                let newSlides = currentSlides.filter(cs => !_irSlides.some(os => os.headline === cs.headline && os.icon === cs.icon));
+                _irSlides = currentSlides;
+                _irPrevHash = newHash;
+                if (newSlides.length > 0) {
+                    // Play only the new slides immediately
+                    _startIrCycle(newSlides, false);
+                }
+            }
         }
 
-        function _renderIRSlide(withFlip) {
+        function _startIrCycle(slidesToPlay, isIntervalLoop) {
+            if (_irTimer) clearTimeout(_irTimer);
+            
+            if (!slidesToPlay || slidesToPlay.length === 0) {
+                document.getElementById('info-rotator').style.display = 'none';
+                const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
+                return;
+            }
+
+            _irActiveSlides = slidesToPlay;
+            _irIdx = 0;
+            document.getElementById('info-rotator').style.display = '';
+            _renderIRSlide(true, isIntervalLoop);
+        }
+
+        function _renderIRSlide(animateIn, isIntervalLoop) {
             const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
             if (!slab) return;
 
+            const s = _irActiveSlides[_irIdx];
+            if (!s) return;
+
             function _applySlide() {
-                const s = _irSlides[_irIdx], hasIcon = s.iconType === 'img' || s.iconType === 'material';
-                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';document.getElementById('ir-headline').classList.add('ir-headline-full');">`; }
-                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded" style="font-size:36px!important;color:var(--primary);font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 48">${s.icon}</span>`; }
+                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
+                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
                 else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
 
-                headline.textContent = s.headline; headline.classList.remove('ir-headline-full');
-                if (!hasIcon || s.iconType === 'none') { headline.classList.add('ir-headline-full'); }
-                const len = s.headline.length; let fs;
-                if (!hasIcon || s.iconType === 'none') { fs = len <= 10 ? '1.5rem' : len <= 20 ? '1.2rem' : len <= 40 ? '0.98rem' : '0.82rem'; }
-                else { fs = len <= 10 ? '1.25rem' : len <= 20 ? '1.05rem' : len <= 40 ? '0.88rem' : '0.74rem'; }
-                headline.style.fontSize = fs;
+                headline.textContent = s.headline;
                 label.textContent = s.label; label.style.display = s.label ? '' : 'none';
-                dotsEl.innerHTML = _irSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
+                dotsEl.innerHTML = _irActiveSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
             }
 
-            if (!withFlip) { _applySlide(); _scheduleNext(); return; }
-            slab.classList.remove('flipping-in'); slab.classList.add('flipping-out');
-            setTimeout(() => {
-                _applySlide(); slab.classList.remove('flipping-out'); slab.classList.add('flipping-in');
-                setTimeout(() => { slab.classList.remove('flipping-in'); _scheduleNext(); }, IR_FLIP_DUR);
-            }, IR_FLIP_DUR);
+            if (animateIn) {
+                _applySlide();
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+                _irTimer = setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleVanish(isIntervalLoop);
+                }, IR_FLIP_DUR);
+            } else {
+                _applySlide();
+                slab.classList.remove('flipping-out', 'flipping-in');
+                _scheduleVanish(isIntervalLoop);
+            }
         }
 
-        function _scheduleNext() {
-            if (_irTimer) clearTimeout(_irTimer); if (_irSlides.length <= 1) return; 
-            _irTimer = setTimeout(() => { _irIdx = (_irIdx + 1) % _irSlides.length; _renderIRSlide(true); }, IR_INTERVAL);
+        function _scheduleVanish(isIntervalLoop) {
+            const dur = window._irDuration !== undefined ? window._irDuration : 5000;
+            _irTimer = setTimeout(() => {
+                const slab = document.getElementById('ir-slab');
+                if (slab) {
+                    slab.classList.add('flipping-out');
+                    _irTimer = setTimeout(() => {
+                        _irIdx++;
+                        if (_irIdx < _irActiveSlides.length) {
+                            // Cycle to next slide in the active batch
+                            _renderIRSlide(true, isIntervalLoop);
+                        } else {
+                            // Batch complete -> Hide container & wait for interval to trigger full batch
+                            document.getElementById('info-rotator').style.display = 'none';
+                            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                            _irTimer = setTimeout(() => {
+                                _startIrCycle(_irSlides, true);
+                            }, interval);
+                        }
+                    }, IR_FLIP_DUR);
+                }
+            }, dur);
         }
+
     </script>
 </body>
 </html>
