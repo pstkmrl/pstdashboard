@@ -857,21 +857,32 @@
             position: fixed; bottom: 54px; left: 10px;
             z-index: 1000; cursor: pointer; transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        /* Mobile header driver icon button */
+        .driver-header-btn { display: none; }
         @media (max-width: 900px) {
-            /* On maint tab: collapse to icon-only, text/badge hidden */
-            body.maint-tab-active .driver-pill {
-                padding: 6px;
-                max-width: unset;
+            .driver-card { display: none !important; }
+            /* Expanded card still usable — reattach to header btn position */
+            .driver-card.expanded {
+                display: block !important;
+                position: fixed; bottom: auto; top: 64px; left: 10px;
+                z-index: 1100;
             }
-            body.maint-tab-active .driver-pill-text-wrap,
-            body.maint-tab-active .driver-pill-outdated-badge,
-            body.maint-tab-active .driver-pill-outdated-dot {
-                display: none !important;
+            .driver-card.expanded .driver-pill { display: none; }
+            .driver-card.expanded .driver-expanded {
+                position: relative; bottom: auto; transform: none; opacity: 1;
+                pointer-events: auto;
             }
-            body.maint-tab-active .driver-pill-icon {
-                width: 36px; height: 36px;
+            .driver-header-btn {
+                display: flex; align-items: center; justify-content: center;
+                width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+                background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
+                color: var(--primary); cursor: pointer;
+                transition: background 0.2s ease;
             }
+            .driver-header-btn.outdated { background: rgba(255,100,80,0.12); border-color: rgba(255,100,80,0.35); color: var(--error); }
+            .driver-header-btn .material-symbols-rounded { font-size: 18px !important; }
         }
+
         .driver-pill {
             display: flex; align-items: center; gap: 0; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
             border-radius: var(--radius-full); box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.12);
@@ -1221,8 +1232,8 @@
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
             
-            #info-rotator { width: calc(100vw - 16px); max-width: calc(100vw - 16px); min-width: unset; bottom: 46px; right: 8px; }
-            .ir-slab { height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
+            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: 46px; right: 8px; left: 8px; }
+            .ir-slab { height: auto !important; min-height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
             .ir-icon-wrap { width: 52px; height: 52px; }
             .ir-headline { font-size: 1.05rem !important; white-space: normal; }
 
@@ -1259,8 +1270,8 @@
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
             
-            #info-rotator { width: calc(100vw - 16px); bottom: 46px; right: 8px; z-index: 1005; }
-            .ir-slab { height: 78px; padding: 7px 12px 7px 8px; gap: 8px; }
+            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
+            .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
             
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
@@ -1313,6 +1324,9 @@
             </div>
         </div>
         <div class="top-controls">
+            <button class="driver-header-btn" id="driver-header-btn" onclick="toggleDriverCard(event)" aria-label="Driver Info">
+                <span class="material-symbols-rounded">directions_car</span>
+            </button>
             <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
                 <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
             </button>
@@ -2313,17 +2327,18 @@
 
         function evaluateUpdateBadge(raw) {
             const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
+            const hdrBtn = document.getElementById('driver-header-btn');
             if (!raw || raw === '---') {
                 badge.innerText = 'UPDATE: N/A'; badge.className = 'driver-badge badge-outdated';
-                card.classList.add('outdated'); return;
+                card.classList.add('outdated'); if (hdrBtn) hdrBtn.classList.add('outdated'); return;
             }
             try {
                 const ut = new Date(raw), now = new Date();
                 badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
                 const h = now.getHours(); let ss = new Date(now);
                 if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0); else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
-                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); }
-                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); }
+                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); if (hdrBtn) hdrBtn.classList.remove('outdated'); }
+                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); if (hdrBtn) hdrBtn.classList.add('outdated'); }
             } catch (e) { badge.innerText = 'UPDATE: ERR'; }
         }
 
@@ -2427,17 +2442,9 @@
                 const isMobile = window.innerWidth <= 900;
 
                 if (isMobile) {
-                    // Mobile: full viewport width ceiling, shrink to fit if shorter
-                    const maxW = window.innerWidth - 16;
+                    // Mobile: always full viewport width, height auto via CSS
                     rotator.style.transition = 'none';
-                    rotator.style.width = 'max-content';
-                    const natural = rotator.scrollWidth;
-                    rotator.style.width = '';
-                    const target = Math.min(natural, maxW);
-                    requestAnimationFrame(() => {
-                        rotator.style.transition = 'width 0.35s cubic-bezier(0.4,0,0.2,1)';
-                        rotator.style.width = target + 'px';
-                    });
+                    rotator.style.width = (window.innerWidth - 16) + 'px';
                 } else {
                     // Desktop: 2-line layout, width driven by content, font shrinks if needed
                     const maxW = window.innerWidth - 20;
