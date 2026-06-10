@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PST Lab — Equipment Status</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0e0f12;
+    --surface:   #16181e;
+    --border:    #252830;
+    --muted:     #3a3e4a;
+    --text:      #d4d8e2;
+    --text-dim:  #6b7080;
+    --accent:    #4f8ef7;
+
+    --ok:        #22c55e;
+    --ok-bg:     #052e16;
+    --ok-border: #14532d;
+
+    --warn:      #f59e0b;
+    --warn-bg:   #2d1a00;
+    --warn-border:#78350f;
+
+    --danger:    #ef4444;
+    --danger-bg: #2d0a0a;
+    --danger-border:#7f1d1d;
+
+    --repair:    #a78bfa;
+    --repair-bg: #1c0f38;
+    --repair-border:#4c1d95;
+
+    --idle:      #6b7080;
+    --idle-bg:   #1a1c22;
+    --idle-border:#252830;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .lab-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .lab-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 2px;
+  }
+  .last-sync {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+  .last-sync strong { color: var(--text); display: block; font-size: 12px; }
+
+  /* ── Summary bar ── */
+  .summary {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .summary-item {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .summary-item:last-child { border-right: none; }
+  .summary-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .summary-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Filters ── */
+  .toolbar {
+    padding: 16px 32px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--muted); color: var(--text); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .refresh-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .refresh-btn.spinning svg { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Grid ── */
+  .grid {
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: default;
+  }
+  .card:hover { transform: translateY(-1px); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.35;
+    flex: 1;
+  }
+  .labcode {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  .s-ready    { color: var(--ok);     background: var(--ok-bg);     border-color: var(--ok-border);     }
+  .s-ready    .status-dot { background: var(--ok); }
+  .s-notok    { color: var(--danger); background: var(--danger-bg); border-color: var(--danger-border); }
+  .s-notok    .status-dot { background: var(--danger); }
+  .s-repair   { color: var(--repair); background: var(--repair-bg); border-color: var(--repair-border); }
+  .s-repair   .status-dot { background: var(--repair); }
+  .s-warning  { color: var(--warn);   background: var(--warn-bg);   border-color: var(--warn-border);   }
+  .s-warning  .status-dot { background: var(--warn); }
+  .s-idle     { color: var(--idle);   background: var(--idle-bg);   border-color: var(--idle-border);   }
+  .s-idle     .status-dot { background: var(--idle); }
+
+  .notice {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border-left: 3px solid var(--muted);
+    padding: 6px 10px;
+    border-radius: 0 4px 4px 0;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .notice strong { color: var(--text); font-style: normal; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 2px; }
+
+  /* ── States ── */
+  .state-loading, .state-error, .state-empty {
+    text-align: center;
+    padding: 80px 32px;
+    color: var(--text-dim);
+  }
+  .state-loading .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  .state-error { color: var(--danger); }
+  .state-error .err-icon { font-size: 32px; margin-bottom: 12px; }
+  .state-error p { font-size: 13px; max-width: 400px; margin: 8px auto 0; color: var(--text-dim); }
+  .config-hint {
+    margin-top: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: left;
+    color: var(--text-dim);
+  }
+  .config-hint span { color: var(--accent); }
+
+  /* ── No items ── */
+  .no-items {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 0;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 14px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    header, .toolbar, .grid, footer { padding-left: 16px; padding-right: 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .summary-item { min-width: 80px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="lab-title">
+    <div class="lab-icon">🔧</div>
+    <div>
+      <h1>PST <span>LAB</span></h1>
+      <div class="subtitle">Equipment Status Dashboard</div>
+    </div>
+  </div>
+  <div class="last-sync">
+    <strong id="syncTime">—</strong>
+    Last synced
+  </div>
+</header>
+
+<div class="summary" id="summary">
+  <!-- Populated by JS -->
+</div>
+
+<div class="toolbar">
+  <button class="filter-btn active" data-filter="ALL" onclick="setFilter(this)">All</button>
+  <button class="filter-btn" data-filter="READY TO PICKUP" onclick="setFilter(this)">Ready to Pickup</button>
+  <button class="filter-btn" data-filter="UNDER REPAIR" onclick="setFilter(this)">Under Repair</button>
+  <button class="filter-btn" data-filter="NOT OK" onclick="setFilter(this)">Not OK</button>
+  <button class="filter-btn" data-filter="" onclick="setFilter(this)">No Status</button>
+  <button class="refresh-btn" id="refreshBtn" onclick="fetchData()">
+    <svg id="refreshIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
+    </svg>
+    Refresh
+  </button>
+</div>
+
+<div id="content">
+  <div class="state-loading"><div class="spinner"></div>Connecting to lab sheet…</div>
+</div>
+
+<footer>
+  <span id="footerCount">— items</span>
+  <span>PST Lab · Repair Tracker</span>
+</footer>
+
+<script>
+  // ── CONFIGURE THIS ──────────────────────────────────────────────
+  // Paste your Apps Script Web App URL here after deployment
+  const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+  // ────────────────────────────────────────────────────────────────
+
+  let allItems = [];
+  let currentFilter = "ALL";
+
+  function statusClass(status) {
+    const s = (status || "").toUpperCase().trim();
+    if (s.includes("READY"))  return "s-ready";
+    if (s.includes("NOT OK")) return "s-notok";
+    if (s.includes("REPAIR")) return "s-repair";
+    if (s.includes("WARN"))   return "s-warning";
+    if (s === "")             return "s-idle";
+    return "s-idle";
+  }
+
+  function renderSummary(items) {
+    const counts = {
+      "READY TO PICKUP": 0,
+      "UNDER REPAIR": 0,
+      "NOT OK": 0,
+      "OTHER": 0,
+      "NONE": 0,
+    };
+    items.forEach(item => {
+      const s = (item.status || "").toUpperCase().trim();
+      if (s.includes("READY"))       counts["READY TO PICKUP"]++;
+      else if (s.includes("REPAIR")) counts["UNDER REPAIR"]++;
+      else if (s.includes("NOT OK")) counts["NOT OK"]++;
+      else if (s === "")             counts["NONE"]++;
+      else                           counts["OTHER"]++;
+    });
+
+    document.getElementById("summary").innerHTML = `
+      <div class="summary-item">
+        <div class="summary-count" style="color:#fff">${items.length}</div>
+        <div class="summary-label">Total Items</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-count" style="color:var(--ok)">${counts["READY TO PICKUP"]}</div>
+        <div class="summary-label">Ready</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-count" style="color:var(--repair)">${counts["UNDER REPAIR"]}</div>
+        <div class="summary-label">In Repair</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-count" style="color:var(--danger)">${counts["NOT OK"]}</div>
+        <div class="summary-label">Not OK</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-count" style="color:var(--text-dim)">${counts["NONE"]}</div>
+        <div class="summary-label">No Status</div>
+      </div>
+    `;
+  }
+
+  function renderCards(items) {
+    const filtered = currentFilter === "ALL"
+      ? items
+      : items.filter(i => (i.status || "").toUpperCase().trim() === currentFilter.toUpperCase().trim());
+
+    if (filtered.length === 0) {
+      return `<div class="grid"><div class="no-items">No items match this filter.</div></div>`;
+    }
+
+    const cards = filtered.map(item => {
+      const sc = statusClass(item.status);
+      const statusLabel = item.status ? item.status : "No Status Set";
+      const notice = item.notice ? `
+        <div class="notice">
+          <strong>Notice</strong>
+          ${escHtml(item.notice)}
+        </div>` : "";
+      const labcode = item.labcode ? `<span class="labcode">${escHtml(item.labcode)}</span>` : "";
+      return `
+        <div class="card">
+          <div class="card-top">
+            <div class="item-name">${escHtml(item.item)}</div>
+            ${labcode}
+          </div>
+          <span class="status-badge ${sc}">
+            <span class="status-dot"></span>
+            ${escHtml(statusLabel)}
+          </span>
+          ${notice}
+        </div>`;
+    }).join("");
+
+    return `<div class="grid">${cards}</div>`;
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function setFilter(btn) {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    document.getElementById("content").innerHTML = renderCards(allItems);
+    document.getElementById("footerCount").textContent =
+      (currentFilter === "ALL" ? allItems.length : allItems.filter(i =>
+        (i.status || "").toUpperCase().trim() === currentFilter.toUpperCase().trim()
+      ).length) + " items";
+  }
+
+  async function fetchData() {
+    if (APPS_SCRIPT_URL === "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE") {
+      document.getElementById("content").innerHTML = `
+        <div class="state-error">
+          <div class="err-icon">⚙️</div>
+          <strong>Apps Script URL not configured</strong>
+          <p>Open this HTML file and paste your deployed Apps Script Web App URL into the <code>APPS_SCRIPT_URL</code> variable at the top of the script.</p>
+          <div class="config-hint">const APPS_SCRIPT_URL = <span>"https://script.google.com/macros/s/..."</span>;</div>
+        </div>`;
+      return;
+    }
+
+    const btn = document.getElementById("refreshBtn");
+    btn.classList.add("spinning");
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      if (!Array.isArray(data)) throw new Error("Unexpected response format");
+      allItems = data;
+
+      renderSummary(allItems);
+      document.getElementById("content").innerHTML = renderCards(allItems);
+      document.getElementById("syncTime").textContent =
+        new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+      document.getElementById("footerCount").textContent = allItems.length + " items";
+
+    } catch(err) {
+      document.getElementById("content").innerHTML = `
+        <div class="state-error">
+          <div class="err-icon">⚠️</div>
+          <strong>Could not load data</strong>
+          <p>${escHtml(err.message)} — Make sure your Apps Script is deployed as a Web App and CORS is enabled.</p>
+        </div>`;
+    } finally {
+      btn.classList.remove("spinning");
+    }
+  }
+
+  // Auto-refresh every 60 seconds
+  fetchData();
+  setInterval(fetchData, 60000);
+</script>
+</body>
+</html>
