@@ -2088,6 +2088,12 @@
                 if (param === 'sheetab_R2C48' && unit === 'sheetab') window._irDuration = (parseFloat(val) || 5) * 1000;
                 if (param === 'sheetab_R2C47' && unit === 'sheetab') window._irInterval = (parseFloat(val) || 5) * 1000;
 
+                // Chart Switch Interval Parameter
+                if (param === 'sheetab_R2C49' && unit === 'sheetab') {
+                    const parsedInt = parseFloat(val);
+                    window._chartInterval = (!isNaN(parsedInt) && parsedInt > 0) ? parsedInt * 1000 : 10000;
+                }
+
                 const c36Match = param.match(/^sheetab_R(\d+)C36$/);
                 if (c36Match && unit === 'sheetab') { const row = parseInt(c36Match[1], 10); if (row >= 3) irRowItems[row] = val; }
                 const c37Match = param.match(/^sheetab_R(\d+)C37$/);
@@ -2639,10 +2645,13 @@
 
             const parseChartData = (csv) => {
                 if (!csv || csv.trim() === '---' || csv.trim() === '') return [];
+                
                 const currentMonthIdx = new Date().getMonth();
-                const monthMap = {
-                    'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5,
-                    'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11
+                const currentFyMonthIdx = currentMonthIdx >= 3 ? currentMonthIdx - 3 : currentMonthIdx + 9;
+                
+                const fyMonthMap = {
+                    'APR': 0, 'MAY': 1, 'JUN': 2, 'JUL': 3, 'AUG': 4, 'SEP': 5,
+                    'OCT': 6, 'NOV': 7, 'DEC': 8, 'JAN': 9, 'FEB': 10, 'MAR': 11
                 };
 
                 return csv.split('\n').map(row => {
@@ -2650,10 +2659,10 @@
                     if (parts.length >= 2) {
                         const label = parts[0].trim();
                         const labelUpper = label.toUpperCase().substring(0, 3);
-                        const mIdx = monthMap[labelUpper];
+                        const mIdx = fyMonthMap[labelUpper];
                         
-                        // Ignore months that have not yet occurred
-                        if (mIdx !== undefined && mIdx > currentMonthIdx) {
+                        // Ignore months that have not yet occurred in the current financial year
+                        if (mIdx !== undefined && mIdx > currentFyMonthIdx) {
                             return null;
                         }
                         
@@ -2739,6 +2748,7 @@
 
         function _scheduleChartVanish() {
             clearChartTimers();
+            const interval = window._chartInterval !== undefined ? window._chartInterval : 10000;
             _chartTimer = setTimeout(() => {
                 if (_chartSets.length > 1) {
                     const slab = document.getElementById('chart-slab');
@@ -2752,7 +2762,7 @@
                 } else {
                     _scheduleChartVanish();
                 }
-            }, 10000);
+            }, interval);
         }
 
     </script>
