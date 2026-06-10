@@ -1284,6 +1284,209 @@
             .clock-val { font-size: 0.85rem; }
             .ops-inline-container { flex-wrap: wrap; }
         }
+        /* --- Advanced Skeumorphic Maintenance Footer Transitions --- */
+.maintenance-footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 90px;
+    position: relative;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Counters Container styling */
+.m-counters-wrap {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.m-counter-item {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: left center;
+}
+
+.m-counter-item.vanished {
+    opacity: 0;
+    transform: scale(0);
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.m-counter-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: #8a99ad;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.6s ease;
+}
+
+.m-counter-val {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    transition: all 0.6s ease;
+}
+
+/* Skeumorphic Combined Sum Effect */
+.m-counter-item.joined-sum {
+    background: linear-gradient(135deg, #1e2538 0%, #111622 100%);
+    padding: 10px 16px;
+    border-radius: var(--radius-m);
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,0.05), 
+                inset -1px -1px 2px rgba(0,0,0,0.4),
+                0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { border-color: rgba(0, 255, 204, 0.2); box-shadow: 0 0 8px rgba(0,255,204,0.1); }
+    100% { border-color: rgba(0, 163, 255, 0.4); box-shadow: 0 0 16px rgba(0,163,255,0.2); }
+}
+
+/* Middle Dynamic Chart Area */
+.m-chart-middle-zone {
+    flex-grow: 1;
+    margin: 0 24px;
+    height: 75px;
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+}
+
+.m-chart-middle-zone.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.m-chart-title {
+    font-size: 0.7rem;
+    font-family: var(--font-display);
+    color: #00ffcc;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 4px rgba(0,255,204,0.3);
+}
+
+.m-skeuo-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 50px;
+    width: 100%;
+}
+
+.m-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.m-bar-track {
+    width: 100%;
+    height: 100%;
+    background: #151a26;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.5), inset -1px -1px 2px rgba(255,255,255,0.05);
+    display: flex;
+    align-items: flex-end;
+}
+
+.m-bar-fill {
+    width: 100%;
+    height: 0%;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #00ffcc 0%, #00a3ff 100%);
+    box-shadow: inset 1px 1px 1px rgba(255,255,255,0.4), 0 0 8px rgba(0,255,204,0.3);
+    transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.m-bar-label {
+    font-size: 0.6rem;
+    color: #627285;
+    margin-top: 3px;
+    font-family: var(--font-body);
+}
+
+/* Concentric Progress Indicators */
+.m-progress-outer-wrap {
+    position: relative;
+    width: 180px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: all 0.8s ease;
+    flex-shrink: 0;
+}
+
+.linear-progress-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.6s ease;
+    opacity: 1;
+}
+
+.linear-progress-box.hidden {
+    opacity: 0;
+    transform: translateX(20px);
+    pointer-events: none;
+    position: absolute;
+}
+
+.concentric-svg-box {
+    position: absolute;
+    right: 10px;
+    width: 84px;
+    height: 84px;
+    transform: scale(0) rotate(-90deg);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.concentric-svg-box.visible {
+    transform: scale(1) rotate(-90deg);
+    opacity: 1;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: #161b26;
+    box-shadow: inset 2px 2px 5px #000;
+}
+
+.circle-progress-ring {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease-in-out;
+}
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -2536,7 +2739,228 @@
                 }
             }, dur);
         }
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Setup Mock API framework to parse structural csv elements safely from r2c46 / r2c45
+    function getSheetCellData(row, col) {
+        if (window.sheetData && window.sheetData[row] && window.sheetData[row][col]) {
+            return window.sheetData[row][col];
+        }
+        // Fallback default sample datasets
+        if (col === 46) {
+            if (row === 1) return "PREVENTIVE MAINTENANCE PERFORMANCE";
+            return "APR,46\nMAY,33\nJUN,18\nJUL,27\nAUG,41\nSEP,35";
+        }
+        if (col === 45) {
+            if (row === 1) return "CORRECTIVE & ACTIVITIES BREAKDOWN";
+            return "APR,22\nMAY,41\nJUN,29\nJUL,19\nAUG,33\nSEP,48";
+        }
+        return "";
+    }
 
+    // 2. Identify Target Maintenance Card Container
+    // This looks for standard structural references containing maintenance data indicators
+    const cardFooters = document.querySelectorAll('footer, .card-footer, [class*="footer"]');
+    let targetFooter = null;
+    
+    for (let footer of cardFooters) {
+        if (footer.textContent.includes("Preventive") || footer.innerHTML.includes("progress")) {
+            targetFooter = footer;
+            break;
+        }
+    }
+    
+    if (!targetFooter) {
+        // Fallback catchall to safely initialize system structures if specific markers differ
+        targetFooter = document.querySelector('.maintenance-card [class*="footer"]') || document.querySelector('.card:nth-child(3) [class*="footer"]');
+    }
+
+    if (!targetFooter) return; // Prevent lifecycle errors if elements are loaded dynamically
+
+    // 3. Structure the exact HTML layout to support fluid dynamic transformation transformations
+    const currentHTMLContent = targetFooter.innerHTML; 
+    
+    // Extract base counts dynamically from existing DOM text variables safely
+    const extractCount = (regex) => {
+        const matches = currentHTMLContent.match(regex);
+        return matches ? matches[1] : Math.floor(Math.random() * 30) + 10;
+    };
+    
+    const countPrev = extractCount(/Preventive[^0-9]*([0-9]+)/i) || 42;
+    const countCorr = extractCount(/Corrective[^0-9]*([0-9]+)/i) || 19;
+    const countAct = extractCount(/Activities[^0-9]*([0-9]+)/i) || 25;
+
+    targetFooter.innerHTML = `
+        <div class="maintenance-footer-container">
+            <div class="m-counters-wrap" id="mCountersWrap">
+                <div class="m-counter-item" id="mCountPrevBox">
+                    <span class="m-counter-label" id="mLabelPrev">Preventive</span>
+                    <span class="m-counter-val" id="mValPrev">${countPrev}</span>
+                </div>
+                <div class="m-counter-item" id="mCountCorrBox">
+                    <span class="m-counter-label">Corrective</span>
+                    <span class="m-counter-val" id="mValCorr">${countCorr}</span>
+                </div>
+                <div class="m-counter-item" id="mCountActBox">
+                    <span class="m-counter-label">Activities</span>
+                    <span class="m-counter-val" id="mValAct">${countAct}</span>
+                </div>
+            </div>
+
+            <div class="m-chart-middle-zone" id="mChartZone">
+                <div class="m-chart-title" id="mChartTitle">Overview</div>
+                <div class="m-skeuo-bars" id="mBarsContainer"></div>
+            </div>
+
+            <div class="m-progress-outer-wrap">
+                <div class="linear-progress-box" id="mLinearBox">
+                    ${currentHTMLContent.includes('progress') ? currentHTMLContent : `
+                        <div style="height:6px; background:#1e2533; border-radius:4px; overflow:hidden;"><div style="width:75%; height:100%; background:#00ffcc;"></div></div>
+                        <div style="height:6px; background:#1e2533; border-radius:4px; overflow:hidden;"><div style="width:55%; height:100%; background:#00a3ff;"></div></div>
+                    `}
+                </div>
+                <svg class="concentric-svg-box" id="mConcentricBox" viewBox="0 0 100 100">
+                    <circle class="circle-bg" cx="50" cy="50" r="40" stroke-width="6"/>
+                    <circle class="circle-progress-ring" id="ringOuter" cx="50" cy="50" r="40" stroke-width="6" 
+                            stroke="#00ffcc" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                    
+                    <circle class="circle-bg" cx="50" cy="50" r="28" stroke-width="6"/>
+                    <circle class="circle-progress-ring" id="ringInner" cx="50" cy="50" r="28" stroke-width="6" 
+                            stroke="#00a3ff" stroke-dasharray="175.8" stroke-dashoffset="175.8"/>
+                </svg>
+            </div>
+        </div>
+    `;
+
+    // 4. Dom Node Target Handlers
+    const mLinearBox = document.getElementById('mLinearBox');
+    const mConcentricBox = document.getElementById('mConcentricBox');
+    const ringOuter = document.getElementById('ringOuter');
+    const ringInner = document.getElementById('ringInner');
+    
+    const mCountPrevBox = document.getElementById('mCountPrevBox');
+    const mCountCorrBox = document.getElementById('mCountCorrBox');
+    const mCountActBox = document.getElementById('mCountActBox');
+    const mLabelPrev = document.getElementById('mLabelPrev');
+    const mValPrev = document.getElementById('mValPrev');
+    const mValCorr = document.getElementById('mValCorr');
+    const mValAct = document.getElementById('mValAct');
+    
+    const mChartZone = document.getElementById('mChartZone');
+    const mChartTitle = document.getElementById('mChartTitle');
+    const mBarsContainer = document.getElementById('mBarsContainer');
+
+    // 5. Dynamic Data Visualization Render Engine
+    function renderBarChart(cellRow, cellCol) {
+        mBarsContainer.innerHTML = '';
+        mChartTitle.textContent = getSheetCellData(1, cellCol);
+        
+        const rawCSV = getSheetCellData(cellRow, cellCol);
+        const dataLines = rawCSV.split('\n').filter(l => l.trim() !== '');
+        
+        let maxVal = 0;
+        const parsedData = dataLines.map(line => {
+            const [month, value] = line.split(',');
+            const num = parseInt(value, 10) || 0;
+            if (num > maxVal) maxVal = num;
+            return { month: month.trim(), val: num };
+        });
+
+        parsedData.forEach(item => {
+            const pct = maxVal > 0 ? (item.val / maxVal) * 100 : 0;
+            const barCol = document.createElement('div');
+            barCol.className = 'm-bar-col';
+            barCol.innerHTML = `
+                <div class="m-bar-track">
+                    <div class="m-bar-fill" style="height: 0%"></div>
+                </div>
+                <div class="m-bar-label">${item.month}</div>
+            `;
+            mBarsContainer.appendChild(barCol);
+            
+            // Trigger dynamic growth transition frame
+            setTimeout(() => {
+                const fillElement = barCol.querySelector('.m-bar-fill');
+                if (fillElement) fillElement.style.height = `${pct}%`;
+            }, 100);
+        });
+    }
+
+    // 6. Visual Sequence State Machine Controller Loop
+    function runTransformationSequence() {
+        // --- PHASE 1: Transform to Rings & Show Preventive Graph (r2c46) ---
+        setTimeout(() => {
+            // Linear progress collapses; rings initialize right aligned
+            mLinearBox.classList.add('hidden');
+            mConcentricBox.classList.add('visible');
+            
+            // Set concentric ring progress fills (Outer 78%, Inner 62%)
+            ringOuter.style.strokeDashoffset = 251.2 - (251.2 * 0.78);
+            ringInner.style.strokeDashoffset = 175.8 - (175.8 * 0.62);
+
+            // Hide other counts; keep preventive left-aligned
+            mCountCorrBox.classList.add('vanished');
+            mCountActBox.classList.add('vanished');
+            mCountPrevBox.style.transform = 'scale(1.15)'; // Resizes nicely
+
+            // Generate and inject Graph 1
+            renderBarChart(2, 46);
+            mChartZone.classList.add('visible');
+        }, 1000);
+
+        // --- PHASE 2: Graph Vanishes, Remaining Counts Reappear ---
+        setTimeout(() => {
+            mChartZone.classList.remove('visible');
+            
+            // Re-reveal counters back into space flow
+            mCountCorrBox.classList.remove('vanished');
+            mCountActBox.classList.remove('vanished');
+            mCountPrevBox.style.transform = 'scale(1)';
+        }, 12000);
+
+        // --- PHASE 3: Preventive Vanishes, Joining Fusion Sum Matrix Display & Graph 2 (r2c45) ---
+        setTimeout(() => {
+            mCountPrevBox.classList.add('vanished');
+            
+            // Morph & merge Corrective + Activities together into a unified skeumorphic pill
+            mCountCorrBox.classList.add('joined-sum');
+            mCountActBox.classList.add('vanished'); // Hide standard tracking footprint
+            
+            const totalSum = parseInt(countCorr) + parseInt(countAct);
+            mCountCorrBox.querySelector('.m-counter-label').textContent = "Corrective + Activities";
+            mValCorr.textContent = totalSum;
+            mValCorr.style.color = "#00ffcc";
+
+            // Render and show Graph 2
+            renderBarChart(2, 45);
+            mChartZone.classList.add('visible');
+        }, 22000);
+
+        // --- PHASE 4: Complete Cycle - Reset smoothly to Initial Standard State Layout ---
+        setTimeout(() => {
+            mChartZone.classList.remove('visible');
+            
+            // Deconstruct joined elements back to regular layout attributes
+            mCountCorrBox.classList.remove('joined-sum');
+            mCountCorrBox.querySelector('.m-counter-label').textContent = "Corrective";
+            mValCorr.textContent = countCorr;
+            mValCorr.style.color = "#ffffff";
+            
+            // Restore all items
+            mCountPrevBox.classList.remove('vanished');
+            mCountCorrBox.classList.remove('vanished');
+            mCountActBox.classList.remove('vanished');
+            
+            // Restore original linear indicators
+            mConcentricBox.classList.remove('visible');
+            mLinearBox.classList.remove('hidden');
+        }, 35000);
+    }
+
+    // 7. Initialize Lifecycle Loop Configuration 
+    // Triggers instantly on initial boot, then re-runs on a clean 60-second execution tick
+    setTimeout(runTransformationSequence, 2000); 
+    setInterval(runTransformationSequence, 60000);
+});
     </script>
 </body>
 </html>
