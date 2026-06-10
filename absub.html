@@ -1178,7 +1178,8 @@
             flex-direction: column;
             padding: 10px 18px;
             gap: 6px;
-            min-width: 260px;
+            width: max-content;
+            min-width: 180px;
         }
         [data-theme="light"] .chart-slab {
             background: rgba(238,246,255,0.9);
@@ -2624,6 +2625,13 @@
         let _chartSets = [];
         let _chartPrevHash = null;
 
+        function clearChartTimers() {
+            if (_chartTimer) {
+                clearTimeout(_chartTimer);
+                _chartTimer = null;
+            }
+        }
+
         function updateChartRotator(title1, data1, title2, data2) {
             const chartHash = title1 + data1 + title2 + data2;
             if (_chartPrevHash === chartHash) return;
@@ -2631,9 +2639,26 @@
 
             const parseChartData = (csv) => {
                 if (!csv || csv.trim() === '---' || csv.trim() === '') return [];
+                const currentMonthIdx = new Date().getMonth();
+                const monthMap = {
+                    'JAN': 0, 'FEB': 1, 'MAR': 2, 'APR': 3, 'MAY': 4, 'JUN': 5,
+                    'JUL': 6, 'AUG': 7, 'SEP': 8, 'OCT': 9, 'NOV': 10, 'DEC': 11
+                };
+
                 return csv.split('\n').map(row => {
                     const parts = row.split(',');
-                    if (parts.length >= 2) return { label: parts[0].trim().substring(0,3), val: parseFloat(parts[1].trim()) || 0 };
+                    if (parts.length >= 2) {
+                        const label = parts[0].trim();
+                        const labelUpper = label.toUpperCase().substring(0, 3);
+                        const mIdx = monthMap[labelUpper];
+                        
+                        // Ignore months that have not yet occurred
+                        if (mIdx !== undefined && mIdx > currentMonthIdx) {
+                            return null;
+                        }
+                        
+                        return { label: label.substring(0, 3), val: parseFloat(parts[1].trim()) || 0 };
+                    }
                     return null;
                 }).filter(i => i !== null);
             };
@@ -2648,13 +2673,13 @@
             const dock = document.getElementById('chart-dock');
             if (_chartSets.length === 0) {
                 if (dock) dock.style.display = 'none';
-                if (_chartTimer) clearTimeout(_chartTimer);
+                clearChartTimers();
                 return;
             }
 
             if (dock) dock.style.display = 'block';
 
-            if (_chartTimer) clearTimeout(_chartTimer);
+            clearChartTimers();
             _chartIdx = 0;
             _renderChartSlide(true);
         }
@@ -2695,11 +2720,13 @@
                 });
             };
 
+            clearChartTimers();
+
             if (animateIn) {
                 applySlide();
                 slab.classList.remove('flipping-out');
                 slab.classList.add('flipping-in');
-                setTimeout(() => {
+                _chartTimer = setTimeout(() => {
                     slab.classList.remove('flipping-in');
                     _scheduleChartVanish();
                 }, 360); // Match IR_FLIP_DUR
@@ -2711,13 +2738,13 @@
         }
 
         function _scheduleChartVanish() {
-            // Wait 10 seconds before swapping to the other chart
+            clearChartTimers();
             _chartTimer = setTimeout(() => {
                 if (_chartSets.length > 1) {
                     const slab = document.getElementById('chart-slab');
                     if (slab) {
                         slab.classList.add('flipping-out');
-                        setTimeout(() => {
+                        _chartTimer = setTimeout(() => {
                             _chartIdx = (_chartIdx + 1) % _chartSets.length;
                             _renderChartSlide(true);
                         }, 360);
