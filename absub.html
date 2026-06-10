@@ -1054,9 +1054,6 @@
             box-shadow: 0 24px 64px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1),
                         inset 0 1px 0 rgba(255,255,255,0.95);
         }
-        #cons-overlay.visible .cons-overlay-panel {
-            transform: scale(1) translateY(0);
-        }
         .cons-panel-header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 14px 18px 10px; border-bottom: 1px solid var(--surface-variant);
@@ -1154,6 +1151,66 @@
         [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.14); }
         .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
 
+        /* ── ALTERNATING CHART DOCK WIDGET ── */
+        .chart-dock {
+            position: fixed;
+            bottom: 54px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1002;
+            pointer-events: none;
+            perspective: 900px;
+        }
+        .chart-slab {
+            pointer-events: auto;
+            border-radius: var(--radius-m);
+            background: rgba(14, 20, 32, 0.82);
+            border: 1px solid rgba(125,190,255,0.22);
+            box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
+                        inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
+            backdrop-filter: blur(36px) saturate(2.4);
+            -webkit-backdrop-filter: blur(36px) saturate(2.4);
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            transform: rotateX(0deg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 18px;
+            gap: 6px;
+            min-width: 260px;
+        }
+        [data-theme="light"] .chart-slab {
+            background: rgba(238,246,255,0.9);
+            border-color: rgba(0,97,164,0.22);
+            box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98);
+        }
+        .chart-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        .chart-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
+        
+        .chart-header { display: flex; align-items: center; gap: 6px; justify-content: center; }
+        .chart-header .material-symbols-rounded { font-size: 16px !important; color: var(--primary); }
+        .chart-title { font-family: var(--font-display); font-weight: 900; font-size: 0.72rem; color: var(--on-surface); letter-spacing: 1px; text-transform: uppercase; }
+        .chart-body { display: flex; align-items: flex-end; justify-content: center; gap: 14px; height: 56px; margin-top: 2px; padding-bottom: 2px; }
+        .chart-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; flex: 1; max-width: 28px; }
+        .chart-val-lbl { font-family: var(--font-display); font-size: 0.58rem; font-weight: 900; color: var(--primary); }
+        
+        .chart-bar-wrap { width: 100%; max-width: 22px; flex-grow: 1; display: flex; align-items: flex-end; background: rgba(255,255,255,0.04); border-radius: 4px 4px 0 0; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
+        [data-theme="light"] .chart-bar-wrap { background: rgba(0,0,0,0.03); box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
+        
+        .chart-bar-fill {
+            width: 100%;
+            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 40%, transparent) 100%);
+            border-radius: 4px 4px 0 0;
+            border: 1px solid rgba(255,255,255,0.22);
+            border-bottom: none;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.35), 0 -2px 8px rgba(125,190,255,0.25);
+            transition: height 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        [data-theme="light"] .chart-bar-fill { border-color: rgba(0,97,164,0.2); box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 -2px 6px rgba(0,97,164,0.15); }
+        .chart-month-lbl { font-family: var(--font-display); font-size: 0.52rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; letter-spacing: 0.5px; }
+
         /* ── BLACKOUT ── */
         #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
         .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
@@ -1237,6 +1294,8 @@
             .ir-icon-wrap { width: 52px; height: 52px; }
             .ir-headline { font-size: 1.05rem !important; white-space: normal; }
 
+            .chart-dock { bottom: 135px; transform: translateX(-50%) scale(0.95); }
+
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
@@ -1273,6 +1332,8 @@
             #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
             .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
             
+            .chart-dock { bottom: 125px; transform: translateX(-50%) scale(0.85); }
+
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
             .mcd-label { font-size: 0.48rem; }
@@ -1284,209 +1345,6 @@
             .clock-val { font-size: 0.85rem; }
             .ops-inline-container { flex-wrap: wrap; }
         }
-        /* --- Advanced Skeumorphic Maintenance Footer Transitions --- */
-.maintenance-footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    min-height: 90px;
-    position: relative;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-}
-
-/* Counters Container styling */
-.m-counters-wrap {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    flex-shrink: 0;
-}
-
-.m-counter-item {
-    display: flex;
-    flex-direction: column;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    transform: scale(1);
-    transform-origin: left center;
-}
-
-.m-counter-item.vanished {
-    opacity: 0;
-    transform: scale(0);
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.m-counter-label {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    color: #8a99ad;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.6s ease;
-}
-
-.m-counter-val {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #ffffff;
-    transition: all 0.6s ease;
-}
-
-/* Skeumorphic Combined Sum Effect */
-.m-counter-item.joined-sum {
-    background: linear-gradient(135deg, #1e2538 0%, #111622 100%);
-    padding: 10px 16px;
-    border-radius: var(--radius-m);
-    box-shadow: inset 1px 1px 2px rgba(255,255,255,0.05), 
-                inset -1px -1px 2px rgba(0,0,0,0.4),
-                0 4px 12px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    animation: pulseGlow 2s infinite alternate;
-}
-
-@keyframes pulseGlow {
-    0% { border-color: rgba(0, 255, 204, 0.2); box-shadow: 0 0 8px rgba(0,255,204,0.1); }
-    100% { border-color: rgba(0, 163, 255, 0.4); box-shadow: 0 0 16px rgba(0,163,255,0.2); }
-}
-
-/* Middle Dynamic Chart Area */
-.m-chart-middle-zone {
-    flex-grow: 1;
-    margin: 0 24px;
-    height: 75px;
-    opacity: 0;
-    transform: translateY(15px) scale(0.95);
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    pointer-events: none;
-}
-
-.m-chart-middle-zone.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-}
-
-.m-chart-title {
-    font-size: 0.7rem;
-    font-family: var(--font-display);
-    color: #00ffcc;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    letter-spacing: 0.08em;
-    text-shadow: 0 0 4px rgba(0,255,204,0.3);
-}
-
-.m-skeuo-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    height: 50px;
-    width: 100%;
-}
-
-.m-bar-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    justify-content: flex-end;
-}
-
-.m-bar-track {
-    width: 100%;
-    height: 100%;
-    background: #151a26;
-    border-radius: 4px;
-    position: relative;
-    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.5), inset -1px -1px 2px rgba(255,255,255,0.05);
-    display: flex;
-    align-items: flex-end;
-}
-
-.m-bar-fill {
-    width: 100%;
-    height: 0%;
-    border-radius: 4px;
-    background: linear-gradient(180deg, #00ffcc 0%, #00a3ff 100%);
-    box-shadow: inset 1px 1px 1px rgba(255,255,255,0.4), 0 0 8px rgba(0,255,204,0.3);
-    transition: height 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.m-bar-label {
-    font-size: 0.6rem;
-    color: #627285;
-    margin-top: 3px;
-    font-family: var(--font-body);
-}
-
-/* Concentric Progress Indicators */
-.m-progress-outer-wrap {
-    position: relative;
-    width: 180px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    transition: all 0.8s ease;
-    flex-shrink: 0;
-}
-
-.linear-progress-box {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    transition: all 0.6s ease;
-    opacity: 1;
-}
-
-.linear-progress-box.hidden {
-    opacity: 0;
-    transform: translateX(20px);
-    pointer-events: none;
-    position: absolute;
-}
-
-.concentric-svg-box {
-    position: absolute;
-    right: 10px;
-    width: 84px;
-    height: 84px;
-    transform: scale(0) rotate(-90deg);
-    opacity: 0;
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.concentric-svg-box.visible {
-    transform: scale(1) rotate(-90deg);
-    opacity: 1;
-}
-
-.circle-bg {
-    fill: none;
-    stroke: #161b26;
-    box-shadow: inset 2px 2px 5px #000;
-}
-
-.circle-progress-ring {
-    fill: none;
-    stroke-linecap: round;
-    transition: stroke-dashoffset 1s ease-in-out;
-}
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -1801,6 +1659,18 @@
     </div>
 
     <div id="app-dock" class="app-dock"></div>
+
+    <div id="chart-dock" class="chart-dock" style="display:none;">
+        <div class="chart-slab" id="chart-slab">
+            <div class="chart-header">
+                <span class="material-symbols-rounded">bar_chart</span>
+                <span class="chart-title" id="chart-title">LOADING...</span>
+            </div>
+            <div class="chart-body" id="chart-bars">
+                <!-- Bars auto populated here -->
+            </div>
+        </div>
+    </div>
 
     <div id="info-rotator" style="display:none;">
         <div class="ir-slab" id="ir-slab">
@@ -2164,6 +2034,7 @@
             let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
             let opsScheduleLines = null;
             let irWeather = '', irItems = '', irImages = '';
+            let chartT1 = '', chartD1 = '', chartT2 = '', chartD2 = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
@@ -2275,6 +2146,12 @@
                     
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
+                    
+                    // Graph Chart Retrievals
+                    if (param === 'sheetab_R1C45') chartT1 = val;
+                    if (param === 'sheetab_R2C45') chartD1 = val;
+                    if (param === 'sheetab_R1C46') chartT2 = val;
+                    if (param === 'sheetab_R2C46') chartD2 = val;
                 }
             });
 
@@ -2343,6 +2220,7 @@
 
             buildAppDock(dockRows);
             initInfoRotator(irWeather, irRowItems, irRowImages);
+            updateChartRotator(chartT1, chartD1, chartT2, chartD2);
 
             if (opsScheduleLines !== null) {
                 const listEl = document.getElementById('maint-list');
@@ -2739,228 +2617,117 @@
                 }
             }, dur);
         }
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Setup Mock API framework to parse structural csv elements safely from r2c46 / r2c45
-    function getSheetCellData(row, col) {
-        if (window.sheetData && window.sheetData[row] && window.sheetData[row][col]) {
-            return window.sheetData[row][col];
+
+        /* ── CHART ROTATOR SYSTEM ── */
+        let _chartTimer = null;
+        let _chartIdx = 0;
+        let _chartSets = [];
+        let _chartPrevHash = null;
+
+        function updateChartRotator(title1, data1, title2, data2) {
+            const chartHash = title1 + data1 + title2 + data2;
+            if (_chartPrevHash === chartHash) return;
+            _chartPrevHash = chartHash;
+
+            const parseChartData = (csv) => {
+                if (!csv || csv.trim() === '---' || csv.trim() === '') return [];
+                return csv.split('\n').map(row => {
+                    const parts = row.split(',');
+                    if (parts.length >= 2) return { label: parts[0].trim().substring(0,3), val: parseFloat(parts[1].trim()) || 0 };
+                    return null;
+                }).filter(i => i !== null);
+            };
+
+            const set1 = parseChartData(data1);
+            const set2 = parseChartData(data2);
+
+            _chartSets = [];
+            if (set1.length > 0) _chartSets.push({ title: title1 || 'CHART 1', data: set1 });
+            if (set2.length > 0) _chartSets.push({ title: title2 || 'CHART 2', data: set2 });
+
+            const dock = document.getElementById('chart-dock');
+            if (_chartSets.length === 0) {
+                if (dock) dock.style.display = 'none';
+                if (_chartTimer) clearTimeout(_chartTimer);
+                return;
+            }
+
+            if (dock) dock.style.display = 'block';
+
+            if (_chartTimer) clearTimeout(_chartTimer);
+            _chartIdx = 0;
+            _renderChartSlide(true);
         }
-        // Fallback default sample datasets
-        if (col === 46) {
-            if (row === 1) return "PREVENTIVE MAINTENANCE PERFORMANCE";
-            return "APR,46\nMAY,33\nJUN,18\nJUL,27\nAUG,41\nSEP,35";
+
+        function _renderChartSlide(animateIn) {
+            const slab = document.getElementById('chart-slab');
+            const titleEl = document.getElementById('chart-title');
+            const bodyEl = document.getElementById('chart-bars');
+            if (!slab || !_chartSets[_chartIdx]) return;
+
+            const currentSet = _chartSets[_chartIdx];
+
+            const applySlide = () => {
+                titleEl.textContent = currentSet.title;
+                const maxVal = Math.max(...currentSet.data.map(d => d.val), 1);
+
+                bodyEl.innerHTML = currentSet.data.map(d => {
+                    const pct = (d.val / maxVal) * 100;
+                    return `
+                    <div class="chart-col">
+                        <span class="chart-val-lbl">${d.val}</span>
+                        <div class="chart-bar-wrap">
+                            <div class="chart-bar-fill" data-pct="${pct}" style="height: 0%"></div>
+                        </div>
+                        <span class="chart-month-lbl">${d.label}</span>
+                    </div>
+                    `;
+                }).join('');
+
+                // Trigger smooth growing animation just after DOM insertion
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        const fills = bodyEl.querySelectorAll('.chart-bar-fill');
+                        fills.forEach(fill => {
+                            fill.style.height = fill.dataset.pct + '%';
+                        });
+                    }, 50);
+                });
+            };
+
+            if (animateIn) {
+                applySlide();
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+                setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleChartVanish();
+                }, 360); // Match IR_FLIP_DUR
+            } else {
+                applySlide();
+                slab.classList.remove('flipping-out', 'flipping-in');
+                _scheduleChartVanish();
+            }
         }
-        if (col === 45) {
-            if (row === 1) return "CORRECTIVE & ACTIVITIES BREAKDOWN";
-            return "APR,22\nMAY,41\nJUN,29\nJUL,19\nAUG,33\nSEP,48";
+
+        function _scheduleChartVanish() {
+            // Wait 10 seconds before swapping to the other chart
+            _chartTimer = setTimeout(() => {
+                if (_chartSets.length > 1) {
+                    const slab = document.getElementById('chart-slab');
+                    if (slab) {
+                        slab.classList.add('flipping-out');
+                        setTimeout(() => {
+                            _chartIdx = (_chartIdx + 1) % _chartSets.length;
+                            _renderChartSlide(true);
+                        }, 360);
+                    }
+                } else {
+                    _scheduleChartVanish();
+                }
+            }, 10000);
         }
-        return "";
-    }
 
-    // 2. Identify Target Maintenance Card Container
-    // This looks for standard structural references containing maintenance data indicators
-    const cardFooters = document.querySelectorAll('footer, .card-footer, [class*="footer"]');
-    let targetFooter = null;
-    
-    for (let footer of cardFooters) {
-        if (footer.textContent.includes("Preventive") || footer.innerHTML.includes("progress")) {
-            targetFooter = footer;
-            break;
-        }
-    }
-    
-    if (!targetFooter) {
-        // Fallback catchall to safely initialize system structures if specific markers differ
-        targetFooter = document.querySelector('.maintenance-card [class*="footer"]') || document.querySelector('.card:nth-child(3) [class*="footer"]');
-    }
-
-    if (!targetFooter) return; // Prevent lifecycle errors if elements are loaded dynamically
-
-    // 3. Structure the exact HTML layout to support fluid dynamic transformation transformations
-    const currentHTMLContent = targetFooter.innerHTML; 
-    
-    // Extract base counts dynamically from existing DOM text variables safely
-    const extractCount = (regex) => {
-        const matches = currentHTMLContent.match(regex);
-        return matches ? matches[1] : Math.floor(Math.random() * 30) + 10;
-    };
-    
-    const countPrev = extractCount(/Preventive[^0-9]*([0-9]+)/i) || 42;
-    const countCorr = extractCount(/Corrective[^0-9]*([0-9]+)/i) || 19;
-    const countAct = extractCount(/Activities[^0-9]*([0-9]+)/i) || 25;
-
-    targetFooter.innerHTML = `
-        <div class="maintenance-footer-container">
-            <div class="m-counters-wrap" id="mCountersWrap">
-                <div class="m-counter-item" id="mCountPrevBox">
-                    <span class="m-counter-label" id="mLabelPrev">Preventive</span>
-                    <span class="m-counter-val" id="mValPrev">${countPrev}</span>
-                </div>
-                <div class="m-counter-item" id="mCountCorrBox">
-                    <span class="m-counter-label">Corrective</span>
-                    <span class="m-counter-val" id="mValCorr">${countCorr}</span>
-                </div>
-                <div class="m-counter-item" id="mCountActBox">
-                    <span class="m-counter-label">Activities</span>
-                    <span class="m-counter-val" id="mValAct">${countAct}</span>
-                </div>
-            </div>
-
-            <div class="m-chart-middle-zone" id="mChartZone">
-                <div class="m-chart-title" id="mChartTitle">Overview</div>
-                <div class="m-skeuo-bars" id="mBarsContainer"></div>
-            </div>
-
-            <div class="m-progress-outer-wrap">
-                <div class="linear-progress-box" id="mLinearBox">
-                    ${currentHTMLContent.includes('progress') ? currentHTMLContent : `
-                        <div style="height:6px; background:#1e2533; border-radius:4px; overflow:hidden;"><div style="width:75%; height:100%; background:#00ffcc;"></div></div>
-                        <div style="height:6px; background:#1e2533; border-radius:4px; overflow:hidden;"><div style="width:55%; height:100%; background:#00a3ff;"></div></div>
-                    `}
-                </div>
-                <svg class="concentric-svg-box" id="mConcentricBox" viewBox="0 0 100 100">
-                    <circle class="circle-bg" cx="50" cy="50" r="40" stroke-width="6"/>
-                    <circle class="circle-progress-ring" id="ringOuter" cx="50" cy="50" r="40" stroke-width="6" 
-                            stroke="#00ffcc" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
-                    
-                    <circle class="circle-bg" cx="50" cy="50" r="28" stroke-width="6"/>
-                    <circle class="circle-progress-ring" id="ringInner" cx="50" cy="50" r="28" stroke-width="6" 
-                            stroke="#00a3ff" stroke-dasharray="175.8" stroke-dashoffset="175.8"/>
-                </svg>
-            </div>
-        </div>
-    `;
-
-    // 4. Dom Node Target Handlers
-    const mLinearBox = document.getElementById('mLinearBox');
-    const mConcentricBox = document.getElementById('mConcentricBox');
-    const ringOuter = document.getElementById('ringOuter');
-    const ringInner = document.getElementById('ringInner');
-    
-    const mCountPrevBox = document.getElementById('mCountPrevBox');
-    const mCountCorrBox = document.getElementById('mCountCorrBox');
-    const mCountActBox = document.getElementById('mCountActBox');
-    const mLabelPrev = document.getElementById('mLabelPrev');
-    const mValPrev = document.getElementById('mValPrev');
-    const mValCorr = document.getElementById('mValCorr');
-    const mValAct = document.getElementById('mValAct');
-    
-    const mChartZone = document.getElementById('mChartZone');
-    const mChartTitle = document.getElementById('mChartTitle');
-    const mBarsContainer = document.getElementById('mBarsContainer');
-
-    // 5. Dynamic Data Visualization Render Engine
-    function renderBarChart(cellRow, cellCol) {
-        mBarsContainer.innerHTML = '';
-        mChartTitle.textContent = getSheetCellData(1, cellCol);
-        
-        const rawCSV = getSheetCellData(cellRow, cellCol);
-        const dataLines = rawCSV.split('\n').filter(l => l.trim() !== '');
-        
-        let maxVal = 0;
-        const parsedData = dataLines.map(line => {
-            const [month, value] = line.split(',');
-            const num = parseInt(value, 10) || 0;
-            if (num > maxVal) maxVal = num;
-            return { month: month.trim(), val: num };
-        });
-
-        parsedData.forEach(item => {
-            const pct = maxVal > 0 ? (item.val / maxVal) * 100 : 0;
-            const barCol = document.createElement('div');
-            barCol.className = 'm-bar-col';
-            barCol.innerHTML = `
-                <div class="m-bar-track">
-                    <div class="m-bar-fill" style="height: 0%"></div>
-                </div>
-                <div class="m-bar-label">${item.month}</div>
-            `;
-            mBarsContainer.appendChild(barCol);
-            
-            // Trigger dynamic growth transition frame
-            setTimeout(() => {
-                const fillElement = barCol.querySelector('.m-bar-fill');
-                if (fillElement) fillElement.style.height = `${pct}%`;
-            }, 100);
-        });
-    }
-
-    // 6. Visual Sequence State Machine Controller Loop
-    function runTransformationSequence() {
-        // --- PHASE 1: Transform to Rings & Show Preventive Graph (r2c46) ---
-        setTimeout(() => {
-            // Linear progress collapses; rings initialize right aligned
-            mLinearBox.classList.add('hidden');
-            mConcentricBox.classList.add('visible');
-            
-            // Set concentric ring progress fills (Outer 78%, Inner 62%)
-            ringOuter.style.strokeDashoffset = 251.2 - (251.2 * 0.78);
-            ringInner.style.strokeDashoffset = 175.8 - (175.8 * 0.62);
-
-            // Hide other counts; keep preventive left-aligned
-            mCountCorrBox.classList.add('vanished');
-            mCountActBox.classList.add('vanished');
-            mCountPrevBox.style.transform = 'scale(1.15)'; // Resizes nicely
-
-            // Generate and inject Graph 1
-            renderBarChart(2, 46);
-            mChartZone.classList.add('visible');
-        }, 1000);
-
-        // --- PHASE 2: Graph Vanishes, Remaining Counts Reappear ---
-        setTimeout(() => {
-            mChartZone.classList.remove('visible');
-            
-            // Re-reveal counters back into space flow
-            mCountCorrBox.classList.remove('vanished');
-            mCountActBox.classList.remove('vanished');
-            mCountPrevBox.style.transform = 'scale(1)';
-        }, 12000);
-
-        // --- PHASE 3: Preventive Vanishes, Joining Fusion Sum Matrix Display & Graph 2 (r2c45) ---
-        setTimeout(() => {
-            mCountPrevBox.classList.add('vanished');
-            
-            // Morph & merge Corrective + Activities together into a unified skeumorphic pill
-            mCountCorrBox.classList.add('joined-sum');
-            mCountActBox.classList.add('vanished'); // Hide standard tracking footprint
-            
-            const totalSum = parseInt(countCorr) + parseInt(countAct);
-            mCountCorrBox.querySelector('.m-counter-label').textContent = "Corrective + Activities";
-            mValCorr.textContent = totalSum;
-            mValCorr.style.color = "#00ffcc";
-
-            // Render and show Graph 2
-            renderBarChart(2, 45);
-            mChartZone.classList.add('visible');
-        }, 22000);
-
-        // --- PHASE 4: Complete Cycle - Reset smoothly to Initial Standard State Layout ---
-        setTimeout(() => {
-            mChartZone.classList.remove('visible');
-            
-            // Deconstruct joined elements back to regular layout attributes
-            mCountCorrBox.classList.remove('joined-sum');
-            mCountCorrBox.querySelector('.m-counter-label').textContent = "Corrective";
-            mValCorr.textContent = countCorr;
-            mValCorr.style.color = "#ffffff";
-            
-            // Restore all items
-            mCountPrevBox.classList.remove('vanished');
-            mCountCorrBox.classList.remove('vanished');
-            mCountActBox.classList.remove('vanished');
-            
-            // Restore original linear indicators
-            mConcentricBox.classList.remove('visible');
-            mLinearBox.classList.remove('hidden');
-        }, 35000);
-    }
-
-    // 7. Initialize Lifecycle Loop Configuration 
-    // Triggers instantly on initial boot, then re-runs on a clean 60-second execution tick
-    setTimeout(runTransformationSequence, 2000); 
-    setInterval(runTransformationSequence, 60000);
-});
     </script>
 </body>
 </html>
