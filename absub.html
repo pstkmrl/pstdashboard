@@ -741,7 +741,7 @@
             flex-direction: column; 
             gap: 10px; 
             position: relative; 
-            overflow: hidden; /* Keeps child content from overflowing out of the card */
+            overflow: hidden; 
         }
         
         @media (min-width: 901px) {
@@ -815,7 +815,7 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS BAR (Footer remains permanently visible) ── */
+        /* ── MAINTENANCE PROGRESS BAR ── */
         .maint-progress-footer {
             margin-top: auto;
             padding-top: 12px;
@@ -823,7 +823,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            flex-shrink: 0; /* Important: Prevents footer compression on small screens */
+            flex-shrink: 0; 
         }
         @media (max-width: 900px) {
             .maint-progress-footer {
@@ -852,189 +852,14 @@
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
         .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
-        /* ── MAINT FOOTER TRANSFORM SYSTEM ── */
-        .maint-progress-right {
-            transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
-            min-height: 56px;
-        }
-
-        /* Concentric circles widget */
-        .maint-circles-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            flex-shrink: 0;
-            opacity: 0;
-            transform: scale(0.7) translateX(20px);
-            transition: opacity 0.55s cubic-bezier(0.34,1.56,0.64,1), transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
-            pointer-events: none;
-        }
-        .maint-circles-wrap.visible {
-            opacity: 1;
-            transform: scale(1) translateX(0);
-            pointer-events: auto;
-        }
-        .maint-circles-svg-wrap {
-            position: relative;
-            width: 72px; height: 72px;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-        }
-        .maint-circles-svg-wrap svg {
-            position: absolute; top: 0; left: 0;
-            transform: rotate(-90deg);
-            overflow: visible;
-        }
-        .cc-track { fill: none; stroke-width: 5; stroke-linecap: round; opacity: 0.18; }
-        .cc-fill  { fill: none; stroke-width: 5; stroke-linecap: round;
-            transition: stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1), stroke 0.6s ease; }
-        .cc-label-wrap {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 0;
-        }
-        .cc-pct-val {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
-            color: var(--primary); line-height: 1; letter-spacing: -0.3px;
-        }
-        .cc-pct-sub {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.38rem;
-            color: var(--on-surface-variant); letter-spacing: 1px; text-transform: uppercase; opacity: 0.6;
-        }
-        .cc-legend {
-            display: flex; flex-direction: column; gap: 2px; align-items: flex-end;
-        }
-        .cc-legend-item {
-            display: flex; align-items: center; gap: 4px;
-            font-family: var(--font-display); font-size: 0.42rem; font-weight: 800;
-            color: var(--on-surface-variant); letter-spacing: 0.8px; text-transform: uppercase;
-            opacity: 0.7; white-space: nowrap;
-        }
-        .cc-legend-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-
-        /* Maint counts transitions */
-        #maint-counts-dock {
-            transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
-        }
-        .mcd-item {
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4,0,0.2,1), max-width 0.5s ease;
-            overflow: hidden;
-        }
-        .mcd-item.hidden {
-            opacity: 0;
-            transform: translateY(8px);
-            max-width: 0 !important;
-            padding: 0 !important;
-            border: none !important;
-        }
-        .mcd-item.merging {
-            opacity: 0;
-            transform: translateY(-6px);
-        }
-        .mcd-item.merged-sum {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .mcd-sum-badge {
-            display: inline-flex; align-items: center; gap: 3px;
-            font-family: var(--font-display); font-size: 0.38rem; font-weight: 900;
-            letter-spacing: 0.8px; color: var(--on-surface-variant);
-            background: var(--surface-variant);
-            border-radius: var(--radius-full); padding: 1px 6px;
-            margin-top: 2px;
-        }
-        .mcd-sum-eq {
-            font-size: 0.5rem; opacity: 0.5; font-family: var(--font-display); font-weight: 900;
-        }
-
-        /* Bar chart inset panel */
-        .maint-chart-panel {
-            flex: 1;
-            min-width: 0;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1);
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-        .maint-chart-panel.visible {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        .chart-panel-title {
-            font-family: var(--font-display); font-size: 0.46rem; font-weight: 900;
-            letter-spacing: 1.4px; text-transform: uppercase;
-            color: var(--on-surface-variant); opacity: 0.55;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .chart-bars-area {
-            flex: 1;
-            display: flex; align-items: flex-end; gap: 3px;
-            min-height: 40px;
-        }
-        .chart-bar-col {
-            flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
-            min-width: 0;
-        }
-        .chart-bar-fill {
-            width: 100%; border-radius: 2px 2px 0 0;
-            min-height: 2px;
-            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 55%, transparent) 100%);
-            box-shadow: 0 -2px 6px rgba(125,190,255,0.22);
-            transition: height 0.9s cubic-bezier(0.34,1.2,0.64,1);
-            position: relative;
-        }
-        .chart-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 40%;
-            background: rgba(255,255,255,0.15);
-            border-radius: 2px 2px 0 0;
-        }
-        .chart-bar-label {
-            font-family: var(--font-display); font-size: 0.38rem; font-weight: 900;
-            color: var(--on-surface-variant); letter-spacing: 0.5px;
-            opacity: 0.55; white-space: nowrap;
-        }
-        .chart-bar-val {
-            font-family: var(--font-display); font-size: 0.44rem; font-weight: 900;
-            color: var(--primary); letter-spacing: 0.3px; line-height: 1;
-        }
-        /* Highlight current/last bar */
-        .chart-bar-col.current .chart-bar-fill {
-            background: linear-gradient(180deg, #fff 0%, var(--primary) 60%);
-            box-shadow: 0 -3px 10px rgba(255,255,255,0.3);
-        }
-        .chart-bar-col.current .chart-bar-label,
-        .chart-bar-col.current .chart-bar-val {
-            color: var(--on-surface); opacity: 1;
-        }
-
-        /* Bars hide when circles visible */
-        .maint-bars-wrapper {
-            transition: opacity 0.4s ease, transform 0.4s ease, max-width 0.5s ease;
-        }
-        .maint-bars-wrapper.hidden {
-            opacity: 0;
-            transform: translateX(10px);
-            max-width: 0 !important;
-            overflow: hidden;
-            min-width: 0 !important;
-        }
-
-        /* ── DRIVER CARD — Liquid Glass Pill ── */
+        /* ── DRIVER CARD ── */
         .driver-card {
             position: fixed; bottom: 54px; left: 10px;
             z-index: 1000; cursor: pointer; transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* Mobile header driver icon button */
         .driver-header-btn { display: none; }
         @media (max-width: 900px) {
             .driver-card { display: none !important; }
-            /* Expanded card still usable — reattach to header btn position */
             .driver-card.expanded {
                 display: block !important;
                 position: fixed; bottom: auto; top: 64px; left: 10px;
@@ -1191,38 +1016,6 @@
         }
         [data-theme="light"] .ticker-refresh-stamp { background: rgba(0,0,0,0.02); }
 
-        /* Date-day-time widget in ticker right */
-        .ticker-datetime {
-            height: 100%;
-            display: flex; align-items: center; gap: 0;
-            border-left: 1px solid rgba(128,128,128,0.18);
-            flex-shrink: 0;
-        }
-        .tdt-block {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 0 11px; gap: 1px; height: 100%;
-            border-right: 1px solid rgba(128,128,128,0.12);
-        }
-        .tdt-block:last-child { border-right: none; }
-        .tdt-val {
-            font-family: var(--font-display); font-weight: 900; font-size: 1.05rem;
-            line-height: 1; color: var(--primary); letter-spacing: -0.3px;
-        }
-        .tdt-lbl {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.42rem;
-            letter-spacing: 1.2px; color: var(--on-surface-variant); opacity: 0.6;
-            text-transform: uppercase;
-        }
-        .tdt-day {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.58rem;
-            letter-spacing: 0.5px; color: var(--on-surface); opacity: 0.75;
-            text-transform: uppercase; line-height: 1;
-        }
-        .tdt-date-val {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
-            letter-spacing: -0.2px; color: var(--on-surface); line-height: 1;
-        }
-
         /* ── CONSUMABLES OVERLAY ── */
         #cons-overlay {
             position: fixed; inset: 0; z-index: 9980;
@@ -1303,80 +1096,23 @@
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
-        /* ── INFO ROTATOR WIDGET — left-side fly-in/swipe ── */
-        #info-rotator {
-            position: fixed;
-            bottom: 54px;
-            left: 10px;
-            z-index: 1005;
-            width: min(480px, calc(100vw - 20px));
-            /* Container slides in/out as a whole */
-            transform: translateX(-110%);
-            transition: transform 0.55s cubic-bezier(0.34, 1.28, 0.64, 1);
-            overflow: hidden; /* clips the swipe child */
-        }
-        #info-rotator.ir-visible {
-            transform: translateX(0);
-        }
-        #info-rotator.ir-exit {
-            transform: translateX(-110%);
-            transition: transform 0.48s cubic-bezier(0.4, 0, 0.8, 0.6);
-        }
-
-        /* The slab itself — no longer animated directly for entry/exit; swipe handles slide changes */
+        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
+        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
         .ir-slab {
             width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
-            background: rgba(14, 20, 32, 0.86);
+            background: rgba(14, 20, 32, 0.82);
             border: 1px solid rgba(125,190,255,0.22);
             box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
-                        inset 0 1.5px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.3);
+                        inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
             backdrop-filter: blur(36px) saturate(2.4); -webkit-backdrop-filter: blur(36px) saturate(2.4);
-            overflow: hidden; position: relative;
-            display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
-            padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
+            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
         }
-        [data-theme="light"] .ir-slab {
-            background: rgba(238,246,255,0.92); border-color: rgba(0,97,164,0.22);
-            box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09),
-                        inset 0 1.5px 0 rgba(255,255,255,0.98);
-        }
-
-        /* Swipe-through: sliding content wrapper inside the slab */
-        .ir-slide-content {
-            display: flex; flex-direction: row; align-items: center; gap: 14px;
-            flex: 1; min-width: 0;
-            transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
-        }
-        .ir-slide-content.swipe-out-left {
-            transform: translateX(-60px);
-            opacity: 0;
-        }
-        .ir-slide-content.swipe-in-right {
-            transform: translateX(60px);
-            opacity: 0;
-            transition: none;
-        }
-        .ir-slide-content.swipe-settle {
-            transform: translateX(0);
-            opacity: 1;
-            transition: transform 0.38s cubic-bezier(0.34, 1.18, 0.64, 1), opacity 0.28s ease;
-        }
-
-        /* Skeuomorphic edge shadow on slab for depth */
-        .ir-slab::after {
-            content: '';
-            position: absolute; inset: 0;
-            border-radius: var(--radius-m);
-            pointer-events: none;
-            box-shadow: inset 3px 0 8px rgba(0,0,0,0.18), inset -3px 0 8px rgba(0,0,0,0.08);
-        }
-
-        /* Keep old animation names but redirect — they are no longer called but kept for safety */
-        @keyframes ir-flip-out { 0% { opacity: 1; } 100% { opacity: 0; } }
-        @keyframes ir-flip-in  { 0% { opacity: 0; } 100% { opacity: 1; } }
-        .ir-slab.flipping-out { animation: ir-flip-out 0.01s forwards; }
-        .ir-slab.flipping-in  { animation: ir-flip-in  0.01s forwards; }
-
+        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,97,164,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
+        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.2; } }
+        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.2; } 100% { transform: rotateX(0deg); opacity: 1; } }
+        .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
         .ir-accent-bar {
             position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
             background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 50%, transparent) 100%);
@@ -1426,6 +1162,118 @@
         .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
+
+        /* ── STATION PILLS (New Lower Center Display) ── */
+        #station-pills-dock {
+            position: fixed;
+            bottom: 56px; 
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 1004;
+            pointer-events: none; /* Let clicks pass through empty gaps */
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 60vw;
+            padding-bottom: 8px;
+        }
+        .st-pill {
+            pointer-events: auto;
+            background: var(--surface-variant);
+            border: 1.5px solid var(--outline);
+            color: var(--on-surface);
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s, border-color 0.3s;
+            cursor: default;
+        }
+        .st-pill.st-filled {
+            background: var(--success-container);
+            color: var(--on-success-container);
+            border-color: var(--success);
+            box-shadow: 0 4px 12px rgba(20, 108, 46, 0.25);
+        }
+        .st-pill:hover { transform: translateY(-2px); }
+
+        .st-remark-bubble {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.95);
+            background: var(--primary);
+            color: var(--surface);
+            padding: 6px 12px;
+            border-radius: var(--radius-m);
+            font-size: 0.75rem;
+            font-family: var(--font-body);
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            box-shadow: var(--shadow-2);
+        }
+        .st-remark-bubble::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 8px; height: 8px;
+            background: var(--primary);
+        }
+        .st-pill:hover .st-remark-bubble,
+        .st-pill.auto-popup .st-remark-bubble {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        /* ── STATION PILLS ANNOUNCEMENT OVERLAY ── */
+        #st-announce-overlay {
+            position: fixed; inset: 0; z-index: 9995;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; opacity: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: opacity 0.4s ease;
+        }
+        #st-announce-overlay.visible { opacity: 1; pointer-events: auto; }
+        .st-announce-card {
+            background: var(--surface);
+            border: 2px solid var(--primary);
+            padding: 30px 60px;
+            border-radius: var(--radius-full);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1);
+            transform: scale(0.5) translateY(50px);
+            opacity: 0;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        [data-theme="light"] .st-announce-card { box-shadow: 0 24px 64px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.8); }
+        .st-announce-card.pop { transform: scale(1) translateY(0); opacity: 1; }
+        .st-announce-card.fly-down {
+            transform: translateY(40vh) scale(0.3);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .st-announce-title {
+            font-family: var(--font-display); font-size: 0.8rem;
+            font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
+        }
+        .st-announce-name {
+            font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
+            color: var(--on-surface); letter-spacing: 2px; line-height: 1;
+        }
+        .st-announce-name.filled { color: var(--success); }
 
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
@@ -1502,6 +1350,11 @@
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
+            
+            #station-pills-dock { bottom: 48px; max-width: 90vw; }
+            .st-pill { padding: 4px 10px; font-size: 0.8rem; }
+            .st-announce-card { padding: 20px 40px; }
+            .st-announce-name { font-size: 2.5rem; }
         }
 
         @media (max-width: 600px) {
@@ -1532,7 +1385,7 @@
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; left: 8px; right: auto; z-index: 1005; }
+            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
             .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
             
             #stock-dock { display: none; }
@@ -1558,6 +1411,8 @@
             <div class="center-dot"></div>
         </div>
     </div>
+
+    <div id="station-pills-dock"></div>
 
     <header class="app-bar">
         <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
@@ -1711,35 +1566,20 @@
                     </div>
                     <div class="maint-progress-right">
                         <div id="maint-counts-dock">
-                            <div class="mcd-item" id="mcd-preventive">
+                            <div class="mcd-item">
                                 <div class="mcd-val" id="maint-preventive-val">—</div>
                                 <div class="mcd-label">Preventive<br>Maint.</div>
                             </div>
-                            <div class="mcd-item" id="mcd-corrective">
+                            <div class="mcd-item">
                                 <div class="mcd-val" id="maint-corrective-val">—</div>
                                 <div class="mcd-label">Corrective<br>Maint.</div>
                             </div>
-                            <div class="mcd-item" id="mcd-activity">
+                            <div class="mcd-item">
                                 <div class="mcd-val" id="maint-activity-val">—</div>
                                 <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
-                            <div class="mcd-item" id="mcd-sum" style="display:none;">
-                                <div class="mcd-val" id="maint-sum-val" style="color:var(--primary)">—</div>
-                                <div class="mcd-label" style="text-align:left;line-height:1.4;">
-                                    <span id="mcd-sum-badge" class="mcd-sum-badge">
-                                        <span id="mcd-sum-corr">0</span>
-                                        <span class="mcd-sum-eq">+</span>
-                                        <span id="mcd-sum-act">0</span>
-                                    </span>
-                                    <br>Corr.+Act.
-                                </div>
-                            </div>
                         </div>
-                        <div class="maint-chart-panel" id="maint-chart-panel">
-                            <div class="chart-panel-title" id="chart-panel-title">—</div>
-                            <div class="chart-bars-area" id="chart-bars-area"></div>
-                        </div>
-                        <div class="maint-bars-wrapper" id="maint-bars-wrapper">
+                        <div class="maint-bars-wrapper">
                             <div class="maint-bar-group">
                                 <div class="maint-progress-meta">
                                     <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
@@ -1759,32 +1599,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="maint-circles-wrap" id="maint-circles-wrap">
-                            <div class="maint-circles-svg-wrap">
-                                <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-                                    <circle class="cc-track" cx="36" cy="36" r="31" stroke="var(--primary)"/>
-                                    <circle class="cc-fill" id="cc-fill-1" cx="36" cy="36" r="31" stroke="var(--primary)"
-                                        stroke-dasharray="194.78" stroke-dashoffset="194.78"/>
-                                    <circle class="cc-track" cx="36" cy="36" r="21" stroke="var(--success)"/>
-                                    <circle class="cc-fill" id="cc-fill-2" cx="36" cy="36" r="21" stroke="var(--success)"
-                                        stroke-dasharray="131.95" stroke-dashoffset="131.95"/>
-                                </svg>
-                                <div class="cc-label-wrap">
-                                    <span class="cc-pct-val" id="cc-pct-1">—</span>
-                                    <span class="cc-pct-sub">PROGRESS</span>
-                                </div>
-                            </div>
-                            <div class="cc-legend">
-                                <div class="cc-legend-item">
-                                    <div class="cc-legend-dot" style="background:var(--primary)"></div>
-                                    <span id="cc-label-1" style="max-width:70px;overflow:hidden;text-overflow:ellipsis">—</span>
-                                </div>
-                                <div class="cc-legend-item">
-                                    <div class="cc-legend-dot" style="background:var(--success)"></div>
-                                    <span id="cc-label-2" style="max-width:70px;overflow:hidden;text-overflow:ellipsis">—</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -1796,6 +1610,13 @@
         <div class="mcd-burst-card">
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
             <div class="mcd-burst-label" id="mcd-burst-label">—</div>
+        </div>
+    </div>
+
+    <div id="st-announce-overlay">
+        <div class="st-announce-card" id="st-announce-card">
+            <div class="st-announce-title">Incoming Station</div>
+            <div class="st-announce-name" id="st-announce-name">---</div>
         </div>
     </div>
 
@@ -1905,13 +1726,11 @@
     <div id="info-rotator" style="display:none;">
         <div class="ir-slab" id="ir-slab">
             <div class="ir-accent-bar"></div>
-            <div class="ir-slide-content" id="ir-slide-content">
-                <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
-                <div class="ir-text-col">
-                    <div class="ir-headline" id="ir-headline">—</div>
-                    <div class="ir-label"   id="ir-label"></div>
-                    <div class="ir-dots-row" id="ir-dots"></div>
-                </div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-text-col">
+                <div class="ir-headline" id="ir-headline">—</div>
+                <div class="ir-label"   id="ir-label"></div>
+                <div class="ir-dots-row" id="ir-dots"></div>
             </div>
         </div>
     </div>
@@ -1923,25 +1742,6 @@
         </div>
         <div class="ticker-refresh-stamp">
             <span class="refresh-prefix">UPDATED: </span><span id="refresh-time">---</span>
-        </div>
-        <div class="ticker-datetime">
-            <div class="tdt-block">
-                <span class="tdt-day" id="tdt-day">---</span>
-                <span class="tdt-date-val" id="tdt-date">--</span>
-                <span class="tdt-lbl" id="tdt-month">---</span>
-            </div>
-            <div class="tdt-block">
-                <span class="tdt-val" id="tdt-h">00</span>
-                <span class="tdt-lbl">HRS</span>
-            </div>
-            <div class="tdt-block">
-                <span class="tdt-val" id="tdt-m">00</span>
-                <span class="tdt-lbl">MIN</span>
-            </div>
-            <div class="tdt-block">
-                <span class="tdt-val" id="tdt-s">00</span>
-                <span class="tdt-lbl">SEC</span>
-            </div>
         </div>
         <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
     </footer>
@@ -2272,6 +2072,150 @@
             });
         }
 
+        // ── Station Pills Logic & State ──
+        let _stPillsData = [];
+        let _stPopupInterval = 0; // ms
+        let _stAutoPopupTimer = null;
+        let _stAnnounceQueue = [];
+        let _isAnnouncing = false;
+        let _stPillsFirstLoad = true;
+        let _stPopupIdx = -1;
+
+        function parseStationPills(rawString) {
+            if (!rawString || rawString.trim() === '') return [];
+            return rawString.split('•').map(s => {
+                let text = s.trim();
+                if (!text) return null;
+                let isFilled = false;
+                let remark = null;
+                
+                if (text.includes('✓')) {
+                    isFilled = true;
+                    text = text.replace('✓', '').trim();
+                }
+                
+                const remarkMatch = text.match(/\[(.*?)\]/);
+                if (remarkMatch) {
+                    remark = remarkMatch[1].trim();
+                    text = text.replace(remarkMatch[0], '').trim();
+                }
+                
+                return { name: text, isFilled, remark };
+            }).filter(item => item && item.name);
+        }
+
+        function handleStationPills(r2c50, r2c51) {
+            if (r2c51) _stPopupInterval = (parseFloat(r2c51) || 0) * 1000;
+            
+            const newPillsData = parseStationPills(r2c50);
+            
+            if (_stPillsFirstLoad) {
+                _stPillsData = newPillsData;
+                renderStationPills();
+                _stPillsFirstLoad = false;
+            } else {
+                const newAdded = newPillsData.filter(np => 
+                    !_stPillsData.some(op => op.name === np.name)
+                );
+                
+                _stPillsData = newPillsData;
+                
+                if (newAdded.length > 0) {
+                    _stAnnounceQueue.push(...newAdded);
+                    processAnnounceQueue();
+                } else {
+                    renderStationPills();
+                }
+            }
+        }
+
+        function renderStationPills() {
+            const dock = document.getElementById('station-pills-dock');
+            if (!dock) return;
+            
+            if (_stPillsData.length === 0) {
+                dock.innerHTML = '';
+                stopAutoPopup();
+                return;
+            }
+            
+            dock.innerHTML = _stPillsData.map((p, idx) => {
+                const fillCls = p.isFilled ? 'st-filled' : '';
+                const remarkHtml = p.remark ? `<div class="st-remark-bubble">${p.remark}</div>` : '';
+                return `<div class="st-pill ${fillCls}" id="st-pill-${idx}">
+                    ${p.name}
+                    ${remarkHtml}
+                </div>`;
+            }).join('');
+            
+            startAutoPopup();
+        }
+
+        function startAutoPopup() {
+            stopAutoPopup();
+            if (_stPopupInterval <= 0) return;
+            
+            const pillsWithRemarks = _stPillsData.map((p, i) => ({p, i})).filter(x => x.p.remark);
+            if (pillsWithRemarks.length === 0) return;
+            
+            _stAutoPopupTimer = setInterval(() => {
+                document.querySelectorAll('.st-pill.auto-popup').forEach(el => el.classList.remove('auto-popup'));
+                
+                _stPopupIdx = (_stPopupIdx + 1) % pillsWithRemarks.length;
+                const targetIdx = pillsWithRemarks[_stPopupIdx].i;
+                const pillEl = document.getElementById(`st-pill-${targetIdx}`);
+                if (pillEl) {
+                    pillEl.classList.add('auto-popup');
+                    setTimeout(() => {
+                        if (pillEl) pillEl.classList.remove('auto-popup');
+                    }, Math.min(3000, _stPopupInterval - 200)); 
+                }
+            }, _stPopupInterval);
+        }
+
+        function stopAutoPopup() {
+            if (_stAutoPopupTimer) clearInterval(_stAutoPopupTimer);
+            _stAutoPopupTimer = null;
+        }
+
+        function processAnnounceQueue() {
+            if (_isAnnouncing || _stAnnounceQueue.length === 0) {
+                if (_stAnnounceQueue.length === 0 && !_isAnnouncing) renderStationPills();
+                return;
+            }
+            
+            _isAnnouncing = true;
+            const p = _stAnnounceQueue.shift();
+            
+            const overlay = document.getElementById('st-announce-overlay');
+            const card = document.getElementById('st-announce-card');
+            const nameEl = document.getElementById('st-announce-name');
+            
+            nameEl.textContent = p.name;
+            nameEl.className = 'st-announce-name ' + (p.isFilled ? 'filled' : '');
+            
+            card.className = 'st-announce-card';
+            overlay.classList.add('visible');
+            
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    card.classList.add('pop');
+                    
+                    setTimeout(() => {
+                        card.classList.remove('pop');
+                        card.classList.add('fly-down');
+                        overlay.classList.remove('visible');
+                        
+                        setTimeout(() => {
+                            _isAnnouncing = false;
+                            processAnnounceQueue(); 
+                        }, 500); 
+                        
+                    }, 2000); 
+                }, 50);
+            });
+        }
+
         window.draw = function(data) {
             const timeEl = document.getElementById('refresh-time');
             if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -2285,6 +2229,7 @@
             let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
             let opsScheduleLines = null;
             let irWeather = '', irItems = '', irImages = '';
+            let statPillsRaw = '', statPillsIntervalRaw = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
@@ -2328,6 +2273,10 @@
                 if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
                 if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
                 
+                // Station Pills Parameters
+                if (param === 'sheetab_R2C50' && unit === 'sheetab') statPillsRaw = val;
+                if (param === 'sheetab_R2C51' && unit === 'sheetab') statPillsIntervalRaw = val;
+
                 // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
@@ -2396,30 +2345,11 @@
                     
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-
-                    // Chart data for footer transform — also update circle labels
-                    if (param === 'sheetab_R1C27') { const el = document.getElementById('cc-label-1'); if(el) el.textContent = (val || 'BAR 1').substring(0,12); }
-                    if (param === 'sheetab_R1C44') { const el = document.getElementById('cc-label-2'); if(el) el.textContent = (val || 'BAR 2').substring(0,12); }
-                }
-
-                // Chart data — captured WITHOUT unit gate since R1 rows may arrive with different unit values
-                if (param === 'sheetab_R1C46') {
-                    window._chartTitle46 = val;
-                    console.log('[CHART46] Title captured:', JSON.stringify(val));
-                }
-                if (param === 'sheetab_R2C46') {
-                    window._chartData46 = val;
-                    console.log('[CHART46] Raw data captured (len=' + val.length + '):', JSON.stringify(val.substring(0, 120)));
-                }
-                if (param === 'sheetab_R1C45') {
-                    window._chartTitle45 = val;
-                    console.log('[CHART45] Title captured:', JSON.stringify(val));
-                }
-                if (param === 'sheetab_R2C45') {
-                    window._chartData45 = val;
-                    console.log('[CHART45] Raw data captured (len=' + val.length + '):', JSON.stringify(val.substring(0, 120)));
                 }
             });
+            
+            // Execute Station Pills Handling
+            handleStationPills(statPillsRaw, statPillsIntervalRaw);
 
             function updateProgressBar(val, fillId, valId) {
                 const pct = parseFloat(val);
@@ -2440,8 +2370,6 @@
                         fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)'; 
                         valEl.style.color = 'var(--error)'; 
                     }
-                    // Hook: keep circle pcts in sync
-                    if (window._syncMaintCircles) window._syncMaintCircles(fillId, clamped);
                 } else { 
                     valEl.innerText = '—'; 
                     fillEl.style.width = '0%'; 
@@ -2698,17 +2626,6 @@
             document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
             document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
             document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
-            // Ticker datetime widget
-            const DAYS_SHORT = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-            const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const tdtH = document.getElementById('tdt-h'), tdtM = document.getElementById('tdt-m'), tdtS = document.getElementById('tdt-s');
-            const tdtDay = document.getElementById('tdt-day'), tdtDate = document.getElementById('tdt-date'), tdtMonth = document.getElementById('tdt-month');
-            if (tdtH) tdtH.textContent = String(h).padStart(2,'0');
-            if (tdtM) tdtM.textContent = String(m).padStart(2,'0');
-            if (tdtS) tdtS.textContent = String(s).padStart(2,'0');
-            if (tdtDay)   tdtDay.textContent   = DAYS_SHORT[n.getDay()];
-            if (tdtDate)  tdtDate.textContent  = String(n.getDate()).padStart(2,'0');
-            if (tdtMonth) tdtMonth.textContent = MONTHS_SHORT[n.getMonth()] + ' ' + n.getFullYear();
         }
         setInterval(updateClocks, 1000);
 
@@ -2718,357 +2635,15 @@
             s.src = `${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s);
         }
         setInterval(refreshData, 120000); refreshData(); updateClocks();
-
-        // ── CHART DEBUG HELPER — remove after confirming data ──
-        // Taps into the draw cycle; 8 seconds after first load, prints what was captured.
-        setTimeout(function _chartDebug() {
-            const d46 = window._chartData46, d45 = window._chartData45;
-            const t46 = window._chartTitle46, t45 = window._chartTitle45;
-            console.group('[KMRL CHART DEBUG]');
-            console.log('R1C46 (title46):', JSON.stringify(t46));
-            console.log('R2C46 (data46) :', d46 ? JSON.stringify(d46.substring(0,200)) : 'UNDEFINED — param never matched');
-            console.log('R1C45 (title45):', JSON.stringify(t45));
-            console.log('R2C45 (data45) :', d45 ? JSON.stringify(d45.substring(0,200)) : 'UNDEFINED — param never matched');
-            console.groupEnd();
-        }, 8000);
-
-        // ── MAINT FOOTER 60-SECOND TRANSFORM CYCLE ──
-        // States: 0=normal, 1=preventive+chart46+circles, 2=all counts+circles, 3=sum+chart45+circles
-        // Timing: 0s normal → 60s → phase1(preventive+chart46) → 20s → phase2(all counts, no chart) → 5s → phase3(sum+chart45) → 20s → back to normal
-        (function initFooterCycle() {
-            let _phase = 0;
-            let _cycleTimer = null;
-            let _pct1 = 0, _pct2 = 0;
-
-            // Sync progress values when bars update
-            const _origUpdatePB = window._updateProgressBarHook;
-            function hookProgressBar(val, fillId) {
-                const pct = parseFloat(val);
-                if (!isNaN(pct)) {
-                    const c = Math.min(100, Math.max(0, pct));
-                    if (fillId === 'maint-progress-fill-1') _pct1 = c;
-                    if (fillId === 'maint-progress-fill-2') _pct2 = c;
-                }
-            }
-            window._maintFooterPctHook = hookProgressBar;
-
-            function parseChartCSV(raw) {
-                if (!raw) return [];
-                // Normalise: the API may deliver multi-line cell values with \n, \r\n,
-                // or may concatenate everything into one string with no separator.
-                // Strategy: replace any whitespace runs that sit between entries with a
-                // single newline, then extract MON,VALUE pairs case-insensitively.
-                const str = raw.replace(/\r/g, '').trim();
-
-                const entries = [];
-                // Broad regex: optional whitespace around comma, value is one or more digits
-                // Accepts both "APR,46" and "apr, 46" and "APR ,46" and "APR,46MAY,33"
-                const re = /([A-Za-z]{3})\s*,\s*(\d+)/g;
-                let m;
-                while ((m = re.exec(str)) !== null) {
-                    entries.push({ month: m[1].toUpperCase(), value: parseInt(m[2], 10) });
-                }
-
-                if (entries.length === 0) {
-                    // Fallback: try line-by-line split for formats like "APR 46" (space-separated)
-                    str.split(/[\n,]+/).forEach(part => {
-                        const t = part.trim();
-                        const spaceMatch = t.match(/^([A-Za-z]{3})\s+(\d+)$/);
-                        if (spaceMatch) entries.push({ month: spaceMatch[1].toUpperCase(), value: parseInt(spaceMatch[2], 10) });
-                    });
-                }
-
-                console.log('[CHART] parseChartCSV →', entries.length, 'entries:', entries.map(e => e.month + ':' + e.value).join(' '));
-                return entries;
-            }
-
-            function buildBarChart(containerId, titleId, csvRaw, chartTitleRaw) {
-                const titleEl = document.getElementById(titleId);
-                const areaEl  = document.getElementById(containerId);
-                if (!titleEl || !areaEl) return;
-
-                titleEl.textContent = chartTitleRaw || '—';
-                const data = parseChartCSV(csvRaw);
-                if (!data.length) { areaEl.innerHTML = '<span style="font-size:0.5rem;opacity:0.4;font-family:var(--font-display);color:var(--on-surface-variant)">NO DATA</span>'; return; }
-
-                const maxVal = Math.max(...data.map(d => d.value), 1);
-                const maxH = 38; // px
-                const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-                const now = new Date();
-                const curMon = months[now.getMonth()];
-                // Show last 6 entries max
-                const slice = data.slice(-6);
-
-                areaEl.innerHTML = slice.map((d, i) => {
-                    const h = Math.max(2, Math.round((d.value / maxVal) * maxH));
-                    const isCurrent = d.month === curMon || i === slice.length - 1;
-                    return `<div class="chart-bar-col${isCurrent ? ' current' : ''}">
-                        <span class="chart-bar-val">${d.value}</span>
-                        <div class="chart-bar-fill" style="height:0px" data-h="${h}"></div>
-                        <span class="chart-bar-label">${d.month}</span>
-                    </div>`;
-                }).join('');
-
-                // Animate bars in after brief delay
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        areaEl.querySelectorAll('.chart-bar-fill').forEach(el => {
-                            el.style.transition = 'height 0.8s cubic-bezier(0.34,1.2,0.64,1)';
-                            el.style.height = el.dataset.h + 'px';
-                        });
-                    }, 80);
-                });
-            }
-
-            function updateCircles(pct1, pct2, label1, label2) {
-                const C1 = 2 * Math.PI * 31, C2 = 2 * Math.PI * 21;
-                const f1 = document.getElementById('cc-fill-1');
-                const f2 = document.getElementById('cc-fill-2');
-                const p1 = document.getElementById('cc-pct-1');
-                const l1 = document.getElementById('cc-label-1');
-                const l2 = document.getElementById('cc-label-2');
-                if (f1) { f1.style.strokeDashoffset = (C1 - (pct1/100)*C1).toFixed(2); }
-                if (f2) { f2.style.strokeDashoffset = (C2 - (pct2/100)*C2).toFixed(2); }
-                if (p1) p1.textContent = pct1.toFixed(0) + '%';
-                if (l1 && label1) l1.textContent = label1.substring(0,13);
-                if (l2 && label2) l2.textContent = label2.substring(0,13);
-            }
-
-            function getMaintNums() {
-                const corrVal = parseInt(document.getElementById('maint-corrective-val')?.textContent) || 0;
-                const actVal  = parseInt(document.getElementById('maint-activity-val')?.textContent) || 0;
-                return { corr: corrVal, act: actVal };
-            }
-
-            // --- Phase transitions ---
-            function toPhase0() {
-                // Normal state: all counts, progress bars, no circles, no chart
-                _phase = 0;
-
-                const sumEl = document.getElementById('mcd-sum');
-                const prevEl = document.getElementById('mcd-preventive');
-                const corrEl = document.getElementById('mcd-corrective');
-                const actEl  = document.getElementById('mcd-activity');
-                const barsW  = document.getElementById('maint-bars-wrapper');
-                const circW  = document.getElementById('maint-circles-wrap');
-                const chartP = document.getElementById('maint-chart-panel');
-
-                // Hide circles & chart
-                if (circW) circW.classList.remove('visible');
-                if (chartP) chartP.classList.remove('visible');
-                setTimeout(() => {
-                    if (chartP) { chartP.style.display = 'none'; }
-                }, 500);
-
-                // Show bars
-                if (barsW) { barsW.style.display = ''; setTimeout(() => barsW.classList.remove('hidden'), 20); }
-
-                // Restore all counts
-                if (sumEl)  { sumEl.style.display = 'none'; }
-                if (prevEl) { prevEl.style.display = ''; setTimeout(() => prevEl.classList.remove('hidden'), 20); }
-                if (corrEl) { corrEl.style.display = ''; setTimeout(() => corrEl.classList.remove('hidden'), 20); }
-                if (actEl)  { actEl.style.display = ''; setTimeout(() => actEl.classList.remove('hidden'), 20); }
-            }
-
-            function toPhase1() {
-                // Preventive only (left), circles (right), chart46 (middle)
-                _phase = 1;
-
-                const barsW  = document.getElementById('maint-bars-wrapper');
-                const circW  = document.getElementById('maint-circles-wrap');
-                const chartP = document.getElementById('maint-chart-panel');
-                const corrEl = document.getElementById('mcd-corrective');
-                const actEl  = document.getElementById('mcd-activity');
-                const prevEl = document.getElementById('mcd-preventive');
-                const sumEl  = document.getElementById('mcd-sum');
-
-                // Hide sum if shown
-                if (sumEl)  { sumEl.style.display = 'none'; }
-                // Show preventive
-                if (prevEl) { prevEl.style.display = ''; setTimeout(() => prevEl.classList.remove('hidden'), 20); }
-
-                // Step 1: Fade out corr/act
-                if (corrEl) corrEl.classList.add('hidden');
-                if (actEl)  actEl.classList.add('hidden');
-
-                setTimeout(() => {
-                    if (corrEl) corrEl.style.display = 'none';
-                    if (actEl)  actEl.style.display = 'none';
-
-                    // Step 2: Hide bars
-                    if (barsW) barsW.classList.add('hidden');
-                    setTimeout(() => { if (barsW) barsW.style.display = 'none'; }, 450);
-
-                    // Step 3: Show chart46
-                    if (chartP) {
-                        chartP.style.display = '';
-                        const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'PROGRESS';
-                        const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'SECONDARY';
-                        buildBarChart('chart-bars-area', 'chart-panel-title', window._chartData46, window._chartTitle46);
-                        setTimeout(() => chartP.classList.add('visible'), 60);
-                    }
-
-                    // Step 4: Show circles
-                    if (circW) {
-                        const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'BAR 1';
-                        const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'BAR 2';
-                        updateCircles(_pct1, _pct2, lbl1, lbl2);
-                        setTimeout(() => circW.classList.add('visible'), 200);
-                    }
-                }, 450);
-            }
-
-            function toPhase2() {
-                // All 3 counts back, circles still showing, no chart
-                _phase = 2;
-
-                const circW  = document.getElementById('maint-circles-wrap');
-                const chartP = document.getElementById('maint-chart-panel');
-                const corrEl = document.getElementById('mcd-corrective');
-                const actEl  = document.getElementById('mcd-activity');
-                const prevEl = document.getElementById('mcd-preventive');
-                const sumEl  = document.getElementById('mcd-sum');
-
-                // Hide chart
-                if (chartP) chartP.classList.remove('visible');
-                setTimeout(() => { if (chartP) chartP.style.display = 'none'; }, 500);
-
-                // Hide sum
-                if (sumEl) { sumEl.classList.add('hidden'); setTimeout(() => { sumEl.style.display = 'none'; sumEl.classList.remove('hidden'); }, 450); }
-
-                // Show all 3 counts
-                if (prevEl) { prevEl.style.display = ''; setTimeout(() => prevEl.classList.remove('hidden'), 20); }
-                if (corrEl) { corrEl.style.display = ''; setTimeout(() => corrEl.classList.remove('hidden'), 60); }
-                if (actEl)  { actEl.style.display = ''; setTimeout(() => actEl.classList.remove('hidden'), 110); }
-
-                // Refresh circles
-                if (circW && circW.classList.contains('visible')) {
-                    const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'BAR 1';
-                    const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'BAR 2';
-                    updateCircles(_pct1, _pct2, lbl1, lbl2);
-                }
-            }
-
-            function toPhase3() {
-                // Preventive vanishes, corr+act merge to sum (left), circles (right), chart45 (middle)
-                _phase = 3;
-
-                const circW  = document.getElementById('maint-circles-wrap');
-                const chartP = document.getElementById('maint-chart-panel');
-                const corrEl = document.getElementById('mcd-corrective');
-                const actEl  = document.getElementById('mcd-activity');
-                const prevEl = document.getElementById('mcd-preventive');
-                const sumEl  = document.getElementById('mcd-sum');
-
-                // Step 1: Fade out preventive
-                if (prevEl) prevEl.classList.add('hidden');
-
-                // Step 2: Merge corr+act into sum
-                const { corr, act } = getMaintNums();
-                setTimeout(() => {
-                    if (prevEl) prevEl.style.display = 'none';
-
-                    // Animate merge: corr and act fade/rise while sum fades in
-                    if (corrEl) corrEl.classList.add('merging');
-                    if (actEl)  actEl.classList.add('merging');
-
-                    setTimeout(() => {
-                        if (corrEl) { corrEl.classList.remove('merging'); corrEl.classList.add('hidden'); }
-                        if (actEl)  { actEl.classList.remove('merging');  actEl.classList.add('hidden'); }
-
-                        // Show sum
-                        const sumValEl  = document.getElementById('maint-sum-val');
-                        const sumCorrEl = document.getElementById('mcd-sum-corr');
-                        const sumActEl  = document.getElementById('mcd-sum-act');
-                        if (sumValEl)  sumValEl.textContent = corr + act;
-                        if (sumCorrEl) sumCorrEl.textContent = corr;
-                        if (sumActEl)  sumActEl.textContent = act;
-                        if (sumEl) {
-                            sumEl.style.display = '';
-                            sumEl.classList.remove('hidden');
-                        }
-
-                        setTimeout(() => {
-                            if (corrEl) corrEl.style.display = 'none';
-                            if (actEl)  actEl.style.display = 'none';
-                        }, 450);
-
-                        // Show chart45
-                        if (chartP) {
-                            chartP.style.display = '';
-                            buildBarChart('chart-bars-area', 'chart-panel-title', window._chartData45, window._chartTitle45);
-                            setTimeout(() => chartP.classList.add('visible'), 80);
-                        }
-
-                        // Refresh circles
-                        if (circW && circW.classList.contains('visible')) {
-                            const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'BAR 1';
-                            const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'BAR 2';
-                            updateCircles(_pct1, _pct2, lbl1, lbl2);
-                        } else if (circW) {
-                            const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'BAR 1';
-                            const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'BAR 2';
-                            updateCircles(_pct1, _pct2, lbl1, lbl2);
-                            setTimeout(() => circW.classList.add('visible'), 200);
-                        }
-                    }, 350);
-                }, 450);
-            }
-
-            // Patch updateProgressBar to also keep pct values
-            const _origUpdatePB2 = window.updateProgressBar;
-            // We'll hook via the data path — store pcts when progress bars update
-            // (done inline in draw function via window._maintFooterPctHook calls)
-
-            function startCycle() {
-                if (_cycleTimer) clearInterval(_cycleTimer);
-                let _tick = 0;
-                // Phase schedule (seconds from cycle start):
-                //   0s   → phase 0 (normal)
-                //   60s  → phase 1 (preventive + chart46 + circles)
-                //   80s  → phase 2 (all counts + circles, no chart)
-                //   85s  → phase 3 (sum + chart45 + circles)
-                //   105s → back to phase 0
-                const PHASE_TIMES = [0, 60, 80, 85, 105];
-                // We run a 1s tick
-                _cycleTimer = setInterval(() => {
-                    _tick++;
-                    const t = _tick % PHASE_TIMES[4]; // 105s cycle
-                    if (t === PHASE_TIMES[1]) toPhase1();
-                    else if (t === PHASE_TIMES[2]) toPhase2();
-                    else if (t === PHASE_TIMES[3]) toPhase3();
-                    else if (t === 0) toPhase0();
-                }, 1000);
-            }
-
-            // Also hook updateProgressBar to capture pct values
-            // We do this by wrapping after the function is defined in the draw block
-            // (draw() redefines updateProgressBar locally so we patch via window hook)
-            window._syncMaintCircles = function(fillId, pctClamped) {
-                if (fillId === 'maint-progress-fill-1') {
-                    _pct1 = pctClamped;
-                } else if (fillId === 'maint-progress-fill-2') {
-                    _pct2 = pctClamped;
-                }
-                // If circles visible, refresh
-                const circW = document.getElementById('maint-circles-wrap');
-                if (circW && circW.classList.contains('visible')) {
-                    const lbl1 = document.getElementById('maint-progress-label-1')?.textContent || 'BAR 1';
-                    const lbl2 = document.getElementById('maint-progress-label-2')?.textContent || 'BAR 2';
-                    updateCircles(_pct1, _pct2, lbl1, lbl2);
-                }
-            };
-
-            startCycle();
-        })();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
         let _irTimer = null, _irIdx = 0, _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
-        const IR_SWIPE_DUR = 380;
+        const IR_FLIP_DUR = 360; 
 
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
+            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             let currentSlides = [];
-            // Date card REMOVED — date/day/time now shown in ticker bar bottom-right
+            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
@@ -3084,14 +2659,17 @@
 
             const newHash = JSON.stringify(currentSlides);
             if (_irPrevHash === null) {
+                // First load
                 _irSlides = currentSlides;
                 _irPrevHash = newHash;
                 _startIrCycle(_irSlides, true);
             } else if (_irPrevHash !== newHash) {
+                // Data changed: Compare and find newly added slides
                 let newSlides = currentSlides.filter(cs => !_irSlides.some(os => os.headline === cs.headline && os.icon === cs.icon));
                 _irSlides = currentSlides;
                 _irPrevHash = newHash;
                 if (newSlides.length > 0) {
+                    // Play only the new slides immediately
                     _startIrCycle(newSlides, false);
                 }
             }
@@ -3099,9 +2677,9 @@
 
         function _startIrCycle(slidesToPlay, isIntervalLoop) {
             if (_irTimer) clearTimeout(_irTimer);
-
+            
             if (!slidesToPlay || slidesToPlay.length === 0) {
-                _irHide();
+                document.getElementById('info-rotator').style.display = 'none';
                 const interval = window._irInterval !== undefined ? window._irInterval : 5000;
                 _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
                 return;
@@ -3109,106 +2687,128 @@
 
             _irActiveSlides = slidesToPlay;
             _irIdx = 0;
-
-            // Fly in from left, then show first slide
-            _irFlyIn(() => {
-                _applyIrSlide();
-                _irScheduleNext(isIntervalLoop);
-            });
+            document.getElementById('info-rotator').style.display = '';
+            _renderIRSlide(true, isIntervalLoop);
         }
 
-        function _irFlyIn(cb) {
-            const rotator = document.getElementById('info-rotator');
-            if (!rotator) return;
-            rotator.style.display = '';
-            // Force off-screen then animate in
-            rotator.classList.remove('ir-visible', 'ir-exit');
-            // Reflow to ensure transition fires
-            void rotator.offsetWidth;
-            rotator.classList.add('ir-visible');
-            // Wait for fly-in to complete before calling cb
-            _irTimer = setTimeout(cb, 580);
-        }
+        function _renderIRSlide(animateIn, isIntervalLoop) {
+            const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
+            if (!slab) return;
 
-        function _irHide() {
-            const rotator = document.getElementById('info-rotator');
-            if (!rotator) return;
-            rotator.classList.add('ir-exit');
-            rotator.classList.remove('ir-visible');
-            setTimeout(() => { rotator.style.display = 'none'; rotator.classList.remove('ir-exit'); }, 500);
-        }
-
-        function _applyIrSlide() {
-            const iconWrap = document.getElementById('ir-icon-wrap');
-            const headline = document.getElementById('ir-headline');
-            const label    = document.getElementById('ir-label');
-            const dotsEl   = document.getElementById('ir-dots');
             const s = _irActiveSlides[_irIdx];
-            if (!s || !iconWrap || !headline) return;
+            if (!s) return;
 
-            if (s.iconType === 'img') {
-                iconWrap.style.display = '';
-                iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`;
-            } else if (s.iconType === 'material') {
-                iconWrap.style.display = '';
-                iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`;
+            function _applySlide() {
+                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
+                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
+                else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
+
+                headline.textContent = s.headline;
+                label.textContent = s.label; label.style.display = s.label ? '' : 'none';
+                dotsEl.innerHTML = _irActiveSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
+
+                // Dynamic width: measure content and resize container
+                _irResizeToContent();
+            }
+
+            function _irResizeToContent() {
+                const rotator = document.getElementById('info-rotator');
+                const headlineEl = document.getElementById('ir-headline');
+                if (!rotator || !headlineEl) return;
+                const isMobile = window.innerWidth <= 900;
+
+                if (isMobile) {
+                    // Mobile: always full viewport width, height auto via CSS
+                    rotator.style.transition = 'none';
+                    rotator.style.width = (window.innerWidth - 16) + 'px';
+                } else {
+                    // Desktop: 2-line layout, width driven by content, font shrinks if needed
+                    const maxW = window.innerWidth - 20;
+                    const minW = 420;
+                    const baseFontSize = 1.6; // rem
+                    const minFontSize = 0.95; // rem
+                    const rootFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+
+                    // Reset font size before measuring
+                    headlineEl.style.fontSize = '';
+                    rotator.style.transition = 'none';
+                    rotator.style.width = 'max-content';
+
+                    let natural = rotator.scrollWidth;
+
+                    if (natural <= maxW) {
+                        // Fits fine — use natural width clamped to minW
+                        const target = Math.max(natural, minW);
+                        rotator.style.width = '';
+                        requestAnimationFrame(() => {
+                            rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
+                            rotator.style.width = target + 'px';
+                        });
+                    } else {
+                        // Too wide for viewport — allow 2-line wrapping at half width and try to fit
+                        rotator.style.width = '';
+                        // Try half the natural width as a starting point (2 roughly equal lines)
+                        let tryW = Math.ceil(natural / 2) + 120; // +120 for icon/padding
+                        tryW = Math.max(tryW, minW);
+
+                        if (tryW <= maxW) {
+                            requestAnimationFrame(() => {
+                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
+                                rotator.style.width = tryW + 'px';
+                            });
+                        } else {
+                            // Still too wide — shrink font size until it fits at maxW
+                            rotator.style.width = maxW + 'px';
+                            let fontSize = baseFontSize;
+                            while (fontSize > minFontSize) {
+                                fontSize = Math.max(fontSize - 0.05, minFontSize);
+                                headlineEl.style.fontSize = fontSize + 'rem';
+                                if (rotator.scrollHeight <= rotator.clientHeight + 2) break;
+                            }
+                            requestAnimationFrame(() => {
+                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
+                                rotator.style.width = maxW + 'px';
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (animateIn) {
+                _applySlide();
+                slab.classList.remove('flipping-out');
+                slab.classList.add('flipping-in');
+                _irTimer = setTimeout(() => {
+                    slab.classList.remove('flipping-in');
+                    _scheduleVanish(isIntervalLoop);
+                }, IR_FLIP_DUR);
             } else {
-                iconWrap.style.display = 'none';
-                iconWrap.innerHTML = '';
-            }
-
-            headline.textContent = s.headline;
-            label.textContent = s.label || '';
-            label.style.display = s.label ? '' : 'none';
-            if (dotsEl) {
-                dotsEl.innerHTML = _irActiveSlides.map((_, i) =>
-                    `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`
-                ).join('');
+                _applySlide();
+                slab.classList.remove('flipping-out', 'flipping-in');
+                _scheduleVanish(isIntervalLoop);
             }
         }
 
-        function _irSwipeToNext(cb) {
-            // Swipe current content out to the left, bring next in from the right
-            const content = document.getElementById('ir-slide-content');
-            if (!content) { cb && cb(); return; }
-
-            // Swipe out
-            content.classList.remove('swipe-in-right', 'swipe-settle');
-            content.classList.add('swipe-out-left');
-
-            setTimeout(() => {
-                // Apply new slide data instantly while offscreen
-                _applyIrSlide();
-                // Position new content coming from right (no transition)
-                content.classList.remove('swipe-out-left');
-                content.classList.add('swipe-in-right');
-                void content.offsetWidth; // reflow
-                // Settle into place
-                content.classList.remove('swipe-in-right');
-                content.classList.add('swipe-settle');
-                setTimeout(() => {
-                    content.classList.remove('swipe-settle');
-                    cb && cb();
-                }, 420);
-            }, IR_SWIPE_DUR);
-        }
-
-        function _irScheduleNext(isIntervalLoop) {
+        function _scheduleVanish(isIntervalLoop) {
             const dur = window._irDuration !== undefined ? window._irDuration : 5000;
             _irTimer = setTimeout(() => {
-                _irIdx++;
-                if (_irIdx < _irActiveSlides.length) {
-                    // Swipe to next slide
-                    _irSwipeToNext(() => {
-                        _irScheduleNext(isIntervalLoop);
-                    });
-                } else {
-                    // All slides done — fly out left
-                    _irHide();
-                    const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                const slab = document.getElementById('ir-slab');
+                if (slab) {
+                    slab.classList.add('flipping-out');
                     _irTimer = setTimeout(() => {
-                        _startIrCycle(_irSlides, true);
-                    }, interval);
+                        _irIdx++;
+                        if (_irIdx < _irActiveSlides.length) {
+                            // Cycle to next slide in the active batch
+                            _renderIRSlide(true, isIntervalLoop);
+                        } else {
+                            // Batch complete -> Hide container & wait for interval to trigger full batch
+                            document.getElementById('info-rotator').style.display = 'none';
+                            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                            _irTimer = setTimeout(() => {
+                                _startIrCycle(_irSlides, true);
+                            }, interval);
+                        }
+                    }, IR_FLIP_DUR);
                 }
             }, dur);
         }
