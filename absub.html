@@ -1096,122 +1096,61 @@
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
-        /* ── INFO ROTATOR WIDGET (News Lower-Third, left side above driver pill) ── */
-        #info-rotator {
-            position: fixed;
-            bottom: calc(54px + 52px + 10px); /* driver pill height ~52px + gap */
-            left: 10px;
-            z-index: 1005;
-            width: max-content;
-            min-width: 300px;
-            max-width: min(560px, calc(100vw - 20px));
-            pointer-events: none;
-        }
-
-        /* Outer shell — the news lower-third "bug" */
+        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
+        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
         .ir-slab {
-            width: 100%; min-width: 0;
-            border-radius: 0 var(--radius-s) var(--radius-s) 0;
-            overflow: hidden;
-            display: flex; flex-direction: column;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
-            /* clip-path used for wipe: initial state clipped to 0 width */
-            clip-path: inset(0 100% 0 0 round 0 var(--radius-s) var(--radius-s) 0);
+            width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
+            background: rgba(14, 20, 32, 0.82);
+            border: 1px solid rgba(125,190,255,0.22);
+            box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
+                        inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
+            backdrop-filter: blur(36px) saturate(2.4); -webkit-backdrop-filter: blur(36px) saturate(2.4);
+            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
         }
-
-        /* Wipe IN: reveal left-to-right */
-        @keyframes ir-wipe-in {
-            0%   { clip-path: inset(0 100% 0 0 round 0 var(--radius-s) var(--radius-s) 0); }
-            100% { clip-path: inset(0 0% 0 0   round 0 var(--radius-s) var(--radius-s) 0); }
-        }
-        /* Wipe OUT: collapse right-to-left */
-        @keyframes ir-wipe-out {
-            0%   { clip-path: inset(0 0% 0 0   round 0 var(--radius-s) var(--radius-s) 0); }
-            100% { clip-path: inset(0 100% 0 0 round 0 var(--radius-s) var(--radius-s) 0); }
-        }
-        .ir-slab.flipping-in  { animation: ir-wipe-in  0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-        .ir-slab.flipping-out { animation: ir-wipe-out 0.32s cubic-bezier(0.4, 0, 1, 1) forwards; }
-
-        /* Top band: coloured ticker-style label strip */
-        .ir-label-band {
-            background: var(--primary);
-            padding: 2px 10px 2px 12px;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .ir-live-dot {
-            width: 5px; height: 5px; border-radius: 50%;
-            background: #fff; opacity: 0.9;
-            flex-shrink: 0;
-            animation: ir-live-pulse 1.4s ease-in-out infinite;
-        }
-        @keyframes ir-live-pulse {
-            0%, 100% { opacity: 0.9; transform: scale(1); }
-            50%       { opacity: 0.45; transform: scale(0.75); }
-        }
-        .ir-label {
-            font-family: var(--font-display); font-size: 0.52rem; font-weight: 900;
-            color: rgba(0,0,0,0.85); letter-spacing: 1.4px; text-transform: uppercase;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            line-height: 1;
-        }
-        [data-theme="light"] .ir-label-band { background: var(--primary); }
-        [data-theme="light"] .ir-label { color: rgba(255,255,255,0.92); }
-        [data-theme="light"] .ir-live-dot { background: #fff; }
-
-        /* Bottom band: dark content area */
-        .ir-content-band {
-            background: rgba(14, 20, 32, 0.88);
-            border-top: 1.5px solid var(--primary);
-            backdrop-filter: blur(28px) saturate(2); -webkit-backdrop-filter: blur(28px) saturate(2);
-            display: flex; flex-direction: row; align-items: center;
-            padding: 7px 14px 7px 10px; gap: 10px;
-        }
-        [data-theme="light"] .ir-content-band {
-            background: rgba(238, 246, 255, 0.94);
-            border-top-color: var(--primary);
-        }
-
+        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,97,164,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
+        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.2; } }
+        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.2; } 100% { transform: rotateX(0deg); opacity: 1; } }
+        .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
         .ir-accent-bar {
-            position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
-            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 40%, transparent) 100%);
+            position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
+            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 50%, transparent) 100%);
+            border-radius: var(--radius-m) 0 0 var(--radius-m);
+            box-shadow: 2px 0 14px rgba(125,190,255,0.4);
         }
-
+        
         .ir-icon-wrap {
-            width: 40px; height: 40px; border-radius: var(--radius-s); flex-shrink: 0;
-            background: rgba(125,190,255,0.12);
+            width: 64px; height: 64px; border-radius: var(--radius-m); flex-shrink: 0;
+            background: rgba(125,190,255,0.1);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.12);
             border: 1px solid rgba(125,190,255,0.28);
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
-        [data-theme="light"] .ir-icon-wrap { background: rgba(0,97,164,0.09); border-color: rgba(0,97,164,0.22); }
-        .ir-icon-wrap .material-symbols-rounded { font-size: 22px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
-        .ir-icon-img { width: 100%; height: 100%; object-fit: cover; }
-
+        [data-theme="light"] .ir-icon-wrap {
+            background: rgba(0,97,164,0.08); border-color: rgba(0,97,164,0.2);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.9);
+        }
+        .ir-icon-wrap .material-symbols-rounded { font-size: 36px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
+        .ir-icon-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+        
         .ir-text-col { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; justify-content: center; }
         .ir-headline {
-            font-family: var(--font-display); font-size: 1.05rem; font-weight: 900;
-            color: var(--on-surface); text-align: left; line-height: 1.2; letter-spacing: -0.2px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            margin: 0;
+            font-family: var(--font-display); font-size: 1.6rem; font-weight: 900;
+            color: var(--on-surface); text-align: left; line-height: 1.18; letter-spacing: -0.4px;
+            white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; max-width: 100%; margin: 0;
         }
-
-        /* Progress bar at very bottom of content band */
-        .ir-progress-bar-wrap {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: rgba(125,190,255,0.12);
-            overflow: hidden;
+        .ir-label {
+            font-family: var(--font-display); font-size: 0.6rem; font-weight: 800;
+            color: var(--primary); opacity: 0.85; text-align: left;
+            letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 3px;
+            text-transform: uppercase;
         }
-        .ir-progress-bar {
-            height: 100%;
-            background: var(--primary);
-            width: 100%;
-            transform-origin: left;
-            transform: scaleX(1);
-        }
-
-        .ir-dots-row { display: flex; justify-content: flex-start; gap: 3px; margin-top: 3px; }
-        .ir-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.35s ease, width 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .ir-dots-row { display: flex; justify-content: flex-start; gap: 4px; margin-top: 6px; }
+        .ir-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.35s ease, width 0.35s cubic-bezier(0.4,0,0.2,1); }
         [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.14); }
-        .ir-dot.ir-dot-active { background: var(--primary); width: 12px; border-radius: 2px; }
+        .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
 
         /* ── BLACKOUT ── */
         #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
@@ -1403,8 +1342,10 @@
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: calc(46px + 48px + 8px) !important; left: 8px !important; right: auto !important; }
-            .ir-headline { font-size: 0.95rem !important; }
+            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: 46px; right: 8px; left: 8px; }
+            .ir-slab { height: auto !important; min-height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
+            .ir-icon-wrap { width: 52px; height: 52px; }
+            .ir-headline { font-size: 1.05rem !important; white-space: normal; }
 
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
@@ -1444,8 +1385,8 @@
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; bottom: calc(46px + 48px + 8px) !important; left: 8px !important; right: auto !important; z-index: 1005; }
-            .ir-slab { height: auto !important; }
+            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
+            .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
             
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
@@ -1784,17 +1725,12 @@
 
     <div id="info-rotator" style="display:none;">
         <div class="ir-slab" id="ir-slab">
-            <div class="ir-label-band">
-                <div class="ir-live-dot"></div>
-                <div class="ir-label" id="ir-label">LIVE UPDATE</div>
-            </div>
-            <div class="ir-content-band" style="position:relative;">
-                <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
-                <div class="ir-text-col">
-                    <div class="ir-headline" id="ir-headline">—</div>
-                    <div class="ir-dots-row" id="ir-dots"></div>
-                </div>
-                <div class="ir-progress-bar-wrap"><div class="ir-progress-bar" id="ir-progress-bar"></div></div>
+            <div class="ir-accent-bar"></div>
+            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
+            <div class="ir-text-col">
+                <div class="ir-headline" id="ir-headline">—</div>
+                <div class="ir-label"   id="ir-label"></div>
+                <div class="ir-dots-row" id="ir-dots"></div>
             </div>
         </div>
     </div>
@@ -2707,7 +2643,7 @@
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             let currentSlides = [];
-            // Date card removed — date now shown in deployment card headers
+            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
