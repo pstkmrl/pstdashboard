@@ -2397,14 +2397,27 @@
                     if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
 
-                    // Chart data for footer transform
-                    if (param === 'sheetab_R1C46') window._chartTitle46 = val;
-                    if (param === 'sheetab_R2C46') window._chartData46 = val;
-                    if (param === 'sheetab_R1C45') window._chartTitle45 = val;
-                    if (param === 'sheetab_R2C45') window._chartData45 = val;
-                    // Also update circle labels from progress bar labels
+                    // Chart data for footer transform — also update circle labels
                     if (param === 'sheetab_R1C27') { const el = document.getElementById('cc-label-1'); if(el) el.textContent = (val || 'BAR 1').substring(0,12); }
                     if (param === 'sheetab_R1C44') { const el = document.getElementById('cc-label-2'); if(el) el.textContent = (val || 'BAR 2').substring(0,12); }
+                }
+
+                // Chart data — captured WITHOUT unit gate since R1 rows may arrive with different unit values
+                if (param === 'sheetab_R1C46') {
+                    window._chartTitle46 = val;
+                    console.log('[CHART46] Title captured:', JSON.stringify(val));
+                }
+                if (param === 'sheetab_R2C46') {
+                    window._chartData46 = val;
+                    console.log('[CHART46] Raw data captured (len=' + val.length + '):', JSON.stringify(val.substring(0, 120)));
+                }
+                if (param === 'sheetab_R1C45') {
+                    window._chartTitle45 = val;
+                    console.log('[CHART45] Title captured:', JSON.stringify(val));
+                }
+                if (param === 'sheetab_R2C45') {
+                    window._chartData45 = val;
+                    console.log('[CHART45] Raw data captured (len=' + val.length + '):', JSON.stringify(val.substring(0, 120)));
                 }
             });
 
@@ -2706,6 +2719,19 @@
         }
         setInterval(refreshData, 120000); refreshData(); updateClocks();
 
+        // ── CHART DEBUG HELPER — remove after confirming data ──
+        // Taps into the draw cycle; 8 seconds after first load, prints what was captured.
+        setTimeout(function _chartDebug() {
+            const d46 = window._chartData46, d45 = window._chartData45;
+            const t46 = window._chartTitle46, t45 = window._chartTitle45;
+            console.group('[KMRL CHART DEBUG]');
+            console.log('R1C46 (title46):', JSON.stringify(t46));
+            console.log('R2C46 (data46) :', d46 ? JSON.stringify(d46.substring(0,200)) : 'UNDEFINED — param never matched');
+            console.log('R1C45 (title45):', JSON.stringify(t45));
+            console.log('R2C45 (data45) :', d45 ? JSON.stringify(d45.substring(0,200)) : 'UNDEFINED — param never matched');
+            console.groupEnd();
+        }, 8000);
+
         // ── MAINT FOOTER 60-SECOND TRANSFORM CYCLE ──
         // States: 0=normal, 1=preventive+chart46+circles, 2=all counts+circles, 3=sum+chart45+circles
         // Timing: 0s normal → 60s → phase1(preventive+chart46) → 20s → phase2(all counts, no chart) → 5s → phase3(sum+chart45) → 20s → back to normal
@@ -2728,15 +2754,31 @@
 
             function parseChartCSV(raw) {
                 if (!raw) return [];
-                // Values are concatenated without newlines — split on pattern: 3-letter month followed by comma
-                const str = (raw || '').replace(/\r/g, '');
+                // Normalise: the API may deliver multi-line cell values with \n, \r\n,
+                // or may concatenate everything into one string with no separator.
+                // Strategy: replace any whitespace runs that sit between entries with a
+                // single newline, then extract MON,VALUE pairs case-insensitively.
+                const str = raw.replace(/\r/g, '').trim();
+
                 const entries = [];
-                // Match MON,VALUE patterns — the raw may have \n or just be concatenated
-                const re = /([A-Z]{3}),(\d+)/g;
+                // Broad regex: optional whitespace around comma, value is one or more digits
+                // Accepts both "APR,46" and "apr, 46" and "APR ,46" and "APR,46MAY,33"
+                const re = /([A-Za-z]{3})\s*,\s*(\d+)/g;
                 let m;
                 while ((m = re.exec(str)) !== null) {
-                    entries.push({ month: m[1], value: parseInt(m[2], 10) });
+                    entries.push({ month: m[1].toUpperCase(), value: parseInt(m[2], 10) });
                 }
+
+                if (entries.length === 0) {
+                    // Fallback: try line-by-line split for formats like "APR 46" (space-separated)
+                    str.split(/[\n,]+/).forEach(part => {
+                        const t = part.trim();
+                        const spaceMatch = t.match(/^([A-Za-z]{3})\s+(\d+)$/);
+                        if (spaceMatch) entries.push({ month: spaceMatch[1].toUpperCase(), value: parseInt(spaceMatch[2], 10) });
+                    });
+                }
+
+                console.log('[CHART] parseChartCSV →', entries.length, 'entries:', entries.map(e => e.month + ':' + e.value).join(' '));
                 return entries;
             }
 
