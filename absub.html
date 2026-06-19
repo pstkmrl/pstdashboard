@@ -934,6 +934,25 @@
             pointer-events: none; z-index: 10;
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
+
+        /* Bar chart raw-data debug popup (troubleshooting aid) */
+        .maint-barchart-wrap { position: relative; }
+        .maint-barchart-debug {
+            position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(6px);
+            width: max(220px, 100%); max-width: 280px; background: var(--surface);
+            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 12px 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
+            transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200; text-align: left;
+        }
+        .maint-barchart-wrap:hover .maint-barchart-debug { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .maint-barchart-debug::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); }
+        .mbd-row { display: flex; justify-content: space-between; gap: 10px; font-family: var(--font-display); font-size: 0.5rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 3px; }
+        .mbd-row span:last-child { color: var(--primary); opacity: 1; text-transform: none; font-weight: 700; }
+        .mbd-csv { font-family: 'Courier New', monospace; font-size: 0.74rem; font-weight: 700; color: var(--on-surface); line-height: 1.5; white-space: pre-wrap; word-break: break-word; background: var(--surface-variant); border-radius: var(--radius-s); padding: 6px 8px; margin-top: 6px; max-height: 140px; overflow-y: auto; }
+        .mbd-status { font-family: var(--font-display); font-size: 0.56rem; font-weight: 900; letter-spacing: 0.4px; margin-top: 7px; display: flex; align-items: center; gap: 5px; }
+        .mbd-status.ok { color: var(--success); }
+        .mbd-status.bad { color: var(--error); }
+        .mbd-status .material-symbols-rounded { font-size: 13px !important; }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1755,10 +1774,22 @@
                             </div>
                         </div>
                         <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-debug" id="maint-barchart-debug">
+                                <div class="mbd-row"><span>Param</span><span>sheetab_R2C45</span></div>
+                                <div class="mbd-row"><span>Label src</span><span>sheetab_R1C45</span></div>
+                                <div class="mbd-csv" id="maint-barchart-debug-csv">No data received yet</div>
+                                <div class="mbd-status bad" id="maint-barchart-debug-status"><span class="material-symbols-rounded">hourglass_empty</span>Waiting for data…</div>
+                            </div>
                             <div class="maint-barchart-container" id="maint-barchart-container"></div>
                             <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
                         </div>
                         <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-debug" id="maint-barchart-debug-2">
+                                <div class="mbd-row"><span>Param</span><span>sheetab_R2C46</span></div>
+                                <div class="mbd-row"><span>Label src</span><span>sheetab_R1C46</span></div>
+                                <div class="mbd-csv" id="maint-barchart-debug-csv-2">No data received yet</div>
+                                <div class="mbd-status bad" id="maint-barchart-debug-status-2"><span class="material-symbols-rounded">hourglass_empty</span>Waiting for data…</div>
+                            </div>
                             <div class="maint-barchart-container" id="maint-barchart-container-2"></div>
                             <div class="circ-label" id="maint-barchart-label-2" title="Chart Title">—</div>
                         </div>
@@ -2438,13 +2469,24 @@
         }
 
         // Render bar chart function
-        function renderMaintBarChart(raw, containerId) {
+        function renderMaintBarChart(raw, containerId, debugCsvId, debugStatusId) {
             const container = document.getElementById(containerId || 'maint-barchart-container');
-            if (!container) return;
-            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
+            const debugCsvEl = debugCsvId ? document.getElementById(debugCsvId) : null;
+            const debugStatusEl = debugStatusId ? document.getElementById(debugStatusId) : null;
+
+            const setDebug = (statusText, ok) => {
+                if (debugCsvEl) debugCsvEl.textContent = (raw && raw.trim() !== '') ? raw : '(empty value received)';
+                if (debugStatusEl) {
+                    debugStatusEl.className = 'mbd-status ' + (ok ? 'ok' : 'bad');
+                    debugStatusEl.innerHTML = `<span class="material-symbols-rounded">${ok ? 'check_circle' : 'error'}</span>${statusText}`;
+                }
+            };
+
+            if (!container) { setDebug('Container not found in DOM', false); return; }
+            if (!raw || raw.trim() === '') { container.innerHTML = ''; setDebug('No data received yet', false); return; }
 
             const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return;
+            if (matches.length === 0) { setDebug('Received data but 0 month entries matched (expected "MMM,123" pairs)', false); return; }
 
             const dataMap = {};
             matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
@@ -2463,6 +2505,8 @@
                 chartData.push({ month: m, val: v });
                 if (v > maxVal) maxVal = v;
             }
+
+            setDebug(`Parsed ${matches.length} entries, plotted ${chartData.length} months`, true);
 
             container.innerHTML = chartData.map(d => {
                 return `
@@ -2615,8 +2659,8 @@
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val, 'maint-barchart-container'); }
-                    if (param === 'sheetab_R2C46') { renderMaintBarChart(val, 'maint-barchart-container-2'); }
+                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val, 'maint-barchart-container', 'maint-barchart-debug-csv', 'maint-barchart-debug-status'); }
+                    if (param === 'sheetab_R2C46') { renderMaintBarChart(val, 'maint-barchart-container-2', 'maint-barchart-debug-csv-2', 'maint-barchart-debug-status-2'); }
                 }
             });
             
