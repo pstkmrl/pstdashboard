@@ -224,7 +224,7 @@
         [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.07); }
         .mcd-val {
             font-family: var(--font-display);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             font-weight: 900;
             line-height: 1;
             color: var(--on-surface);
@@ -550,9 +550,23 @@
         }
         .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        
         @media (min-width: 901px) {
             .dashboard-content { align-items: flex-start; overflow-y: auto; }
             .left-column { height: auto; }
+            .right-column { align-self: flex-start; }
+            .unified-unit {
+                max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 20px);
+            }
+            .maint-progress-right {
+                flex-wrap: nowrap;
+            }
+            #maint-counts-dock {
+                flex-shrink: 1;
+            }
+            .maint-barchart-wrap {
+                min-width: 90px;
+            }
         }
 
         .m3-card {
@@ -741,15 +755,9 @@
             flex-direction: column; 
             gap: 10px; 
             position: relative; 
-            overflow: hidden; /* Keeps child content from overflowing out of the card */
+            overflow: hidden; 
         }
-        
-        @media (min-width: 901px) {
-            .right-column { align-self: flex-start; }
-            .unified-unit {
-                max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 20px);
-            }
-        }
+
         .maint-header-wrapper { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex-shrink: 0; max-width: 100%; }
         .ops-inline-container { display: flex; gap: 5px; flex-wrap: nowrap; align-items: center; min-width: 0; overflow: hidden; width: 100%; max-width: 100%; }
         
@@ -815,7 +823,7 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS BAR (Footer remains permanently visible) ── */
+        /* ── MAINTENANCE PROGRESS FOOTER ── */
         .maint-progress-footer {
             margin-top: auto;
             padding-top: 12px;
@@ -823,22 +831,54 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            flex-shrink: 0; /* Important: Prevents footer compression on small screens */
+            flex-shrink: 0; 
         }
         @media (max-width: 900px) {
             .maint-progress-footer {
                 padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
             }
         }
-        .maint-progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
-        .maint-progress-label { font-family: var(--font-display); font-size: 0.56rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.65; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
-        .maint-progress-value { font-family: var(--font-display); font-size: 0.88rem; font-weight: 900; color: var(--primary); letter-spacing: 0.5px; }
-        .maint-progress-right { display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; }
-        .maint-bars-wrapper { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; justify-content: center; }
-        .maint-bar-group { display: flex; flex-direction: column; min-width: 0; }
-        .maint-progress-track { position: relative; width: 100%; height: 8px; background: var(--surface-variant); border-radius: var(--radius-full); overflow: hidden; }
-        .maint-progress-fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 70%, white) 100%); transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1), background 1.2s ease; width: 0%; }
-        .maint-progress-fill::after { content: ''; position: absolute; top: 0; right: 0; width: 32px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3)); border-radius: var(--radius-full); }
+        .maint-progress-right { 
+            display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
+        }
+
+        /* Circular progress styling */
+        .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
+        .maint-circ-item { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 60px; }
+        .circ-svg-wrap { position: relative; width: 44px; height: 44px; }
+        .circ-svg-wrap svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        .circ-bg { fill: none; stroke: var(--surface-variant); stroke-width: 4; }
+        .circ-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 1.2s ease; }
+        .circ-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.75rem; font-weight: 900; letter-spacing: 0.5px; }
+        .circ-label { font-family: var(--font-display); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; color: var(--on-surface-variant); text-align: center; line-height: 1.2; letter-spacing: 0.5px; max-width: 80px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; }
+
+        /* Bar chart styling */
+        .maint-barchart-wrap {
+            flex: 1; min-width: 120px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end;
+        }
+        .maint-barchart-container {
+            width: 100%; height: 54px;
+            display: flex; align-items: flex-end; gap: 2px;
+            padding: 4px 6px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--surface-variant);
+            border-radius: var(--radius-s);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+        }
+        [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
+        .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
+        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
+        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
+        .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
+        .bc-value {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            margin-bottom: 2px; font-family: var(--font-display); font-size: 0.52rem; font-weight: 900;
+            color: var(--on-surface); text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            pointer-events: none; z-index: 10;
+        }
+        [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -852,16 +892,14 @@
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
         .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
-        /* ── DRIVER CARD — Liquid Glass Pill ── */
+        /* ── DRIVER CARD ── */
         .driver-card {
             position: fixed; bottom: 54px; left: 10px;
             z-index: 1000; cursor: pointer; transition: all 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* Mobile header driver icon button */
         .driver-header-btn { display: none; }
         @media (max-width: 900px) {
             .driver-card { display: none !important; }
-            /* Expanded card still usable — reattach to header btn position */
             .driver-card.expanded {
                 display: block !important;
                 position: fixed; bottom: auto; top: 64px; left: 10px;
@@ -1099,7 +1137,7 @@
         .app-dock, .dock-toggle-btn { display: none !important; }
 
         /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
-        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
+        #info-rotator { position: fixed; bottom: 104px; left: 10px; right: auto; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
         .ir-slab {
             width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
             background: rgba(14, 20, 32, 0.82);
@@ -1164,6 +1202,128 @@
         .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
+
+        /* ── STATION PILLS ── */
+        #station-pills-dock {
+            position: fixed;
+            bottom: 56px; 
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 1004;
+            pointer-events: none; /* Let clicks pass through empty gaps */
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 60vw;
+            padding-bottom: 8px;
+        }
+        .st-pill {
+            pointer-events: auto;
+            background: var(--surface-variant);
+            border: 1.5px solid var(--outline);
+            color: var(--on-surface);
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            box-shadow: var(--shadow-1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s, border-color 0.3s;
+            cursor: default;
+        }
+        .st-pill.st-filled {
+            background: var(--success-container);
+            color: var(--on-success-container);
+            border-color: var(--success);
+            box-shadow: 0 4px 12px rgba(20, 108, 46, 0.25);
+        }
+        .st-pill:hover { transform: translateY(-2px); }
+
+        .st-remark-bubble {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.95);
+            background: var(--primary);
+            color: var(--surface);
+            padding: 6px 12px;
+            border-radius: var(--radius-m);
+            font-size: 0.75rem;
+            font-family: var(--font-body);
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+            box-shadow: var(--shadow-2);
+        }
+        .st-remark-bubble::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 8px; height: 8px;
+            background: var(--primary);
+        }
+        .st-pill:hover .st-remark-bubble,
+        .st-pill.auto-popup .st-remark-bubble {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+        
+        #st-pills-toggle-btn { display: none; }
+        .st-pills-badge {
+            position: absolute; top: -4px; right: -4px;
+            background: var(--success); color: var(--on-success-container);
+            font-size: 0.65rem; font-family: var(--font-display); font-weight: 900;
+            padding: 2px 6px; border-radius: var(--radius-full); display: none;
+            box-shadow: var(--shadow-1);
+        }
+        #st-pills-toggle-btn.has-updates .st-pills-badge { display: block; }
+
+        /* ── STATION PILLS ANNOUNCEMENT OVERLAY ── */
+        #st-announce-overlay {
+            position: fixed; inset: 0; z-index: 9995;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; opacity: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: opacity 0.4s ease;
+        }
+        #st-announce-overlay.visible { opacity: 1; pointer-events: auto; }
+        .st-announce-card {
+            background: var(--surface);
+            border: 2px solid var(--primary);
+            padding: 30px 60px;
+            border-radius: var(--radius-full);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1);
+            transform: scale(0.5) translateY(50px);
+            opacity: 0;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        [data-theme="light"] .st-announce-card { box-shadow: 0 24px 64px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.8); }
+        .st-announce-card.pop { transform: scale(1) translateY(0); opacity: 1; }
+        .st-announce-card.fly-down {
+            transform: translateY(40vh) scale(0.3);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .st-announce-title {
+            font-family: var(--font-display); font-size: 0.8rem;
+            font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
+        }
+        .st-announce-name {
+            font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
+            color: var(--on-surface); letter-spacing: 2px; line-height: 1;
+        }
+        .st-announce-name.filled { color: var(--success); }
 
         /* ── MOBILE RESPONSIVE ── */
         @media (max-width: 900px) {
@@ -1232,7 +1392,7 @@
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: 46px; right: 8px; left: 8px; }
+            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; top: 46px; right: 8px; left: 8px; }
             .ir-slab { height: auto !important; min-height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
             .ir-icon-wrap { width: 52px; height: 52px; }
             .ir-headline { font-size: 1.05rem !important; white-space: normal; }
@@ -1240,6 +1400,54 @@
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
+            
+            #st-pills-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 100px;
+                right: 10px;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background: var(--surface-variant);
+                border: 1.5px solid var(--outline);
+                color: var(--on-surface);
+                box-shadow: var(--shadow-2);
+                z-index: 1005;
+                cursor: pointer;
+                transition: transform 0.2s, background 0.3s, border-color 0.3s;
+            }
+            #st-pills-toggle-btn:active {
+                transform: scale(0.95);
+            }
+            #st-pills-toggle-btn.has-updates {
+                border-color: var(--success);
+                color: var(--success);
+                background: var(--success-container);
+            }
+            #st-pills-toggle-btn .material-symbols-rounded { font-size: 22px !important; }
+            
+            #station-pills-dock {
+                bottom: 156px;
+                left: 10px;
+                right: 10px;
+                transform: translateY(15px);
+                max-width: none;
+                justify-content: flex-end;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            }
+            #station-pills-dock.expanded {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+            .st-pill { padding: 4px 10px; font-size: 0.8rem; }
+            .st-announce-card { padding: 20px 40px; }
+            .st-announce-name { font-size: 2.5rem; }
         }
 
         @media (max-width: 600px) {
@@ -1296,6 +1504,12 @@
             <div class="center-dot"></div>
         </div>
     </div>
+
+    <div id="station-pills-dock"></div>
+    <button id="st-pills-toggle-btn" onclick="toggleStationPills(event)" title="Station Status">
+        <span class="material-symbols-rounded">ev_station</span>
+        <span id="st-pills-badge" class="st-pills-badge"></span>
+    </button>
 
     <header class="app-bar">
         <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
@@ -1462,25 +1676,31 @@
                                 <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
                         </div>
-                        <div class="maint-bars-wrapper">
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-1" class="maint-progress-label">Maintenance Progress</span>
-                                    <span id="maint-progress-value-1" class="maint-progress-value">—</span>
+                        <div class="maint-circ-wrap">
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-1">—</div>
                                 </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-1" class="maint-progress-fill"></div>
-                                </div>
+                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
                             </div>
-                            <div class="maint-bar-group">
-                                <div class="maint-progress-meta">
-                                    <span id="maint-progress-label-2" class="maint-progress-label">Secondary Progress</span>
-                                    <span id="maint-progress-value-2" class="maint-progress-value">—</span>
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-2">—</div>
                                 </div>
-                                <div class="maint-progress-track">
-                                    <div id="maint-progress-fill-2" class="maint-progress-fill"></div>
-                                </div>
+                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
                             </div>
+                        </div>
+                        <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-container" id="maint-barchart-container"></div>
+                            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
                         </div>
                     </div>
                 </div>
@@ -1493,6 +1713,13 @@
         <div class="mcd-burst-card">
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
             <div class="mcd-burst-label" id="mcd-burst-label">—</div>
+        </div>
+    </div>
+
+    <div id="st-announce-overlay">
+        <div class="st-announce-card" id="st-announce-card">
+            <div class="st-announce-title">CHECKLIST UPDATED</div>
+            <div class="st-announce-name" id="st-announce-name">---</div>
         </div>
     </div>
 
@@ -1691,11 +1918,30 @@
             if (menu) { menu.classList.remove('open'); }
             if (icon) icon.innerText = 'menu';
         }
+        
+        // ── Station Pills Toggle ──
+        function toggleStationPills(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('station-pills-dock');
+            if (dock) dock.classList.toggle('expanded');
+        }
+
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('hamburger-menu');
             const btn  = document.getElementById('hamburger-btn');
             if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
                 closeHamburger();
+            }
+
+            const card = document.getElementById('driver-card');
+            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
+                card.classList.remove('expanded');
+            }
+            
+            const stDock = document.getElementById('station-pills-dock');
+            const stBtn = document.getElementById('st-pills-toggle-btn');
+            if (stDock && stDock.classList.contains('expanded') && !stDock.contains(e.target) && (!stBtn || !stBtn.contains(e.target))) {
+                stDock.classList.remove('expanded');
             }
         });
 
@@ -1748,12 +1994,7 @@
             const card = document.getElementById('driver-card');
             card.classList.toggle('expanded');
         }
-        document.addEventListener('click', function(e) {
-            const card = document.getElementById('driver-card');
-            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
-                card.classList.remove('expanded');
-            }
-        });
+        
         function initiateCall(e) {
             if (e) e.stopPropagation();
             const ph = document.getElementById('driver-phone').innerText;
@@ -1948,6 +2189,243 @@
             });
         }
 
+        // ── Station Pills Logic & State ──
+        let _stPillsData = [];
+        let _stPopupInterval = 0; // ms
+        let _stAutoPopupTimer = null;
+        let _stAnnounceQueue = [];
+        let _isAnnouncing = false;
+        let _stPillsFirstLoad = true;
+        let _stPopupIdx = -1;
+
+        function parseStationPills(rawString) {
+            if (!rawString || rawString.trim() === '') return [];
+            return rawString.split('•').map(s => {
+                let text = s.trim();
+                if (!text) return null;
+                let isFilled = false;
+                let remark = null;
+                
+                if (text.includes('✓')) {
+                    isFilled = true;
+                    text = text.replace('✓', '').trim();
+                }
+                
+                const remarkMatch = text.match(/\[(.*?)\]/);
+                if (remarkMatch) {
+                    remark = remarkMatch[1].trim();
+                    text = text.replace(remarkMatch[0], '').trim();
+                }
+                
+                return { name: text, isFilled, remark };
+            }).filter(item => item && item.name);
+        }
+
+        function handleStationPills(r2c50, r2c51) {
+            if (r2c51) _stPopupInterval = (parseFloat(r2c51) || 0) * 1000;
+            
+            const newPillsData = parseStationPills(r2c50);
+            
+            if (_stPillsFirstLoad) {
+                _stPillsData = newPillsData;
+                renderStationPills();
+                _stPillsFirstLoad = false;
+            } else {
+                const newAdded = newPillsData.filter(np => 
+                    !_stPillsData.some(op => op.name === np.name)
+                );
+                
+                _stPillsData = newPillsData;
+                
+                if (newAdded.length > 0) {
+                    _stAnnounceQueue.push(...newAdded);
+                    processAnnounceQueue();
+                } else {
+                    renderStationPills();
+                }
+            }
+        }
+
+        function renderStationPills() {
+            const dock = document.getElementById('station-pills-dock');
+            if (!dock) return;
+            
+            const toggleBtn = document.getElementById('st-pills-toggle-btn');
+            const badge = document.getElementById('st-pills-badge');
+            
+            if (_stPillsData.length === 0) {
+                dock.innerHTML = '';
+                if (toggleBtn) toggleBtn.style.display = 'none';
+                stopAutoPopup();
+                return;
+            } else {
+                if (toggleBtn) toggleBtn.style.display = '';
+            }
+            
+            dock.innerHTML = _stPillsData.map((p, idx) => {
+                const fillCls = p.isFilled ? 'st-filled' : '';
+                const remarkHtml = p.remark ? `<div class="st-remark-bubble">${p.remark}</div>` : '';
+                return `<div class="st-pill ${fillCls}" id="st-pill-${idx}">
+                    ${p.name}
+                    ${remarkHtml}
+                </div>`;
+            }).join('');
+            
+            if (toggleBtn && badge) {
+                const filledCount = _stPillsData.filter(p => p.isFilled).length;
+                if (filledCount > 0) {
+                    toggleBtn.classList.add('has-updates');
+                    badge.textContent = filledCount;
+                } else {
+                    toggleBtn.classList.remove('has-updates');
+                    badge.textContent = '';
+                }
+            }
+            
+            startAutoPopup();
+        }
+
+        function startAutoPopup() {
+            stopAutoPopup();
+            if (_stPopupInterval <= 0) return;
+            
+            const pillsWithRemarks = _stPillsData.map((p, i) => ({p, i})).filter(x => x.p.remark);
+            if (pillsWithRemarks.length === 0) return;
+            
+            _stAutoPopupTimer = setInterval(() => {
+                document.querySelectorAll('.st-pill.auto-popup').forEach(el => el.classList.remove('auto-popup'));
+                
+                _stPopupIdx = (_stPopupIdx + 1) % pillsWithRemarks.length;
+                const targetIdx = pillsWithRemarks[_stPopupIdx].i;
+                const pillEl = document.getElementById(`st-pill-${targetIdx}`);
+                if (pillEl) {
+                    pillEl.classList.add('auto-popup');
+                    setTimeout(() => {
+                        if (pillEl) pillEl.classList.remove('auto-popup');
+                    }, Math.min(3000, _stPopupInterval - 200)); 
+                }
+            }, _stPopupInterval);
+        }
+
+        function stopAutoPopup() {
+            if (_stAutoPopupTimer) clearInterval(_stAutoPopupTimer);
+            _stAutoPopupTimer = null;
+        }
+
+        function processAnnounceQueue() {
+            if (_isAnnouncing || _stAnnounceQueue.length === 0) {
+                if (_stAnnounceQueue.length === 0 && !_isAnnouncing) renderStationPills();
+                return;
+            }
+            
+            _isAnnouncing = true;
+            const p = _stAnnounceQueue.shift();
+            
+            const overlay = document.getElementById('st-announce-overlay');
+            const card = document.getElementById('st-announce-card');
+            const nameEl = document.getElementById('st-announce-name');
+            
+            nameEl.textContent = p.name;
+            nameEl.className = 'st-announce-name ' + (p.isFilled ? 'filled' : '');
+            
+            card.className = 'st-announce-card';
+            overlay.classList.add('visible');
+            
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    card.classList.add('pop');
+                    
+                    setTimeout(() => {
+                        card.classList.remove('pop');
+                        card.classList.add('fly-down');
+                        overlay.classList.remove('visible');
+                        
+                        setTimeout(() => {
+                            _isAnnouncing = false;
+                            processAnnounceQueue(); 
+                        }, 500); 
+                        
+                    }, 2000); 
+                }, 50);
+            });
+        }
+
+        // Update function for circular progress bars
+        function updateCircularProgress(val, fillId, valId) {
+            const pct = parseFloat(val);
+            const fillEl = document.getElementById(fillId);
+            const valEl = document.getElementById(valId);
+            if (!fillEl || !valEl) return;
+            const CIRCUMFERENCE = 113.1;
+            if (!isNaN(pct)) {
+                const clamped = Math.min(100, Math.max(0, pct)); 
+                valEl.innerText = clamped.toFixed(0) + '%';
+                const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
+                setTimeout(() => { fillEl.style.strokeDashoffset = offset; }, 80);
+                
+                if (clamped >= 80) { 
+                    fillEl.style.stroke = 'var(--success)';
+                    valEl.style.color = 'var(--success)'; 
+                } else if (clamped >= 50) { 
+                    fillEl.style.stroke = 'var(--primary)';
+                    valEl.style.color = 'var(--primary)'; 
+                } else { 
+                    fillEl.style.stroke = 'var(--error)';
+                    valEl.style.color = 'var(--error)'; 
+                }
+            } else { 
+                valEl.innerText = '—'; 
+                fillEl.style.strokeDashoffset = CIRCUMFERENCE; 
+            }
+        }
+
+        // Render bar chart function
+        function renderMaintBarChart(raw) {
+            const container = document.getElementById('maint-barchart-container');
+            if (!container) return;
+            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
+
+            const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
+            if (matches.length === 0) return;
+
+            const dataMap = {};
+            matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
+
+            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+            const currentMonthIdx = new Date().getMonth();
+            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+            const currentMonthName = monthNames[currentMonthIdx];
+            const currentFyIdx = fyOrder.indexOf(currentMonthName);
+
+            let maxVal = 0;
+            const chartData = [];
+            for (let i = 0; i <= currentFyIdx; i++) {
+                const m = fyOrder[i];
+                const v = dataMap[m] || 0;
+                chartData.push({ month: m, val: v });
+                if (v > maxVal) maxVal = v;
+            }
+
+            container.innerHTML = chartData.map(d => {
+                return `
+                <div class="bc-col">
+                    <div class="bc-bar-bg">
+                        <div class="bc-bar-fill" style="height: 0%;">
+                            <div class="bc-value">${d.val}</div>
+                        </div>
+                    </div>
+                    <div class="bc-label">${d.month}</div>
+                </div>`;
+            }).join('');
+
+            setTimeout(() => {
+                const fills = container.querySelectorAll('.bc-bar-fill');
+                chartData.forEach((d, i) => {
+                    if (fills[i]) fills[i].style.height = (maxVal > 0 ? (d.val / maxVal) * 100 : 0) + '%';
+                });
+            }, 100);
+        }
+
         window.draw = function(data) {
             const timeEl = document.getElementById('refresh-time');
             if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -1961,6 +2439,7 @@
             let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
             let opsScheduleLines = null;
             let irWeather = '', irItems = '', irImages = '';
+            let statPillsRaw = '', statPillsIntervalRaw = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
@@ -2004,6 +2483,10 @@
                 if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
                 if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
                 
+                // Station Pills Parameters
+                if (param === 'sheetab_R2C50' && unit === 'sheetab') statPillsRaw = val;
+                if (param === 'sheetab_R2C51' && unit === 'sheetab') statPillsIntervalRaw = val;
+
                 // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
                 if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
@@ -2067,38 +2550,18 @@
                 }
 
                 if (unit === 'sheetab') {
-                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINTENANCE PROGRESS'; }
-                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SECONDARY PROGRESS'; }
+                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
+                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
+                    if (param === 'sheetab_R1C45') { const el = document.getElementById('maint-barchart-label'); if(el) el.innerText = val || 'MONTHLY TREND'; }
                     
-                    if (param === 'sheetab_R2C27') { updateProgressBar(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
-                    if (param === 'sheetab_R2C44') { updateProgressBar(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
+                    if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
+                    if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
+                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
                 }
             });
-
-            function updateProgressBar(val, fillId, valId) {
-                const pct = parseFloat(val);
-                const fillEl = document.getElementById(fillId);
-                const valEl = document.getElementById(valId);
-                if (!fillEl || !valEl) return;
-                if (!isNaN(pct)) {
-                    const clamped = Math.min(100, Math.max(0, pct)); 
-                    valEl.innerText = clamped.toFixed(1) + '%';
-                    setTimeout(() => { fillEl.style.width = clamped + '%'; }, 80);
-                    if (clamped >= 80) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--success) 0%, color-mix(in srgb, var(--success) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--success)'; 
-                    } else if (clamped >= 50) { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--primary)'; 
-                    } else { 
-                        fillEl.style.background = 'linear-gradient(90deg, var(--error) 0%, color-mix(in srgb, var(--error) 60%, white) 100%)'; 
-                        valEl.style.color = 'var(--error)'; 
-                    }
-                } else { 
-                    valEl.innerText = '—'; 
-                    fillEl.style.width = '0%'; 
-                }
-            }
+            
+            // Execute Station Pills Handling
+            handleStationPills(statPillsRaw, statPillsIntervalRaw);
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
