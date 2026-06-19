@@ -815,7 +815,7 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER ── */
+        /* ── MAINTENANCE PROGRESS BAR ── */
         .maint-progress-footer {
             margin-top: auto;
             padding-top: 12px;
@@ -830,38 +830,97 @@
                 padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
             }
         }
-        .maint-progress-right { 
-            display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
+        /* ── MAINTENANCE CIRCULAR PROGRESS RINGS ── */
+        .maint-rings-wrapper {
+            display: flex; flex-direction: row; align-items: center; gap: 10px;
+            flex-shrink: 0;
+        }
+        .maint-ring-group {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .maint-ring-svg-wrap {
+            position: relative; width: 72px; height: 72px;
+        }
+        .maint-ring-svg {
+            width: 72px; height: 72px;
+            transform: rotate(-90deg);
+            overflow: visible;
+        }
+        .mring-track {
+            fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 5;
+        }
+        [data-theme="light"] .mring-track { stroke: rgba(0,0,0,0.08); }
+        .mring-fill {
+            fill: none; stroke-width: 5; stroke-linecap: round;
+            stroke: var(--primary);
+            transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1), stroke 0.8s ease;
+            filter: drop-shadow(0 0 4px rgba(125,190,255,0.5));
+        }
+        .mring-fill.ring-high { stroke: var(--success); filter: drop-shadow(0 0 4px rgba(114,212,138,0.5)); }
+        .mring-fill.ring-mid  { stroke: var(--primary); filter: drop-shadow(0 0 4px rgba(125,190,255,0.5)); }
+        .mring-fill.ring-low  { stroke: var(--error);   filter: drop-shadow(0 0 4px rgba(255,180,171,0.5)); }
+        .maint-ring-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .maint-ring-pct {
+            font-family: var(--font-display); font-size: 0.82rem; font-weight: 900;
+            color: var(--primary); letter-spacing: -0.5px; line-height: 1;
+            transition: color 0.8s ease;
+        }
+        .maint-ring-pct.pct-high { color: var(--success); }
+        .maint-ring-pct.pct-mid  { color: var(--primary); }
+        .maint-ring-pct.pct-low  { color: var(--error); }
+        .maint-ring-label {
+            font-family: var(--font-display); font-size: 0.46rem; font-weight: 900;
+            letter-spacing: 0.8px; text-transform: uppercase;
+            color: var(--on-surface-variant); opacity: 0.65;
+            text-align: center; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;
         }
 
-        /* Circular progress styling */
-        .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
-        .maint-circ-item { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 60px; }
-        .circ-svg-wrap { position: relative; width: 44px; height: 44px; }
-        .circ-svg-wrap svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .circ-bg { fill: none; stroke: var(--surface-variant); stroke-width: 4; }
-        .circ-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1), stroke 1.2s ease; }
-        .circ-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.75rem; font-weight: 900; letter-spacing: 0.5px; }
-        .circ-label { font-family: var(--font-display); font-size: 0.48rem; font-weight: 800; text-transform: uppercase; color: var(--on-surface-variant); text-align: center; line-height: 1.2; letter-spacing: 0.5px; max-width: 64px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* Keep hidden elements for JS compatibility */
+        .maint-bars-wrapper, .maint-bar-group,
+        .maint-progress-track, .maint-progress-fill,
+        .maint-progress-meta, .maint-progress-label { display: none !important; }
 
-        /* Bar chart styling */
-        .maint-barchart-container {
-            flex: 1; min-width: 120px; height: 64px;
-            display: flex; align-items: flex-end; gap: 2px;
-            padding: 4px 6px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--surface-variant);
-            border-radius: var(--radius-s);
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+        /* ── MAINTENANCE BAR CHART (R2C45) ── */
+        .maint-barchart-section {
+            border-top: 1.5px solid var(--surface-variant);
+            padding-top: 10px;
+            margin-top: 6px;
+            flex-shrink: 0;
         }
-        [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
-        .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
-        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
-        .bc-bar-fill { width: 100%; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
-        .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
-        .bc-tooltip { position: absolute; bottom: calc(100% + 4px); left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-size: 0.55rem; font-weight: 900; background: var(--surface-variant); color: var(--on-surface); padding: 2px 6px; border-radius: 4px; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10; border: 1px solid var(--outline); box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
-        .bc-col:hover .bc-tooltip { opacity: 1; }
+        .maint-barchart-label {
+            font-family: var(--font-display); font-size: 0.5rem; font-weight: 900;
+            letter-spacing: 1.2px; text-transform: uppercase;
+            color: var(--on-surface-variant); opacity: 0.6;
+            margin-bottom: 6px;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .maint-barchart-label .material-symbols-rounded { font-size: 12px !important; opacity: 0.7; }
+        .maint-barchart-canvas-wrap {
+            width: 100%; height: 80px; position: relative;
+        }
+        .maint-barchart-svg {
+            width: 100%; height: 100%; overflow: visible;
+        }
+        .mbc-bar {
+            fill: var(--primary);
+            opacity: 0.72;
+            rx: 3px;
+            transition: opacity 0.2s;
+        }
+        .mbc-bar:hover { opacity: 1; }
+        .mbc-bar.mbc-bar-zero { fill: var(--outline); opacity: 0.25; }
+        .mbc-x-label {
+            font-family: var(--font-display); font-size: 7px; font-weight: 800;
+            fill: var(--on-surface-variant); opacity: 0.55; text-anchor: middle;
+        }
+        .mbc-value-label {
+            font-family: var(--font-display); font-size: 7.5px; font-weight: 900;
+            fill: var(--primary); text-anchor: middle;
+        }
+        .mbc-value-label.mbc-val-zero { fill: var(--outline); opacity: 0.4; }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1119,32 +1178,91 @@
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
-        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
-        #info-rotator { position: fixed; bottom: 54px; right: 10px; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
+        /* ── INFO ROTATOR WIDGET (Lower Third — Left Side) ── */
+        @keyframes ir-slide-in {
+            0%  { transform: translateX(-110%); opacity: 0; }
+            100%{ transform: translateX(0);     opacity: 1; }
+        }
+        @keyframes ir-slide-out {
+            0%  { transform: translateX(0);     opacity: 1; }
+            100%{ transform: translateX(-110%); opacity: 0; }
+        }
+        @keyframes ir-fade-cross {
+            0%  { opacity: 1; }
+            40% { opacity: 0; }
+            60% { opacity: 0; }
+            100%{ opacity: 1; }
+        }
+
+        #info-rotator {
+            position: fixed;
+            bottom: 62px;
+            left: 10px;
+            z-index: 1005;
+            width: max-content;
+            min-width: 360px;
+            max-width: min(780px, calc(100vw - 20px));
+            /* entrance animation */
+            transform: translateX(-110%);
+            opacity: 0;
+            transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+        }
+        #info-rotator.ir-visible {
+            animation: ir-slide-in 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards;
+        }
+        #info-rotator.ir-leaving {
+            animation: ir-slide-out 0.42s cubic-bezier(0.4,0,1,1) forwards;
+        }
+        /* Cross-fade between slides while rotator stays visible */
+        #info-rotator.ir-fade-cross .ir-slab {
+            animation: ir-fade-cross 0.5s ease forwards;
+        }
+
         .ir-slab {
-            width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
-            background: rgba(14, 20, 32, 0.82);
-            border: 1px solid rgba(125,190,255,0.22);
+            width: 100%; min-width: 0; height: 88px; border-radius: var(--radius-m);
+            background: rgba(14, 20, 32, 0.86);
+            border: 1px solid rgba(125,190,255,0.28);
+            border-left: 4px solid var(--primary);
             box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
-                        inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
+                        inset 0 1.5px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.25);
             backdrop-filter: blur(36px) saturate(2.4); -webkit-backdrop-filter: blur(36px) saturate(2.4);
-            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
-            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
+            overflow: hidden;
+            display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+            padding: 10px 16px 10px 14px; gap: 12px; box-sizing: border-box;
+            position: relative;
         }
-        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,97,164,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
-        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.2; } }
-        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.2; } 100% { transform: rotateX(0deg); opacity: 1; } }
-        .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
-        .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
-        .ir-accent-bar {
-            position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
-            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 50%, transparent) 100%);
-            border-radius: var(--radius-m) 0 0 var(--radius-m);
-            box-shadow: 2px 0 14px rgba(125,190,255,0.4);
+        [data-theme="light"] .ir-slab {
+            background: rgba(238,246,255,0.92); border-color: rgba(0,97,164,0.28);
+            border-left-color: var(--primary);
+            box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98);
         }
-        
+        /* Subtle live-pulse dot */
+        .ir-slab::after {
+            content: '';
+            position: absolute; top: 10px; right: 12px;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 6px var(--primary);
+            animation: ir-live-pulse 2s ease-in-out infinite;
+        }
+        @keyframes ir-live-pulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.35; transform: scale(0.7); }
+        }
+
+        /* Progress bar at bottom of slab */
+        .ir-progress-bar {
+            position: absolute; bottom: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 60%, white));
+            border-radius: 0 0 0 var(--radius-m);
+            transition: width 0.1s linear;
+            width: 0%;
+        }
+
+        .ir-accent-bar { display: none; }
+
         .ir-icon-wrap {
-            width: 64px; height: 64px; border-radius: var(--radius-m); flex-shrink: 0;
+            width: 56px; height: 56px; border-radius: var(--radius-m); flex-shrink: 0;
             background: rgba(125,190,255,0.1);
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.12);
             border: 1px solid rgba(125,190,255,0.28);
@@ -1154,26 +1272,39 @@
             background: rgba(0,97,164,0.08); border-color: rgba(0,97,164,0.2);
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.9);
         }
-        .ir-icon-wrap .material-symbols-rounded { font-size: 36px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
+        .ir-icon-wrap .material-symbols-rounded { font-size: 30px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
         .ir-icon-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
         
         .ir-text-col { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; justify-content: center; }
         .ir-headline {
-            font-family: var(--font-display); font-size: 1.6rem; font-weight: 900;
+            font-family: var(--font-display); font-size: 1.45rem; font-weight: 900;
             color: var(--on-surface); text-align: left; line-height: 1.18; letter-spacing: -0.4px;
             white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
             overflow: hidden; max-width: 100%; margin: 0;
         }
         .ir-label {
-            font-family: var(--font-display); font-size: 0.6rem; font-weight: 800;
+            font-family: var(--font-display); font-size: 0.58rem; font-weight: 800;
             color: var(--primary); opacity: 0.85; text-align: left;
             letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 3px;
             text-transform: uppercase;
         }
-        .ir-dots-row { display: flex; justify-content: flex-start; gap: 4px; margin-top: 6px; }
+        .ir-dots-row { display: flex; justify-content: flex-start; gap: 4px; margin-top: 5px; }
         .ir-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.35s ease, width 0.35s cubic-bezier(0.4,0,0.2,1); }
         [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.14); }
         .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
+
+        /* Mobile dismiss button */
+        .ir-dismiss-btn {
+            display: none;
+            position: absolute; top: 7px; right: 22px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+            color: var(--on-surface-variant); cursor: pointer;
+            align-items: center; justify-content: center;
+            font-family: var(--font-display); font-size: 10px; font-weight: 900;
+            transition: background 0.2s;
+        }
+        .ir-dismiss-btn:hover { background: rgba(255,255,255,0.22); }
 
         /* ── BLACKOUT ── */
         #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
@@ -1365,10 +1496,19 @@
             .fail-val { font-size: 1.1rem; }
             .hamburger-menu { right: 0; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: 46px; right: 8px; left: 8px; }
-            .ir-slab { height: auto !important; min-height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
-            .ir-icon-wrap { width: 52px; height: 52px; }
-            .ir-headline { font-size: 1.05rem !important; white-space: normal; }
+            #info-rotator {
+                min-width: unset !important;
+                width: calc(100vw - 16px) !important;
+                max-width: calc(100vw - 16px) !important;
+                bottom: auto !important;
+                top: 8px;
+                left: 8px !important;
+                right: 8px !important;
+            }
+            .ir-slab { height: auto !important; min-height: 72px; padding: 8px 12px 10px 12px; gap: 10px; }
+            .ir-icon-wrap { width: 48px; height: 48px; }
+            .ir-headline { font-size: 1rem !important; white-space: normal; }
+            .ir-dismiss-btn { display: flex; }
 
             #stock-dock { right: 10px; bottom: 54px; width: 160px; }
             #maint-counts-dock { margin-top: 8px; }
@@ -1408,8 +1548,8 @@
             .chk-d-label { font-size: 0.62rem; }
             .chk-d-status { font-size: 0.62rem; }
             
-            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
-            .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
+            #info-rotator { width: calc(100vw - 16px) !important; bottom: auto; top: 8px; right: 8px; left: 8px; z-index: 1005; }
+            .ir-slab { height: auto !important; min-height: 68px; padding: 7px 12px 9px 12px; gap: 8px; }
             
             #stock-dock { display: none; }
             .mcd-val { font-size: 1.3rem; }
@@ -1602,30 +1742,43 @@
                                 <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
                         </div>
-                        <div class="maint-circ-wrap">
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                        <div class="maint-rings-wrapper">
+                            <div class="maint-ring-group">
+                                <div class="maint-ring-svg-wrap">
+                                    <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg" id="maint-ring-svg-1">
+                                        <circle class="mring-track" cx="36" cy="36" r="28"/>
+                                        <circle class="mring-fill" id="maint-ring-fill-1" cx="36" cy="36" r="28" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
                                     </svg>
-                                    <div class="circ-val" id="maint-progress-value-1">—</div>
+                                    <div class="maint-ring-center">
+                                        <span class="maint-ring-pct" id="maint-progress-value-1">—</span>
+                                    </div>
                                 </div>
-                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                                <span id="maint-progress-label-1" class="maint-ring-label">Maint. Progress</span>
                             </div>
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                            <div class="maint-ring-group">
+                                <div class="maint-ring-svg-wrap">
+                                    <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg" id="maint-ring-svg-2">
+                                        <circle class="mring-track" cx="36" cy="36" r="28"/>
+                                        <circle class="mring-fill" id="maint-ring-fill-2" cx="36" cy="36" r="28" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
                                     </svg>
-                                    <div class="circ-val" id="maint-progress-value-2">—</div>
+                                    <div class="maint-ring-center">
+                                        <span class="maint-ring-pct" id="maint-progress-value-2">—</span>
+                                    </div>
                                 </div>
-                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                                <span id="maint-progress-label-2" class="maint-ring-label">Secondary</span>
                             </div>
                         </div>
-                        <div class="maint-barchart-container" id="maint-barchart-container">
-                            </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart: Monthly data from sheetab R2C45 -->
+                <div class="maint-barchart-section" id="maint-barchart-section" style="display:none;">
+                    <div class="maint-barchart-label">
+                        <span class="material-symbols-rounded">bar_chart</span>
+                        <span id="maint-barchart-title">Monthly Activity</span>
+                    </div>
+                    <div class="maint-barchart-canvas-wrap">
+                        <svg class="maint-barchart-svg" id="maint-barchart-svg"></svg>
                     </div>
                 </div>
 
@@ -1759,11 +1912,13 @@
                 <div class="ir-label"   id="ir-label"></div>
                 <div class="ir-dots-row" id="ir-dots"></div>
             </div>
+            <button class="ir-dismiss-btn" onclick="irDismiss()" aria-label="Dismiss">✕</button>
+            <div class="ir-progress-bar" id="ir-progress-bar"></div>
         </div>
     </div>
 
     <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
+        <div id="ticker-head" class="ticker-head"><span id="ticker-head-date">IMPORTANT NOTICE</span></div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
         </div>
@@ -2243,81 +2398,6 @@
             });
         }
 
-        // Update function for circular progress bars
-        function updateCircularProgress(val, fillId, valId) {
-            const pct = parseFloat(val);
-            const fillEl = document.getElementById(fillId);
-            const valEl = document.getElementById(valId);
-            if (!fillEl || !valEl) return;
-            const CIRCUMFERENCE = 113.1;
-            if (!isNaN(pct)) {
-                const clamped = Math.min(100, Math.max(0, pct)); 
-                valEl.innerText = clamped.toFixed(0) + '%';
-                const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
-                setTimeout(() => { fillEl.style.strokeDashoffset = offset; }, 80);
-                
-                if (clamped >= 80) { 
-                    fillEl.style.stroke = 'var(--success)';
-                    valEl.style.color = 'var(--success)'; 
-                } else if (clamped >= 50) { 
-                    fillEl.style.stroke = 'var(--primary)';
-                    valEl.style.color = 'var(--primary)'; 
-                } else { 
-                    fillEl.style.stroke = 'var(--error)';
-                    valEl.style.color = 'var(--error)'; 
-                }
-            } else { 
-                valEl.innerText = '—'; 
-                fillEl.style.strokeDashoffset = CIRCUMFERENCE; 
-            }
-        }
-
-        // Render bar chart function
-        function renderMaintBarChart(raw) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
-
-            const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return;
-
-            const dataMap = {};
-            matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
-
-            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-            const currentMonthIdx = new Date().getMonth();
-            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const currentMonthName = monthNames[currentMonthIdx];
-            const currentFyIdx = fyOrder.indexOf(currentMonthName);
-
-            let maxVal = 0;
-            const chartData = [];
-            for (let i = 0; i <= currentFyIdx; i++) {
-                const m = fyOrder[i];
-                const v = dataMap[m] || 0;
-                chartData.push({ month: m, val: v });
-                if (v > maxVal) maxVal = v;
-            }
-
-            container.innerHTML = chartData.map(d => {
-                return `
-                <div class="bc-col">
-                    <div class="bc-bar-bg">
-                        <div class="bc-tooltip">${d.val}</div>
-                        <div class="bc-bar-fill" style="height: 0%;"></div>
-                    </div>
-                    <div class="bc-label">${d.month}</div>
-                </div>`;
-            }).join('');
-
-            setTimeout(() => {
-                const fills = container.querySelectorAll('.bc-bar-fill');
-                chartData.forEach((d, i) => {
-                    if (fills[i]) fills[i].style.height = (maxVal > 0 ? (d.val / maxVal) * 100 : 0) + '%';
-                });
-            }, 100);
-        }
-
         window.draw = function(data) {
             const timeEl = document.getElementById('refresh-time');
             if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -2332,6 +2412,7 @@
             let opsScheduleLines = null;
             let irWeather = '', irItems = '', irImages = '';
             let statPillsRaw = '', statPillsIntervalRaw = '';
+            let r2c45Raw = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
@@ -2378,6 +2459,9 @@
                 // Station Pills Parameters
                 if (param === 'sheetab_R2C50' && unit === 'sheetab') statPillsRaw = val;
                 if (param === 'sheetab_R2C51' && unit === 'sheetab') statPillsIntervalRaw = val;
+
+                // Bar chart R2C45
+                if (param === 'sheetab_R2C45' && unit === 'sheetab') r2c45Raw = val;
 
                 // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
@@ -2442,17 +2526,49 @@
                 }
 
                 if (unit === 'sheetab') {
-                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
-                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
+                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'Maint. Progress'; }
+                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'Secondary'; }
                     
-                    if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
-                    if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
+                    if (param === 'sheetab_R2C27') { updateCircularRing(val, 'maint-ring-fill-1', 'maint-progress-value-1'); }
+                    if (param === 'sheetab_R2C44') { updateCircularRing(val, 'maint-ring-fill-2', 'maint-progress-value-2'); }
                 }
             });
             
             // Execute Station Pills Handling
             handleStationPills(statPillsRaw, statPillsIntervalRaw);
+
+            // Draw bar chart if R2C45 data available
+            if (r2c45Raw) { updateMaintBarChart(r2c45Raw); }
+
+            function updateCircularRing(val, ringFillId, valId) {
+                const pct = parseFloat(val);
+                const ringEl = document.getElementById(ringFillId);
+                const valEl  = document.getElementById(valId);
+                if (!valEl) return;
+                const CIRCUMFERENCE = 175.93;
+                if (!isNaN(pct)) {
+                    const clamped = Math.min(100, Math.max(0, pct));
+                    const offset  = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
+                    valEl.innerText = clamped.toFixed(1) + '%';
+                    if (ringEl) {
+                        setTimeout(() => { ringEl.style.strokeDashoffset = offset.toFixed(2); }, 80);
+                        const cls = clamped >= 75 ? 'ring-high' : clamped >= 40 ? 'ring-mid' : 'ring-low';
+                        const pCls = clamped >= 75 ? 'pct-high' : clamped >= 40 ? 'pct-mid' : 'pct-low';
+                        ringEl.className = 'mring-fill ' + cls;
+                        valEl.className  = 'maint-ring-pct ' + pCls;
+                    }
+                } else {
+                    valEl.innerText = '—';
+                    if (ringEl) ringEl.style.strokeDashoffset = CIRCUMFERENCE;
+                }
+            }
+
+            // Keep legacy stub (called nowhere now but guard in case)
+            function updateProgressBar(val, fillId, valId) {
+                // Redirected to ring renderer
+                const ringIdMap = { 'maint-progress-fill-1': 'maint-ring-fill-1', 'maint-progress-fill-2': 'maint-ring-fill-2' };
+                updateCircularRing(val, ringIdMap[fillId] || fillId, valId);
+            }
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
@@ -2707,6 +2823,81 @@
         }
         setInterval(updateClocks, 1000);
 
+        // Update ticker head with current date & day
+        function updateTickerHeadDate() {
+            const el = document.getElementById('ticker-head-date');
+            if (!el) return;
+            const now = new Date();
+            const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+            const day  = days[now.getDay()];
+            const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+            el.innerText = day + ' · ' + dateStr;
+        }
+        updateTickerHeadDate();
+        setInterval(updateTickerHeadDate, 60000);
+
+        // ── MAINTENANCE BAR CHART (R2C45) ──
+        function updateMaintBarChart(raw) {
+            if (!raw || raw.trim() === '') return;
+            const section = document.getElementById('maint-barchart-section');
+            const svgEl   = document.getElementById('maint-barchart-svg');
+            if (!section || !svgEl) return;
+
+            // Financial year month order: APR→MAR
+            const FY_ORDER = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+
+            // Parse: "APR,46MAY,33JUN,34..." OR "APR,46\nMAY,33..."
+            const entries = [];
+            const regex = /([A-Z]{3}),(\d+\.?\d*)/g;
+            let match;
+            while ((match = regex.exec(raw.replace(/\s+/g, ''))) !== null) {
+                entries.push({ month: match[1].toUpperCase(), value: parseFloat(match[2]) });
+            }
+            if (entries.length === 0) return;
+
+            // Only show months that have passed in FY (value > 0 or first N months based on current month)
+            const now = new Date();
+            const curMonth = now.getMonth(); // 0=Jan … 11=Dec
+            // FY current index: APR=0 in FY. Map curMonth to FY index.
+            const monthToFY = { 3:0,4:1,5:2,6:3,7:4,8:5,9:6,10:7,11:8,0:9,1:10,2:11 };
+            const currentFYIdx = monthToFY[curMonth];
+
+            // Show months up to and including current FY month
+            const visible = entries.filter((e, i) => {
+                const fyIdx = FY_ORDER.indexOf(e.month);
+                return fyIdx !== -1 && fyIdx <= currentFYIdx;
+            });
+
+            if (visible.length === 0) return;
+
+            const maxVal = Math.max(...visible.map(e => e.value), 1);
+            section.style.display = '';
+
+            // SVG layout
+            const W = 280, H = 72, PAD_L = 4, PAD_R = 4, PAD_TOP = 16, PAD_BOT = 16;
+            const chartW = W - PAD_L - PAD_R;
+            const chartH = H - PAD_TOP - PAD_BOT;
+            const n = visible.length;
+            const gap = 3;
+            const barW = Math.max(6, (chartW - gap * (n - 1)) / n);
+
+            let bars = '', labels = '', values = '';
+            visible.forEach((e, i) => {
+                const x = PAD_L + i * (barW + gap);
+                const barH = e.value > 0 ? Math.max(4, (e.value / maxVal) * chartH) : 2;
+                const y = PAD_TOP + chartH - barH;
+                const isZero = e.value === 0;
+                bars += `<rect class="mbc-bar${isZero ? ' mbc-bar-zero' : ''}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" rx="2"/>`;
+                labels += `<text class="mbc-x-label" x="${(x + barW/2).toFixed(1)}" y="${(H - 2).toFixed(1)}">${e.month}</text>`;
+                if (!isZero) {
+                    values += `<text class="mbc-value-label" x="${(x + barW/2).toFixed(1)}" y="${(y - 3).toFixed(1)}">${e.value}</text>`;
+                }
+            });
+
+            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svgEl.innerHTML = bars + labels + values;
+        }
+
         function refreshData() {
             const old = document.getElementById('api-script'); if (old) old.remove();
             const s = document.createElement('script'); s.id = 'api-script';
@@ -2715,19 +2906,30 @@
         setInterval(refreshData, 120000); refreshData(); updateClocks();
         window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
 
-        let _irTimer = null, _irIdx = 0, _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
-        const IR_FLIP_DUR = 360; 
+        let _irTimer = null, _irProgressTimer = null, _irIdx = 0;
+        let _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
+        let _irBatchVisible = false; // true = rotator is slid-in for this batch
+
+        const IR_FADE_DUR = 400;  // ms for cross-fade between slides
+        const IR_SLIDE_DUR = 560; // ms for slide-in / slide-out animation
+
+        function irDismiss() {
+            _irSlideOut(() => {
+                document.getElementById('info-rotator').style.display = 'none';
+                _irBatchVisible = false;
+            });
+        }
 
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             let currentSlides = [];
-            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
+            // NOTE: date card intentionally omitted
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
-                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg  = ((irRowImages || {})[rowNum] || '').trim();
+                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg = ((irRowImages || {})[rowNum] || '').trim();
                 if (!rawItem) return;
-                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== ''), imageLines = rawImg.split('\n').map(l => l.trim());
+                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== '');
+                const imageLines = rawImg.split('\n').map(l => l.trim());
                 itemLines.forEach((line, i) => {
                     const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
                     let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
@@ -2737,17 +2939,14 @@
 
             const newHash = JSON.stringify(currentSlides);
             if (_irPrevHash === null) {
-                // First load
                 _irSlides = currentSlides;
                 _irPrevHash = newHash;
                 _startIrCycle(_irSlides, true);
             } else if (_irPrevHash !== newHash) {
-                // Data changed: Compare and find newly added slides
                 let newSlides = currentSlides.filter(cs => !_irSlides.some(os => os.headline === cs.headline && os.icon === cs.icon));
                 _irSlides = currentSlides;
                 _irPrevHash = newHash;
                 if (newSlides.length > 0) {
-                    // Play only the new slides immediately
                     _startIrCycle(newSlides, false);
                 }
             }
@@ -2755,140 +2954,131 @@
 
         function _startIrCycle(slidesToPlay, isIntervalLoop) {
             if (_irTimer) clearTimeout(_irTimer);
-            
+            if (_irProgressTimer) clearInterval(_irProgressTimer);
+
             if (!slidesToPlay || slidesToPlay.length === 0) {
-                document.getElementById('info-rotator').style.display = 'none';
-                const interval = window._irInterval !== undefined ? window._irInterval : 5000;
+                const interval = window._irInterval !== undefined ? window._irInterval : 30000;
                 _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
                 return;
             }
 
             _irActiveSlides = slidesToPlay;
             _irIdx = 0;
-            document.getElementById('info-rotator').style.display = '';
-            _renderIRSlide(true, isIntervalLoop);
+
+            const rotator = document.getElementById('info-rotator');
+            rotator.style.display = '';
+
+            if (!_irBatchVisible) {
+                // Slide in from left for the whole batch
+                rotator.classList.remove('ir-leaving');
+                rotator.classList.add('ir-visible');
+                _irBatchVisible = true;
+                _irTimer = setTimeout(() => {
+                    _applyIRSlide();
+                    _scheduleNextSlide(isIntervalLoop);
+                }, IR_SLIDE_DUR);
+            } else {
+                _applyIRSlide();
+                _scheduleNextSlide(isIntervalLoop);
+            }
         }
 
-        function _renderIRSlide(animateIn, isIntervalLoop) {
-            const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
-            if (!slab) return;
-
+        function _applyIRSlide() {
+            const iconWrap = document.getElementById('ir-icon-wrap');
+            const headline = document.getElementById('ir-headline');
+            const label    = document.getElementById('ir-label');
+            const dotsEl   = document.getElementById('ir-dots');
             const s = _irActiveSlides[_irIdx];
             if (!s) return;
 
-            function _applySlide() {
-                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
-                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
-                else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
-
-                headline.textContent = s.headline;
-                label.textContent = s.label; label.style.display = s.label ? '' : 'none';
-                dotsEl.innerHTML = _irActiveSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
-
-                // Dynamic width: measure content and resize container
-                _irResizeToContent();
-            }
-
-            function _irResizeToContent() {
-                const rotator = document.getElementById('info-rotator');
-                const headlineEl = document.getElementById('ir-headline');
-                if (!rotator || !headlineEl) return;
-                const isMobile = window.innerWidth <= 900;
-
-                if (isMobile) {
-                    // Mobile: always full viewport width, height auto via CSS
-                    rotator.style.transition = 'none';
-                    rotator.style.width = (window.innerWidth - 16) + 'px';
-                } else {
-                    // Desktop: 2-line layout, width driven by content, font shrinks if needed
-                    const maxW = window.innerWidth - 20;
-                    const minW = 420;
-                    const baseFontSize = 1.6; // rem
-                    const minFontSize = 0.95; // rem
-                    const rootFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-
-                    // Reset font size before measuring
-                    headlineEl.style.fontSize = '';
-                    rotator.style.transition = 'none';
-                    rotator.style.width = 'max-content';
-
-                    let natural = rotator.scrollWidth;
-
-                    if (natural <= maxW) {
-                        // Fits fine — use natural width clamped to minW
-                        const target = Math.max(natural, minW);
-                        rotator.style.width = '';
-                        requestAnimationFrame(() => {
-                            rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                            rotator.style.width = target + 'px';
-                        });
-                    } else {
-                        // Too wide for viewport — allow 2-line wrapping at half width and try to fit
-                        rotator.style.width = '';
-                        // Try half the natural width as a starting point (2 roughly equal lines)
-                        let tryW = Math.ceil(natural / 2) + 120; // +120 for icon/padding
-                        tryW = Math.max(tryW, minW);
-
-                        if (tryW <= maxW) {
-                            requestAnimationFrame(() => {
-                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                                rotator.style.width = tryW + 'px';
-                            });
-                        } else {
-                            // Still too wide — shrink font size until it fits at maxW
-                            rotator.style.width = maxW + 'px';
-                            let fontSize = baseFontSize;
-                            while (fontSize > minFontSize) {
-                                fontSize = Math.max(fontSize - 0.05, minFontSize);
-                                headlineEl.style.fontSize = fontSize + 'rem';
-                                if (rotator.scrollHeight <= rotator.clientHeight + 2) break;
-                            }
-                            requestAnimationFrame(() => {
-                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                                rotator.style.width = maxW + 'px';
-                            });
-                        }
-                    }
-                }
-            }
-
-            if (animateIn) {
-                _applySlide();
-                slab.classList.remove('flipping-out');
-                slab.classList.add('flipping-in');
-                _irTimer = setTimeout(() => {
-                    slab.classList.remove('flipping-in');
-                    _scheduleVanish(isIntervalLoop);
-                }, IR_FLIP_DUR);
+            if (s.iconType === 'img') {
+                iconWrap.style.display = '';
+                iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`;
+            } else if (s.iconType === 'material') {
+                iconWrap.style.display = '';
+                iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`;
             } else {
-                _applySlide();
-                slab.classList.remove('flipping-out', 'flipping-in');
-                _scheduleVanish(isIntervalLoop);
+                iconWrap.style.display = 'none';
+                iconWrap.innerHTML = '';
             }
+
+            headline.textContent = s.headline;
+            label.textContent    = s.label;
+            label.style.display  = s.label ? '' : 'none';
+            dotsEl.innerHTML     = _irActiveSlides.map((_, i) =>
+                `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
+
+            // Width sizing (desktop)
+            const rotator = document.getElementById('info-rotator');
+            const isMobile = window.innerWidth <= 900;
+            if (isMobile) {
+                rotator.style.width = (window.innerWidth - 16) + 'px';
+            } else {
+                const maxW = Math.floor(window.innerWidth * 0.55);
+                const minW = 360;
+                headline.style.fontSize = '';
+                rotator.style.width = 'max-content';
+                const natural = rotator.scrollWidth;
+                const target = Math.min(Math.max(natural, minW), maxW);
+                rotator.style.width = target + 'px';
+            }
+
+            // Progress bar
+            _startIRProgress();
         }
 
-        function _scheduleVanish(isIntervalLoop) {
-            const dur = window._irDuration !== undefined ? window._irDuration : 5000;
+        function _startIRProgress() {
+            const bar = document.getElementById('ir-progress-bar');
+            if (!bar) return;
+            if (_irProgressTimer) clearInterval(_irProgressTimer);
+            const dur = window._irDuration !== undefined ? window._irDuration : 6000;
+            let elapsed = 0;
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            _irProgressTimer = setInterval(() => {
+                elapsed += 80;
+                const pct = Math.min(100, (elapsed / dur) * 100);
+                bar.style.width = pct + '%';
+                if (pct >= 100) { clearInterval(_irProgressTimer); _irProgressTimer = null; }
+            }, 80);
+        }
+
+        function _scheduleNextSlide(isIntervalLoop) {
+            const dur = window._irDuration !== undefined ? window._irDuration : 6000;
             _irTimer = setTimeout(() => {
-                const slab = document.getElementById('ir-slab');
-                if (slab) {
-                    slab.classList.add('flipping-out');
+                _irIdx++;
+                if (_irIdx < _irActiveSlides.length) {
+                    // Cross-fade to next slide (rotator stays visible)
+                    const rotator = document.getElementById('info-rotator');
+                    rotator.classList.add('ir-fade-cross');
                     _irTimer = setTimeout(() => {
-                        _irIdx++;
-                        if (_irIdx < _irActiveSlides.length) {
-                            // Cycle to next slide in the active batch
-                            _renderIRSlide(true, isIntervalLoop);
-                        } else {
-                            // Batch complete -> Hide container & wait for interval to trigger full batch
-                            document.getElementById('info-rotator').style.display = 'none';
-                            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
-                            _irTimer = setTimeout(() => {
-                                _startIrCycle(_irSlides, true);
-                            }, interval);
-                        }
-                    }, IR_FLIP_DUR);
+                        _applyIRSlide();
+                        rotator.classList.remove('ir-fade-cross');
+                        _scheduleNextSlide(isIntervalLoop);
+                    }, IR_FADE_DUR);
+                } else {
+                    // Batch done — slide out, then wait interval
+                    _irSlideOut(() => {
+                        _irBatchVisible = false;
+                        const interval = window._irInterval !== undefined ? window._irInterval : 30000;
+                        _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
+                    });
                 }
             }, dur);
+        }
+
+        function _irSlideOut(cb) {
+            if (_irProgressTimer) { clearInterval(_irProgressTimer); _irProgressTimer = null; }
+            const rotator = document.getElementById('info-rotator');
+            if (!rotator) { if (cb) cb(); return; }
+            rotator.classList.remove('ir-visible');
+            rotator.classList.add('ir-leaving');
+            setTimeout(() => {
+                rotator.style.display = 'none';
+                rotator.classList.remove('ir-leaving');
+                _irBatchVisible = false;
+                if (cb) cb();
+            }, IR_SLIDE_DUR);
         }
 
     </script>
