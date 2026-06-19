@@ -203,46 +203,6 @@
         }
         .failures-pill.burst { animation: fail-burst 0.75s ease forwards; }
 
-        /* ── MAINT COUNTER BOXES (Corrective / Activity counts) ── */
-        #maint-counts-dock {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 0;
-            flex-shrink: 0;
-        }
-        .mcd-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            padding: 0 10px;
-            border-right: 1px solid rgba(255,255,255,0.08);
-        }
-        .mcd-item:first-child { padding-left: 0; }
-        .mcd-item:last-child { border-right: none; }
-        [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.07); }
-        .mcd-val {
-            font-family: var(--font-display);
-            font-size: 1.2rem;
-            font-weight: 900;
-            line-height: 1;
-            color: var(--on-surface);
-            letter-spacing: -0.5px;
-            transition: color 0.3s ease;
-        }
-        .mcd-label {
-            font-family: var(--font-display);
-            font-size: 0.48rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--on-surface-variant);
-            text-align: center;
-            line-height: 1.3;
-            white-space: nowrap;
-        }
-
         /* ── MAINT COUNT CHANGE — centre-screen burst overlay ── */
         #mcd-burst-overlay {
             position: fixed; inset: 0; z-index: 9970;
@@ -818,11 +778,11 @@
         /* ── MAINTENANCE PROGRESS BAR ── */
         .maint-progress-footer {
             margin-top: auto;
-            padding-top: 12px;
+            padding-top: 10px;
             padding-bottom: 0;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 0;
             flex-shrink: 0; 
         }
         @media (max-width: 900px) {
@@ -832,39 +792,39 @@
         }
         /* ── MAINTENANCE CIRCULAR PROGRESS RINGS ── */
         .maint-rings-wrapper {
-            display: flex; flex-direction: row; align-items: center; gap: 10px;
+            display: flex; flex-direction: row; align-items: center; gap: 8px;
             flex-shrink: 0;
         }
         .maint-ring-group {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
         }
         .maint-ring-svg-wrap {
-            position: relative; width: 72px; height: 72px;
+            position: relative; width: 54px; height: 54px;
         }
         .maint-ring-svg {
-            width: 72px; height: 72px;
+            width: 54px; height: 54px;
             transform: rotate(-90deg);
             overflow: visible;
         }
         .mring-track {
-            fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 5;
+            fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 4.5;
         }
         [data-theme="light"] .mring-track { stroke: rgba(0,0,0,0.08); }
         .mring-fill {
-            fill: none; stroke-width: 5; stroke-linecap: round;
+            fill: none; stroke-width: 4.5; stroke-linecap: round;
             stroke: var(--primary);
             transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1), stroke 0.8s ease;
-            filter: drop-shadow(0 0 4px rgba(125,190,255,0.5));
+            filter: drop-shadow(0 0 3px rgba(125,190,255,0.5));
         }
-        .mring-fill.ring-high { stroke: var(--success); filter: drop-shadow(0 0 4px rgba(114,212,138,0.5)); }
-        .mring-fill.ring-mid  { stroke: var(--primary); filter: drop-shadow(0 0 4px rgba(125,190,255,0.5)); }
-        .mring-fill.ring-low  { stroke: var(--error);   filter: drop-shadow(0 0 4px rgba(255,180,171,0.5)); }
+        .mring-fill.ring-high { stroke: var(--success); filter: drop-shadow(0 0 3px rgba(114,212,138,0.5)); }
+        .mring-fill.ring-mid  { stroke: var(--primary); filter: drop-shadow(0 0 3px rgba(125,190,255,0.5)); }
+        .mring-fill.ring-low  { stroke: var(--error);   filter: drop-shadow(0 0 3px rgba(255,180,171,0.5)); }
         .maint-ring-center {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
             display: flex; align-items: center; justify-content: center;
         }
         .maint-ring-pct {
-            font-family: var(--font-display); font-size: 0.82rem; font-weight: 900;
+            font-family: var(--font-display); font-size: 0.68rem; font-weight: 900;
             color: var(--primary); letter-spacing: -0.5px; line-height: 1;
             transition: color 0.8s ease;
         }
@@ -872,16 +832,67 @@
         .maint-ring-pct.pct-mid  { color: var(--primary); }
         .maint-ring-pct.pct-low  { color: var(--error); }
         .maint-ring-label {
-            font-family: var(--font-display); font-size: 0.46rem; font-weight: 900;
-            letter-spacing: 0.8px; text-transform: uppercase;
+            font-family: var(--font-display); font-size: 0.40rem; font-weight: 900;
+            letter-spacing: 0.6px; text-transform: uppercase;
             color: var(--on-surface-variant); opacity: 0.65;
-            text-align: center; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;
+            text-align: center; white-space: nowrap; max-width: 60px; overflow: hidden; text-overflow: ellipsis;
         }
 
         /* Keep hidden elements for JS compatibility */
         .maint-bars-wrapper, .maint-bar-group,
         .maint-progress-track, .maint-progress-fill,
         .maint-progress-meta, .maint-progress-label { display: none !important; }
+
+        /* Single-row footer: counts | divider | rings */
+        .maint-progress-right {
+            display: flex; flex-direction: row; align-items: center;
+            gap: 0; min-width: 0; position: relative;
+            border-top: 1.5px solid var(--surface-variant);
+            padding-top: 8px;
+        }
+        #maint-counts-dock {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0;
+            flex-shrink: 0;
+            flex: 1;
+        }
+        .mcd-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 0 8px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+        }
+        .mcd-item:first-child { padding-left: 0; }
+        .mcd-item:last-child { border-right: 1px solid rgba(255,255,255,0.08); }
+        [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.07); }
+        .mcd-val {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 900;
+            line-height: 1;
+            color: var(--on-surface);
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+        .mcd-label {
+            font-family: var(--font-display);
+            font-size: 0.40rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: var(--on-surface-variant);
+            text-align: center;
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+        .maint-rings-divider {
+            width: 1px; height: 46px; background: rgba(255,255,255,0.08); flex-shrink: 0; margin: 0 8px;
+        }
+        [data-theme="light"] .maint-rings-divider { background: rgba(0,0,0,0.07); }
 
         /* ── MAINTENANCE BAR CHART (R2C45) ── */
         .maint-barchart-section {
@@ -1196,12 +1207,12 @@
 
         #info-rotator {
             position: fixed;
-            bottom: 62px;
+            bottom: 110px;   /* ticker(46px) + driver-pill(~48px) + gap(16px) */
             left: 10px;
-            z-index: 1005;
+            z-index: 999;    /* below driver card (1000) so driver pill stays on top */
             width: max-content;
-            min-width: 360px;
-            max-width: min(780px, calc(100vw - 20px));
+            min-width: 340px;
+            max-width: min(680px, calc(55vw));
             /* entrance animation */
             transform: translateX(-110%);
             opacity: 0;
@@ -1742,24 +1753,25 @@
                                 <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
                         </div>
+                        <div class="maint-rings-divider"></div>
                         <div class="maint-rings-wrapper">
                             <div class="maint-ring-group">
                                 <div class="maint-ring-svg-wrap">
-                                    <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg" id="maint-ring-svg-1">
-                                        <circle class="mring-track" cx="36" cy="36" r="28"/>
-                                        <circle class="mring-fill" id="maint-ring-fill-1" cx="36" cy="36" r="28" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
+                                    <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg">
+                                        <circle class="mring-track" cx="27" cy="27" r="21"/>
+                                        <circle class="mring-fill" id="maint-ring-fill-1" cx="27" cy="27" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95"/>
                                     </svg>
                                     <div class="maint-ring-center">
                                         <span class="maint-ring-pct" id="maint-progress-value-1">—</span>
                                     </div>
                                 </div>
-                                <span id="maint-progress-label-1" class="maint-ring-label">Maint. Progress</span>
+                                <span id="maint-progress-label-1" class="maint-ring-label">Maint.</span>
                             </div>
                             <div class="maint-ring-group">
                                 <div class="maint-ring-svg-wrap">
-                                    <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg" id="maint-ring-svg-2">
-                                        <circle class="mring-track" cx="36" cy="36" r="28"/>
-                                        <circle class="mring-fill" id="maint-ring-fill-2" cx="36" cy="36" r="28" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>
+                                    <svg viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg" class="maint-ring-svg">
+                                        <circle class="mring-track" cx="27" cy="27" r="21"/>
+                                        <circle class="mring-fill" id="maint-ring-fill-2" cx="27" cy="27" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95"/>
                                     </svg>
                                     <div class="maint-ring-center">
                                         <span class="maint-ring-pct" id="maint-progress-value-2">—</span>
@@ -1771,11 +1783,12 @@
                     </div>
                 </div>
 
-                <!-- Bar Chart: Monthly data from sheetab R2C45 -->
+                <!-- Bar/Line Chart: Monthly data from sheetab R2C45 -->
                 <div class="maint-barchart-section" id="maint-barchart-section" style="display:none;">
-                    <div class="maint-barchart-label">
-                        <span class="material-symbols-rounded">bar_chart</span>
+                    <div class="maint-barchart-label" onclick="toggleChartType()" style="cursor:pointer;" title="Click to toggle bar/line chart">
+                        <span class="material-symbols-rounded" id="maint-barchart-icon">bar_chart</span>
                         <span id="maint-barchart-title">Monthly Activity</span>
+                        <span class="material-symbols-rounded" style="font-size:10px!important;margin-left:auto;opacity:0.4">swap_horiz</span>
                     </div>
                     <div class="maint-barchart-canvas-wrap">
                         <svg class="maint-barchart-svg" id="maint-barchart-svg"></svg>
