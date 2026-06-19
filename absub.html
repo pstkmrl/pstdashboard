@@ -1203,7 +1203,7 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS (New Lower Center Display) ── */
+        /* ── STATION PILLS ── */
         #station-pills-dock {
             position: fixed;
             bottom: 56px; 
@@ -1275,6 +1275,16 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0) scale(1);
         }
+        
+        #st-pills-toggle-btn { display: none; }
+        .st-pills-badge {
+            position: absolute; top: -4px; right: -4px;
+            background: var(--success); color: var(--on-success-container);
+            font-size: 0.65rem; font-family: var(--font-display); font-weight: 900;
+            padding: 2px 6px; border-radius: var(--radius-full); display: none;
+            box-shadow: var(--shadow-1);
+        }
+        #st-pills-toggle-btn.has-updates .st-pills-badge { display: block; }
 
         /* ── STATION PILLS ANNOUNCEMENT OVERLAY ── */
         #st-announce-overlay {
@@ -1391,7 +1401,50 @@
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
             
-            #station-pills-dock { bottom: 48px; max-width: 90vw; }
+            #st-pills-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 100px;
+                right: 10px;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background: var(--surface-variant);
+                border: 1.5px solid var(--outline);
+                color: var(--on-surface);
+                box-shadow: var(--shadow-2);
+                z-index: 1005;
+                cursor: pointer;
+                transition: transform 0.2s, background 0.3s, border-color 0.3s;
+            }
+            #st-pills-toggle-btn:active {
+                transform: scale(0.95);
+            }
+            #st-pills-toggle-btn.has-updates {
+                border-color: var(--success);
+                color: var(--success);
+                background: var(--success-container);
+            }
+            #st-pills-toggle-btn .material-symbols-rounded { font-size: 22px !important; }
+            
+            #station-pills-dock {
+                bottom: 156px;
+                left: 10px;
+                right: 10px;
+                transform: translateY(15px);
+                max-width: none;
+                justify-content: flex-end;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            }
+            #station-pills-dock.expanded {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
             .st-pill { padding: 4px 10px; font-size: 0.8rem; }
             .st-announce-card { padding: 20px 40px; }
             .st-announce-name { font-size: 2.5rem; }
@@ -1453,6 +1506,10 @@
     </div>
 
     <div id="station-pills-dock"></div>
+    <button id="st-pills-toggle-btn" onclick="toggleStationPills(event)" title="Station Status">
+        <span class="material-symbols-rounded">ev_station</span>
+        <span id="st-pills-badge" class="st-pills-badge"></span>
+    </button>
 
     <header class="app-bar">
         <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
@@ -1861,11 +1918,30 @@
             if (menu) { menu.classList.remove('open'); }
             if (icon) icon.innerText = 'menu';
         }
+        
+        // ── Station Pills Toggle ──
+        function toggleStationPills(e) {
+            if (e) e.stopPropagation();
+            const dock = document.getElementById('station-pills-dock');
+            if (dock) dock.classList.toggle('expanded');
+        }
+
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('hamburger-menu');
             const btn  = document.getElementById('hamburger-btn');
             if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
                 closeHamburger();
+            }
+
+            const card = document.getElementById('driver-card');
+            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
+                card.classList.remove('expanded');
+            }
+            
+            const stDock = document.getElementById('station-pills-dock');
+            const stBtn = document.getElementById('st-pills-toggle-btn');
+            if (stDock && stDock.classList.contains('expanded') && !stDock.contains(e.target) && (!stBtn || !stBtn.contains(e.target))) {
+                stDock.classList.remove('expanded');
             }
         });
 
@@ -1918,12 +1994,7 @@
             const card = document.getElementById('driver-card');
             card.classList.toggle('expanded');
         }
-        document.addEventListener('click', function(e) {
-            const card = document.getElementById('driver-card');
-            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
-                card.classList.remove('expanded');
-            }
-        });
+        
         function initiateCall(e) {
             if (e) e.stopPropagation();
             const ph = document.getElementById('driver-phone').innerText;
@@ -2179,10 +2250,16 @@
             const dock = document.getElementById('station-pills-dock');
             if (!dock) return;
             
+            const toggleBtn = document.getElementById('st-pills-toggle-btn');
+            const badge = document.getElementById('st-pills-badge');
+            
             if (_stPillsData.length === 0) {
                 dock.innerHTML = '';
+                if (toggleBtn) toggleBtn.style.display = 'none';
                 stopAutoPopup();
                 return;
+            } else {
+                if (toggleBtn) toggleBtn.style.display = '';
             }
             
             dock.innerHTML = _stPillsData.map((p, idx) => {
@@ -2193,6 +2270,17 @@
                     ${remarkHtml}
                 </div>`;
             }).join('');
+            
+            if (toggleBtn && badge) {
+                const filledCount = _stPillsData.filter(p => p.isFilled).length;
+                if (filledCount > 0) {
+                    toggleBtn.classList.add('has-updates');
+                    badge.textContent = filledCount;
+                } else {
+                    toggleBtn.classList.remove('has-updates');
+                    badge.textContent = '';
+                }
+            }
             
             startAutoPopup();
         }
