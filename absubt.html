@@ -126,6 +126,7 @@
             border-radius: var(--radius-full);
             display: flex; align-items: center; position: relative; overflow: hidden;
         }
+        
         /* Fade edges */
         .checklist-container::before,
         .checklist-container::after {
@@ -181,6 +182,7 @@
             font-weight: 900;
             line-height: 1.1;
         }
+        
         .fail-val.open-val   { color: var(--error); }
         .fail-val.closed-val { color: var(--success); }
         .fail-lbl {
@@ -410,6 +412,7 @@
             font-family: var(--font-display); font-weight: 900; font-size: 0.62rem;
             color: #fff; letter-spacing: 0.8px; text-transform: uppercase;
         }
+        
         .sdock-notice .material-symbols-rounded {
             font-size: 15px !important; color: #fff;
             animation: warn-pulse 1.2s infinite;
@@ -448,6 +451,7 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: all 0.2s ease;
         }
+        
         .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
         .btn-grid-active { background: var(--primary); color: var(--surface); }
         .btn-off { background: var(--error-container); color: var(--on-error-container); }
@@ -477,6 +481,7 @@
                         inset 0 1px 0 rgba(255,255,255,0.95);
         }
         .hamburger-menu.open { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
+        
         .hm-item {
             display: flex; align-items: center; gap: 10px;
             padding: 9px 14px; border-radius: var(--radius-m);
@@ -513,6 +518,7 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
+        
         .stock-item {
             display: inline-flex; align-items: center; gap: 8px;
             background: rgba(255,255,255,0.06);
@@ -548,6 +554,7 @@
             scrollbar-width: thin;
             scrollbar-color: var(--surface-variant) transparent;
         }
+        
         .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
         
@@ -584,6 +591,7 @@
             margin-bottom: 14px;
             flex-wrap: wrap;
         }
+        
         .card-header {
             font-family: var(--font-display);
             font-weight: 900; font-size: 1rem;
@@ -665,6 +673,7 @@
             font-family: var(--font-display); font-size: 0.85rem; font-weight: 700;
             color: var(--on-surface-variant); letter-spacing: 0.3px; white-space: nowrap;
         }
+        
         .shift-count-badge .cnt-staff { color: var(--on-surface); font-weight: 900; }
         .shift-count-badge .cnt-sep { opacity: 0.4; margin: 0 1px; font-size: 0.75rem; }
         .shift-count-badge .cnt-tech { color: var(--primary); font-weight: 900; }
@@ -741,6 +750,7 @@
         .chk-d-filled .chk-d-icon { color: var(--success); }
         .chk-d-empty .chk-d-icon  { color: var(--warning); }
         .chk-d-body { flex: 1; min-width: 0; overflow: hidden; height: 1rem; position: relative; }
+        
         .chk-d-slide { display: flex; flex-direction: column; transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
         .chk-d-slide.show-status { transform: translateY(-50%); }
         .chk-d-label, .chk-d-status { font-family: var(--font-display); font-size: 0.68rem; font-weight: 900; white-space: nowrap; line-height: 1rem; letter-spacing: 0.4px; overflow: hidden; text-overflow: ellipsis; }
@@ -770,6 +780,7 @@
         .ops-rot-pill.alert { background: var(--error-container); border-color: var(--error); }
         .ops-rot-pill.ok { background: var(--success-container); border-color: var(--success); }
         .ops-rot-pill-icon { font-size: 13px !important; flex-shrink: 0; transition: color 0.4s; }
+        
         .ops-rot-pill.alert .ops-rot-pill-icon { color: var(--error); }
         .ops-rot-pill.ok    .ops-rot-pill-icon { color: var(--success); }
         .ops-rot-pill-text { overflow: hidden; height: 1rem; display: flex; flex-direction: column; position: relative; min-width: 0; }
@@ -801,6 +812,7 @@
             gap: 8px;
             padding-bottom: 8px; /* Creates seamless transition between halves */
         }
+        
         .maint-scroll-track.scrolling {
             animation-name: maint-scroll;
             animation-timing-function: linear;
@@ -823,74 +835,25 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER — hidden in card, now a dock ── */
+        /* ── MAINTENANCE PROGRESS FOOTER (Original Mobile View Rules) ── */
         .maint-progress-footer {
-            display: none; /* content is now in the bottom dock */
+            margin-top: auto;
+            padding-top: 12px;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0; 
+            transition: all 0.3s ease;
+        }
+        @media (max-width: 900px) {
+            .maint-progress-footer {
+                padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
+            }
         }
         .maint-progress-right { 
             display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
         }
-
-        /* ── MAINTENANCE BOTTOM DOCK (glassmorphism) ── */
-        #maint-bottom-dock {
-            position: fixed;
-            bottom: 36px; /* above ticker */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1003;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 18px 10px;
-            background: rgba(22,28,37,0.72);
-            border: 1.5px solid rgba(125,190,255,0.18);
-            border-radius: var(--radius-l);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 12px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);
-            backdrop-filter: blur(32px) saturate(1.8);
-            -webkit-backdrop-filter: blur(32px) saturate(1.8);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease;
-            min-width: 340px;
-            max-width: calc(100vw - 32px);
-        }
-        [data-theme="light"] #maint-bottom-dock {
-            background: rgba(240,246,255,0.82);
-            border-color: rgba(0,97,164,0.18);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07), inset 0 1.5px 0 rgba(255,255,255,0.9);
-        }
-
-        /* Dock top row: mcd + circulars + barchart */
-        .dock-main-row {
-            display: flex; flex-direction: row; align-items: center; gap: 12px; width: 100%;
-            justify-content: center;
-        }
-
-        /* Station pills inside dock */
-        .dock-station-pills-row {
-            display: flex; flex-direction: row; align-items: center; gap: 6px; flex-wrap: wrap;
-            justify-content: center; width: 100%; min-height: 0;
-        }
-        .dock-station-pills-row:empty { display: none; }
-        .dock-divider {
-            width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(125,190,255,0.2), transparent);
-            border-radius: var(--radius-full);
-            flex-shrink: 0;
-        }
-        .dock-divider:has(+ .dock-station-pills-row:empty) { display: none; }
-
-        /* Popup for dock (remarks) */
-        .maint-progress-popup {
-            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
-            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
-            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
-        }
-        .dock-main-row:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
-        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
-        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
-        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
         /* Circular progress styling */
         .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
@@ -906,7 +869,6 @@
         .maint-barchart-wrap {
             flex: 1; min-width: 120px;
             display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end;
-            cursor: pointer;
         }
         .maint-barchart-container {
             width: 100%; height: 54px;
@@ -917,29 +879,12 @@
             border-radius: var(--radius-s);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
-            transition: border-color 0.3s ease;
-            position: relative; overflow: hidden;
         }
-        .maint-barchart-container:hover { border-color: var(--primary); }
         [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
         
-        /* Sparkline mode */
-        .maint-barchart-container.sparkline-mode { padding: 2px 4px; gap: 0; }
-        .maint-barchart-container.sparkline-mode .bc-col { gap: 0; }
-        .maint-barchart-container.sparkline-mode .bc-label { display: none; }
-        .maint-barchart-container.sparkline-mode .bc-value { display: none; }
-        .maint-barchart-container.sparkline-mode .bc-bar-bg { background: transparent; border-radius: 0; }
-        .maint-barchart-container.sparkline-mode .bc-bar-fill { border-radius: 1px; }
-        .maint-barchart-container.sparkline-mode .bc-bar-fill-b { border-radius: 1px; }
-
-        /* Sparkline SVG overlay */
-        #bc-sparkline-svg { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
-        .maint-barchart-container.sparkline-mode #bc-sparkline-svg { opacity: 1; }
-
         .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
-        .bc-bar-bg { width: 100%; max-width: 12px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; gap: 1px; }
-        .bc-bar-fill { flex: 1; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); min-width: 0; }
-        .bc-bar-fill-b { flex: 1; position: relative; background: linear-gradient(0deg, var(--secondary, #A8BDD4) 0%, color-mix(in srgb, var(--secondary, #A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 6px rgba(168,189,212,0.2); min-width: 0; }
+        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
+        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
         .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
         .bc-value {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
@@ -948,72 +893,6 @@
             pointer-events: none; z-index: 10;
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
-
-        /* Chart legend */
-        .bc-legend { display: flex; gap: 8px; align-items: center; justify-content: center; }
-        .bc-legend-item { display: flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 0.42rem; font-weight: 800; color: var(--on-surface-variant); letter-spacing: 0.3px; text-transform: uppercase; }
-        .bc-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-        .bc-legend-dot-a { background: var(--primary); }
-        .bc-legend-dot-b { background: var(--secondary, #A8BDD4); }
-        .maint-barchart-container.sparkline-mode ~ .bc-legend { opacity: 0.5; }
-
-        /* ── CHART ZOOM OVERLAY ── */
-        #chart-zoom-overlay {
-            position: fixed; inset: 0; z-index: 9980;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0); backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-            pointer-events: none; opacity: 0;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.4s ease;
-        }
-        #chart-zoom-overlay.visible {
-            opacity: 1; background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(18px) saturate(1.5);
-            -webkit-backdrop-filter: blur(18px) saturate(1.5);
-            pointer-events: auto;
-        }
-        .chart-zoom-card {
-            background: var(--surface);
-            border: 1.5px solid rgba(125,190,255,0.25);
-            border-radius: var(--radius-l);
-            box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.18);
-            backdrop-filter: blur(40px) saturate(2);
-            -webkit-backdrop-filter: blur(40px) saturate(2);
-            padding: 22px 26px 18px;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            width: min(90vw, 480px);
-            transform: scale(0.5) translateY(40px);
-            opacity: 0;
-            transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
-        }
-        [data-theme="light"] .chart-zoom-card {
-            background: rgba(255,255,255,0.92);
-            border-color: rgba(0,97,164,0.2);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.18), inset 0 1.5px 0 rgba(255,255,255,0.9);
-        }
-        #chart-zoom-overlay.visible .chart-zoom-card { transform: scale(1) translateY(0); opacity: 1; }
-        .chart-zoom-title { font-family: var(--font-display); font-size: 0.65rem; font-weight: 900; letter-spacing: 1.8px; text-transform: uppercase; color: var(--primary); }
-        .chart-zoom-bars {
-            width: 100%; height: 140px;
-            display: flex; align-items: flex-end; gap: 3px;
-            padding: 6px 8px 2px;
-        }
-        .czb-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
-        .czb-bar-bg { width: 100%; max-width: 20px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 4px 4px 0 0; gap: 2px; overflow: visible; position: relative; }
-        .czb-bar-a { flex: 1; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
-        .czb-bar-b { flex: 1; background: linear-gradient(0deg, var(--secondary,#A8BDD4) 0%, color-mix(in srgb, var(--secondary,#A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
-        .czb-label { font-family: var(--font-display); font-size: 0.52rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
-        .chart-zoom-legend { display: flex; gap: 12px; }
-        .czl-item { display: flex; align-items: center; gap: 4px; font-family: var(--font-display); font-size: 0.58rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
-        .czl-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .czl-dot-a { background: var(--primary); }
-        .czl-dot-b { background: var(--secondary,#A8BDD4); }
-        @keyframes chart-pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(125,190,255,0.5), 0 32px 80px rgba(0,0,0,0.6); }
-            60% { box-shadow: 0 0 0 18px rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
-            100% { box-shadow: 0 0 0 0 rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
-        }
-        #chart-zoom-overlay.visible .chart-zoom-card { animation: chart-pulse-ring 1s ease 0.55s 1 both; }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1081,6 +960,7 @@
             padding: 2px 8px 2px 6px; font-family: var(--font-display); font-size: 0.55rem; font-weight: 900; letter-spacing: 0.8px; text-transform: uppercase;
             color: var(--error); white-space: nowrap; flex-shrink: 0; animation: warning-blink 1.5s infinite alternate;
         }
+        
         .driver-pill-outdated-badge .material-symbols-rounded { font-size: 11px !important; }
         .driver-card.outdated .driver-pill-outdated-badge { display: flex; }
         .driver-pill-outdated-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); box-shadow: 0 0 6px var(--error); flex-shrink: 0; display: none; animation: warn-pulse 2s infinite; }
@@ -1105,6 +985,7 @@
         .driver-card.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
         .driver-card.outdated .driver-expanded { border-color: rgba(255,100,80,0.3); }
         .driver-card.outdated .driver-expanded::before { background: linear-gradient(90deg, var(--error), transparent); }
+        
         .driver-exp-outdated { display: none; align-items: center; gap: 4px; background: rgba(186,26,26,0.14); border: 1px solid rgba(255,100,80,0.28); border-radius: var(--radius-s); padding: 3px 8px; font-family: var(--font-display); font-size: 0.5rem; font-weight: 900; letter-spacing: 0.8px; text-transform: uppercase; color: var(--error); animation: warning-blink 1.5s infinite alternate; margin-bottom: 6px; }
         .driver-card.outdated .driver-exp-outdated { display: flex; }
         .driver-exp-header { display: flex; flex-direction: column; gap: 1px; margin-bottom: 6px; }
@@ -1127,2170 +1008,350 @@
         }
         #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
         .flash-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px) saturate(0.6); -webkit-backdrop-filter: blur(6px) saturate(0.6); }
-        .flash-panel { position: relative; z-index: 1; width: min(820px, calc(100vw - 32px)); background: rgba(10,14,20,0.88); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-l); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); overflow: hidden; transform: scale(0.93) translateY(20px); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-        [data-theme="light"] .flash-panel { background: rgba(240,244,248,0.9); border-color: rgba(255,255,255,0.8); }
-        #flash-news-overlay.visible .flash-panel { transform: scale(1) translateY(0); }
-        .flash-banner { display: flex; align-items: center; gap: 10px; background: #CC0000; padding: 7px 20px; }
-        .flash-banner-live { display: flex; align-items: center; gap: 5px; background: #fff; border-radius: 3px; padding: 1px 8px; font-family: var(--font-display); font-size: 0.72rem; font-weight: 900; color: #CC0000; letter-spacing: 1.5px; animation: flash-live-blink 1s infinite; }
-        .flash-live-dot { width: 7px; height: 7px; border-radius: 50%; background: #CC0000; }
-        @keyframes flash-live-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .flash-banner-text { font-family: var(--font-display); font-size: 0.72rem; font-weight: 900; letter-spacing: 2px; color: #fff; text-transform: uppercase; }
-        .flash-banner-tag { margin-left: auto; font-family: var(--font-display); font-size: 0.6rem; font-weight: 800; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); }
-        .flash-body { padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 16px; }
-        .flash-eyebrow { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: #CC0000; display: flex; align-items: center; gap: 6px; }
-        .flash-eyebrow::before { content: ''; display: block; width: 20px; height: 2px; background: #CC0000; }
-        .flash-headline { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.4rem, 4vw, 2.1rem); line-height: 1.25; letter-spacing: -0.3px; color: var(--on-bg); }
-        [data-theme="light"] .flash-headline { color: var(--on-bg); }
-        .flash-item-num { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 0.6rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.5; letter-spacing: 1px; }
-        .flash-dots { display: flex; gap: 5px; }
-        .flash-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.3s; }
-        [data-theme="light"] .flash-dot { background: rgba(0,0,0,0.15); }
-        .flash-dot.active { background: #CC0000; }
-        .flash-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding: 12px 28px; }
-        [data-theme="light"] .flash-footer { border-color: rgba(0,0,0,0.08); }
-        .flash-progress-wrap { flex: 1; height: 2px; background: rgba(255,255,255,0.1); border-radius: var(--radius-full); overflow: hidden; margin-right: 16px; }
-        [data-theme="light"] .flash-progress-wrap { background: rgba(0,0,0,0.1); }
-        .flash-progress-fill { height: 100%; background: #CC0000; border-radius: var(--radius-full); transition: width 0.1s linear; width: 0%; }
-        .flash-dismiss { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.5; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; }
-        .flash-dismiss:hover { opacity: 1; }
+        .flash-panel { position: relative; z-index: 1; width: min(820px, calc(100vw - 32px)); background: rgba(10,14,20,0.88); border: 1px solid var(--outline); border-radius: var(--radius-l); padding: 24px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); }
 
-        /* ── TICKER ── */
-        .ticker-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            height: 46px; background: var(--surface);
-            box-shadow: 0 -2px 12px rgba(0,0,0,0.15);
-            display: flex; align-items: center; z-index: 1001; cursor: pointer;
-        }
-        .ticker-head {
-            background: var(--primary); color: var(--surface);
-            height: 100%; padding: 0 20px; display: flex; align-items: center;
-            font-family: var(--font-display); font-weight: 900; font-size: 0.8rem;
-            letter-spacing: 1px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
-        }
-        .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        .ticker-scroll { white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: var(--on-surface); padding: 0 20px; flex-shrink: 0; }
-        .scrolling-active { padding-left: 100%; animation: ticker-move 80s linear infinite; }
-        @keyframes ticker-move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
-        .ticker-bar:hover .scrolling-active { animation-play-state: paused; }
-        .ticker-popup {
-            display: none; position: absolute; bottom: 118px; left: 50%;
-            transform: translateX(-50%); width: calc(100% - 28px); max-width: 860px;
-            background: var(--surface); color: var(--on-surface);
-            padding: 18px 22px; border-radius: var(--radius-l);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 2px solid var(--primary); z-index: 1005;
-            font-size: 1rem; line-height: 1.6; font-family: var(--font-body); font-weight: 600;
-            white-space: pre-wrap; max-height: 60vh; overflow-y: auto; cursor: default;
-        }
-        .ticker-bar:hover .ticker-popup { display: block; }
-        .ticker-refresh-stamp {
-            height: 100%; padding: 0 16px; display: flex; align-items: center; gap: 4px;
-            font-family: var(--font-display); font-size: 0.65rem; font-weight: 800;
-            color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.5px;
-            white-space: nowrap; flex-shrink: 0; border-left: 1px solid rgba(128,128,128,0.2);
-            background: rgba(0,0,0,0.05);
-        }
-        [data-theme="light"] .ticker-refresh-stamp { background: rgba(0,0,0,0.02); }
-
-        /* ── CONSUMABLES OVERLAY ── */
-        #cons-overlay {
-            position: fixed; inset: 0; z-index: 9980;
-            display: flex; align-items: center; justify-content: center;
-            pointer-events: none; opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        #cons-overlay.visible { opacity: 1; pointer-events: auto; }
-        .cons-overlay-backdrop {
-            position: absolute; inset: 0;
-            background: rgba(0,0,0,0.65);
-            backdrop-filter: blur(6px) saturate(0.7);
-            -webkit-backdrop-filter: blur(6px) saturate(0.7);
-        }
-        .cons-overlay-panel {
-            position: relative; z-index: 1;
-            width: min(440px, calc(100vw - 32px));
-            max-height: calc(100vh - 80px);
-            background: var(--surface);
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: var(--radius-l);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 6px 20px rgba(0,0,0,0.3),
-                        inset 0 1px 0 rgba(255,255,255,0.18);
-            backdrop-filter: blur(40px) saturate(2);
-            -webkit-backdrop-filter: blur(40px) saturate(2);
-            overflow: hidden;
-            display: flex; flex-direction: column;
-            transform: scale(0.94) translateY(16px);
-            transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        [data-theme="light"] .cons-overlay-panel {
-            background: var(--surface);
-            border-color: rgba(255,255,255,0.8);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.15), 0 6px 20px rgba(0,0,0,0.1),
-                        inset 0 1px 0 rgba(255,255,255,0.95);
-        }
-        #cons-overlay.visible .cons-overlay-panel {
-            transform: scale(1) translateY(0);
-        }
-        .cons-panel-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 18px 10px; border-bottom: 1px solid var(--surface-variant);
-        }
-        .cons-panel-title {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
-            letter-spacing: 1px; text-transform: uppercase; color: var(--primary);
-            display: flex; align-items: center; gap: 7px;
-        }
-        .cons-panel-title .material-symbols-rounded { font-size: 18px !important; }
-        .cons-panel-close {
-            width: 30px; height: 30px; border-radius: 50%;
-            background: var(--surface-variant); border: none;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease;
-        }
-        .cons-panel-close:hover { background: var(--surface-dim); }
-        .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
-        .cons-panel-list {
-            overflow-y: auto; padding: 10px 14px 14px;
-            display: flex; flex-direction: column; gap: 7px;
-            scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent;
-        }
-        .cons-list-item { display: flex; align-items: center; gap: 12px; background: var(--surface-variant); border-radius: var(--radius-m); padding: 9px 14px; }
-        .cons-list-icon-ring { position: relative; width: 42px; height: 42px; flex-shrink: 0; }
-        .cons-list-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3; }
-        [data-theme="light"] .cons-list-icon-ring svg .ring-track { stroke: rgba(0,0,0,0.1); }
-        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
-        .cons-list-img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.6); }
-        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.82rem; color: var(--primary); text-transform: uppercase; }
-        .cons-list-body { flex: 1; min-width: 0; }
-        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
-        .cons-list-sub { font-family: var(--font-body); font-size: 0.62rem; font-weight: 600; color: var(--on-surface-variant); opacity: 0.7; margin-top: 1px; }
-        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1rem; letter-spacing: 0.3px; flex-shrink: 0; }
-        .cons-list-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
-
-        .app-dock, .dock-toggle-btn { display: none !important; }
-
-        /* ── INFO ROTATOR WIDGET (Lower Third Redesign) ── */
-        #info-rotator { position: fixed; bottom: 104px; left: 10px; right: auto; z-index: 1005; width: max-content; min-width: 420px; max-width: min(900px, calc(100vw - 20px)); perspective: 900px; perspective-origin: 50% 50%; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
-        .ir-slab {
-            width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
-            background: rgba(14, 20, 32, 0.82);
-            border: 1px solid rgba(125,190,255,0.22);
-            box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
-                        inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
-            backdrop-filter: blur(36px) saturate(2.4); -webkit-backdrop-filter: blur(36px) saturate(2.4);
-            transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
-            display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
-        }
-        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,97,164,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
-        @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.2; } }
-        @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.2; } 100% { transform: rotateX(0deg); opacity: 1; } }
-        .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
-        .ir-slab.flipping-in { animation: ir-flip-in 0.36s cubic-bezier(0, 0, 0.2, 1) forwards; }
-        .ir-accent-bar {
-            position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
-            background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 50%, transparent) 100%);
-            border-radius: var(--radius-m) 0 0 var(--radius-m);
-            box-shadow: 2px 0 14px rgba(125,190,255,0.4);
-        }
-        
-        .ir-icon-wrap {
-            width: 64px; height: 64px; border-radius: var(--radius-m); flex-shrink: 0;
-            background: rgba(125,190,255,0.1);
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.12);
-            border: 1px solid rgba(125,190,255,0.28);
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        [data-theme="light"] .ir-icon-wrap {
-            background: rgba(0,97,164,0.08); border-color: rgba(0,97,164,0.2);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.9);
-        }
-        .ir-icon-wrap .material-symbols-rounded { font-size: 36px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
-        .ir-icon-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-        
-        .ir-text-col { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; justify-content: center; }
-        .ir-headline {
-            font-family: var(--font-display); font-size: 1.6rem; font-weight: 900;
-            color: var(--on-surface); text-align: left; line-height: 1.18; letter-spacing: -0.4px;
-            white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-            overflow: hidden; max-width: 100%; margin: 0;
-        }
-        .ir-label {
-            font-family: var(--font-display); font-size: 0.6rem; font-weight: 800;
-            color: var(--primary); opacity: 0.85; text-align: left;
-            letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; margin-top: 3px;
-            text-transform: uppercase;
-        }
-        .ir-dots-row { display: flex; justify-content: flex-start; gap: 4px; margin-top: 6px; }
-        .ir-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.35s ease, width 0.35s cubic-bezier(0.4,0,0.2,1); }
-        [data-theme="light"] .ir-dot { background: rgba(0,0,0,0.14); }
-        .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
-
-        /* ── BLACKOUT ── */
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
-        .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
-        .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
-        .h-min { width: 4px; height: 40%; background: #aaa; margin-left: -2px; }
-        .h-sec { width: 2px; height: 45%; background: #FFB4AB; margin-left: -1px; }
-        .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: #FFB4AB; border-radius: 50%; transform: translate(-50%, -50%); }
-        .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
-        .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
-
-        /* ── STATION PILLS — now embedded in maint bottom dock ── */
-        #station-pills-dock {
-            display: flex;
-            gap: 6px;
-            pointer-events: auto;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 100%;
-        }
-        .st-pill {
-            pointer-events: auto;
-            background: var(--surface-variant);
-            border: 1.5px solid var(--outline);
-            color: var(--on-surface);
-            padding: 5px 14px;
-            border-radius: var(--radius-full);
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            position: relative;
-            box-shadow: var(--shadow-1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s, border-color 0.3s;
-            cursor: default;
-        }
-        .st-pill.st-filled {
-            background: var(--success-container);
-            color: var(--on-success-container);
-            border-color: var(--success);
-            box-shadow: 0 4px 12px rgba(20, 108, 46, 0.25);
-        }
-        .st-pill:hover { transform: translateY(-2px); }
-
-        .st-remark-bubble {
-            position: fixed;
-            bottom: auto;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px) scale(0.95);
-            background: var(--primary);
-            color: var(--surface);
-            padding: 6px 12px;
-            border-radius: var(--radius-m);
-            font-size: 0.75rem;
-            font-family: var(--font-body);
-            font-weight: 700;
-            white-space: normal;
-            word-break: break-word;
-            max-width: min(260px, 80vw);
-            width: max-content;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 1100;
-            box-shadow: var(--shadow-2);
-            text-align: center;
-            line-height: 1.4;
-        }
-        .st-remark-bubble::after {
-            content: ''; position: absolute;
-            bottom: -4px; left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            width: 8px; height: 8px;
-            background: var(--primary);
-        }
-        .st-pill:hover .st-remark-bubble,
-        .st-pill.auto-popup .st-remark-bubble {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1);
-        }
-        
-        #st-pills-toggle-btn { display: none; }
-        .st-pills-badge {
-            position: absolute; top: -4px; right: -4px;
-            background: var(--success); color: var(--on-success-container);
-            font-size: 0.65rem; font-family: var(--font-display); font-weight: 900;
-            padding: 2px 6px; border-radius: var(--radius-full); display: none;
-            box-shadow: var(--shadow-1);
-        }
-        #st-pills-toggle-btn.has-updates .st-pills-badge { display: block; }
-
-        /* ── STATION PILLS ANNOUNCEMENT OVERLAY ── */
-        #st-announce-overlay {
-            position: fixed; inset: 0; z-index: 9995;
-            display: flex; align-items: center; justify-content: center;
-            pointer-events: none; opacity: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: opacity 0.4s ease;
-        }
-        #st-announce-overlay.visible { opacity: 1; pointer-events: auto; }
-        .st-announce-card {
-            background: var(--surface);
-            border: 2px solid var(--primary);
-            padding: 30px 60px;
-            border-radius: var(--radius-full);
-            box-shadow: 0 24px 64px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1);
-            transform: scale(0.5) translateY(50px);
-            opacity: 0;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        [data-theme="light"] .st-announce-card { box-shadow: 0 24px 64px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.8); }
-        .st-announce-card.pop { transform: scale(1) translateY(0); opacity: 1; }
-        .st-announce-card.fly-down {
-            transform: translateY(40vh) scale(0.3);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .st-announce-title {
-            font-family: var(--font-display); font-size: 0.8rem;
-            font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
-        }
-        .st-announce-name {
-            font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
-            color: var(--on-surface); letter-spacing: 2px; line-height: 1;
-        }
-        .st-announce-name.filled { color: var(--success); }
-
-        /* ── MOBILE RESPONSIVE ── */
+        /* COMPLETING TRUNCATED CSS */
         @media (max-width: 900px) {
-            .mobile-tab-bar {
-                display: flex; gap: 8px; margin: 8px 12px 0; padding: 4px;
-                background: var(--surface); border-radius: var(--radius-full);
-                box-shadow: var(--shadow-1); z-index: 10; flex-shrink: 0;
-            }
-            .m-tab {
-                flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-                padding: 8px 12px; border: none; border-radius: var(--radius-full);
-                background: transparent; color: var(--on-surface-variant);
-                font-family: var(--font-display); font-size: 0.8rem; font-weight: 800;
-                transition: all 0.3s ease; cursor: pointer;
-            }
-            .m-tab.active { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-            .m-tab .material-symbols-rounded { font-size: 16px !important; }
-
-            .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
-            .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
-
-            .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            
-            /* Enhanced Mobile Flex locking for Maint tab perfect fit */
-            .dashboard-content[data-active-tab="maint"] {
+            #st-pills-toggle-btn {
                 display: flex;
-                flex-direction: column;
-                overflow: hidden !important; 
-                padding-bottom: env(safe-area-inset-bottom, 0px);
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 100px;
+                right: 10px;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background: var(--surface-variant);
+                border: 1.5px solid var(--outline);
+                color: var(--on-surface);
+                box-shadow: var(--shadow-1);
+                z-index: 1004;
             }
-            .dashboard-content[data-active-tab="maint"] .right-column {
+        }
+
+        /* ── Ticker placeholder and station pills ── */
+        .ticker-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 46px; background: var(--surface);
+            display: flex; align-items: center; z-index: 900; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            padding: 0 16px; border-top: 1px solid var(--outline);
+        }
+        #station-pills-dock {
+            position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 950; transition: bottom 0.3s ease;
+        }
+
+        /* ── DESKTOP RESTRUCTURE: MAINTENANCE DOCK (CRITICAL ADDITION) ── */
+        @media (min-width: 901px) {
+            /* 1. Un-nest the maint footer on desktop, converting it into a fixed floating dock */
+            .maint-progress-footer {
+                position: fixed;
+                bottom: 60px; /* Right above the ticker */
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(14, 20, 34, 0.85); /* Theme adaptive glass matching existing docs */
+                border: 1.5px solid rgba(125,190,255,0.22);
+                border-radius: var(--radius-l);
+                box-shadow: 0 16px 48px rgba(0,0,0,0.6), inset 0 1.5px 0 rgba(255,255,255,0.15);
+                backdrop-filter: blur(32px) saturate(2);
+                -webkit-backdrop-filter: blur(32px) saturate(2);
+                padding: 12px 32px;
+                width: max-content;
+                min-width: 640px;
+                z-index: 1020;
                 display: flex;
-                flex: 1;
-                min-height: 0;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin: 0;
+            }
+
+            [data-theme="light"] .maint-progress-footer {
+                background: rgba(240, 246, 255, 0.9);
+                border-color: rgba(0, 97, 164, 0.22);
+                box-shadow: 0 16px 48px rgba(0,0,0,0.15), inset 0 1.5px 0 rgba(255,255,255,0.95);
+            }
+
+            .maint-progress-footer .maint-progress-right {
                 width: 100%;
+                justify-content: space-evenly;
+                gap: 40px;
             }
-            .unified-unit { 
-                flex: 1; 
-                height: auto !important; 
-                max-height: none !important; 
-                width: 100%; 
-                margin: 0; 
+
+            /* 2. Prevent right column items from hiding behind the newly created central dock */
+            .dashboard-content {
+                padding-bottom: 160px; 
             }
-            .ops-inline-container { flex-wrap: wrap; }
 
-            .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
-            .middle-module { order: 3; width: 100%; margin: 4px 0 0 0; height: 38px; }
-            .logo-section img { height: 24px; }
-            .icon-btn { width: 36px; height: 36px; }
-            .icon-btn .material-symbols-rounded { font-size: 20px !important; }
-            .clock-unit { min-width: 42px; padding: 2px 6px; }
-            .clock-val { font-size: 1.1rem; }
-            .clock-label { font-size: 0.48rem; }
-            .roster-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-            .driver-card { left: 8px; bottom: 46px; z-index: 999; }
-            .driver-expanded { min-width: 200px; }
-            .ticker-head { padding: 0 12px; font-size: 0.68rem; }
-            .ticker-popup { bottom: 122px; width: calc(100% - 14px); padding: 14px; }
-            .ticker-refresh-stamp { padding: 0 10px; font-size: 0.6rem; }
-            .refresh-prefix { display: none; }
-            .deploy-header { flex-direction: column; gap: 6px; }
-            .general-info-pill { justify-content: flex-start; }
-            .card-header { font-size: 0.88rem; }
-            .m3-card { padding: 12px; }
-            .failures-pill { padding: 2px 8px; }
-            .fail-val { font-size: 1.1rem; }
-            .hamburger-menu { right: 0; }
-            
-            #info-rotator { width: calc(100vw - 16px) !important; max-width: calc(100vw - 16px) !important; min-width: unset !important; bottom: 46px; right: 8px; left: 8px; }
-            .ir-slab { height: auto !important; min-height: 78px; padding: 8px 12px 8px 8px; gap: 10px; }
-            .ir-icon-wrap { width: 52px; height: 52px; }
-            .ir-headline { font-size: 1.05rem !important; white-space: normal; }
+            .unified-unit {
+                padding-bottom: 0;
+            }
 
-            #stock-dock { right: 10px; bottom: 54px; width: 160px; }
-            #maint-counts-dock { margin-top: 8px; }
-            .mcd-val { font-size: 1.5rem; }
-            
-            #st-pills-toggle-btn { display: none !important; }
-            .st-pill { padding: 4px 10px; font-size: 0.8rem; }
-            .st-announce-card { padding: 20px 40px; }
-            .st-announce-name { font-size: 2.5rem; }
-        }
-
-        @media (max-width: 600px) {
-            .dashboard-content { padding: 6px 6px 80px 6px; gap: 6px; }
-            .app-bar { padding: 6px 10px; margin: 4px 4px 0 4px; }
-            .logo-section img { height: 22px; }
-            .middle-module { height: 34px; gap: 8px; }
-            .clock-container { gap: 4px; }
-            .clock-unit { min-width: 36px; padding: 1px 5px; }
-            .clock-val { font-size: 0.95rem; }
-            .clock-label { font-size: 0.42rem; letter-spacing: 0.8px; }
-            .top-controls { gap: 4px; }
-            .icon-btn { width: 32px; height: 32px; }
-            .icon-btn .material-symbols-rounded { font-size: 18px !important; }
-            .roster-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .m3-card { padding: 10px; border-radius: var(--radius-m); }
-            .staff-name { font-size: 0.95rem; }
-            .card-header { font-size: 0.82rem; gap: 6px; }
-            .gen-name-tag { font-size: 0.7rem; padding: 3px 9px; }
-            .gen-label-pill { font-size: 0.58rem; padding: 2px 8px; }
-            .m3-shift-label { font-size: 0.9rem; }
-            .ticker-head { padding: 0 10px; font-size: 0.62rem; }
-            .ticker-scroll { font-size: 0.82rem; }
-            .ops-rot-pill { padding: 2px 7px 2px 5px; }
-            .ops-rot-label, .ops-rot-status { font-size: 0.6rem; }
-            .failures-pill { padding: 2px 6px; }
-            .fail-val { font-size: 0.9rem; }
-            .chk-d-label { font-size: 0.62rem; }
-            .chk-d-status { font-size: 0.62rem; }
-            
-            #info-rotator { width: calc(100vw - 16px) !important; bottom: 46px; right: 8px; left: 8px; z-index: 1005; }
-            .ir-slab { height: auto !important; min-height: 72px; padding: 7px 12px 7px 8px; gap: 8px; }
-            
-            #stock-dock { display: none; }
-            .mcd-val { font-size: 1.3rem; }
-            .mcd-label { font-size: 0.48rem; }
-        }
-
-        @media (max-width: 400px) {
-            .roster-grid { grid-template-columns: 1fr; gap: 6px; }
-            .clock-unit { min-width: 30px; padding: 1px 4px; }
-            .clock-val { font-size: 0.85rem; }
-            .ops-inline-container { flex-wrap: wrap; }
+            /* 3. Gracefully avoid collision with existing bottom station pills by moving pills up */
+            #station-pills-dock {
+                bottom: 150px;
+            }
         }
     </style>
 </head>
-<body onclick="wakeUp()">
+<body>
 
-    <div id="blackout">
-        <div class="analog-wrap">
-            <div id="ana-h" class="hand h-hr"></div>
-            <div id="ana-m" class="hand h-min"></div>
-            <div id="ana-s" class="hand h-sec"></div>
-            <div class="center-dot"></div>
+    <!-- ── TOP APP BAR ── -->
+    <div class="app-bar">
+        <div class="logo-section">
+            <!-- Placeholder for logo -->
+            <div style="font-family: var(--font-display); font-weight: 900; color: var(--primary); font-size: 1.2rem;">KMRL LOGO</div>
         </div>
-    </div>
-
-    <!-- station-pills-dock moved into #maint-bottom-dock -->
-    <button id="st-pills-toggle-btn" style="display:none!important" title="Station Status">
-        <span class="material-symbols-rounded">ev_station</span>
-        <span id="st-pills-badge" class="st-pills-badge"></span>
-    </button>
-
-    <header class="app-bar">
-        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
+        
         <div class="middle-module">
-            <div id="checklist-container" class="checklist-container">
-                <div id="station-track" class="station-track"></div>
+            <div class="checklist-container">
+                <div class="station-track">
+                    <!-- Dummy Track Items -->
+                    <div class="stock-item"><span class="stock-name">STN-A</span><span class="stock-val safe"><span class="material-symbols-rounded stock-icon">check_circle</span> OK</span></div>
+                    <div class="stock-divider"></div>
+                    <div class="stock-item alarm"><span class="stock-name">STN-B</span><span class="stock-val warn"><span class="material-symbols-rounded stock-icon">warning</span> ERR</span></div>
+                    <div class="stock-divider"></div>
+                    <div class="stock-item"><span class="stock-name">STN-C</span><span class="stock-val safe"><span class="material-symbols-rounded stock-icon">check_circle</span> OK</span></div>
+                </div>
             </div>
-            <div id="clock-container" class="clock-container">
-                <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
-                <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
-                <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
-            </div>
-            <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
-                <div class="fail-title">Failures</div>
+            
+            <div class="failures-pill">
+                <div class="fail-title">System Flags</div>
                 <div class="failures-nums">
                     <div class="fail-num-block">
-                        <div class="fail-val closed-val" id="fail-closed-val">—</div>
-                        <div class="fail-lbl">CLOSED</div>
+                        <span class="fail-val open-val">2</span>
+                        <span class="fail-lbl">OPEN</span>
                     </div>
                     <div class="fail-sep"></div>
                     <div class="fail-num-block">
-                        <div class="fail-val open-val" id="fail-open-val">—</div>
-                        <div class="fail-lbl">OPEN</div>
+                        <span class="fail-val closed-val">8</span>
+                        <span class="fail-lbl">CLSD</span>
                     </div>
                 </div>
             </div>
+
+            <div class="clock-container">
+                <div class="clock-unit">
+                    <span class="clock-val" id="time-val">15:29</span>
+                    <span class="clock-label">IST</span>
+                </div>
+            </div>
         </div>
+
         <div class="top-controls">
-            <button class="driver-header-btn" id="driver-header-btn" onclick="toggleDriverCard(event)" aria-label="Driver Info">
-                <span class="material-symbols-rounded">directions_car</span>
+            <button class="icon-btn" onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark')">
+                <span class="material-symbols-rounded">contrast</span>
             </button>
-            <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
-                <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
+            <button class="icon-btn">
+                <span class="material-symbols-rounded">menu</span>
             </button>
-            <div class="hamburger-menu" id="hamburger-menu">
-                <button class="hm-item" onclick="toggleTheme(event);closeHamburger()">
-                    <span class="material-symbols-rounded" id="theme-icon">dark_mode</span>
-                    <span id="hm-theme-label">Toggle Theme</span>
-                </button>
-                <button class="hm-item" id="hm-grid-btn" onclick="toggleGrid(event);closeHamburger()">
-                    <span class="material-symbols-rounded">monitoring</span>
-                    <span>Station Feed</span>
-                    <span class="hm-active-dot" id="hm-grid-dot"></span>
-                </button>
-                <button class="hm-item" onclick="goFullscreen(event);closeHamburger()">
-                    <span class="material-symbols-rounded">fullscreen</span>
-                    <span>Fullscreen</span>
-                </button>
-                <div class="hm-divider"></div>
-                <button class="hm-item hm-danger" onclick="manualOff(event);closeHamburger()">
-                    <span class="material-symbols-rounded">power_settings_new</span>
-                    <span>Screen Off</span>
-                </button>
-            </div>
         </div>
-    </header>
-
-    <div class="mobile-tab-bar">
-        <button class="m-tab active" onclick="switchMobileTab('overview')" data-tab="overview">
-            <span class="material-symbols-rounded">dashboard</span> Overview
-        </button>
-        <button class="m-tab" onclick="switchMobileTab('maint')" data-tab="maint">
-            <span class="material-symbols-rounded">construction</span> Maintenance
-        </button>
     </div>
 
-    <main class="dashboard-content" data-active-tab="overview">
+    <!-- ── MAIN DASHBOARD ── -->
+    <div class="dashboard-content">
+        <!-- LEFT COLUMN: Deployment & Shifts -->
         <div class="left-column">
+            <!-- Deployment Card -->
             <div class="m3-card">
                 <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
-                    <div class="general-info-pill" id="today-gen-pills">
-                        <span class="gen-label-pill">GENERAL</span>
+                    <div class="card-header">
+                        <span class="material-symbols-rounded">group</span> Deployment Roster
+                    </div>
+                    <div class="general-info-pill">
+                        <span class="gen-name-tag">Zone A Operations</span>
+                        <span class="gen-label-pill">Active</span>
                     </div>
                 </div>
-                <div id="roster-today" class="roster-grid"></div>
-            </div>
-            <div class="m3-card">
-                <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
-                    <div class="general-info-pill" id="tomorrow-gen-pills">
-                        <span class="gen-label-pill">GENERAL</span>
+                <div class="roster-grid">
+                    <!-- Shift 1 -->
+                    <div class="m3-shift-card m3-shift-active">
+                        <div class="shift-header-row">
+                            <div class="m3-shift-label">Morning <div class="shift-active-dot"></div></div>
+                            <div class="shift-count-badge">
+                                <span class="cnt-staff">12</span><span class="cnt-sep">|</span><span class="cnt-tech">4</span>
+                            </div>
+                        </div>
+                        <div class="staff-list">
+                            <div class="m3-staff-item"><span class="m3-badge badge-tpc-m">M</span><span class="staff-name">John D.</span></div>
+                            <div class="m3-staff-item"><span class="m3-badge badge-tpc-e">E</span><span class="staff-name">Sarah K.</span></div>
+                        </div>
+                        <div class="tech-section">
+                            <div class="tech-label-row">
+                                <span class="material-symbols-rounded tech-label-icon">precision_manufacturing</span>
+                                <span class="tech-label">Eqpt Roster</span>
+                            </div>
+                            <div class="tech-scroll-wrap">
+                                <div class="tech-scroll-track">
+                                    <span class="tech-name-chip">Generator 1 <div class="tech-dot"></div></span>
+                                    <span class="tech-name-chip">Relay Box B <div class="tech-dot"></div></span>
+                                    <span class="tech-name-chip">Line C Cart <div class="tech-dot"></div></span>
+                                    <span class="tech-name-chip">Generator 1 <div class="tech-dot"></div></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Shift 2 -->
+                    <div class="m3-shift-card">
+                        <div class="shift-header-row">
+                            <div class="m3-shift-label">Evening</div>
+                            <div class="shift-count-badge">
+                                <span class="cnt-staff">8</span><span class="cnt-sep">|</span><span class="cnt-tech">2</span>
+                            </div>
+                        </div>
+                        <div class="staff-list">
+                            <div class="m3-staff-item"><span class="m3-badge badge-default">T</span><span class="staff-name">Mike T.</span></div>
+                        </div>
+                    </div>
+                    <!-- Shift 3 -->
+                    <div class="m3-shift-card">
+                        <div class="shift-header-row">
+                            <div class="m3-shift-label">Night</div>
+                            <div class="shift-count-badge">
+                                <span class="cnt-staff">5</span><span class="cnt-sep">|</span><span class="cnt-tech">1</span>
+                            </div>
+                        </div>
+                        <div class="staff-list">
+                            <div class="m3-staff-item"><span class="m3-badge badge-tpc-n">N</span><span class="staff-name">Eliza R.</span></div>
+                        </div>
                     </div>
                 </div>
-                <div id="roster-tomorrow" class="roster-grid"></div>
             </div>
         </div>
 
+        <!-- RIGHT COLUMN: Maintenance Operations -->
         <div class="right-column">
-            <div class="m3-card unified-unit">
+            <div class="unified-unit m3-card">
                 <div class="maint-header-wrapper">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
-                        <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
-                        <div class="ops-inline-container">
-                        <div id="box-mainline" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
+                    <div class="card-header">
+                        <span class="material-symbols-rounded">engineering</span> Maintenance Overview
+                    </div>
+                    <div class="ops-inline-container">
+                        <div class="ops-rot-pill ok">
+                            <span class="material-symbols-rounded ops-rot-pill-icon">build_circle</span>
                             <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="mainline-slide">
-                                    <span class="ops-rot-label">MAINLINE</span>
-                                    <span class="ops-rot-status" id="mainline-status-val">---</span>
+                                <div class="ops-rot-pill-slide">
+                                    <span class="ops-rot-label">Systems Nominal</span>
                                 </div>
                             </div>
                         </div>
-                        <div id="box-depot" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
-                            <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="depot-slide">
-                                    <span class="ops-rot-label">DEPOT</span>
-                                    <span class="ops-rot-status" id="depot-status-val">---</span>
+                    </div>
+                    <div class="maint-divider"></div>
+                </div>
+                
+                <div class="maint-list">
+                    <div class="maint-scroll-track scrolling">
+                        <div class="maint-scroll-half">
+                            <div class="m3-sch-item">Routine inspection of Transformer T-04 scheduled for 18:00 HRS.</div>
+                            <div class="m3-sch-item">Cooling fluid replacement required on Sub-Array B.</div>
+                            <div class="m3-sch-item">Calibration of secondary voltage sensors initiated.</div>
+                        </div>
+                        <div class="maint-scroll-half">
+                            <div class="m3-sch-item">Routine inspection of Transformer T-04 scheduled for 18:00 HRS.</div>
+                            <div class="m3-sch-item">Cooling fluid replacement required on Sub-Array B.</div>
+                            <div class="m3-sch-item">Calibration of secondary voltage sensors initiated.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THE TARGET: This footer automatically becomes a centered dock on desktop view due to the media query -->
+                <div class="maint-progress-footer">
+                    <div class="maint-progress-right">
+                        
+                        <!-- Circular Progress Indicators -->
+                        <div class="maint-circ-wrap">
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 36 36"><path class="circ-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path class="circ-fill" stroke="var(--primary)" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg>
+                                    <div class="circ-val" style="color: var(--primary);">75%</div>
+                                </div>
+                                <span class="circ-label">MTRS</span>
+                            </div>
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 36 36"><path class="circ-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /><path class="circ-fill" stroke="var(--success)" stroke-dasharray="92, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" /></svg>
+                                    <div class="circ-val" style="color: var(--success);">92%</div>
+                                </div>
+                                <span class="circ-label">TKRS</span>
+                            </div>
+                        </div>
+
+                        <!-- Bar Charts -->
+                        <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-container">
+                                <div class="bc-col">
+                                    <div class="bc-bar-bg"><div class="bc-bar-fill" style="height: 40%;"></div></div>
+                                    <span class="bc-label">U1</span>
+                                    <span class="bc-value">40</span>
+                                </div>
+                                <div class="bc-col">
+                                    <div class="bc-bar-bg"><div class="bc-bar-fill" style="height: 85%;"></div></div>
+                                    <span class="bc-label">U2</span>
+                                    <span class="bc-value">85</span>
+                                </div>
+                                <div class="bc-col">
+                                    <div class="bc-bar-bg"><div class="bc-bar-fill" style="height: 60%;"></div></div>
+                                    <span class="bc-label">U3</span>
+                                    <span class="bc-value">60</span>
+                                </div>
+                                <div class="bc-col">
+                                    <div class="bc-bar-bg"><div class="bc-bar-fill" style="height: 20%; background: var(--error);"></div></div>
+                                    <span class="bc-label">U4</span>
+                                    <span class="bc-value">20</span>
                                 </div>
                             </div>
+                            <span style="font-family: var(--font-display); font-size: 0.5rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase;">Unit Loads</span>
                         </div>
+
+                        <!-- Hover Popup -->
+                        <div class="maint-progress-popup">
+                            <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Detailed Status</div>
+                            <div class="maint-popup-body">All arrays operating nominally. Maintenance loads stable.</div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="maint-divider"></div>
-                <div id="checklist-dual" class="checklist-dual-row">
-                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-mtrs-slide">
-                                <span class="chk-d-label">MTRS</span>
-                                <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
-                    </div>
-                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-tkrs-slide">
-                                <span class="chk-d-label">TKRS</span>
-                                <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
-                    </div>
-                </div>
-                
-                <div id="maint-list" class="maint-list"></div>
-                
-                <!-- maint-progress-footer contents moved to #maint-bottom-dock -->
-
-            </div>
-        </div>
-    </main>
-
-    <!-- Chart Zoom Overlay -->
-    <div id="chart-zoom-overlay" onclick="closeChartZoom()">
-        <div class="chart-zoom-card" onclick="event.stopPropagation()">
-            <div class="chart-zoom-title" id="cz-title">—</div>
-            <div class="chart-zoom-bars" id="cz-bars"></div>
-            <div class="chart-zoom-legend" id="cz-legend">
-                <div class="czl-item"><div class="czl-dot czl-dot-a"></div><span id="cz-label-a">—</span></div>
-                <div class="czl-item"><div class="czl-dot czl-dot-b"></div><span id="cz-label-b">—</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Maintenance Bottom Dock -->
-    <div id="maint-bottom-dock">
-        <div class="dock-main-row" style="position:relative;">
-            <div class="maint-progress-popup">
-                <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-            </div>
-            <div id="maint-counts-dock">
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-preventive-val">—</div>
-                    <div class="mcd-label">Preventive<br>Maint.</div>
-                </div>
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-corrective-val">—</div>
-                    <div class="mcd-label">Corrective<br>Maint.</div>
-                </div>
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-activity-val">—</div>
-                    <div class="mcd-label">Activities<br>Jobcards</div>
-                </div>
-            </div>
-            <div class="maint-circ-wrap">
-                <div class="maint-circ-item">
-                    <div class="circ-svg-wrap">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-1">—</div>
-                    </div>
-                    <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                </div>
-                <div class="maint-circ-item">
-                    <div class="circ-svg-wrap">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-2">—</div>
-                    </div>
-                    <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                </div>
-            </div>
-            <div class="maint-barchart-wrap" onclick="toggleChartSparkline(event)" title="Click to toggle sparkline / tap to zoom">
-                <div class="maint-barchart-container" id="maint-barchart-container">
-                    <svg id="bc-sparkline-svg" preserveAspectRatio="none"></svg>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                    <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                    <div class="bc-legend" id="bc-legend" style="display:none;">
-                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-a"></div><span id="bc-legend-a-text">Series A</span></div>
-                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-b"></div><span id="bc-legend-b-text">Series B</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="dock-divider"></div>
-        <div id="station-pills-dock" class="dock-station-pills-row"></div>
-    </div>
-
-    <div id="mcd-burst-overlay">
-        <div class="mcd-burst-card">
-            <div class="mcd-burst-val" id="mcd-burst-val">—</div>
-            <div class="mcd-burst-label" id="mcd-burst-label">—</div>
-        </div>
-    </div>
-
-    <div id="st-announce-overlay">
-        <div class="st-announce-card" id="st-announce-card">
-            <div class="st-announce-title">CHECKLIST UPDATED</div>
-            <div class="st-announce-name" id="st-announce-name">---</div>
-        </div>
-    </div>
-
-    <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
+    <!-- Floating Stock Dock -->
+    <div id="stock-dock" class="has-low">
         <div class="sdock-accent"></div>
         <div class="sdock-header">
             <span class="material-symbols-rounded sdock-header-icon">inventory_2</span>
-            <span class="sdock-title">Stock Availability</span>
-            <span class="sdock-low-badge" id="sdock-low-badge">LOW</span>
+            <span class="sdock-title">Critical Spares</span>
+            <span class="sdock-low-badge">ALERT</span>
         </div>
-        <div class="sdock-body" style="position:relative;">
-            <div id="sdock-slide-wrap" style="position:relative;height:2.4rem;overflow:hidden;">
-                <div id="sdock-row-a" class="sdock-row"><span class="sdock-sub">Loading…</span></div>
-                <div id="sdock-row-b" class="sdock-row" style="position:absolute;top:1.2rem;left:0;right:0;opacity:0;"></div>
-            </div>
-            <div class="sdock-notice" id="sdock-notice">
-                <span class="material-symbols-rounded">notifications_active</span>
-                <span class="sdock-notice-text">Stock Updated</span>
+        <div class="sdock-body">
+            <div class="sdock-row">
+                <span class="material-symbols-rounded sdock-row-icon">cable</span>
+                <span class="sdock-row-name">HV Cables</span>
+                <span class="sdock-row-pct low">2%</span>
+                <span class="material-symbols-rounded sdock-row-warn">error</span>
             </div>
         </div>
     </div>
 
-    <div id="driver-card" class="driver-card outdated" onclick="toggleDriverCard(event)">
-        <div class="driver-expanded" onclick="event.stopPropagation()">
-            <div class="driver-exp-outdated">
-                <span class="material-symbols-rounded" style="font-size:14px!important">warning</span>
-                OUTDATED DATA
-            </div>
-            <div class="driver-exp-header">
-                <div class="driver-exp-label">On Duty Driver</div>
-                <div id="driver-shift" class="driver-exp-shift">SHIFT: ---</div>
-                <div id="driver-name" class="driver-exp-name">Loading...</div>
-                <div id="driver-phone" class="driver-exp-phone">---</div>
-            </div>
-            <div id="driver-update-badge" class="driver-exp-update">UPDATE: ---</div>
-            <div class="driver-exp-call" onclick="initiateCall(event)">
-                <span class="material-symbols-rounded">call</span>
-                CALL DRIVER
-            </div>
-        </div>
-        <div class="driver-pill">
-            <div class="driver-pill-icon">
-                <span class="material-symbols-rounded" style="font-size:17px!important">directions_car</span>
-            </div>
-            <div class="driver-pill-text-wrap">
-                <div class="driver-pill-slide" id="driver-pill-slide">
-                    <span class="driver-pill-name-val" id="driver-pill-name">Loading...</span>
-                    <span class="driver-pill-num-val" id="driver-pill-num">---</span>
-                </div>
-            </div>
-            <div class="driver-pill-outdated-badge">
-                <span class="material-symbols-rounded">warning</span>
-                OUTDATED
-            </div>
-            <div class="driver-pill-outdated-dot"></div>
-        </div>
+    <!-- Ticker Placeholder -->
+    <div class="ticker-bar">
+        <span style="font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; color: var(--on-surface);"><span style="color: var(--primary);">SYS MSG:</span> ALL SUBSTATION ZONES REPORTING NOMINAL TELEMETRY.</span>
     </div>
 
-    <div id="flash-news-overlay">
-        <div class="flash-backdrop" onclick="dismissFlash()"></div>
-        <div class="flash-panel">
-            <div class="flash-banner">
-                <div class="flash-banner-live">
-                    <div class="flash-live-dot"></div>
-                    LIVE
-                </div>
-                <div class="flash-banner-text">⚡ IMPORTANT NOTICE</div>
-                <div class="flash-banner-tag" id="flash-tag">KMRL SUBSTATION</div>
-            </div>
-            <div class="flash-body">
-                <div class="flash-eyebrow">BREAKING UPDATE</div>
-                <div class="flash-headline" id="flash-headline">—</div>
-                <div class="flash-item-num">
-                    <span id="flash-item-label">ITEM 1 OF 1</span>
-                    <div class="flash-dots" id="flash-dots"></div>
-                </div>
-            </div>
-            <div class="flash-footer">
-                <div class="flash-progress-wrap">
-                    <div class="flash-progress-fill" id="flash-progress-fill"></div>
-                </div>
-                <div class="flash-dismiss" onclick="dismissFlash()">DISMISS ✕</div>
-            </div>
-        </div>
+    <!-- Station Pills Placeholder (Pushed up slightly in desktop view via CSS) -->
+    <div id="station-pills-dock">
+        <div style="padding: 4px 12px; background: var(--surface-variant); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 800; border: 1px solid var(--outline);">Z1: OK</div>
+        <div style="padding: 4px 12px; background: var(--surface-variant); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 800; border: 1px solid var(--outline);">Z2: OK</div>
     </div>
-
-    <div id="cons-overlay">
-        <div class="cons-overlay-backdrop" onclick="closeConsOverlay()"></div>
-        <div class="cons-overlay-panel">
-            <div class="cons-panel-header">
-                <div class="cons-panel-title">
-                    <span class="material-symbols-rounded">inventory_2</span>
-                    STOCK AVAILABILITY
-                </div>
-                <button class="cons-panel-close" onclick="closeConsOverlay()">
-                    <span class="material-symbols-rounded">close</span>
-                </button>
-            </div>
-            <div class="cons-panel-list" id="cons-panel-list">
-                <div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items loaded</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-dock" class="app-dock"></div>
-
-    <div id="info-rotator" style="display:none;">
-        <div class="ir-slab" id="ir-slab">
-            <div class="ir-accent-bar"></div>
-            <div class="ir-icon-wrap" id="ir-icon-wrap"></div>
-            <div class="ir-text-col">
-                <div class="ir-headline" id="ir-headline">—</div>
-                <div class="ir-label"   id="ir-label"></div>
-                <div class="ir-dots-row" id="ir-dots"></div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
-        <div id="ticker-body" class="ticker-body">
-            <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
-        </div>
-        <div class="ticker-refresh-stamp">
-            <span class="refresh-prefix">UPDATED: </span><span id="refresh-time">---</span>
-        </div>
-        <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
-    </footer>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
-
-        function initTheme() {
-            const saved = localStorage.getItem('kmrl_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', saved);
-        }
-        initTheme();
-
-        function toggleTheme(e) {
-            if (e) e.stopPropagation();
-            const cur = document.documentElement.getAttribute('data-theme');
-            const nxt = cur === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', nxt);
-            localStorage.setItem('kmrl_theme', nxt);
-            const icon = document.getElementById('theme-icon');
-            if (icon) icon.innerText = nxt === 'dark' ? 'light_mode' : 'dark_mode';
-        }
-        function initThemeIcon() {
-            const saved = localStorage.getItem('kmrl_theme') || 'dark';
-            const icon = document.getElementById('theme-icon');
-            if (icon) icon.innerText = saved === 'dark' ? 'light_mode' : 'dark_mode';
-        }
-        initThemeIcon();
-        function goFullscreen(e) { if (e) e.stopPropagation(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
-        function manualOff(e) { if (e) e.stopPropagation(); document.getElementById('blackout').style.display = 'flex'; }
-        function wakeUp() {
-            document.getElementById('blackout').style.display = 'none';
-        }
-
-        // ── Mobile Tabs Switcher ──
-        function switchMobileTab(tabId) {
-            document.querySelectorAll('.m-tab').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tabId);
-            });
-            const dc = document.querySelector('.dashboard-content');
-            if(dc) dc.setAttribute('data-active-tab', tabId);
-            document.body.classList.toggle('maint-tab-active', tabId === 'maint');
-        }
-
-        // ── Ops rotating pills: alternate label ↔ status every 8s ──
-        let _opsPillTimer = null;
-        let _opsShowingStatus = false;
-        function startOpsPillCycle() {
-            if (_opsPillTimer) clearInterval(_opsPillTimer);
-            _opsPillTimer = setInterval(() => {
-                _opsShowingStatus = !_opsShowingStatus;
-                const ms = document.getElementById('mainline-slide');
-                const ds = document.getElementById('depot-slide');
-                if (ms) ms.classList.toggle('show-status', _opsShowingStatus);
-                if (ds) ds.classList.toggle('show-status', _opsShowingStatus);
-            }, 8000);
-        }
-        startOpsPillCycle();
-
-        // ── Hamburger menu ──
-        function toggleHamburger(e) {
-            if (e) e.stopPropagation();
-            const menu = document.getElementById('hamburger-menu');
-            const icon = document.getElementById('hamburger-icon');
-            const open = menu.classList.toggle('open');
-            icon.innerText = open ? 'close' : 'menu';
-        }
-        function closeHamburger() {
-            const menu = document.getElementById('hamburger-menu');
-            const icon = document.getElementById('hamburger-icon');
-            if (menu) { menu.classList.remove('open'); }
-            if (icon) icon.innerText = 'menu';
-        }
-        
-        // ── Station Pills Toggle ──
-        function toggleStationPills(e) {
-            if (e) e.stopPropagation();
-            const dock = document.getElementById('station-pills-dock');
-            if (dock) dock.classList.toggle('expanded');
-        }
-
-        document.addEventListener('click', function(e) {
-            const menu = document.getElementById('hamburger-menu');
-            const btn  = document.getElementById('hamburger-btn');
-            if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-                closeHamburger();
-            }
-
-            const card = document.getElementById('driver-card');
-            if (card && card.classList.contains('expanded') && !card.contains(e.target)) {
-                card.classList.remove('expanded');
-            }
-            
-            const stDock = document.getElementById('station-pills-dock');
-            const stBtn = document.getElementById('st-pills-toggle-btn');
-            if (stDock && stDock.classList.contains('expanded') && !stDock.contains(e.target) && (!stBtn || !stBtn.contains(e.target))) {
-                stDock.classList.remove('expanded');
-            }
-        });
-
-        // ── Failures block ──
-        let _failuresLastRaw = null;
-        function updateFailuresPill(raw) {
-            const pill     = document.getElementById('failures-pill');
-            const openEl   = document.getElementById('fail-open-val');
-            const closedEl = document.getElementById('fail-closed-val');
-            if (!pill || !openEl || !closedEl) return;
-
-            if (!raw || raw.trim() === '' || raw.trim() === '---') {
-                openEl.textContent   = '—';
-                closedEl.textContent = '—';
-                return;
-            }
-
-            const parts       = raw.trim().split('/');
-            const openCount   = parseInt(parts[0]) || 0;
-            const closedCount = parseInt(parts[1]) || 0;
-
-            openEl.textContent   = openCount;
-            closedEl.textContent = closedCount;
-
-            if (_failuresLastRaw !== raw) {
-                _failuresLastRaw = raw;
-                pill.classList.remove('burst');
-                void pill.offsetWidth;
-                pill.classList.add('burst');
-                setTimeout(() => pill.classList.remove('burst'), 900);
-            }
-        }
-
-        // ── Driver pill: alternate name ↔ number every 10s ──
-        let _driverPillTimer = null;
-        let _driverShowingNum = false;
-        function startDriverPillCycle() {
-            if (_driverPillTimer) clearInterval(_driverPillTimer);
-            _driverPillTimer = setInterval(() => {
-                const slide = document.getElementById('driver-pill-slide');
-                if (!slide) return;
-                _driverShowingNum = !_driverShowingNum;
-                slide.classList.toggle('show-number', _driverShowingNum);
-            }, 10000);
-        }
-        startDriverPillCycle();
-
-        function toggleDriverCard(e) {
-            if (e) e.stopPropagation();
-            const card = document.getElementById('driver-card');
-            card.classList.toggle('expanded');
-        }
-        
-        function initiateCall(e) {
-            if (e) e.stopPropagation();
-            const ph = document.getElementById('driver-phone').innerText;
-            if (ph && ph !== "---") window.location.href = `tel:${ph.replace(/\D/g, '')}`;
-        }
-
-        // ── Flash News System ──
-        let _flashItems = [];
-        let _flashIdx = 0;
-        let _flashTimer = null;
-        let _flashProgressTimer = null;
-        let _flashHourTimer = null;
-        let _lastNoticeRaw = '';
-        const FLASH_ITEM_DURATION = 7000; 
-
-        function showFlashNews(items, startIdx = 0) {
-            if (!items || items.length === 0) return;
-            _flashItems = items;
-            _flashIdx = startIdx;
-            _renderFlashItem();
-            const overlay = document.getElementById('flash-news-overlay');
-            overlay.classList.add('visible');
-            _startFlashProgress();
-        }
-
-        function _renderFlashItem() {
-            const items = _flashItems;
-            const idx = _flashIdx;
-            const total = items.length;
-            document.getElementById('flash-headline').innerText = items[idx] || '';
-            document.getElementById('flash-item-label').innerText = `ITEM ${idx + 1} OF ${total}`;
-            const dotsEl = document.getElementById('flash-dots');
-            dotsEl.innerHTML = items.map((_, i) =>
-                `<div class="flash-dot ${i === idx ? 'active' : ''}"></div>`
-            ).join('');
-            document.getElementById('flash-tag').innerText =
-                new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit', hour12:false}) + ' · KMRL';
-        }
-
-        function _startFlashProgress() {
-            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
-            if (_flashTimer) clearTimeout(_flashTimer);
-            const fill = document.getElementById('flash-progress-fill');
-            if (fill) fill.style.width = '0%';
-            const start = Date.now();
-            _flashProgressTimer = setInterval(() => {
-                const elapsed = Date.now() - start;
-                const pct = Math.min(100, (elapsed / FLASH_ITEM_DURATION) * 100);
-                if (fill) fill.style.width = pct + '%';
-            }, 80);
-            _flashTimer = setTimeout(() => {
-                clearInterval(_flashProgressTimer);
-                _flashIdx++;
-                if (_flashIdx < _flashItems.length) {
-                    _renderFlashItem();
-                    _startFlashProgress();
-                } else {
-                    dismissFlash();
-                }
-            }, FLASH_ITEM_DURATION);
-        }
-
-        function dismissFlash() {
-            if (_flashTimer) clearTimeout(_flashTimer);
-            if (_flashProgressTimer) clearInterval(_flashProgressTimer);
-            document.getElementById('flash-news-overlay').classList.remove('visible');
-        }
-
-        function triggerFlashIfChanged(raw) {
-            if (!raw || raw.trim() === '') return;
-            const items = raw.split('\n').map(l => l.trim()).filter(l => l !== '');
-            if (items.length === 0) return;
-
-            if (raw.trim() !== _lastNoticeRaw.trim()) {
-                _lastNoticeRaw = raw.trim();
-                setTimeout(() => showFlashNews(items, 0), 1200);
-                if (_flashHourTimer) clearInterval(_flashHourTimer);
-                _flashHourTimer = setInterval(() => {
-                    const latest = _lastNoticeRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
-                    if (latest.length > 0) showFlashNews(latest, 0);
-                }, 60 * 60 * 1000); 
-            }
-        }
-
-        function toggleGrid(e) {
-            if (e) e.stopPropagation();
-            const chk = document.getElementById('checklist-container');
-            const dot = document.getElementById('hm-grid-dot');
-            const isHidden = chk.style.visibility === 'hidden';
-            chk.style.visibility = isHidden ? 'visible' : 'hidden';
-            if (dot) dot.classList.toggle('visible', !isHidden);
-            if (isHidden) {
-                const t = document.getElementById('station-track');
-                t.style.animation = 'none'; t.offsetHeight; t.style.animation = null;
-            }
-        }
-
-        function parseStaff(raw) {
-            if (!raw) return '';
-            return raw.split('\n').filter(l => l.trim() !== '').map(line => {
-                if (line.includes('|')) {
-                    const parts = line.split('|'), name = parts[0].trim(), duty = parts[1] ? parts[1].trim() : '', dCode = duty.toUpperCase();
-                    let bCls = 'badge-default';
-                    if (dCode.includes('M TPC')) bCls = 'badge-tpc-m';
-                    else if (dCode.includes('E TPC')) bCls = 'badge-tpc-e';
-                    else if (dCode.includes('N TPC')) bCls = 'badge-tpc-n';
-                    return `<div class="m3-staff-item"><span class="staff-name">${name}</span><span class="m3-badge ${bCls}">${duty}</span></div>`;
-                }
-                return `<div class="m3-staff-item"><span class="staff-name">${line}</span></div>`;
-            }).join('');
-        }
-
-        function buildTechSection(techRaw) {
-            if (!techRaw || techRaw.trim() === '') return '';
-            const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
-            if (names.length === 0) return '';
-            const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
-            const allChips = names.map(chipHtml).join('');
-            const doubledChips = allChips + allChips; 
-            if (names.length >= 3) {
-                return `
-                <div class="tech-section">
-                    <div class="tech-label-row">
-                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
-                        <span class="tech-label">Technicians On Duty</span>
-                    </div>
-                    <div class="tech-scroll-wrap">
-                        <div class="tech-scroll-track">${doubledChips}</div>
-                    </div>
-                </div>`;
-            } else {
-                return `
-                <div class="tech-section">
-                    <div class="tech-label-row">
-                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
-                        <span class="tech-label">Technicians On Duty</span>
-                    </div>
-                    <div class="tech-static">${names.map(chipHtml).join('')}</div>
-                </div>`;
-            }
-        }
-
-        function isShiftActive(shiftName) {
+        // Start basic clock update
+        function updateClock() {
             const now = new Date();
-            const totalMins = now.getHours() * 60 + now.getMinutes();
-            const m = (h, min) => h * 60 + min;
-
-            if (shiftName === 'MORNING') return totalMins >= m(6, 30) && totalMins < m(14, 0);
-            if (shiftName === 'EVENING') return totalMins >= m(14, 0) && totalMins < m(21, 30);
-            if (shiftName === 'NIGHT') return totalMins >= m(21, 30) || totalMins < m(6, 30);
-            return false;
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            document.getElementById('time-val').textContent = timeStr;
         }
-
-        function buildShift(title, val, active, tpc, techRaw) {
-            const tpcHtml = (tpc && tpc.trim() !== '') ? `<span class="shift-tpc-badge">TPC: ${tpc}</span>` : '';
-            const staffHtml = (val && val.trim() !== '') ? parseStaff(val) : `<div class="m3-staff-item" style="justify-content:center;opacity:0.4;font-family:var(--font-display);font-size:0.8rem;">No Deployment</div>`;
-            const techHtml = buildTechSection(techRaw);
-            const staffCount = (val && val.trim() !== '') ? val.split('\n').filter(l => l.trim() !== '').length : 0;
-            const techCount = (techRaw && techRaw.trim() !== '') ? techRaw.split('\n').filter(l => l.trim() !== '').length : 0;
-            const countBadge = (staffCount > 0 || techCount > 0) ? `<span class="shift-count-badge"><span class="material-symbols-rounded">group</span><span class="cnt-staff">${staffCount}</span><span class="cnt-sep">+</span><span class="cnt-tech">${techCount}</span></span>` : '';
-
-            return `
-            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
-                <div class="shift-header-row">
-                    <div class="m3-shift-label"><span class="shift-active-dot"></span>${title}${countBadge}</div>
-                    ${tpcHtml}
-                </div>
-                <div class="staff-list">${staffHtml}</div>
-                ${techHtml}
-            </div>`;
-        }
-
-        function buildGenPills(genRaw) {
-            if (!genRaw || genRaw.trim() === '') return '';
-            return genRaw.split('\n').filter(l => l.trim() !== '').map(line => {
-                const name = line.includes('|') ? line.split('|')[0].trim() : line.trim();
-                return `<span class="gen-name-tag">${name}</span>`;
-            }).join('');
-        }
-
-        function updateTickerBar(badge, names, rawText = null) {
-            const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
-            head.innerText = badge.toUpperCase();
-            text.classList.remove('scrolling-active');
-            text.innerText = names;
-            const popup = document.getElementById('ticker-popup');
-            if (popup) popup.innerText = rawText !== null ? rawText : names;
-            requestAnimationFrame(() => {
-                const tw = text.scrollWidth, cw = body.offsetWidth;
-                if (tw > cw - 40) { text.classList.add('scrolling-active'); body.style.justifyContent = 'flex-start'; }
-                else { body.style.justifyContent = 'center'; }
-            });
-        }
-
-        // ── Station Pills Logic & State ──
-        let _stPillsData = [];
-        let _stPopupInterval = 0; // ms
-        let _stAutoPopupTimer = null;
-        let _stAnnounceQueue = [];
-        let _isAnnouncing = false;
-        let _stPillsFirstLoad = true;
-        let _stPopupIdx = -1;
-
-        function parseStationPills(rawString) {
-            if (!rawString || rawString.trim() === '') return [];
-            return rawString.split('•').map(s => {
-                let text = s.trim();
-                if (!text) return null;
-                let isFilled = false;
-                let remark = null;
-                
-                if (text.includes('✓')) {
-                    isFilled = true;
-                    text = text.replace('✓', '').trim();
-                }
-                
-                const remarkMatch = text.match(/\[(.*?)\]/);
-                if (remarkMatch) {
-                    remark = remarkMatch[1].trim();
-                    text = text.replace(remarkMatch[0], '').trim();
-                }
-                
-                return { name: text, isFilled, remark };
-            }).filter(item => item && item.name);
-        }
-
-        function handleStationPills(r2c50, r2c51) {
-            if (r2c51) _stPopupInterval = (parseFloat(r2c51) || 0) * 1000;
-            
-            const newPillsData = parseStationPills(r2c50);
-            
-            if (_stPillsFirstLoad) {
-                _stPillsData = newPillsData;
-                renderStationPills();
-                _stPillsFirstLoad = false;
-            } else {
-                const newAdded = newPillsData.filter(np => 
-                    !_stPillsData.some(op => op.name === np.name)
-                );
-                
-                _stPillsData = newPillsData;
-                
-                if (newAdded.length > 0) {
-                    _stAnnounceQueue.push(...newAdded);
-                    processAnnounceQueue();
-                } else {
-                    renderStationPills();
-                }
-            }
-        }
-
-        function renderStationPills() {
-            const dock = document.getElementById('station-pills-dock');
-            if (!dock) return;
-            
-            const toggleBtn = document.getElementById('st-pills-toggle-btn');
-            const badge = document.getElementById('st-pills-badge');
-            
-            if (_stPillsData.length === 0) {
-                dock.innerHTML = '';
-                if (toggleBtn) toggleBtn.style.display = 'none';
-                stopAutoPopup();
-                return;
-            } else {
-                if (toggleBtn) toggleBtn.style.display = '';
-            }
-            
-            dock.innerHTML = _stPillsData.map((p, idx) => {
-                const fillCls = p.isFilled ? 'st-filled' : '';
-                const remarkHtml = p.remark ? `<div class="st-remark-bubble">${p.remark}</div>` : '';
-                return `<div class="st-pill ${fillCls}" id="st-pill-${idx}">
-                    ${p.name}
-                    ${remarkHtml}
-                </div>`;
-            }).join('');
-            
-            if (toggleBtn && badge) {
-                const filledCount = _stPillsData.filter(p => p.isFilled).length;
-                if (filledCount > 0) {
-                    toggleBtn.classList.add('has-updates');
-                    badge.textContent = filledCount;
-                } else {
-                    toggleBtn.classList.remove('has-updates');
-                    badge.textContent = '';
-                }
-            }
-            
-            startAutoPopup();
-        }
-
-        function startAutoPopup() {
-            stopAutoPopup();
-            if (_stPopupInterval <= 0) return;
-            
-            const pillsWithRemarks = _stPillsData.map((p, i) => ({p, i})).filter(x => x.p.remark);
-            if (pillsWithRemarks.length === 0) return;
-            
-            _stAutoPopupTimer = setInterval(() => {
-                document.querySelectorAll('.st-pill.auto-popup').forEach(el => el.classList.remove('auto-popup'));
-                
-                _stPopupIdx = (_stPopupIdx + 1) % pillsWithRemarks.length;
-                const targetIdx = pillsWithRemarks[_stPopupIdx].i;
-                const pillEl = document.getElementById(`st-pill-${targetIdx}`);
-                if (pillEl) {
-                    pillEl.classList.add('auto-popup');
-                    setTimeout(() => {
-                        if (pillEl) pillEl.classList.remove('auto-popup');
-                    }, Math.min(3000, _stPopupInterval - 200)); 
-                }
-            }, _stPopupInterval);
-        }
-
-        function stopAutoPopup() {
-            if (_stAutoPopupTimer) clearInterval(_stAutoPopupTimer);
-            _stAutoPopupTimer = null;
-        }
-
-        function processAnnounceQueue() {
-            if (_isAnnouncing || _stAnnounceQueue.length === 0) {
-                if (_stAnnounceQueue.length === 0 && !_isAnnouncing) renderStationPills();
-                return;
-            }
-            
-            _isAnnouncing = true;
-            const p = _stAnnounceQueue.shift();
-            
-            const overlay = document.getElementById('st-announce-overlay');
-            const card = document.getElementById('st-announce-card');
-            const nameEl = document.getElementById('st-announce-name');
-            
-            nameEl.textContent = p.name;
-            nameEl.className = 'st-announce-name ' + (p.isFilled ? 'filled' : '');
-            
-            card.className = 'st-announce-card';
-            overlay.classList.add('visible');
-            
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    card.classList.add('pop');
-                    
-                    setTimeout(() => {
-                        card.classList.remove('pop');
-                        card.classList.add('fly-down');
-                        overlay.classList.remove('visible');
-                        
-                        setTimeout(() => {
-                            _isAnnouncing = false;
-                            processAnnounceQueue(); 
-                        }, 500); 
-                        
-                    }, 2000); 
-                }, 50);
-            });
-        }
-
-        // Update function for circular progress bars
-        function updateCircularProgress(val, fillId, valId) {
-            const pct = parseFloat(val);
-            const fillEl = document.getElementById(fillId);
-            const valEl = document.getElementById(valId);
-            if (!fillEl || !valEl) return;
-            const CIRCUMFERENCE = 113.1;
-            if (!isNaN(pct)) {
-                const clamped = Math.min(100, Math.max(0, pct)); 
-                valEl.innerText = clamped.toFixed(0) + '%';
-                const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
-                setTimeout(() => { fillEl.style.strokeDashoffset = offset; }, 80);
-                
-                if (clamped >= 80) { 
-                    fillEl.style.stroke = 'var(--success)';
-                    valEl.style.color = 'var(--success)'; 
-                } else if (clamped >= 50) { 
-                    fillEl.style.stroke = 'var(--primary)';
-                    valEl.style.color = 'var(--primary)'; 
-                } else { 
-                    fillEl.style.stroke = 'var(--error)';
-                    valEl.style.color = 'var(--error)'; 
-                }
-            } else { 
-                valEl.innerText = '—'; 
-                fillEl.style.strokeDashoffset = CIRCUMFERENCE; 
-            }
-        }
-
-        // ── DUAL BAR CHART STATE ──
-        let _bcRawA = '', _bcRawB = '', _bcLabelA = '—', _bcLabelB = '—', _bcChartTitle = '—';
-        let _bcSparklineMode = false;
-        let _bcSparklineTimer = null;
-        const BC_SPARKLINE_AUTO_INTERVAL = 10 * 60 * 1000; // 10 minutes
-        const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-        const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
-        function parseChartData(raw) {
-            if (!raw || raw.trim() === '') return [];
-            const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return [];
-            const dataMap = {};
-            matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
-            const currentFyIdx = fyOrder.indexOf(monthNames[new Date().getMonth()]);
-            const result = [];
-            for (let i = 0; i <= currentFyIdx; i++) {
-                const m = fyOrder[i];
-                result.push({ month: m, val: dataMap[m] || 0 });
-            }
-            return result;
-        }
-
-        function renderMaintBarChart(rawA, rawB, labelA, labelB, chartTitle) {
-            // Accept either old single-arg call or new multi-arg
-            if (rawB !== undefined) { _bcRawA = rawA || ''; _bcRawB = rawB || ''; }
-            else { _bcRawA = rawA || ''; }
-            if (labelA !== undefined) _bcLabelA = labelA || '—';
-            if (labelB !== undefined) _bcLabelB = labelB || '—';
-            if (chartTitle !== undefined) _bcChartTitle = chartTitle || '—';
-            _renderBarChartInternal(true);
-        }
-
-        function _renderBarChartInternal(isUpdate) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            const svgEl = document.getElementById('bc-sparkline-svg');
-            const legendEl = document.getElementById('bc-legend');
-
-            const dataA = parseChartData(_bcRawA);
-            const dataB = parseChartData(_bcRawB);
-            const hasDual = dataB.length > 0;
-
-            if (dataA.length === 0 && dataB.length === 0) { 
-                // Keep sparkline svg but clear bars
-                container.querySelectorAll('.bc-col').forEach(c => c.remove());
-                return; 
-            }
-
-            let maxVal = 0;
-            dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-            dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-
-            const months = dataA.length > 0 ? dataA : dataB;
-
-            // Remove old bars
-            container.querySelectorAll('.bc-col').forEach(c => c.remove());
-
-            months.forEach((d, i) => {
-                const vA = (dataA[i] ? dataA[i].val : 0);
-                const vB = (hasDual && dataB[i] ? dataB[i].val : null);
-                const hA = maxVal > 0 ? (vA / maxVal) * 100 : 0;
-                const hB = (vB !== null && maxVal > 0) ? (vB / maxVal) * 100 : 0;
-                const col = document.createElement('div');
-                col.className = 'bc-col';
-                col.innerHTML = `
-                    <div class="bc-bar-bg">
-                        <div class="bc-bar-fill" style="height:0%"><div class="bc-value">${vA}</div></div>
-                        ${hasDual ? `<div class="bc-bar-fill-b" style="height:0%"></div>` : ''}
-                    </div>
-                    <div class="bc-label">${d.month}</div>`;
-                container.appendChild(col);
-                setTimeout(() => {
-                    const fills = col.querySelectorAll('.bc-bar-fill, .bc-bar-fill-b');
-                    if (fills[0]) fills[0].style.height = hA + '%';
-                    if (fills[1]) fills[1].style.height = hB + '%';
-                }, 120);
-            });
-
-            // Legend
-            if (legendEl) {
-                if (hasDual) {
-                    legendEl.style.display = 'flex';
-                    const aText = document.getElementById('bc-legend-a-text');
-                    const bText = document.getElementById('bc-legend-b-text');
-                    if (aText) aText.textContent = _bcLabelA;
-                    if (bText) bText.textContent = _bcLabelB;
-                } else {
-                    legendEl.style.display = 'none';
-                }
-            }
-
-            // Sparkline
-            if (_bcSparklineMode) {
-                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 150);
-            }
-
-            // Zoom overlay with animation if data changed
-            if (isUpdate) {
-                _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months);
-            }
-        }
-
-        function _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl) {
-            if (!svgEl) return;
-            const W = container.clientWidth, H = container.clientHeight;
-            if (W === 0 || H === 0) return;
-            const n = dataA.length || dataB.length;
-            if (n === 0) { svgEl.innerHTML = ''; return; }
-            const pad = 4;
-            function pts(data, color, opacity) {
-                if (data.length === 0) return '';
-                const step = (W - pad*2) / (n - 1 || 1);
-                const points = data.map((d, i) => {
-                    const x = pad + i * step;
-                    const y = H - pad - (maxVal > 0 ? (d.val / maxVal) * (H - pad*2) : 0);
-                    return `${x},${y}`;
-                }).join(' ');
-                return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
-            }
-            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-            svgEl.innerHTML = pts(dataA, 'var(--primary)', '0.85') + (hasDual ? pts(dataB, 'var(--secondary,#A8BDD4)', '0.7') : '');
-        }
-
-        // ── SPARKLINE TOGGLE ──
-        function toggleChartSparkline(e) {
-            if (e) e.stopPropagation();
-            _bcSparklineMode = !_bcSparklineMode;
-            const container = document.getElementById('maint-barchart-container');
-            const svgEl = document.getElementById('bc-sparkline-svg');
-            if (!container) return;
-            container.classList.toggle('sparkline-mode', _bcSparklineMode);
-            if (_bcSparklineMode) {
-                const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
-                const hasDual = dataB.length > 0;
-                let maxVal = 0;
-                dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
-            } else {
-                if (svgEl) svgEl.innerHTML = '';
-            }
-            // Reset auto-sparkline timer
-            _restartSparklineAutoTimer();
-        }
-
-        function _restartSparklineAutoTimer() {
-            if (_bcSparklineTimer) clearTimeout(_bcSparklineTimer);
-            _bcSparklineTimer = setTimeout(() => {
-                _bcSparklineMode = !_bcSparklineMode;
-                const container = document.getElementById('maint-barchart-container');
-                const svgEl = document.getElementById('bc-sparkline-svg');
-                if (container) container.classList.toggle('sparkline-mode', _bcSparklineMode);
-                if (_bcSparklineMode) {
-                    const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
-                    const hasDual = dataB.length > 0;
-                    let maxVal = 0;
-                    dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                    dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                    setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
-                } else { if (svgEl) svgEl.innerHTML = ''; }
-                _restartSparklineAutoTimer();
-            }, BC_SPARKLINE_AUTO_INTERVAL);
-        }
-        _restartSparklineAutoTimer();
-
-        // ── CHART ZOOM OVERLAY ──
-        let _czTimer = null;
-        let _czPrevHashA = '', _czPrevHashB = '';
-        function _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months) {
-            const hashA = _bcRawA, hashB = _bcRawB;
-            if (hashA === _czPrevHashA && hashB === _czPrevHashB) return;
-            _czPrevHashA = hashA; _czPrevHashB = hashB;
-            if (!dataA.length && !dataB.length) return;
-
-            const overlay = document.getElementById('chart-zoom-overlay');
-            const barsEl = document.getElementById('cz-bars');
-            const titleEl = document.getElementById('cz-title');
-            const czLabelA = document.getElementById('cz-label-a');
-            const czLabelB = document.getElementById('cz-label-b');
-            const czLegend = document.getElementById('cz-legend');
-            if (!overlay || !barsEl) return;
-
-            if (titleEl) titleEl.textContent = _bcChartTitle || 'MONTHLY TREND';
-            if (czLabelA) czLabelA.textContent = _bcLabelA;
-            if (czLabelB) czLabelB.textContent = _bcLabelB;
-            if (czLegend) czLegend.style.display = hasDual ? 'flex' : 'none';
-
-            barsEl.innerHTML = months.map((d, i) => {
-                const vA = dataA[i] ? dataA[i].val : 0;
-                const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
-                return `<div class="czb-col">
-                    <div class="czb-bar-bg">
-                        <div class="czb-bar-a" style="height:0%"></div>
-                        ${hasDual ? `<div class="czb-bar-b" style="height:0%"></div>` : ''}
-                    </div>
-                    <div class="czb-label">${d.month}</div>
-                </div>`;
-            }).join('');
-
-            overlay.classList.add('visible');
-            setTimeout(() => {
-                months.forEach((d, i) => {
-                    const vA = dataA[i] ? dataA[i].val : 0;
-                    const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
-                    const col = barsEl.children[i];
-                    if (!col) return;
-                    const fills = col.querySelectorAll('.czb-bar-a, .czb-bar-b');
-                    if (fills[0]) fills[0].style.height = (maxVal > 0 ? vA/maxVal*100 : 0) + '%';
-                    if (fills[1] && vB !== null) fills[1].style.height = (maxVal > 0 ? vB/maxVal*100 : 0) + '%';
-                });
-            }, 120);
-
-            if (_czTimer) clearTimeout(_czTimer);
-            _czTimer = setTimeout(() => closeChartZoom(), 5000);
-        }
-        function closeChartZoom() {
-            const overlay = document.getElementById('chart-zoom-overlay');
-            if (overlay) overlay.classList.remove('visible');
-            if (_czTimer) clearTimeout(_czTimer);
-        }
-
-        window.draw = function(data) {
-            const timeEl = document.getElementById('refresh-time');
-            if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-            let stHtml = '', tdHtml = '', tmHtml = '';
-
-            let staff = {
-                today:    { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' },
-                tomorrow: { gen: '', morn: '', eve: '', night: '', tpcMorn: '', tpcEve: '', tpcNight: '', techMorn: '', techEve: '', techNight: '' }
-            };
-
-            let chkStatus = '', techNames = '', mtrsStatus = '', tkrsStatus = '';
-            let opsScheduleLines = null;
-            let irWeather = '', irItems = '', irImages = '';
-            let statPillsRaw = '', statPillsIntervalRaw = '';
-            const dockRows = {};
-            const irRowItems = {}, irRowImages = {};
-
-            data.forEach(item => {
-                const unit  = (item.Unit      || '').trim(), param = (item.Parameter || '').trim(), val   = (item.Value     || '').trim();
-
-                if (param === 'sheetab_R2C2') {
-                    const formatted = val.split('\n').map(l => l.trim()).filter(l => l !== '').join('   •   ');
-                    updateTickerBar('IMPORTANT NOTICE', formatted, val);
-                    triggerFlashIfChanged(val);
-                }
-
-                if (param === 'sheetab_R2C12') staff.today.gen      = val;
-                if (param === 'sheetab_R2C3')  staff.today.morn     = val;
-                if (param === 'sheetab_R2C4')  staff.today.eve      = val;
-                if (param === 'sheetab_R2C5')  staff.today.night    = val;
-                if (param === 'sheetab_R2C9')  staff.today.tpcMorn  = val;
-                if (param === 'sheetab_R2C10') staff.today.tpcEve   = val;
-                if (param === 'sheetab_R2C11') staff.today.tpcNight = val;
-                if (param === 'sheetab_R2C6')  staff.today.techMorn  = val;
-                if (param === 'sheetab_R2C7')  staff.today.techEve   = val;
-                if (param === 'sheetab_R2C8')  staff.today.techNight = val;
-
-                if (param === 'sheetab_R2C26') staff.tomorrow.gen      = val;
-                if (param === 'sheetab_R2C17') staff.tomorrow.morn     = val;
-                if (param === 'sheetab_R2C18') staff.tomorrow.eve      = val;
-                if (param === 'sheetab_R2C19') staff.tomorrow.night    = val;
-                if (param === 'sheetab_R2C23') staff.tomorrow.tpcMorn  = val;
-                if (param === 'sheetab_R2C24') staff.tomorrow.tpcEve   = val;
-                if (param === 'sheetab_R2C25') staff.tomorrow.tpcNight = val;
-                if (param === 'sheetab_R2C20') staff.tomorrow.techMorn  = val;
-                if (param === 'sheetab_R2C21') staff.tomorrow.techEve   = val;
-                if (param === 'sheetab_R2C22') staff.tomorrow.techNight = val;
-
-                if (param === 'ChecklistStatus') chkStatus = val;
-                if (param === 'sheetab_R2C33') mtrsStatus = val;
-                if (param === 'sheetab_R2C34') tkrsStatus = val;
-                if (param === 'sheetab_R2C38' && unit === 'sheetab') updateFailuresPill(val);
-
-                if (param === 'sheetab_R2C39' && unit === 'sheetab') updateMaintCount('maint-corrective-val', val, 'Corrective Maintenance');
-                if (param === 'sheetab_R2C40' && unit === 'sheetab') updateMaintCount('maint-activity-val', val, 'Activities');
-                if (param === 'sheetab_R2C41' && unit === 'sheetab') updateMaintCount('maint-preventive-val', val, 'Preventive Maintenance');
-                
-                // Station Pills Parameters
-                if (param === 'sheetab_R2C50' && unit === 'sheetab') statPillsRaw = val;
-                if (param === 'sheetab_R2C51' && unit === 'sheetab') statPillsIntervalRaw = val;
-
-                // Info Rotator Content Parameters
-                if (param === 'sheetab_R2C35') irWeather  = val;
-                if (param === 'sheetab_R2C36') { irItems = val; irRowItems[2] = val; }
-                if (param === 'sheetab_R2C37') { irImages = val; irRowImages[2] = val; }
-                
-                // Info Rotator Timing Parameters
-                if (param === 'sheetab_R2C48' && unit === 'sheetab') window._irDuration = (parseFloat(val) || 5) * 1000;
-                if (param === 'sheetab_R2C47' && unit === 'sheetab') window._irInterval = (parseFloat(val) || 5) * 1000;
-
-                const c36Match = param.match(/^sheetab_R(\d+)C36$/);
-                if (c36Match && unit === 'sheetab') { const row = parseInt(c36Match[1], 10); if (row >= 3) irRowItems[row] = val; }
-                const c37Match = param.match(/^sheetab_R(\d+)C37$/);
-                if (c37Match && unit === 'sheetab') { const row = parseInt(c37Match[1], 10); if (row >= 3) irRowImages[row] = val; }
-                if (param === 'TechTicker' || unit === 'TechTicker') techNames = val;
-
-                if (unit === 'StationTemp') {
-                    const parts = val.split('|'); const amb = parseFloat(parts[0]) || 0, trfo = parseFloat(parts[1]) || 0;
-                    const isAlarm = amb > 34 || trfo > 80;
-                    stHtml += `<div class="stock-item ${isAlarm ? 'alarm' : ''}">
-                        <span class="stock-name">${param}</span>
-                        <span class="stock-val ${amb > 34 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">device_thermostat</span>${parts[0]}°</span>
-                        <span class="stock-divider"></span>
-                        <span class="stock-val ${trfo > 80 ? 'warn' : 'safe'}"><span class="material-symbols-rounded stock-icon">bolt</span>${parts[1]}°</span>
-                    </div>`;
-                }
-
-                if (unit === 'OpsBlock') {
-                    const parts = val.split('|'), m = parts[0] || '---', d = parts[1] || '---';
-                    const mEl = document.getElementById('box-mainline'), dEl = document.getElementById('box-depot');
-                    mEl.className = `ops-rot-pill ${m.toUpperCase().includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    dEl.className = `ops-rot-pill ${d.toUpperCase().includes('ENERGISED') ? 'alert' : 'ok'}`;
-                    const mSv = document.getElementById('mainline-status-val'), dSv = document.getElementById('depot-status-val');
-                    if (mSv) mSv.textContent = m; if (dSv) dSv.textContent = d;
-                }
-
-                /* Seamless Maint-List Auto Scroll Execution */
-                if (unit === 'OpsSchedule') {
-                    opsScheduleLines = val.split('\n').filter(l => l.trim() !== '');
-                }
-
-                if (unit === 'DriverPopup') {
-                    const parts = val.split('|'); const name = parts[0] || '---'; const phone = parts[1] || '---'; const shift = parts[2] || '---';
-                    document.getElementById('driver-name').innerText  = name; document.getElementById('driver-phone').innerText = phone;
-                    document.getElementById('driver-shift').innerText = `SHIFT: ${shift}`;
-                    const pn = document.getElementById('driver-pill-name'), pNum = document.getElementById('driver-pill-num');
-                    if (pn) pn.innerText = name; if (pNum) pNum.innerText = phone !== '---' ? phone : shift !== '---' ? `SHIFT: ${shift}` : '---';
-                }
-
-                if (unit === 'sheetab' && param === 'sheetab_R2C1') evaluateUpdateBadge(val);
-
-                const dockMatch = param.match(/^sheetab_R(\d+)C(29|30|31)$/);
-                if (dockMatch && unit === 'sheetab') {
-                    const row = parseInt(dockMatch[1], 10), col = parseInt(dockMatch[2], 10);
-                    if (!dockRows[row]) dockRows[row] = {};
-                    if (col === 29) dockRows[row].label = val; if (col === 30) dockRows[row].pct = val; if (col === 31) dockRows[row].icon = val;
-                }
-
-                if (param === 'sheetab_R2C28') {
-                    const popupEl = document.getElementById('maint-progress-popup-body');
-                    if (popupEl) popupEl.innerText = val && val.trim() !== '' ? val.trim() : '—';
-                }
-
-                if (unit === 'sheetab') {
-                    if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
-                    if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
-                    if (param === 'sheetab_R1C45') { const el = document.getElementById('maint-barchart-label'); if(el) el.innerText = val || 'MONTHLY TREND'; }
-                    
-                    if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
-                    if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
-                }
-            });
-            
-            // Execute Station Pills Handling
-            handleStationPills(statPillsRaw, statPillsIntervalRaw);
-
-            function applyChkDual(id, rawVal) {
-                const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
-                if (!item) return;
-                const val = (rawVal || '').trim();
-                const isFilled = val !== '' && val !== '---' && val !== '0' && !val.toUpperCase().includes('NOT') && !val.toUpperCase().includes('EMPTY');
-                item.className = 'chk-dual-item ' + (isFilled ? 'chk-d-filled' : 'chk-d-empty');
-                icon.innerText = isFilled ? 'check_box' : 'check_box_outline_blank';
-                if (status) status.textContent = isFilled ? val : (val !== '' && val !== '---' ? val : 'Not Filled');
-            }
-            applyChkDual('chk-mtrs', mtrsStatus);
-            applyChkDual('chk-tkrs', tkrsStatus);
-
-            if (!window._chkPillTimer) {
-                let _chkShowingStatus = false;
-                window._chkPillTimer = setInterval(() => {
-                    _chkShowingStatus = !_chkShowingStatus;
-                    ['chk-mtrs-slide','chk-tkrs-slide'].forEach(sid => { const s = document.getElementById(sid); if (s) s.classList.toggle('show-status', _chkShowingStatus); });
-                }, 8000);
-            }
-
-            const stEl = document.getElementById('station-track');
-            if (stHtml) { stEl.innerHTML = stHtml + stHtml; stEl.style.animation = 'none'; stEl.offsetHeight; stEl.style.animation = ''; }
-
-            const todayPills = document.getElementById('today-gen-pills'), tomorrowPills = document.getElementById('tomorrow-gen-pills');
-            todayPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.today.gen)}`;
-            tomorrowPills.innerHTML = `<span class="gen-label-pill">GENERAL</span>${buildGenPills(staff.tomorrow.gen)}`;
-
-            tdHtml += buildShift('MORNING', staff.today.morn, isShiftActive('MORNING'), staff.today.tpcMorn,  staff.today.techMorn);
-            tdHtml += buildShift('EVENING', staff.today.eve,  isShiftActive('EVENING'), staff.today.tpcEve,   staff.today.techEve);
-            tdHtml += buildShift('NIGHT',   staff.today.night, isShiftActive('NIGHT'),  staff.today.tpcNight, staff.today.techNight);
-
-            tmHtml += buildShift('MORNING', staff.tomorrow.morn, false, staff.tomorrow.tpcMorn,  staff.tomorrow.techMorn);
-            tmHtml += buildShift('EVENING', staff.tomorrow.eve,  false, staff.tomorrow.tpcEve,   staff.tomorrow.techEve);
-            tmHtml += buildShift('NIGHT',   staff.tomorrow.night, false, staff.tomorrow.tpcNight, staff.tomorrow.techNight);
-
-            if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
-            if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
-
-            buildAppDock(dockRows);
-            initInfoRotator(irWeather, irRowItems, irRowImages);
-
-            if (opsScheduleLines !== null) {
-                const listEl = document.getElementById('maint-list');
-                if (opsScheduleLines.length === 0) {
-                    listEl.innerHTML = '';
-                } else {
-                    const itemsHtml = opsScheduleLines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
-                    listEl.innerHTML = `
-                        <div class="maint-scroll-track" id="maint-track">
-                            <div class="maint-scroll-half" id="maint-measure">${itemsHtml}</div>
-                        </div>`;
-                    
-                    // Allow DOM layout (flex containers, roster grids) to fully settle before measuring height
-                    setTimeout(() => {
-                        const track = document.getElementById('maint-track');
-                        const measure = document.getElementById('maint-measure');
-                        if (track && measure) {
-                            const mHeight = measure.getBoundingClientRect().height;
-                            const lHeight = listEl.getBoundingClientRect().height;
-                            
-                            if (mHeight > lHeight && lHeight > 0) {
-                                const duration = Math.max(15, mHeight / 25); 
-                                track.innerHTML = `
-                                    <div class="maint-scroll-half">${itemsHtml}</div>
-                                    <div class="maint-scroll-half">${itemsHtml}</div>`;
-                                track.style.animationDuration = duration + 's';
-                                track.classList.add('scrolling');
-                                listEl.style.overflowY = 'hidden';
-                                listEl.style.paddingRight = '0';
-                            } else {
-                                track.classList.remove('scrolling');
-                                listEl.style.overflowY = 'auto';
-                                listEl.style.paddingRight = '4px';
-                            }
-                        }
-                    }, 400); 
-                }
-            }
-        };
-
-        let _consPillTimer = null, _consPillIdx = 0, _consRows = [];
-        function buildAppDock(dockRows) {
-            const rows = Object.keys(dockRows).map(Number).sort((a, b) => a - b).filter(r => dockRows[r].label || dockRows[r].icon);
-            _consRows = rows.map(r => dockRows[r]);
-            if (rows.length === 0) { _buildConsOverlayEmpty(); return; }
-
-            const RADIUS = 17, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-            _buildStockDock(_consRows);
-
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                listEl.innerHTML = _consRows.map(item => {
-                    const { label = '', pct = '', icon = '' } = item;
-                    const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0)), offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE, cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
-                    const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cons-list-fallback" style="display:none;">${label.charAt(0) || '?'}</span>` : `<span class="cons-list-fallback">${label.charAt(0) || '?'}</span>`;
-                    const warnIcon = pctNum < 20 ? `<span class="material-symbols-rounded cons-list-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
-                    return `<div class="cons-list-item"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
-                }).join('');
-            }
-        }
-
-        function _buildConsOverlayEmpty() {
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items</div>';
-        }
-
-        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.add('visible'); }
-        function closeConsOverlay() { const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.remove('visible'); }
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeConsOverlay(); } });
-
-        const _mcdPrevVals = {};
-        function updateMaintCount(id, raw, label) {
-            const el = document.getElementById(id); if (!el) return;
-            const newVal = (raw && raw.trim() && raw.trim() !== '---') ? raw.trim() : '—';
-            const prev = _mcdPrevVals[id]; _mcdPrevVals[id] = newVal;
-            if (prev === undefined || prev === newVal) { el.textContent = newVal; return; }
-            el.textContent = newVal; el.classList.remove('popping'); void el.offsetWidth; el.classList.add('popping'); setTimeout(() => el.classList.remove('popping'), 700);
-            showMcdBurst(newVal, label);
-        }
-
-        let _mcdBurstTimer = null;
-        function showMcdBurst(val, label) {
-            const ov = document.getElementById('mcd-burst-overlay'), bv = document.getElementById('mcd-burst-val'), bl = document.getElementById('mcd-burst-label');
-            if (!ov || !bv || !bl) return;
-            if (_mcdBurstTimer) { clearTimeout(_mcdBurstTimer); ov.classList.remove('visible'); void ov.offsetWidth; }
-            bv.textContent = val; bl.textContent = label; ov.classList.add('visible');
-            _mcdBurstTimer = setTimeout(() => { ov.classList.remove('visible'); _mcdBurstTimer = null; }, 2200);
-        }
-
-        let _sdockTimer = null, _sdockNoticeTimer = null, _sdockIdx = 0, _sdockRows = [], _sdockPrevHash = null;
-        let _consAutoCloseTimer = null, _cons30minTimer = null;
-
-        /* ─── AUTO-OPEN helpers ─── */
-        function _consAutoOpen(autoClose) {
-            const ov = document.getElementById('cons-overlay');
-            if (!ov) return;
-            ov.classList.add('visible');
-
-            // 1. Auto-scroll the list over 5 s
-            const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                setTimeout(() => {
-                    const maxScroll = listEl.scrollHeight - listEl.clientHeight;
-                    if (maxScroll > 0) {
-                        listEl.style.scrollBehavior = 'smooth';
-                        listEl.scrollTop = 0;
-                        const steps = 60, stepTime = 5000 / steps, perStep = maxScroll / steps;
-                        let step = 0;
-                        const scrollInterval = setInterval(() => {
-                            step++;
-                            listEl.scrollTop = Math.min(step * perStep, maxScroll);
-                            if (step >= steps) clearInterval(scrollInterval);
-                        }, stepTime);
-                    }
-                }, 400);
-            }
-
-            // 2. After 5 s of scroll → highlight low-stock items for 3 s, then remove
-            setTimeout(() => {
-                const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
-                const lowItems = [];
-                items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) { el.classList.add('alert-low'); lowItems.push(el); } });
-                if (lowItems.length) {
-                    setTimeout(() => { lowItems.forEach(el => el.classList.remove('alert-low')); }, 3000);
-                }
-            }, 5400);
-
-            // 3. Auto-close after scroll + highlight + buffer
-            if (autoClose) {
-                if (_consAutoCloseTimer) clearTimeout(_consAutoCloseTimer);
-                _consAutoCloseTimer = setTimeout(() => {
-                    closeConsOverlay();
-                    _consAutoCloseTimer = null;
-                }, 10000); // 5s scroll + 3s highlight + 2s buffer
-            }
-        }
-
-        function _buildStockDock(rows) {
-            _sdockRows = rows;
-            const dock = document.getElementById('stock-dock'), badge = document.getElementById('sdock-low-badge');
-            if (!dock) return;
-            const lowCount = rows.filter(r => (parseFloat(r.pct)||0) < 20).length;
-            const hasLow = lowCount > 0;
-            dock.classList.toggle('has-low', hasLow);
-            if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
-
-            const hash = rows.map(r => r.label + r.pct).join('|');
-            const changed = hash !== _sdockPrevHash;
-            _sdockPrevHash = hash;
-
-            if (_sdockTimer) clearInterval(_sdockTimer);
-            _sdockIdx = 0; _renderSdockRow();
-            if (rows.length > 1) {
-                _sdockTimer = setInterval(() => { _sdockIdx = (_sdockIdx + 1) % _sdockRows.length; _renderSdockRow(); }, 4000);
-            }
-
-            // On change: flash notice, auto-open overlay with scroll + low-highlight, then auto-close
-            if (changed) {
-                const notice = document.getElementById('sdock-notice');
-                if (notice) {
-                    notice.classList.add('visible');
-                    setTimeout(() => notice.classList.remove('visible'), 2000);
-                }
-                // Brief delay then auto-open
-                setTimeout(() => { _consAutoOpen(true); }, 2200);
-            }
-
-            // Every 30 min: auto-open the full stock list with scroll + highlight + auto-close
-            if (_cons30minTimer) clearInterval(_cons30minTimer);
-            _cons30minTimer = setInterval(() => {
-                _consAutoOpen(true);
-            }, 30 * 60 * 1000);
-        }
-
-        function _renderSdockRow() {
-            const rowA = document.getElementById('sdock-row-a'); if (!rowA || !_sdockRows.length) return;
-            const item = _sdockRows[_sdockIdx], { label = '', pct = '', icon = '' } = item;
-            const pctNum = Math.max(0, parseFloat(pct)||0); // allow >100
-            const cls = pctNum > 100 ? 'over' : pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low', isLow = pctNum < 20;
-            const iconEl = icon && icon.startsWith('http') ? '<img src="' + icon + '" alt="" style="width:13px;height:13px;border-radius:50%;object-fit:cover;flex-shrink:0;">' : '<span class="material-symbols-rounded sdock-row-icon">inventory_2</span>';
-            const warnEl = isLow ? '<span class="material-symbols-rounded sdock-row-warn">warning</span>' : '';
-            rowA.innerHTML = iconEl + '<span class="sdock-row-name">' + label + '</span><span class="sdock-row-pct ' + cls + '">' + pctNum.toFixed(0) + '%</span>' + warnEl;
-            const sub = document.getElementById('sdock-sub'); if (sub) sub.textContent = '(' + (_sdockIdx + 1) + ' of ' + _sdockRows.length + ')';
-        }
-
-        function evaluateUpdateBadge(raw) {
-            const card = document.getElementById('driver-card'), badge = document.getElementById('driver-update-badge');
-            const hdrBtn = document.getElementById('driver-header-btn');
-            if (!raw || raw === '---') {
-                badge.innerText = 'UPDATE: N/A'; badge.className = 'driver-badge badge-outdated';
-                card.classList.add('outdated'); if (hdrBtn) hdrBtn.classList.add('outdated'); return;
-            }
-            try {
-                const ut = new Date(raw), now = new Date();
-                badge.innerText = `LAST UPDATE: ${ut.toLocaleString('en-IN', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit', hour12:false})}`;
-                const h = now.getHours(); let ss = new Date(now);
-                if (h >= 8 && h < 20) ss.setHours(8, 0, 0, 0); else { if (h < 8) ss.setDate(now.getDate() - 1); ss.setHours(20, 0, 0, 0); }
-                if (ut >= ss) { badge.className = 'driver-badge badge-active'; card.classList.remove('outdated'); if (hdrBtn) hdrBtn.classList.remove('outdated'); }
-                else { badge.className = 'driver-badge badge-outdated'; card.classList.add('outdated'); if (hdrBtn) hdrBtn.classList.add('outdated'); }
-            } catch (e) { badge.innerText = 'UPDATE: ERR'; }
-        }
-
-        function updateClocks() {
-            const n = new Date(), s = n.getSeconds(), m = n.getMinutes(), h = n.getHours();
-            document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
-            document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
-            document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
-            document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
-            document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
-        }
-        setInterval(updateClocks, 1000);
-
-        function refreshData() {
-            const old = document.getElementById('api-script'); if (old) old.remove();
-            const s = document.createElement('script'); s.id = 'api-script';
-            s.src = `${API_URL}?callback=draw&_t=${Date.now()}`; document.body.appendChild(s);
-        }
-        setInterval(refreshData, 120000); refreshData(); updateClocks();
-        window.onresize = () => { const text = document.getElementById('ticker-text'), popup = document.getElementById('ticker-popup'); updateTickerBar(document.getElementById('ticker-head').innerText, text.innerText, popup ? popup.innerText : null); };
-
-        let _irTimer = null, _irIdx = 0, _irSlides = [], _irActiveSlides = [], _irPrevHash = null;
-        const IR_FLIP_DUR = 360; 
-
-        function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
-            const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-            let currentSlides = [];
-            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
-
-            const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
-            rowNums.forEach(rowNum => {
-                const rawItem = (irRowItems[rowNum] || '').trim(), rawImg  = ((irRowImages || {})[rowNum] || '').trim();
-                if (!rawItem) return;
-                const itemLines  = rawItem.split('\n').map(l => l.trim()).filter(l => l !== ''), imageLines = rawImg.split('\n').map(l => l.trim());
-                itemLines.forEach((line, i) => {
-                    const imgUrl = imageLines[i] || '', hasImg = imgUrl.startsWith('http');
-                    let text = line; if (line.includes('|')) { const p = line.split('|'); text = (p[1] || p[0]).trim(); }
-                    currentSlides.push({ iconType: hasImg ? 'img' : 'none', icon: hasImg ? imgUrl : '', headline: text, label: '' });
-                });
-            });
-
-            const newHash = JSON.stringify(currentSlides);
-            if (_irPrevHash === null) {
-                // First load
-                _irSlides = currentSlides;
-                _irPrevHash = newHash;
-                _startIrCycle(_irSlides, true);
-            } else if (_irPrevHash !== newHash) {
-                // Data changed: Compare and find newly added slides
-                let newSlides = currentSlides.filter(cs => !_irSlides.some(os => os.headline === cs.headline && os.icon === cs.icon));
-                _irSlides = currentSlides;
-                _irPrevHash = newHash;
-                if (newSlides.length > 0) {
-                    // Play only the new slides immediately
-                    _startIrCycle(newSlides, false);
-                }
-            }
-        }
-
-        function _startIrCycle(slidesToPlay, isIntervalLoop) {
-            if (_irTimer) clearTimeout(_irTimer);
-            
-            if (!slidesToPlay || slidesToPlay.length === 0) {
-                document.getElementById('info-rotator').style.display = 'none';
-                const interval = window._irInterval !== undefined ? window._irInterval : 5000;
-                _irTimer = setTimeout(() => { _startIrCycle(_irSlides, true); }, interval);
-                return;
-            }
-
-            _irActiveSlides = slidesToPlay;
-            _irIdx = 0;
-            document.getElementById('info-rotator').style.display = '';
-            _renderIRSlide(true, isIntervalLoop);
-        }
-
-        function _renderIRSlide(animateIn, isIntervalLoop) {
-            const slab = document.getElementById('ir-slab'), iconWrap = document.getElementById('ir-icon-wrap'), headline = document.getElementById('ir-headline'), label = document.getElementById('ir-label'), dotsEl = document.getElementById('ir-dots');
-            if (!slab) return;
-
-            const s = _irActiveSlides[_irIdx];
-            if (!s) return;
-
-            function _applySlide() {
-                if (s.iconType === 'img') { iconWrap.style.display = ''; iconWrap.innerHTML = `<img class="ir-icon-img" src="${s.icon}" alt="" onerror="this.parentElement.style.display='none';">`; }
-                else if (s.iconType === 'material') { iconWrap.style.display = ''; iconWrap.innerHTML = `<span class="material-symbols-rounded">${s.icon}</span>`; }
-                else { iconWrap.style.display = 'none'; iconWrap.innerHTML = ''; }
-
-                headline.textContent = s.headline;
-                label.textContent = s.label; label.style.display = s.label ? '' : 'none';
-                dotsEl.innerHTML = _irActiveSlides.map((_, i) => `<div class="ir-dot${i === _irIdx ? ' ir-dot-active' : ''}"></div>`).join('');
-
-                // Dynamic width: measure content and resize container
-                _irResizeToContent();
-            }
-
-            function _irResizeToContent() {
-                const rotator = document.getElementById('info-rotator');
-                const headlineEl = document.getElementById('ir-headline');
-                if (!rotator || !headlineEl) return;
-                const isMobile = window.innerWidth <= 900;
-
-                if (isMobile) {
-                    // Mobile: always full viewport width, height auto via CSS
-                    rotator.style.transition = 'none';
-                    rotator.style.width = (window.innerWidth - 16) + 'px';
-                } else {
-                    // Desktop: 2-line layout, width driven by content, font shrinks if needed
-                    const maxW = window.innerWidth - 20;
-                    const minW = 420;
-                    const baseFontSize = 1.6; // rem
-                    const minFontSize = 0.95; // rem
-                    const rootFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-
-                    // Reset font size before measuring
-                    headlineEl.style.fontSize = '';
-                    rotator.style.transition = 'none';
-                    rotator.style.width = 'max-content';
-
-                    let natural = rotator.scrollWidth;
-
-                    if (natural <= maxW) {
-                        // Fits fine — use natural width clamped to minW
-                        const target = Math.max(natural, minW);
-                        rotator.style.width = '';
-                        requestAnimationFrame(() => {
-                            rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                            rotator.style.width = target + 'px';
-                        });
-                    } else {
-                        // Too wide for viewport — allow 2-line wrapping at half width and try to fit
-                        rotator.style.width = '';
-                        // Try half the natural width as a starting point (2 roughly equal lines)
-                        let tryW = Math.ceil(natural / 2) + 120; // +120 for icon/padding
-                        tryW = Math.max(tryW, minW);
-
-                        if (tryW <= maxW) {
-                            requestAnimationFrame(() => {
-                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                                rotator.style.width = tryW + 'px';
-                            });
-                        } else {
-                            // Still too wide — shrink font size until it fits at maxW
-                            rotator.style.width = maxW + 'px';
-                            let fontSize = baseFontSize;
-                            while (fontSize > minFontSize) {
-                                fontSize = Math.max(fontSize - 0.05, minFontSize);
-                                headlineEl.style.fontSize = fontSize + 'rem';
-                                if (rotator.scrollHeight <= rotator.clientHeight + 2) break;
-                            }
-                            requestAnimationFrame(() => {
-                                rotator.style.transition = 'width 0.45s cubic-bezier(0.4,0,0.2,1)';
-                                rotator.style.width = maxW + 'px';
-                            });
-                        }
-                    }
-                }
-            }
-
-            if (animateIn) {
-                _applySlide();
-                slab.classList.remove('flipping-out');
-                slab.classList.add('flipping-in');
-                _irTimer = setTimeout(() => {
-                    slab.classList.remove('flipping-in');
-                    _scheduleVanish(isIntervalLoop);
-                }, IR_FLIP_DUR);
-            } else {
-                _applySlide();
-                slab.classList.remove('flipping-out', 'flipping-in');
-                _scheduleVanish(isIntervalLoop);
-            }
-        }
-
-        function _scheduleVanish(isIntervalLoop) {
-            const dur = window._irDuration !== undefined ? window._irDuration : 5000;
-            _irTimer = setTimeout(() => {
-                const slab = document.getElementById('ir-slab');
-                if (slab) {
-                    slab.classList.add('flipping-out');
-                    _irTimer = setTimeout(() => {
-                        _irIdx++;
-                        if (_irIdx < _irActiveSlides.length) {
-                            // Cycle to next slide in the active batch
-                            _renderIRSlide(true, isIntervalLoop);
-                        } else {
-                            // Batch complete -> Hide container & wait for interval to trigger full batch
-                            document.getElementById('info-rotator').style.display = 'none';
-                            const interval = window._irInterval !== undefined ? window._irInterval : 5000;
-                            _irTimer = setTimeout(() => {
-                                _startIrCycle(_irSlides, true);
-                            }, interval);
-                        }
-                    }, IR_FLIP_DUR);
-                }
-            }, dur);
-        }
-
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
