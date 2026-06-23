@@ -823,150 +823,74 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER (mobile / default: in-card layout) ── */
+        /* ── MAINTENANCE PROGRESS FOOTER — hidden in card, now a dock ── */
         .maint-progress-footer {
-            margin-top: auto;
-            padding-top: 12px;
-            padding-bottom: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex-shrink: 0; 
-        }
-        @media (max-width: 900px) {
-            .maint-progress-footer {
-                padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
-            }
+            display: none; /* content is now in the bottom dock */
         }
         .maint-progress-right { 
             display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
         }
-        #maint-dock-anchor { display: none; }
-        #st-pills-anchor { display: none; }
-        #st-pills-section { display: none; }
 
-        /* ── MAINTENANCE DOCK (desktop ≥901px: relocated, centered-bottom dedicated dock) ── */
-        @media (min-width: 901px) {
-            #maint-dock {
-                position: fixed;
-                bottom: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 1003;
-                display: flex;
-                flex-direction: row;
-                align-items: stretch;
-                gap: 0;
-                width: max-content;
-                max-width: min(980px, calc(100vw - 24px));
-                background: rgba(14, 20, 34, 0.82);
-                border: 1.5px solid rgba(125,190,255,0.22);
-                border-radius: 18px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3),
-                            inset 0 1.5px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.2);
-                backdrop-filter: blur(32px) saturate(2);
-                -webkit-backdrop-filter: blur(32px) saturate(2);
-                padding: 10px 18px;
-                transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.18s ease;
-                animation: sdock-entry 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-            }
-            [data-theme="light"] #maint-dock {
-                background: rgba(240,246,255,0.85);
-                border-color: rgba(0,97,164,0.22);
-                box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.07),
-                            inset 0 1.5px 0 rgba(255,255,255,0.9);
-            }
-            #maint-dock:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 14px 44px rgba(0,0,0,0.65), 0 4px 14px rgba(0,0,0,0.35), inset 0 1.5px 0 rgba(255,255,255,0.2); }
-
-            #maint-dock .maint-progress-footer {
-                margin-top: 0;
-                padding: 0;
-                flex-direction: row;
-                align-items: center;
-                gap: 16px;
-                min-width: 0;
-            }
-            #maint-dock .maint-progress-right {
-                flex-wrap: nowrap;
-                gap: 16px;
-                min-width: 0;
-            }
-            #maint-dock .maint-dock-label {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                flex-shrink: 0;
-                padding-right: 14px;
-                border-right: 1px solid rgba(255,255,255,0.1);
-                font-family: var(--font-display);
-                font-weight: 900;
-                font-size: 0.68rem;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-                color: var(--primary);
-            }
-            [data-theme="light"] #maint-dock .maint-dock-label { border-color: rgba(0,0,0,0.08); }
-            #maint-dock .maint-dock-label .material-symbols-rounded { font-size: 16px !important; }
-            #maint-dock #maint-counts-dock { padding-right: 14px; border-right: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
-            [data-theme="light"] #maint-dock #maint-counts-dock { border-color: rgba(0,0,0,0.08); }
-            #maint-dock .maint-circ-wrap { flex-shrink: 0; }
-            #maint-dock .maint-barchart-wrap {
-                flex: 1 1 auto;
-                min-width: 130px;
-            }
-
-            /* Remarks popup re-anchored to sit above the dock, centered */
-            #maint-dock .maint-progress-popup {
-                left: 50%; right: auto; transform: translateX(-50%) translateY(6px);
-                width: max(320px, 100%); max-width: min(420px, calc(100vw - 24px));
-            }
-            #maint-dock .maint-progress-footer:hover .maint-progress-popup { transform: translateX(-50%) translateY(0); }
-            #maint-dock .maint-progress-popup::after { left: 50%; }
+        /* ── MAINTENANCE BOTTOM DOCK (glassmorphism) ── */
+        #maint-bottom-dock {
+            position: fixed;
+            bottom: 36px; /* above ticker */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1003;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px 10px;
+            background: rgba(22,28,37,0.72);
+            border: 1.5px solid rgba(125,190,255,0.18);
+            border-radius: var(--radius-l);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 12px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);
+            backdrop-filter: blur(32px) saturate(1.8);
+            -webkit-backdrop-filter: blur(32px) saturate(1.8);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            min-width: 340px;
+            max-width: calc(100vw - 32px);
+        }
+        [data-theme="light"] #maint-bottom-dock {
+            background: rgba(240,246,255,0.82);
+            border-color: rgba(0,97,164,0.18);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07), inset 0 1.5px 0 rgba(255,255,255,0.9);
         }
 
-        /* On narrower desktop widths the centered dock would otherwise collide with the
-           bottom-right stock dock; wrap it onto two compact rows and shift left of true-center
-           so it stays clear of the stock dock's reserved corner instead of widening further. */
-        @media (min-width: 901px) and (max-width: 1480px) {
-            #maint-dock {
-                width: min(300px, calc(100vw - 340px));
-                max-width: min(300px, calc(100vw - 340px));
-                left: calc(50% - 160px);
-                padding: 12px 16px;
-            }
-            #maint-dock:hover { transform: translateX(-50%) translateY(-2px); }
-            #maint-dock .maint-progress-footer {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            #maint-dock .maint-dock-label {
-                border-right: none;
-                padding-right: 0;
-                padding-bottom: 8px;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-            [data-theme="light"] #maint-dock .maint-dock-label { border-bottom-color: rgba(0,0,0,0.08); }
-            #maint-dock .maint-progress-right {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-                gap: 10px;
-            }
-            #maint-dock #maint-counts-dock {
-                border-right: none;
-                padding-right: 0;
-                padding-bottom: 10px;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                justify-content: space-between;
-            }
-            [data-theme="light"] #maint-dock #maint-counts-dock { border-bottom-color: rgba(0,0,0,0.08); }
-            #maint-dock .maint-circ-wrap { justify-content: space-between; }
-            #maint-dock .maint-barchart-wrap { min-width: 100%; width: 100%; }
-            #maint-dock .maint-progress-popup { left: 0; transform: translateX(0) translateY(6px); }
-            #maint-dock .maint-progress-footer:hover .maint-progress-popup { transform: translateX(0) translateY(0); }
-            #maint-dock .maint-progress-popup::after { left: 30px; }
+        /* Dock top row: mcd + circulars + barchart */
+        .dock-main-row {
+            display: flex; flex-direction: row; align-items: center; gap: 12px; width: 100%;
+            justify-content: center;
         }
+
+        /* Station pills inside dock */
+        .dock-station-pills-row {
+            display: flex; flex-direction: row; align-items: center; gap: 6px; flex-wrap: wrap;
+            justify-content: center; width: 100%; min-height: 0;
+        }
+        .dock-station-pills-row:empty { display: none; }
+        .dock-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(125,190,255,0.2), transparent);
+            border-radius: var(--radius-full);
+            flex-shrink: 0;
+        }
+        .dock-divider:has(+ .dock-station-pills-row:empty) { display: none; }
+
+        /* Popup for dock (remarks) */
+        .maint-progress-popup {
+            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
+            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
+            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
+        }
+        .dock-main-row:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
+        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
         /* Circular progress styling */
         .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
@@ -982,6 +906,7 @@
         .maint-barchart-wrap {
             flex: 1; min-width: 120px;
             display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end;
+            cursor: pointer;
         }
         .maint-barchart-container {
             width: 100%; height: 54px;
@@ -992,11 +917,29 @@
             border-radius: var(--radius-s);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease;
+            position: relative; overflow: hidden;
         }
+        .maint-barchart-container:hover { border-color: var(--primary); }
         [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
+        
+        /* Sparkline mode */
+        .maint-barchart-container.sparkline-mode { padding: 2px 4px; gap: 0; }
+        .maint-barchart-container.sparkline-mode .bc-col { gap: 0; }
+        .maint-barchart-container.sparkline-mode .bc-label { display: none; }
+        .maint-barchart-container.sparkline-mode .bc-value { display: none; }
+        .maint-barchart-container.sparkline-mode .bc-bar-bg { background: transparent; border-radius: 0; }
+        .maint-barchart-container.sparkline-mode .bc-bar-fill { border-radius: 1px; }
+        .maint-barchart-container.sparkline-mode .bc-bar-fill-b { border-radius: 1px; }
+
+        /* Sparkline SVG overlay */
+        #bc-sparkline-svg { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+        .maint-barchart-container.sparkline-mode #bc-sparkline-svg { opacity: 1; }
+
         .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
-        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
-        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
+        .bc-bar-bg { width: 100%; max-width: 12px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; gap: 1px; }
+        .bc-bar-fill { flex: 1; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); min-width: 0; }
+        .bc-bar-fill-b { flex: 1; position: relative; background: linear-gradient(0deg, var(--secondary, #A8BDD4) 0%, color-mix(in srgb, var(--secondary, #A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 6px rgba(168,189,212,0.2); min-width: 0; }
         .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
         .bc-value {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
@@ -1005,6 +948,72 @@
             pointer-events: none; z-index: 10;
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
+
+        /* Chart legend */
+        .bc-legend { display: flex; gap: 8px; align-items: center; justify-content: center; }
+        .bc-legend-item { display: flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 0.42rem; font-weight: 800; color: var(--on-surface-variant); letter-spacing: 0.3px; text-transform: uppercase; }
+        .bc-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .bc-legend-dot-a { background: var(--primary); }
+        .bc-legend-dot-b { background: var(--secondary, #A8BDD4); }
+        .maint-barchart-container.sparkline-mode ~ .bc-legend { opacity: 0.5; }
+
+        /* ── CHART ZOOM OVERLAY ── */
+        #chart-zoom-overlay {
+            position: fixed; inset: 0; z-index: 9980;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0); backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            pointer-events: none; opacity: 0;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.4s ease;
+        }
+        #chart-zoom-overlay.visible {
+            opacity: 1; background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(18px) saturate(1.5);
+            -webkit-backdrop-filter: blur(18px) saturate(1.5);
+            pointer-events: auto;
+        }
+        .chart-zoom-card {
+            background: var(--surface);
+            border: 1.5px solid rgba(125,190,255,0.25);
+            border-radius: var(--radius-l);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.18);
+            backdrop-filter: blur(40px) saturate(2);
+            -webkit-backdrop-filter: blur(40px) saturate(2);
+            padding: 22px 26px 18px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            width: min(90vw, 480px);
+            transform: scale(0.5) translateY(40px);
+            opacity: 0;
+            transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
+        }
+        [data-theme="light"] .chart-zoom-card {
+            background: rgba(255,255,255,0.92);
+            border-color: rgba(0,97,164,0.2);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.18), inset 0 1.5px 0 rgba(255,255,255,0.9);
+        }
+        #chart-zoom-overlay.visible .chart-zoom-card { transform: scale(1) translateY(0); opacity: 1; }
+        .chart-zoom-title { font-family: var(--font-display); font-size: 0.65rem; font-weight: 900; letter-spacing: 1.8px; text-transform: uppercase; color: var(--primary); }
+        .chart-zoom-bars {
+            width: 100%; height: 140px;
+            display: flex; align-items: flex-end; gap: 3px;
+            padding: 6px 8px 2px;
+        }
+        .czb-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
+        .czb-bar-bg { width: 100%; max-width: 20px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 4px 4px 0 0; gap: 2px; overflow: visible; position: relative; }
+        .czb-bar-a { flex: 1; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
+        .czb-bar-b { flex: 1; background: linear-gradient(0deg, var(--secondary,#A8BDD4) 0%, color-mix(in srgb, var(--secondary,#A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
+        .czb-label { font-family: var(--font-display); font-size: 0.52rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
+        .chart-zoom-legend { display: flex; gap: 12px; }
+        .czl-item { display: flex; align-items: center; gap: 4px; font-family: var(--font-display); font-size: 0.58rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
+        .czl-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .czl-dot-a { background: var(--primary); }
+        .czl-dot-b { background: var(--secondary,#A8BDD4); }
+        @keyframes chart-pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(125,190,255,0.5), 0 32px 80px rgba(0,0,0,0.6); }
+            60% { box-shadow: 0 0 0 18px rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
+            100% { box-shadow: 0 0 0 0 rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
+        }
+        #chart-zoom-overlay.visible .chart-zoom-card { animation: chart-pulse-ring 1s ease 0.55s 1 both; }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1012,7 +1021,7 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
             transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
         }
-        .maint-progress-footer:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-progress-right:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
         .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
         .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
@@ -1329,20 +1338,14 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS ── */
+        /* ── STATION PILLS — now embedded in maint bottom dock ── */
         #station-pills-dock {
-            position: fixed;
-            bottom: 56px; 
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            gap: 8px;
-            z-index: 1004;
-            pointer-events: none; /* Let clicks pass through empty gaps */
+            gap: 6px;
+            pointer-events: auto;
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 60vw;
-            padding-bottom: 8px;
+            max-width: 100%;
         }
         .st-pill {
             pointer-events: auto;
@@ -1372,43 +1375,39 @@
 
         .st-remark-bubble {
             position: fixed;
-            top: 0; left: 0; /* actual position is computed and set inline by JS before it becomes visible */
+            bottom: auto;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px) scale(0.95);
             background: var(--primary);
             color: var(--surface);
-            padding: 7px 13px;
+            padding: 6px 12px;
             border-radius: var(--radius-m);
             font-size: 0.75rem;
             font-family: var(--font-body);
             font-weight: 700;
-            line-height: 1.4;
             white-space: normal;
+            word-break: break-word;
+            max-width: min(260px, 80vw);
             width: max-content;
-            max-width: min(260px, calc(100vw - 24px));
-            text-align: left;
             opacity: 0;
             pointer-events: none;
-            transform: translateY(10px) scale(0.95);
-            transition: opacity 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 1010;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1100;
             box-shadow: var(--shadow-2);
+            text-align: center;
+            line-height: 1.4;
         }
         .st-remark-bubble::after {
             content: ''; position: absolute;
+            bottom: -4px; left: 50%;
+            transform: translateX(-50%) rotate(45deg);
             width: 8px; height: 8px;
             background: var(--primary);
-            left: var(--arrow-x, 50%);
-            bottom: -4px;
-            transform: translateX(-50%) rotate(45deg);
         }
-        .st-remark-bubble.arrow-top::after {
-            bottom: auto;
-            top: -4px;
-        }
-        /* Bubble lives at body level (sibling, not descendant, of its pill) so visibility
-           is driven by a JS-toggled class rather than a :hover/.auto-popup CSS combinator. */
-        .st-remark-bubble.visible {
+        .st-pill:hover .st-remark-bubble,
+        .st-pill.auto-popup .st-remark-bubble {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateX(-50%) translateY(0) scale(1);
         }
         
         #st-pills-toggle-btn { display: none; }
@@ -1420,46 +1419,6 @@
             box-shadow: var(--shadow-1);
         }
         #st-pills-toggle-btn.has-updates .st-pills-badge { display: block; }
-
-        /* ── STATION PILLS: relocated into maintenance card footer (desktop ≥901px) ── */
-        @media (min-width: 901px) {
-            #st-pills-section {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                min-height: 0;
-                flex: 1;
-                margin-top: 10px;
-                padding-top: 10px;
-                border-top: 1.5px solid var(--surface-variant);
-            }
-            .st-pills-eyebrow {
-                font-family: var(--font-display); font-size: 0.62rem; font-weight: 900;
-                letter-spacing: 1.4px; text-transform: uppercase; color: var(--on-surface-variant);
-                opacity: 0.7; display: flex; align-items: center; gap: 5px; flex-shrink: 0;
-            }
-            .st-pills-eyebrow .material-symbols-rounded { font-size: 14px !important; opacity: 0.8; }
-            #station-pills-dock {
-                position: static;
-                transform: none;
-                pointer-events: auto;
-                justify-content: flex-start;
-                align-content: flex-start;
-                max-width: none;
-                width: 100%;
-                gap: 7px;
-                padding: 2px 0 0 0;
-                margin-top: auto;
-            }
-            .right-column .unified-unit #station-pills-dock {
-                flex: 1;
-                overflow-y: auto;
-                align-content: flex-start;
-                scrollbar-width: thin;
-                scrollbar-color: var(--surface-variant) transparent;
-            }
-            .right-column .unified-unit .st-pill { font-size: 0.78rem; padding: 4px 11px; }
-        }
 
         /* ── STATION PILLS ANNOUNCEMENT OVERLAY ── */
         #st-announce-overlay {
@@ -1576,50 +1535,7 @@
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
             
-            #st-pills-toggle-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: fixed;
-                bottom: 100px;
-                right: 10px;
-                width: 46px;
-                height: 46px;
-                border-radius: 50%;
-                background: var(--surface-variant);
-                border: 1.5px solid var(--outline);
-                color: var(--on-surface);
-                box-shadow: var(--shadow-2);
-                z-index: 1005;
-                cursor: pointer;
-                transition: transform 0.2s, background 0.3s, border-color 0.3s;
-            }
-            #st-pills-toggle-btn:active {
-                transform: scale(0.95);
-            }
-            #st-pills-toggle-btn.has-updates {
-                border-color: var(--success);
-                color: var(--success);
-                background: var(--success-container);
-            }
-            #st-pills-toggle-btn .material-symbols-rounded { font-size: 22px !important; }
-            
-            #station-pills-dock {
-                bottom: 156px;
-                left: 10px;
-                right: 10px;
-                transform: translateY(15px);
-                max-width: none;
-                justify-content: flex-end;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-            }
-            #station-pills-dock.expanded {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
+            #st-pills-toggle-btn { display: none !important; }
             .st-pill { padding: 4px 10px; font-size: 0.8rem; }
             .st-announce-card { padding: 20px 40px; }
             .st-announce-name { font-size: 2.5rem; }
@@ -1680,8 +1596,8 @@
         </div>
     </div>
 
-    <div id="station-pills-dock"></div>
-    <button id="st-pills-toggle-btn" onclick="toggleStationPills(event)" title="Station Status">
+    <!-- station-pills-dock moved into #maint-bottom-dock -->
+    <button id="st-pills-toggle-btn" style="display:none!important" title="Station Status">
         <span class="material-symbols-rounded">ev_station</span>
         <span id="st-pills-badge" class="st-pills-badge"></span>
     </button>
@@ -1831,66 +1747,83 @@
                 
                 <div id="maint-list" class="maint-list"></div>
                 
-                <div id="st-pills-section">
-                    <div class="st-pills-eyebrow"><span class="material-symbols-rounded">ev_station</span> Station Status</div>
-                    <div id="st-pills-anchor"></div>
-                </div>
-                <div id="maint-dock-anchor"></div>
-                <div id="maint-dock">
-                <div class="maint-progress-footer">
-                    <div class="maint-dock-label"><span class="material-symbols-rounded">construction</span> Maintenance</div>
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
-                    <div class="maint-progress-right">
-                        <div id="maint-counts-dock">
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-preventive-val">—</div>
-                                <div class="mcd-label">Preventive<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-corrective-val">—</div>
-                                <div class="mcd-label">Corrective<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-activity-val">—</div>
-                                <div class="mcd-label">Activities<br>Jobcards</div>
-                            </div>
-                        </div>
-                        <div class="maint-circ-wrap">
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                                    </svg>
-                                    <div class="circ-val" id="maint-progress-value-1">—</div>
-                                </div>
-                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                            </div>
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                                    </svg>
-                                    <div class="circ-val" id="maint-progress-value-2">—</div>
-                                </div>
-                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                            </div>
-                        </div>
-                        <div class="maint-barchart-wrap">
-                            <div class="maint-barchart-container" id="maint-barchart-container"></div>
-                            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                        </div>
-                    </div>
-                </div>
-                </div>
+                <!-- maint-progress-footer contents moved to #maint-bottom-dock -->
 
             </div>
         </div>
     </main>
+
+    <!-- Chart Zoom Overlay -->
+    <div id="chart-zoom-overlay" onclick="closeChartZoom()">
+        <div class="chart-zoom-card" onclick="event.stopPropagation()">
+            <div class="chart-zoom-title" id="cz-title">—</div>
+            <div class="chart-zoom-bars" id="cz-bars"></div>
+            <div class="chart-zoom-legend" id="cz-legend">
+                <div class="czl-item"><div class="czl-dot czl-dot-a"></div><span id="cz-label-a">—</span></div>
+                <div class="czl-item"><div class="czl-dot czl-dot-b"></div><span id="cz-label-b">—</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Bottom Dock -->
+    <div id="maint-bottom-dock">
+        <div class="dock-main-row" style="position:relative;">
+            <div class="maint-progress-popup">
+                <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+            </div>
+            <div id="maint-counts-dock">
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-preventive-val">—</div>
+                    <div class="mcd-label">Preventive<br>Maint.</div>
+                </div>
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-corrective-val">—</div>
+                    <div class="mcd-label">Corrective<br>Maint.</div>
+                </div>
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-activity-val">—</div>
+                    <div class="mcd-label">Activities<br>Jobcards</div>
+                </div>
+            </div>
+            <div class="maint-circ-wrap">
+                <div class="maint-circ-item">
+                    <div class="circ-svg-wrap">
+                        <svg viewBox="0 0 44 44">
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-1">—</div>
+                    </div>
+                    <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                </div>
+                <div class="maint-circ-item">
+                    <div class="circ-svg-wrap">
+                        <svg viewBox="0 0 44 44">
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-2">—</div>
+                    </div>
+                    <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                </div>
+            </div>
+            <div class="maint-barchart-wrap" onclick="toggleChartSparkline(event)" title="Click to toggle sparkline / tap to zoom">
+                <div class="maint-barchart-container" id="maint-barchart-container">
+                    <svg id="bc-sparkline-svg" preserveAspectRatio="none"></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                    <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                    <div class="bc-legend" id="bc-legend" style="display:none;">
+                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-a"></div><span id="bc-legend-a-text">Series A</span></div>
+                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-b"></div><span id="bc-legend-b-text">Series B</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dock-divider"></div>
+        <div id="station-pills-dock" class="dock-station-pills-row"></div>
+    </div>
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
@@ -2071,53 +2004,6 @@
             if(dc) dc.setAttribute('data-active-tab', tabId);
             document.body.classList.toggle('maint-tab-active', tabId === 'maint');
         }
-
-        // ── Responsive layout: relocate maintenance footer + station pills (desktop only) ──
-        // Desktop (>900px): maintenance stats become a fixed, centered-bottom dock;
-        // station pills move in-flow into the maintenance card's footer.
-        // Mobile (<=900px): both are restored to their original positions/behaviour untouched.
-        let _dockLayoutIsDesktop = null;
-        function applyDockLayout() {
-            const isDesktop = window.innerWidth > 900;
-            if (isDesktop === _dockLayoutIsDesktop) return; // no breakpoint change, skip
-            _dockLayoutIsDesktop = isDesktop;
-
-            const maintDock = document.getElementById('maint-dock');
-            const maintAnchor = document.getElementById('maint-dock-anchor');
-            const pillsDock = document.getElementById('station-pills-dock');
-            const pillsAnchor = document.getElementById('st-pills-anchor');
-
-            if (!maintDock || !maintAnchor || !pillsDock || !pillsAnchor) return;
-
-            if (isDesktop) {
-                // Maintenance stats -> fixed dock at body level (clean fixed-position containing block)
-                if (maintDock.parentElement !== document.body) {
-                    document.body.appendChild(maintDock);
-                }
-                // Station pills -> inside the maintenance card's freed-up footer slot
-                if (pillsDock.parentElement !== pillsAnchor.parentElement) {
-                    pillsAnchor.parentElement.appendChild(pillsDock);
-                }
-            } else {
-                // Restore both to their original in-card / fixed-floating mobile positions
-                if (maintAnchor.parentElement) {
-                    maintAnchor.parentElement.insertBefore(maintDock, maintAnchor.nextSibling);
-                }
-                const toggleBtn = document.getElementById('st-pills-toggle-btn');
-                if (toggleBtn && toggleBtn.parentElement) {
-                    toggleBtn.parentElement.insertBefore(pillsDock, toggleBtn);
-                }
-            }
-
-            // Re-run any pending edge-clamp positioning for remark bubbles after relocation
-            if (typeof clampRemarkBubbles === 'function') clampRemarkBubbles();
-        }
-        applyDockLayout();
-        let _dockLayoutResizeTimer = null;
-        window.addEventListener('resize', () => {
-            clearTimeout(_dockLayoutResizeTimer);
-            _dockLayoutResizeTimer = setTimeout(applyDockLayout, 150);
-        });
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
         let _opsPillTimer = null;
@@ -2485,35 +2371,21 @@
             
             if (_stPillsData.length === 0) {
                 dock.innerHTML = '';
-                document.querySelectorAll('.st-remark-bubble[data-owner]').forEach(b => b.remove());
                 if (toggleBtn) toggleBtn.style.display = 'none';
                 stopAutoPopup();
                 return;
             } else {
                 if (toggleBtn) toggleBtn.style.display = '';
             }
-
-            // Clear out any previously detached bubbles from a prior render
-            document.querySelectorAll('.st-remark-bubble[data-owner]').forEach(b => b.remove());
             
             dock.innerHTML = _stPillsData.map((p, idx) => {
                 const fillCls = p.isFilled ? 'st-filled' : '';
+                const remarkHtml = p.remark ? `<div class="st-remark-bubble">${p.remark}</div>` : '';
                 return `<div class="st-pill ${fillCls}" id="st-pill-${idx}">
                     ${p.name}
+                    ${remarkHtml}
                 </div>`;
             }).join('');
-
-            // Remark bubbles live at body level (not nested in the pill) so they always render
-            // via position:fixed in true viewport coordinates — immune to any ancestor's
-            // overflow:hidden (the maintenance card) or transform (the pill's own hover lift).
-            _stPillsData.forEach((p, idx) => {
-                if (!p.remark) return;
-                const bubble = document.createElement('div');
-                bubble.className = 'st-remark-bubble';
-                bubble.setAttribute('data-owner', `st-pill-${idx}`);
-                bubble.textContent = p.remark;
-                document.body.appendChild(bubble);
-            });
             
             if (toggleBtn && badge) {
                 const filledCount = _stPillsData.filter(p => p.isFilled).length;
@@ -2529,67 +2401,6 @@
             startAutoPopup();
         }
 
-        // ── Keep station pill remark bubbles fully inside the viewport ──
-        // Bubbles live at body level with JS-computed position:fixed coordinates, so they
-        // always render above any ancestor's overflow:hidden (e.g. the maintenance card) or
-        // transform (the pill's own hover-lift) and never clip past the viewport edge.
-        function getRemarkBubble(pillEl) {
-            return pillEl ? document.querySelector(`.st-remark-bubble[data-owner="${pillEl.id}"]`) : null;
-        }
-        function clampRemarkBubble(pillEl, bubble) {
-            bubble = bubble || getRemarkBubble(pillEl);
-            if (!bubble) return;
-
-            const margin = 12;
-            const gap = 8; // space between pill and bubble
-            const pillRect = pillEl.getBoundingClientRect();
-
-            const bubbleWidth = bubble.offsetWidth;
-            const bubbleHeight = bubble.offsetHeight;
-
-            const pillCenterX = pillRect.left + pillRect.width / 2;
-            let left = pillCenterX - bubbleWidth / 2;
-            left = Math.max(margin, Math.min(left, window.innerWidth - bubbleWidth - margin));
-
-            let top = pillRect.top - gap - bubbleHeight;
-            let arrowOnTop = false;
-            if (top < margin) {
-                // Not enough room above (e.g. pill near top of viewport) — flip below the pill
-                top = pillRect.bottom + gap;
-                arrowOnTop = true;
-            }
-
-            bubble.style.left = left + 'px';
-            bubble.style.top = top + 'px';
-
-            // Position the little arrow so it still points at the pill's center, clamped to the bubble's own width
-            const arrowX = Math.max(14, Math.min(pillCenterX - left, bubbleWidth - 14));
-            bubble.style.setProperty('--arrow-x', arrowX + 'px');
-            bubble.classList.toggle('arrow-top', arrowOnTop);
-        }
-        function clampRemarkBubbles() {
-            document.querySelectorAll('.st-pill').forEach(pillEl => clampRemarkBubble(pillEl));
-        }
-        function showRemarkBubble(pillEl) {
-            const bubble = getRemarkBubble(pillEl);
-            if (!bubble) return;
-            clampRemarkBubble(pillEl, bubble);
-            bubble.classList.add('visible');
-        }
-        function hideRemarkBubble(pillEl) {
-            const bubble = getRemarkBubble(pillEl);
-            if (bubble) bubble.classList.remove('visible');
-        }
-        // Event delegation: works regardless of where #station-pills-dock currently lives in the DOM.
-        document.addEventListener('mouseover', function(e) {
-            const pillEl = e.target.closest && e.target.closest('.st-pill');
-            if (pillEl) showRemarkBubble(pillEl);
-        });
-        document.addEventListener('mouseout', function(e) {
-            const pillEl = e.target.closest && e.target.closest('.st-pill');
-            if (pillEl && !pillEl.contains(e.relatedTarget)) hideRemarkBubble(pillEl);
-        });
-
         function startAutoPopup() {
             stopAutoPopup();
             if (_stPopupInterval <= 0) return;
@@ -2598,22 +2409,15 @@
             if (pillsWithRemarks.length === 0) return;
             
             _stAutoPopupTimer = setInterval(() => {
-                document.querySelectorAll('.st-pill.auto-popup').forEach(el => {
-                    el.classList.remove('auto-popup');
-                    hideRemarkBubble(el);
-                });
+                document.querySelectorAll('.st-pill.auto-popup').forEach(el => el.classList.remove('auto-popup'));
                 
                 _stPopupIdx = (_stPopupIdx + 1) % pillsWithRemarks.length;
                 const targetIdx = pillsWithRemarks[_stPopupIdx].i;
                 const pillEl = document.getElementById(`st-pill-${targetIdx}`);
                 if (pillEl) {
                     pillEl.classList.add('auto-popup');
-                    showRemarkBubble(pillEl);
                     setTimeout(() => {
-                        if (pillEl) {
-                            pillEl.classList.remove('auto-popup');
-                            hideRemarkBubble(pillEl);
-                        }
+                        if (pillEl) pillEl.classList.remove('auto-popup');
                     }, Math.min(3000, _stPopupInterval - 200)); 
                 }
             }, _stPopupInterval);
@@ -2691,51 +2495,226 @@
             }
         }
 
-        // Render bar chart function
-        function renderMaintBarChart(raw) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
+        // ── DUAL BAR CHART STATE ──
+        let _bcRawA = '', _bcRawB = '', _bcLabelA = '—', _bcLabelB = '—', _bcChartTitle = '—';
+        let _bcSparklineMode = false;
+        let _bcSparklineTimer = null;
+        const BC_SPARKLINE_AUTO_INTERVAL = 10 * 60 * 1000; // 10 minutes
+        const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+        const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
+        function parseChartData(raw) {
+            if (!raw || raw.trim() === '') return [];
             const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return;
-
+            if (matches.length === 0) return [];
             const dataMap = {};
             matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
-
-            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-            const currentMonthIdx = new Date().getMonth();
-            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const currentMonthName = monthNames[currentMonthIdx];
-            const currentFyIdx = fyOrder.indexOf(currentMonthName);
-
-            let maxVal = 0;
-            const chartData = [];
+            const currentFyIdx = fyOrder.indexOf(monthNames[new Date().getMonth()]);
+            const result = [];
             for (let i = 0; i <= currentFyIdx; i++) {
                 const m = fyOrder[i];
-                const v = dataMap[m] || 0;
-                chartData.push({ month: m, val: v });
-                if (v > maxVal) maxVal = v;
+                result.push({ month: m, val: dataMap[m] || 0 });
+            }
+            return result;
+        }
+
+        function renderMaintBarChart(rawA, rawB, labelA, labelB, chartTitle) {
+            // Accept either old single-arg call or new multi-arg
+            if (rawB !== undefined) { _bcRawA = rawA || ''; _bcRawB = rawB || ''; }
+            else { _bcRawA = rawA || ''; }
+            if (labelA !== undefined) _bcLabelA = labelA || '—';
+            if (labelB !== undefined) _bcLabelB = labelB || '—';
+            if (chartTitle !== undefined) _bcChartTitle = chartTitle || '—';
+            _renderBarChartInternal(true);
+        }
+
+        function _renderBarChartInternal(isUpdate) {
+            const container = document.getElementById('maint-barchart-container');
+            if (!container) return;
+            const svgEl = document.getElementById('bc-sparkline-svg');
+            const legendEl = document.getElementById('bc-legend');
+
+            const dataA = parseChartData(_bcRawA);
+            const dataB = parseChartData(_bcRawB);
+            const hasDual = dataB.length > 0;
+
+            if (dataA.length === 0 && dataB.length === 0) { 
+                // Keep sparkline svg but clear bars
+                container.querySelectorAll('.bc-col').forEach(c => c.remove());
+                return; 
             }
 
-            container.innerHTML = chartData.map(d => {
-                return `
-                <div class="bc-col">
+            let maxVal = 0;
+            dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+            dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+
+            const months = dataA.length > 0 ? dataA : dataB;
+
+            // Remove old bars
+            container.querySelectorAll('.bc-col').forEach(c => c.remove());
+
+            months.forEach((d, i) => {
+                const vA = (dataA[i] ? dataA[i].val : 0);
+                const vB = (hasDual && dataB[i] ? dataB[i].val : null);
+                const hA = maxVal > 0 ? (vA / maxVal) * 100 : 0;
+                const hB = (vB !== null && maxVal > 0) ? (vB / maxVal) * 100 : 0;
+                const col = document.createElement('div');
+                col.className = 'bc-col';
+                col.innerHTML = `
                     <div class="bc-bar-bg">
-                        <div class="bc-bar-fill" style="height: 0%;">
-                            <div class="bc-value">${d.val}</div>
-                        </div>
+                        <div class="bc-bar-fill" style="height:0%"><div class="bc-value">${vA}</div></div>
+                        ${hasDual ? `<div class="bc-bar-fill-b" style="height:0%"></div>` : ''}
                     </div>
-                    <div class="bc-label">${d.month}</div>
+                    <div class="bc-label">${d.month}</div>`;
+                container.appendChild(col);
+                setTimeout(() => {
+                    const fills = col.querySelectorAll('.bc-bar-fill, .bc-bar-fill-b');
+                    if (fills[0]) fills[0].style.height = hA + '%';
+                    if (fills[1]) fills[1].style.height = hB + '%';
+                }, 120);
+            });
+
+            // Legend
+            if (legendEl) {
+                if (hasDual) {
+                    legendEl.style.display = 'flex';
+                    const aText = document.getElementById('bc-legend-a-text');
+                    const bText = document.getElementById('bc-legend-b-text');
+                    if (aText) aText.textContent = _bcLabelA;
+                    if (bText) bText.textContent = _bcLabelB;
+                } else {
+                    legendEl.style.display = 'none';
+                }
+            }
+
+            // Sparkline
+            if (_bcSparklineMode) {
+                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 150);
+            }
+
+            // Zoom overlay with animation if data changed
+            if (isUpdate) {
+                _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months);
+            }
+        }
+
+        function _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl) {
+            if (!svgEl) return;
+            const W = container.clientWidth, H = container.clientHeight;
+            if (W === 0 || H === 0) return;
+            const n = dataA.length || dataB.length;
+            if (n === 0) { svgEl.innerHTML = ''; return; }
+            const pad = 4;
+            function pts(data, color, opacity) {
+                if (data.length === 0) return '';
+                const step = (W - pad*2) / (n - 1 || 1);
+                const points = data.map((d, i) => {
+                    const x = pad + i * step;
+                    const y = H - pad - (maxVal > 0 ? (d.val / maxVal) * (H - pad*2) : 0);
+                    return `${x},${y}`;
+                }).join(' ');
+                return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
+            }
+            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svgEl.innerHTML = pts(dataA, 'var(--primary)', '0.85') + (hasDual ? pts(dataB, 'var(--secondary,#A8BDD4)', '0.7') : '');
+        }
+
+        // ── SPARKLINE TOGGLE ──
+        function toggleChartSparkline(e) {
+            if (e) e.stopPropagation();
+            _bcSparklineMode = !_bcSparklineMode;
+            const container = document.getElementById('maint-barchart-container');
+            const svgEl = document.getElementById('bc-sparkline-svg');
+            if (!container) return;
+            container.classList.toggle('sparkline-mode', _bcSparklineMode);
+            if (_bcSparklineMode) {
+                const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
+                const hasDual = dataB.length > 0;
+                let maxVal = 0;
+                dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
+            } else {
+                if (svgEl) svgEl.innerHTML = '';
+            }
+            // Reset auto-sparkline timer
+            _restartSparklineAutoTimer();
+        }
+
+        function _restartSparklineAutoTimer() {
+            if (_bcSparklineTimer) clearTimeout(_bcSparklineTimer);
+            _bcSparklineTimer = setTimeout(() => {
+                _bcSparklineMode = !_bcSparklineMode;
+                const container = document.getElementById('maint-barchart-container');
+                const svgEl = document.getElementById('bc-sparkline-svg');
+                if (container) container.classList.toggle('sparkline-mode', _bcSparklineMode);
+                if (_bcSparklineMode) {
+                    const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
+                    const hasDual = dataB.length > 0;
+                    let maxVal = 0;
+                    dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                    dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                    setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
+                } else { if (svgEl) svgEl.innerHTML = ''; }
+                _restartSparklineAutoTimer();
+            }, BC_SPARKLINE_AUTO_INTERVAL);
+        }
+        _restartSparklineAutoTimer();
+
+        // ── CHART ZOOM OVERLAY ──
+        let _czTimer = null;
+        let _czPrevHashA = '', _czPrevHashB = '';
+        function _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months) {
+            const hashA = _bcRawA, hashB = _bcRawB;
+            if (hashA === _czPrevHashA && hashB === _czPrevHashB) return;
+            _czPrevHashA = hashA; _czPrevHashB = hashB;
+            if (!dataA.length && !dataB.length) return;
+
+            const overlay = document.getElementById('chart-zoom-overlay');
+            const barsEl = document.getElementById('cz-bars');
+            const titleEl = document.getElementById('cz-title');
+            const czLabelA = document.getElementById('cz-label-a');
+            const czLabelB = document.getElementById('cz-label-b');
+            const czLegend = document.getElementById('cz-legend');
+            if (!overlay || !barsEl) return;
+
+            if (titleEl) titleEl.textContent = _bcChartTitle || 'MONTHLY TREND';
+            if (czLabelA) czLabelA.textContent = _bcLabelA;
+            if (czLabelB) czLabelB.textContent = _bcLabelB;
+            if (czLegend) czLegend.style.display = hasDual ? 'flex' : 'none';
+
+            barsEl.innerHTML = months.map((d, i) => {
+                const vA = dataA[i] ? dataA[i].val : 0;
+                const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
+                return `<div class="czb-col">
+                    <div class="czb-bar-bg">
+                        <div class="czb-bar-a" style="height:0%"></div>
+                        ${hasDual ? `<div class="czb-bar-b" style="height:0%"></div>` : ''}
+                    </div>
+                    <div class="czb-label">${d.month}</div>
                 </div>`;
             }).join('');
 
+            overlay.classList.add('visible');
             setTimeout(() => {
-                const fills = container.querySelectorAll('.bc-bar-fill');
-                chartData.forEach((d, i) => {
-                    if (fills[i]) fills[i].style.height = (maxVal > 0 ? (d.val / maxVal) * 100 : 0) + '%';
+                months.forEach((d, i) => {
+                    const vA = dataA[i] ? dataA[i].val : 0;
+                    const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
+                    const col = barsEl.children[i];
+                    if (!col) return;
+                    const fills = col.querySelectorAll('.czb-bar-a, .czb-bar-b');
+                    if (fills[0]) fills[0].style.height = (maxVal > 0 ? vA/maxVal*100 : 0) + '%';
+                    if (fills[1] && vB !== null) fills[1].style.height = (maxVal > 0 ? vB/maxVal*100 : 0) + '%';
                 });
-            }, 100);
+            }, 120);
+
+            if (_czTimer) clearTimeout(_czTimer);
+            _czTimer = setTimeout(() => closeChartZoom(), 5000);
+        }
+        function closeChartZoom() {
+            const overlay = document.getElementById('chart-zoom-overlay');
+            if (overlay) overlay.classList.remove('visible');
+            if (_czTimer) clearTimeout(_czTimer);
         }
 
         window.draw = function(data) {
