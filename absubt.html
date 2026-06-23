@@ -823,24 +823,74 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER ── */
+        /* ── MAINTENANCE PROGRESS FOOTER — hidden in card, now a dock ── */
         .maint-progress-footer {
-            margin-top: auto;
-            padding-top: 12px;
-            padding-bottom: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex-shrink: 0; 
-        }
-        @media (max-width: 900px) {
-            .maint-progress-footer {
-                padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
-            }
+            display: none; /* content is now in the bottom dock */
         }
         .maint-progress-right { 
             display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
         }
+
+        /* ── MAINTENANCE BOTTOM DOCK (glassmorphism) ── */
+        #maint-bottom-dock {
+            position: fixed;
+            bottom: 36px; /* above ticker */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1003;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px 10px;
+            background: rgba(22,28,37,0.72);
+            border: 1.5px solid rgba(125,190,255,0.18);
+            border-radius: var(--radius-l);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 12px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);
+            backdrop-filter: blur(32px) saturate(1.8);
+            -webkit-backdrop-filter: blur(32px) saturate(1.8);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            min-width: 340px;
+            max-width: calc(100vw - 32px);
+        }
+        [data-theme="light"] #maint-bottom-dock {
+            background: rgba(240,246,255,0.82);
+            border-color: rgba(0,97,164,0.18);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07), inset 0 1.5px 0 rgba(255,255,255,0.9);
+        }
+
+        /* Dock top row: mcd + circulars + barchart */
+        .dock-main-row {
+            display: flex; flex-direction: row; align-items: center; gap: 12px; width: 100%;
+            justify-content: center;
+        }
+
+        /* Station pills inside dock */
+        .dock-station-pills-row {
+            display: flex; flex-direction: row; align-items: center; gap: 6px; flex-wrap: wrap;
+            justify-content: center; width: 100%; min-height: 0;
+        }
+        .dock-station-pills-row:empty { display: none; }
+        .dock-divider {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(125,190,255,0.2), transparent);
+            border-radius: var(--radius-full);
+            flex-shrink: 0;
+        }
+        .dock-divider:has(+ .dock-station-pills-row:empty) { display: none; }
+
+        /* Popup for dock (remarks) */
+        .maint-progress-popup {
+            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
+            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
+            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
+        }
+        .dock-main-row:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
+        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
         /* Circular progress styling */
         .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
@@ -856,6 +906,7 @@
         .maint-barchart-wrap {
             flex: 1; min-width: 120px;
             display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end;
+            cursor: pointer;
         }
         .maint-barchart-container {
             width: 100%; height: 54px;
@@ -866,11 +917,29 @@
             border-radius: var(--radius-s);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
+            transition: border-color 0.3s ease;
+            position: relative; overflow: hidden;
         }
+        .maint-barchart-container:hover { border-color: var(--primary); }
         [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
+        
+        /* Sparkline mode */
+        .maint-barchart-container.sparkline-mode { padding: 2px 4px; gap: 0; }
+        .maint-barchart-container.sparkline-mode .bc-col { gap: 0; }
+        .maint-barchart-container.sparkline-mode .bc-label { display: none; }
+        .maint-barchart-container.sparkline-mode .bc-value { display: none; }
+        .maint-barchart-container.sparkline-mode .bc-bar-bg { background: transparent; border-radius: 0; }
+        .maint-barchart-container.sparkline-mode .bc-bar-fill { border-radius: 1px; }
+        .maint-barchart-container.sparkline-mode .bc-bar-fill-b { border-radius: 1px; }
+
+        /* Sparkline SVG overlay */
+        #bc-sparkline-svg { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+        .maint-barchart-container.sparkline-mode #bc-sparkline-svg { opacity: 1; }
+
         .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
-        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
-        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
+        .bc-bar-bg { width: 100%; max-width: 12px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; gap: 1px; }
+        .bc-bar-fill { flex: 1; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); min-width: 0; }
+        .bc-bar-fill-b { flex: 1; position: relative; background: linear-gradient(0deg, var(--secondary, #A8BDD4) 0%, color-mix(in srgb, var(--secondary, #A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 6px rgba(168,189,212,0.2); min-width: 0; }
         .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
         .bc-value {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
@@ -879,6 +948,72 @@
             pointer-events: none; z-index: 10;
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
+
+        /* Chart legend */
+        .bc-legend { display: flex; gap: 8px; align-items: center; justify-content: center; }
+        .bc-legend-item { display: flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 0.42rem; font-weight: 800; color: var(--on-surface-variant); letter-spacing: 0.3px; text-transform: uppercase; }
+        .bc-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .bc-legend-dot-a { background: var(--primary); }
+        .bc-legend-dot-b { background: var(--secondary, #A8BDD4); }
+        .maint-barchart-container.sparkline-mode ~ .bc-legend { opacity: 0.5; }
+
+        /* ── CHART ZOOM OVERLAY ── */
+        #chart-zoom-overlay {
+            position: fixed; inset: 0; z-index: 9980;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0); backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            pointer-events: none; opacity: 0;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.4s ease;
+        }
+        #chart-zoom-overlay.visible {
+            opacity: 1; background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(18px) saturate(1.5);
+            -webkit-backdrop-filter: blur(18px) saturate(1.5);
+            pointer-events: auto;
+        }
+        .chart-zoom-card {
+            background: var(--surface);
+            border: 1.5px solid rgba(125,190,255,0.25);
+            border-radius: var(--radius-l);
+            box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.18);
+            backdrop-filter: blur(40px) saturate(2);
+            -webkit-backdrop-filter: blur(40px) saturate(2);
+            padding: 22px 26px 18px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            width: min(90vw, 480px);
+            transform: scale(0.5) translateY(40px);
+            opacity: 0;
+            transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
+        }
+        [data-theme="light"] .chart-zoom-card {
+            background: rgba(255,255,255,0.92);
+            border-color: rgba(0,97,164,0.2);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.18), inset 0 1.5px 0 rgba(255,255,255,0.9);
+        }
+        #chart-zoom-overlay.visible .chart-zoom-card { transform: scale(1) translateY(0); opacity: 1; }
+        .chart-zoom-title { font-family: var(--font-display); font-size: 0.65rem; font-weight: 900; letter-spacing: 1.8px; text-transform: uppercase; color: var(--primary); }
+        .chart-zoom-bars {
+            width: 100%; height: 140px;
+            display: flex; align-items: flex-end; gap: 3px;
+            padding: 6px 8px 2px;
+        }
+        .czb-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
+        .czb-bar-bg { width: 100%; max-width: 20px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 4px 4px 0 0; gap: 2px; overflow: visible; position: relative; }
+        .czb-bar-a { flex: 1; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
+        .czb-bar-b { flex: 1; background: linear-gradient(0deg, var(--secondary,#A8BDD4) 0%, color-mix(in srgb, var(--secondary,#A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
+        .czb-label { font-family: var(--font-display); font-size: 0.52rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
+        .chart-zoom-legend { display: flex; gap: 12px; }
+        .czl-item { display: flex; align-items: center; gap: 4px; font-family: var(--font-display); font-size: 0.58rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
+        .czl-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .czl-dot-a { background: var(--primary); }
+        .czl-dot-b { background: var(--secondary,#A8BDD4); }
+        @keyframes chart-pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(125,190,255,0.5), 0 32px 80px rgba(0,0,0,0.6); }
+            60% { box-shadow: 0 0 0 18px rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
+            100% { box-shadow: 0 0 0 0 rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
+        }
+        #chart-zoom-overlay.visible .chart-zoom-card { animation: chart-pulse-ring 1s ease 0.55s 1 both; }
         
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1203,20 +1338,14 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS ── */
+        /* ── STATION PILLS — now embedded in maint bottom dock ── */
         #station-pills-dock {
-            position: fixed;
-            bottom: 56px; 
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            gap: 8px;
-            z-index: 1004;
-            pointer-events: none; /* Let clicks pass through empty gaps */
+            gap: 6px;
+            pointer-events: auto;
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 60vw;
-            padding-bottom: 8px;
+            max-width: 100%;
         }
         .st-pill {
             pointer-events: auto;
@@ -1245,8 +1374,8 @@
         .st-pill:hover { transform: translateY(-2px); }
 
         .st-remark-bubble {
-            position: absolute;
-            bottom: calc(100% + 8px);
+            position: fixed;
+            bottom: auto;
             left: 50%;
             transform: translateX(-50%) translateY(10px) scale(0.95);
             background: var(--primary);
@@ -1256,12 +1385,17 @@
             font-size: 0.75rem;
             font-family: var(--font-body);
             font-weight: 700;
-            white-space: nowrap;
+            white-space: normal;
+            word-break: break-word;
+            max-width: min(260px, 80vw);
+            width: max-content;
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 10;
+            z-index: 1100;
             box-shadow: var(--shadow-2);
+            text-align: center;
+            line-height: 1.4;
         }
         .st-remark-bubble::after {
             content: ''; position: absolute;
@@ -1273,7 +1407,7 @@
         .st-pill:hover .st-remark-bubble,
         .st-pill.auto-popup .st-remark-bubble {
             opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1);
+            transform: none;
         }
         
         #st-pills-toggle-btn { display: none; }
@@ -1401,50 +1535,7 @@
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
             
-            #st-pills-toggle-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: fixed;
-                bottom: 100px;
-                right: 10px;
-                width: 46px;
-                height: 46px;
-                border-radius: 50%;
-                background: var(--surface-variant);
-                border: 1.5px solid var(--outline);
-                color: var(--on-surface);
-                box-shadow: var(--shadow-2);
-                z-index: 1005;
-                cursor: pointer;
-                transition: transform 0.2s, background 0.3s, border-color 0.3s;
-            }
-            #st-pills-toggle-btn:active {
-                transform: scale(0.95);
-            }
-            #st-pills-toggle-btn.has-updates {
-                border-color: var(--success);
-                color: var(--success);
-                background: var(--success-container);
-            }
-            #st-pills-toggle-btn .material-symbols-rounded { font-size: 22px !important; }
-            
-            #station-pills-dock {
-                bottom: 156px;
-                left: 10px;
-                right: 10px;
-                transform: translateY(15px);
-                max-width: none;
-                justify-content: flex-end;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-            }
-            #station-pills-dock.expanded {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
+            #st-pills-toggle-btn { display: none !important; }
             .st-pill { padding: 4px 10px; font-size: 0.8rem; }
             .st-announce-card { padding: 20px 40px; }
             .st-announce-name { font-size: 2.5rem; }
@@ -1492,165 +1583,6 @@
             .clock-val { font-size: 0.85rem; }
             .ops-inline-container { flex-wrap: wrap; }
         }
-
-    /* ── DESKTOP M3 LIQUID GLASS DOCK (MAINTENANCE FOOTER) ── */
-@media (min-width: 901px) {
-    /* 1. Extract the footer and style the glass slab */
-    .maint-progress-footer {
-        position: fixed;
-        bottom: 64px; /* Floats perfectly above your ticker */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1010;
-        margin: 0;
-        padding: 16px 28px;
-        border-radius: 40px; /* Elegant pill shape */
-
-        /* Liquid Glass Base + Subtle Primary Tint */
-        background: linear-gradient(
-            135deg, 
-            color-mix(in srgb, var(--primary) 12%, rgba(255,255,255,0.08)) 0%, 
-            rgba(255,255,255,0.02) 100%
-        );
-        backdrop-filter: blur(48px) saturate(2);
-        -webkit-backdrop-filter: blur(48px) saturate(2);
-        
-        /* Skeuomorphic Physical Edges */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-top: 1px solid color-mix(in srgb, var(--primary) 30%, rgba(255, 255, 255, 0.4));
-        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-        
-        /* 3D Depth & Ambient Glow */
-        box-shadow:
-            0 32px 64px rgba(0, 0, 0, 0.6),
-            0 12px 24px rgba(0, 0, 0, 0.4),
-            inset 0 2px 3px rgba(255, 255, 255, 0.2),
-            inset 0 -2px 6px rgba(0, 0, 0, 0.4),
-            0 0 24px color-mix(in srgb, var(--primary) 20%, transparent);
-
-        width: max-content;
-        max-width: 90vw;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* Interactive OS Dock hover effect */
-    .maint-progress-footer:hover {
-        transform: translateX(-50%) translateY(-4px) scale(1.02);
-        box-shadow:
-            0 40px 80px rgba(0, 0, 0, 0.7),
-            0 16px 32px rgba(0, 0, 0, 0.4),
-            inset 0 2px 3px rgba(255, 255, 255, 0.25),
-            inset 0 -2px 6px rgba(0, 0, 0, 0.4),
-            0 0 36px color-mix(in srgb, var(--primary) 30%, transparent);
-    }
-
-    .maint-progress-right {
-        gap: 24px;
-        flex-wrap: nowrap;
-    }
-
-    /* 2. Create Engraved Skeuomorphic Wells for the contents */
-    #maint-counts-dock,
-    .maint-circ-wrap,
-    .maint-barchart-wrap {
-        background: rgba(0, 0, 0, 0.25); /* Deep inset depth */
-        border-radius: 28px;
-        padding: 12px 20px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Bottom specular highlight */
-        box-shadow:
-            inset 0 6px 12px rgba(0, 0, 0, 0.5),
-            inset 0 2px 4px rgba(0, 0, 0, 0.6),
-            0 1px 1px rgba(255, 255, 255, 0.1);
-        position: relative;
-        overflow: hidden;
-        margin: 0;
-        flex-shrink: 0;
-    }
-    
-    /* Subtle overhead lighting reflection over the glass wells */
-    #maint-counts-dock::after,
-    .maint-circ-wrap::after,
-    .maint-barchart-wrap::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%);
-        border-radius: inherit;
-        pointer-events: none;
-    }
-
-    /* Inner spacing adjustments */
-    .mcd-item { border-right: 1px solid rgba(255,255,255,0.06); padding: 0 12px; }
-    .mcd-item:last-child { border-right: none; }
-    
-    .maint-barchart-container {
-        background: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0;
-        height: 44px;
-    }
-    
-    /* 3. Style the popup tooltip to match the glass vibe */
-    .maint-progress-popup {
-        bottom: calc(100% + 16px);
-        border-radius: 20px;
-        background: rgba(14, 20, 32, 0.85);
-        backdrop-filter: blur(24px) saturate(2);
-        -webkit-backdrop-filter: blur(24px) saturate(2);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 16px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
-
-    /* 4. Light Theme Specifics */
-    [data-theme="light"] .maint-progress-footer {
-        background: linear-gradient(
-            135deg, 
-            color-mix(in srgb, var(--primary) 8%, rgba(255,255,255,0.85)) 0%, 
-            rgba(255,255,255,0.4) 100%
-        );
-        border: 1px solid rgba(255, 255, 255, 0.6);
-        border-top: 1px solid rgba(255, 255, 255, 1);
-        border-bottom: 1px solid color-mix(in srgb, var(--primary) 15%, rgba(0, 0, 0, 0.1));
-        box-shadow:
-            0 32px 64px color-mix(in srgb, var(--primary) 15%, rgba(0, 0, 0, 0.15)),
-            0 12px 24px color-mix(in srgb, var(--primary) 10%, rgba(0, 0, 0, 0.1)),
-            inset 0 2px 3px rgba(255, 255, 255, 1),
-            inset 0 -2px 6px color-mix(in srgb, var(--primary) 10%, rgba(0, 0, 0, 0.05)),
-            0 0 24px color-mix(in srgb, var(--primary) 15%, transparent);
-    }
-    [data-theme="light"] .maint-progress-footer:hover {
-        box-shadow:
-            0 40px 80px color-mix(in srgb, var(--primary) 20%, rgba(0, 0, 0, 0.15)),
-            0 16px 32px color-mix(in srgb, var(--primary) 15%, rgba(0, 0, 0, 0.1)),
-            inset 0 2px 3px rgba(255, 255, 255, 1),
-            inset 0 -2px 6px color-mix(in srgb, var(--primary) 10%, rgba(0, 0, 0, 0.05)),
-            0 0 36px color-mix(in srgb, var(--primary) 20%, transparent);
-    }
-    [data-theme="light"] #maint-counts-dock,
-    [data-theme="light"] .maint-circ-wrap,
-    [data-theme="light"] .maint-barchart-wrap {
-        background: color-mix(in srgb, var(--primary) 4%, rgba(0, 0, 0, 0.03));
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        border-bottom: 1px solid rgba(255, 255, 255, 1);
-        box-shadow:
-            inset 0 6px 12px rgba(0, 0, 0, 0.06),
-            inset 0 2px 4px rgba(0, 0, 0, 0.08),
-            0 1px 1px rgba(255, 255, 255, 0.8);
-    }
-    [data-theme="light"] #maint-counts-dock::after,
-    [data-theme="light"] .maint-circ-wrap::after,
-    [data-theme="light"] .maint-barchart-wrap::after {
-        background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 40%);
-    }
-    [data-theme="light"] .mcd-item { border-color: rgba(0,0,0,0.06); }
-    [data-theme="light"] .maint-progress-popup {
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(0, 97, 164, 0.2);
-        box-shadow: 0 16px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1);
-    }
-}
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -1664,8 +1596,8 @@
         </div>
     </div>
 
-    <div id="station-pills-dock"></div>
-    <button id="st-pills-toggle-btn" onclick="toggleStationPills(event)" title="Station Status">
+    <!-- station-pills-dock moved into #maint-bottom-dock -->
+    <button id="st-pills-toggle-btn" style="display:none!important" title="Station Status">
         <span class="material-symbols-rounded">ev_station</span>
         <span id="st-pills-badge" class="st-pills-badge"></span>
     </button>
@@ -1815,58 +1747,83 @@
                 
                 <div id="maint-list" class="maint-list"></div>
                 
-                <div class="maint-progress-footer">
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
-                    <div class="maint-progress-right">
-                        <div id="maint-counts-dock">
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-preventive-val">—</div>
-                                <div class="mcd-label">Preventive<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-corrective-val">—</div>
-                                <div class="mcd-label">Corrective<br>Maint.</div>
-                            </div>
-                            <div class="mcd-item">
-                                <div class="mcd-val" id="maint-activity-val">—</div>
-                                <div class="mcd-label">Activities<br>Jobcards</div>
-                            </div>
-                        </div>
-                        <div class="maint-circ-wrap">
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                                    </svg>
-                                    <div class="circ-val" id="maint-progress-value-1">—</div>
-                                </div>
-                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                            </div>
-                            <div class="maint-circ-item">
-                                <div class="circ-svg-wrap">
-                                    <svg viewBox="0 0 44 44">
-                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                                    </svg>
-                                    <div class="circ-val" id="maint-progress-value-2">—</div>
-                                </div>
-                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                            </div>
-                        </div>
-                        <div class="maint-barchart-wrap">
-                            <div class="maint-barchart-container" id="maint-barchart-container"></div>
-                            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- maint-progress-footer contents moved to #maint-bottom-dock -->
 
             </div>
         </div>
     </main>
+
+    <!-- Chart Zoom Overlay -->
+    <div id="chart-zoom-overlay" onclick="closeChartZoom()">
+        <div class="chart-zoom-card" onclick="event.stopPropagation()">
+            <div class="chart-zoom-title" id="cz-title">—</div>
+            <div class="chart-zoom-bars" id="cz-bars"></div>
+            <div class="chart-zoom-legend" id="cz-legend">
+                <div class="czl-item"><div class="czl-dot czl-dot-a"></div><span id="cz-label-a">—</span></div>
+                <div class="czl-item"><div class="czl-dot czl-dot-b"></div><span id="cz-label-b">—</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Bottom Dock -->
+    <div id="maint-bottom-dock">
+        <div class="dock-main-row" style="position:relative;">
+            <div class="maint-progress-popup">
+                <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+            </div>
+            <div id="maint-counts-dock">
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-preventive-val">—</div>
+                    <div class="mcd-label">Preventive<br>Maint.</div>
+                </div>
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-corrective-val">—</div>
+                    <div class="mcd-label">Corrective<br>Maint.</div>
+                </div>
+                <div class="mcd-item">
+                    <div class="mcd-val" id="maint-activity-val">—</div>
+                    <div class="mcd-label">Activities<br>Jobcards</div>
+                </div>
+            </div>
+            <div class="maint-circ-wrap">
+                <div class="maint-circ-item">
+                    <div class="circ-svg-wrap">
+                        <svg viewBox="0 0 44 44">
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-1">—</div>
+                    </div>
+                    <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                </div>
+                <div class="maint-circ-item">
+                    <div class="circ-svg-wrap">
+                        <svg viewBox="0 0 44 44">
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-2">—</div>
+                    </div>
+                    <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                </div>
+            </div>
+            <div class="maint-barchart-wrap" onclick="toggleChartSparkline(event)" title="Click to toggle sparkline / tap to zoom">
+                <div class="maint-barchart-container" id="maint-barchart-container">
+                    <svg id="bc-sparkline-svg" preserveAspectRatio="none"></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                    <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                    <div class="bc-legend" id="bc-legend" style="display:none;">
+                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-a"></div><span id="bc-legend-a-text">Series A</span></div>
+                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-b"></div><span id="bc-legend-b-text">Series B</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dock-divider"></div>
+        <div id="station-pills-dock" class="dock-station-pills-row"></div>
+    </div>
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
@@ -2084,6 +2041,38 @@
             const dock = document.getElementById('station-pills-dock');
             if (dock) dock.classList.toggle('expanded');
         }
+
+        // ── Station Pills: position fixed remark bubbles above pill, no viewport overflow ──
+        document.addEventListener('mouseover', function(e) {
+            const pill = e.target.closest('.st-pill');
+            if (!pill) return;
+            const bubble = pill.querySelector('.st-remark-bubble');
+            if (!bubble) return;
+            const pr = pill.getBoundingClientRect();
+            // Position above pill
+            let top = pr.top - 8; // will shift up by bubble height after show
+            let left = pr.left + pr.width / 2;
+            bubble.style.top = '';
+            bubble.style.bottom = '';
+            bubble.style.left = '';
+            // Show to measure
+            bubble.style.visibility = 'hidden';
+            bubble.style.opacity = '0';
+            bubble.style.transform = 'translateX(-50%) scale(1)';
+            requestAnimationFrame(() => {
+                const bh = bubble.offsetHeight, bw = bubble.offsetWidth;
+                let finalTop = pr.top - bh - 8;
+                let finalLeft = left - bw / 2;
+                // Clamp to viewport
+                if (finalLeft < 8) finalLeft = 8;
+                if (finalLeft + bw > window.innerWidth - 8) finalLeft = window.innerWidth - bw - 8;
+                if (finalTop < 8) finalTop = pr.bottom + 8; // flip below if no room above
+                bubble.style.top = finalTop + 'px';
+                bubble.style.left = finalLeft + 'px';
+                bubble.style.transform = 'none';
+                bubble.style.visibility = '';
+            });
+        });
 
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('hamburger-menu');
@@ -2538,51 +2527,226 @@
             }
         }
 
-        // Render bar chart function
-        function renderMaintBarChart(raw) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
+        // ── DUAL BAR CHART STATE ──
+        let _bcRawA = '', _bcRawB = '', _bcLabelA = '—', _bcLabelB = '—', _bcChartTitle = '—';
+        let _bcSparklineMode = false;
+        let _bcSparklineTimer = null;
+        const BC_SPARKLINE_AUTO_INTERVAL = 10 * 60 * 1000; // 10 minutes
+        const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+        const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
+        function parseChartData(raw) {
+            if (!raw || raw.trim() === '') return [];
             const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return;
-
+            if (matches.length === 0) return [];
             const dataMap = {};
             matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
-
-            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-            const currentMonthIdx = new Date().getMonth();
-            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const currentMonthName = monthNames[currentMonthIdx];
-            const currentFyIdx = fyOrder.indexOf(currentMonthName);
-
-            let maxVal = 0;
-            const chartData = [];
+            const currentFyIdx = fyOrder.indexOf(monthNames[new Date().getMonth()]);
+            const result = [];
             for (let i = 0; i <= currentFyIdx; i++) {
                 const m = fyOrder[i];
-                const v = dataMap[m] || 0;
-                chartData.push({ month: m, val: v });
-                if (v > maxVal) maxVal = v;
+                result.push({ month: m, val: dataMap[m] || 0 });
+            }
+            return result;
+        }
+
+        function renderMaintBarChart(rawA, rawB, labelA, labelB, chartTitle) {
+            // Accept either old single-arg call or new multi-arg
+            if (rawB !== undefined) { _bcRawA = rawA || ''; _bcRawB = rawB || ''; }
+            else { _bcRawA = rawA || ''; }
+            if (labelA !== undefined) _bcLabelA = labelA || '—';
+            if (labelB !== undefined) _bcLabelB = labelB || '—';
+            if (chartTitle !== undefined) _bcChartTitle = chartTitle || '—';
+            _renderBarChartInternal(true);
+        }
+
+        function _renderBarChartInternal(isUpdate) {
+            const container = document.getElementById('maint-barchart-container');
+            if (!container) return;
+            const svgEl = document.getElementById('bc-sparkline-svg');
+            const legendEl = document.getElementById('bc-legend');
+
+            const dataA = parseChartData(_bcRawA);
+            const dataB = parseChartData(_bcRawB);
+            const hasDual = dataB.length > 0;
+
+            if (dataA.length === 0 && dataB.length === 0) { 
+                // Keep sparkline svg but clear bars
+                container.querySelectorAll('.bc-col').forEach(c => c.remove());
+                return; 
             }
 
-            container.innerHTML = chartData.map(d => {
-                return `
-                <div class="bc-col">
+            let maxVal = 0;
+            dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+            dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+
+            const months = dataA.length > 0 ? dataA : dataB;
+
+            // Remove old bars
+            container.querySelectorAll('.bc-col').forEach(c => c.remove());
+
+            months.forEach((d, i) => {
+                const vA = (dataA[i] ? dataA[i].val : 0);
+                const vB = (hasDual && dataB[i] ? dataB[i].val : null);
+                const hA = maxVal > 0 ? (vA / maxVal) * 100 : 0;
+                const hB = (vB !== null && maxVal > 0) ? (vB / maxVal) * 100 : 0;
+                const col = document.createElement('div');
+                col.className = 'bc-col';
+                col.innerHTML = `
                     <div class="bc-bar-bg">
-                        <div class="bc-bar-fill" style="height: 0%;">
-                            <div class="bc-value">${d.val}</div>
-                        </div>
+                        <div class="bc-bar-fill" style="height:0%"><div class="bc-value">${vA}</div></div>
+                        ${hasDual ? `<div class="bc-bar-fill-b" style="height:0%"></div>` : ''}
                     </div>
-                    <div class="bc-label">${d.month}</div>
+                    <div class="bc-label">${d.month}</div>`;
+                container.appendChild(col);
+                setTimeout(() => {
+                    const fills = col.querySelectorAll('.bc-bar-fill, .bc-bar-fill-b');
+                    if (fills[0]) fills[0].style.height = hA + '%';
+                    if (fills[1]) fills[1].style.height = hB + '%';
+                }, 120);
+            });
+
+            // Legend
+            if (legendEl) {
+                if (hasDual) {
+                    legendEl.style.display = 'flex';
+                    const aText = document.getElementById('bc-legend-a-text');
+                    const bText = document.getElementById('bc-legend-b-text');
+                    if (aText) aText.textContent = _bcLabelA;
+                    if (bText) bText.textContent = _bcLabelB;
+                } else {
+                    legendEl.style.display = 'none';
+                }
+            }
+
+            // Sparkline
+            if (_bcSparklineMode) {
+                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 150);
+            }
+
+            // Zoom overlay with animation if data changed
+            if (isUpdate) {
+                _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months);
+            }
+        }
+
+        function _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl) {
+            if (!svgEl) return;
+            const W = container.clientWidth, H = container.clientHeight;
+            if (W === 0 || H === 0) return;
+            const n = dataA.length || dataB.length;
+            if (n === 0) { svgEl.innerHTML = ''; return; }
+            const pad = 4;
+            function pts(data, color, opacity) {
+                if (data.length === 0) return '';
+                const step = (W - pad*2) / (n - 1 || 1);
+                const points = data.map((d, i) => {
+                    const x = pad + i * step;
+                    const y = H - pad - (maxVal > 0 ? (d.val / maxVal) * (H - pad*2) : 0);
+                    return `${x},${y}`;
+                }).join(' ');
+                return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
+            }
+            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svgEl.innerHTML = pts(dataA, 'var(--primary)', '0.85') + (hasDual ? pts(dataB, 'var(--secondary,#A8BDD4)', '0.7') : '');
+        }
+
+        // ── SPARKLINE TOGGLE ──
+        function toggleChartSparkline(e) {
+            if (e) e.stopPropagation();
+            _bcSparklineMode = !_bcSparklineMode;
+            const container = document.getElementById('maint-barchart-container');
+            const svgEl = document.getElementById('bc-sparkline-svg');
+            if (!container) return;
+            container.classList.toggle('sparkline-mode', _bcSparklineMode);
+            if (_bcSparklineMode) {
+                const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
+                const hasDual = dataB.length > 0;
+                let maxVal = 0;
+                dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
+            } else {
+                if (svgEl) svgEl.innerHTML = '';
+            }
+            // Reset auto-sparkline timer
+            _restartSparklineAutoTimer();
+        }
+
+        function _restartSparklineAutoTimer() {
+            if (_bcSparklineTimer) clearTimeout(_bcSparklineTimer);
+            _bcSparklineTimer = setTimeout(() => {
+                _bcSparklineMode = !_bcSparklineMode;
+                const container = document.getElementById('maint-barchart-container');
+                const svgEl = document.getElementById('bc-sparkline-svg');
+                if (container) container.classList.toggle('sparkline-mode', _bcSparklineMode);
+                if (_bcSparklineMode) {
+                    const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
+                    const hasDual = dataB.length > 0;
+                    let maxVal = 0;
+                    dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                    dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+                    setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
+                } else { if (svgEl) svgEl.innerHTML = ''; }
+                _restartSparklineAutoTimer();
+            }, BC_SPARKLINE_AUTO_INTERVAL);
+        }
+        _restartSparklineAutoTimer();
+
+        // ── CHART ZOOM OVERLAY ──
+        let _czTimer = null;
+        let _czPrevHashA = '', _czPrevHashB = '';
+        function _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months) {
+            const hashA = _bcRawA, hashB = _bcRawB;
+            if (hashA === _czPrevHashA && hashB === _czPrevHashB) return;
+            _czPrevHashA = hashA; _czPrevHashB = hashB;
+            if (!dataA.length && !dataB.length) return;
+
+            const overlay = document.getElementById('chart-zoom-overlay');
+            const barsEl = document.getElementById('cz-bars');
+            const titleEl = document.getElementById('cz-title');
+            const czLabelA = document.getElementById('cz-label-a');
+            const czLabelB = document.getElementById('cz-label-b');
+            const czLegend = document.getElementById('cz-legend');
+            if (!overlay || !barsEl) return;
+
+            if (titleEl) titleEl.textContent = _bcChartTitle || 'MONTHLY TREND';
+            if (czLabelA) czLabelA.textContent = _bcLabelA;
+            if (czLabelB) czLabelB.textContent = _bcLabelB;
+            if (czLegend) czLegend.style.display = hasDual ? 'flex' : 'none';
+
+            barsEl.innerHTML = months.map((d, i) => {
+                const vA = dataA[i] ? dataA[i].val : 0;
+                const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
+                return `<div class="czb-col">
+                    <div class="czb-bar-bg">
+                        <div class="czb-bar-a" style="height:0%"></div>
+                        ${hasDual ? `<div class="czb-bar-b" style="height:0%"></div>` : ''}
+                    </div>
+                    <div class="czb-label">${d.month}</div>
                 </div>`;
             }).join('');
 
+            overlay.classList.add('visible');
             setTimeout(() => {
-                const fills = container.querySelectorAll('.bc-bar-fill');
-                chartData.forEach((d, i) => {
-                    if (fills[i]) fills[i].style.height = (maxVal > 0 ? (d.val / maxVal) * 100 : 0) + '%';
+                months.forEach((d, i) => {
+                    const vA = dataA[i] ? dataA[i].val : 0;
+                    const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
+                    const col = barsEl.children[i];
+                    if (!col) return;
+                    const fills = col.querySelectorAll('.czb-bar-a, .czb-bar-b');
+                    if (fills[0]) fills[0].style.height = (maxVal > 0 ? vA/maxVal*100 : 0) + '%';
+                    if (fills[1] && vB !== null) fills[1].style.height = (maxVal > 0 ? vB/maxVal*100 : 0) + '%';
                 });
-            }, 100);
+            }, 120);
+
+            if (_czTimer) clearTimeout(_czTimer);
+            _czTimer = setTimeout(() => closeChartZoom(), 5000);
+        }
+        function closeChartZoom() {
+            const overlay = document.getElementById('chart-zoom-overlay');
+            if (overlay) overlay.classList.remove('visible');
+            if (_czTimer) clearTimeout(_czTimer);
         }
 
         window.draw = function(data) {
@@ -2711,16 +2875,32 @@
                 if (unit === 'sheetab') {
                     if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
                     if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
-                    if (param === 'sheetab_R1C45') { const el = document.getElementById('maint-barchart-label'); if(el) el.innerText = val || 'MONTHLY TREND'; }
+                    if (param === 'sheetab_R1C45') { 
+                        _bcLabelA = val || 'Series A'; 
+                        const el = document.getElementById('maint-barchart-label'); 
+                        if(el) el.innerText = _bcChartTitle || val || 'MONTHLY TREND'; 
+                    }
+                    if (param === 'sheetab_R1C46') {
+                        _bcLabelB = val || 'Series B';
+                        _bcChartTitle = val || 'MONTHLY TREND';
+                        const el = document.getElementById('maint-barchart-label');
+                        if (el) el.innerText = _bcChartTitle;
+                        const czTitle = document.getElementById('cz-title');
+                        if (czTitle) czTitle.textContent = _bcChartTitle;
+                    }
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
+                    if (param === 'sheetab_R2C45') { _bcRawA = val || ''; }
+                    if (param === 'sheetab_R2C46') { _bcRawB = val || ''; }
                 }
             });
             
             // Execute Station Pills Handling
             handleStationPills(statPillsRaw, statPillsIntervalRaw);
+
+            // Render dual bar chart with both series after all data is processed
+            renderMaintBarChart(_bcRawA, _bcRawB, _bcLabelA, _bcLabelB, _bcChartTitle);
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
