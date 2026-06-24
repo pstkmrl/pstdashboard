@@ -823,74 +823,24 @@
             line-height: 1.5;
         }
 
-        /* ── MAINTENANCE PROGRESS FOOTER — hidden in card, now a dock ── */
+        /* ── MAINTENANCE PROGRESS FOOTER ── */
         .maint-progress-footer {
-            display: none; /* content is now in the bottom dock */
+            margin-top: auto;
+            padding-top: 12px;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0; 
+        }
+        @media (max-width: 900px) {
+            .maint-progress-footer {
+                padding-bottom: max(93px, calc(69px + env(safe-area-inset-bottom, 24px)));
+            }
         }
         .maint-progress-right { 
             display: flex; flex-direction: row; align-items: center; gap: 12px; min-width: 0; position: relative; flex-wrap: wrap; justify-content: space-between; 
         }
-
-        /* ── MAINTENANCE BOTTOM DOCK (glassmorphism) ── */
-        #maint-bottom-dock {
-            position: fixed;
-            bottom: 36px; /* above ticker */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1003;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 18px 10px;
-            background: rgba(22,28,37,0.72);
-            border: 1.5px solid rgba(125,190,255,0.18);
-            border-radius: var(--radius-l);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 12px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);
-            backdrop-filter: blur(32px) saturate(1.8);
-            -webkit-backdrop-filter: blur(32px) saturate(1.8);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease;
-            min-width: 340px;
-            max-width: calc(100vw - 32px);
-        }
-        [data-theme="light"] #maint-bottom-dock {
-            background: rgba(240,246,255,0.82);
-            border-color: rgba(0,97,164,0.18);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.07), inset 0 1.5px 0 rgba(255,255,255,0.9);
-        }
-
-        /* Dock top row: mcd + circulars + barchart */
-        .dock-main-row {
-            display: flex; flex-direction: row; align-items: center; gap: 12px; width: 100%;
-            justify-content: center;
-        }
-
-        /* Station pills inside dock */
-        .dock-station-pills-row {
-            display: flex; flex-direction: row; align-items: center; gap: 6px; flex-wrap: wrap;
-            justify-content: center; width: 100%; min-height: 0;
-        }
-        .dock-station-pills-row:empty { display: none; }
-        .dock-divider {
-            width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(125,190,255,0.2), transparent);
-            border-radius: var(--radius-full);
-            flex-shrink: 0;
-        }
-        .dock-divider:has(+ .dock-station-pills-row:empty) { display: none; }
-
-        /* Popup for dock (remarks) */
-        .maint-progress-popup {
-            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
-            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
-            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
-        }
-        .dock-main-row:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
-        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
-        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
-        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
         /* Circular progress styling */
         .maint-circ-wrap { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 0 4px; }
@@ -906,7 +856,6 @@
         .maint-barchart-wrap {
             flex: 1; min-width: 120px;
             display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end;
-            cursor: pointer;
         }
         .maint-barchart-container {
             width: 100%; height: 54px;
@@ -917,29 +866,11 @@
             border-radius: var(--radius-s);
             backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             box-shadow: inset 0 1px 4px rgba(0,0,0,0.1);
-            transition: border-color 0.3s ease;
-            position: relative; overflow: hidden;
         }
-        .maint-barchart-container:hover { border-color: var(--primary); }
         [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
-        
-        /* Sparkline mode */
-        .maint-barchart-container.sparkline-mode { padding: 2px 4px; gap: 0; }
-        .maint-barchart-container.sparkline-mode .bc-col { gap: 0; }
-        .maint-barchart-container.sparkline-mode .bc-label { display: none; }
-        .maint-barchart-container.sparkline-mode .bc-value { display: none; }
-        .maint-barchart-container.sparkline-mode .bc-bar-bg { background: transparent; border-radius: 0; }
-        .maint-barchart-container.sparkline-mode .bc-bar-fill { border-radius: 1px; }
-        .maint-barchart-container.sparkline-mode .bc-bar-fill-b { border-radius: 1px; }
-
-        /* Sparkline SVG overlay */
-        #bc-sparkline-svg { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
-        .maint-barchart-container.sparkline-mode #bc-sparkline-svg { opacity: 1; }
-
         .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
-        .bc-bar-bg { width: 100%; max-width: 12px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; gap: 1px; }
-        .bc-bar-fill { flex: 1; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); min-width: 0; }
-        .bc-bar-fill-b { flex: 1; position: relative; background: linear-gradient(0deg, var(--secondary, #A8BDD4) 0%, color-mix(in srgb, var(--secondary, #A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 6px rgba(168,189,212,0.2); min-width: 0; }
+        .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
+        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
         .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
         .bc-value {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
@@ -948,73 +879,126 @@
             pointer-events: none; z-index: 10;
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
-
-        /* Chart legend */
-        .bc-legend { display: flex; gap: 8px; align-items: center; justify-content: center; }
-        .bc-legend-item { display: flex; align-items: center; gap: 3px; font-family: var(--font-display); font-size: 0.42rem; font-weight: 800; color: var(--on-surface-variant); letter-spacing: 0.3px; text-transform: uppercase; }
-        .bc-legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-        .bc-legend-dot-a { background: var(--primary); }
-        .bc-legend-dot-b { background: var(--secondary, #A8BDD4); }
-        .maint-barchart-container.sparkline-mode ~ .bc-legend { opacity: 0.5; }
-
-        /* ── CHART ZOOM OVERLAY ── */
-        #chart-zoom-overlay {
-            position: fixed; inset: 0; z-index: 9980;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0); backdrop-filter: blur(0px);
-            -webkit-backdrop-filter: blur(0px);
-            pointer-events: none; opacity: 0;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, opacity 0.4s ease;
-        }
-        #chart-zoom-overlay.visible {
-            opacity: 1; background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(18px) saturate(1.5);
-            -webkit-backdrop-filter: blur(18px) saturate(1.5);
-            pointer-events: auto;
-        }
-        .chart-zoom-card {
-            background: var(--surface);
-            border: 1.5px solid rgba(125,190,255,0.25);
-            border-radius: var(--radius-l);
-            box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.18);
-            backdrop-filter: blur(40px) saturate(2);
-            -webkit-backdrop-filter: blur(40px) saturate(2);
-            padding: 22px 26px 18px;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            width: min(90vw, 480px);
-            transform: scale(0.5) translateY(40px);
-            opacity: 0;
-            transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;
-        }
-        [data-theme="light"] .chart-zoom-card {
-            background: rgba(255,255,255,0.92);
-            border-color: rgba(0,97,164,0.2);
-            box-shadow: 0 24px 60px rgba(0,0,0,0.18), inset 0 1.5px 0 rgba(255,255,255,0.9);
-        }
-        #chart-zoom-overlay.visible .chart-zoom-card { transform: scale(1) translateY(0); opacity: 1; }
-        .chart-zoom-title { font-family: var(--font-display); font-size: 0.65rem; font-weight: 900; letter-spacing: 1.8px; text-transform: uppercase; color: var(--primary); }
-        .chart-zoom-bars {
-            width: 100%; height: 140px;
-            display: flex; align-items: flex-end; gap: 3px;
-            padding: 6px 8px 2px;
-        }
-        .czb-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; min-width: 0; }
-        .czb-bar-bg { width: 100%; max-width: 20px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 4px 4px 0 0; gap: 2px; overflow: visible; position: relative; }
-        .czb-bar-a { flex: 1; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
-        .czb-bar-b { flex: 1; background: linear-gradient(0deg, var(--secondary,#A8BDD4) 0%, color-mix(in srgb, var(--secondary,#A8BDD4) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.9s cubic-bezier(0.4,0,0.2,1); min-width: 0; }
-        .czb-label { font-family: var(--font-display); font-size: 0.52rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
-        .chart-zoom-legend { display: flex; gap: 12px; }
-        .czl-item { display: flex; align-items: center; gap: 4px; font-family: var(--font-display); font-size: 0.58rem; font-weight: 800; color: var(--on-surface-variant); text-transform: uppercase; }
-        .czl-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .czl-dot-a { background: var(--primary); }
-        .czl-dot-b { background: var(--secondary,#A8BDD4); }
-        @keyframes chart-pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(125,190,255,0.5), 0 32px 80px rgba(0,0,0,0.6); }
-            60% { box-shadow: 0 0 0 18px rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
-            100% { box-shadow: 0 0 0 0 rgba(125,190,255,0), 0 32px 80px rgba(0,0,0,0.6); }
-        }
-        #chart-zoom-overlay.visible .chart-zoom-card { animation: chart-pulse-ring 1s ease 0.55s 1 both; }
         
+        /* ── BARCHART ROTATOR ── */
+        .bc-rotator {
+            width: 100%; height: 100%;
+            position: relative;
+        }
+        .bc-panel {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(6px) scale(0.98);
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            padding: 4px 6px;
+        }
+        .bc-panel.bc-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+        .bc-panel.bc-exit {
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Chart type indicator dots */
+        .bc-indicator-dots {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .bc-ind-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--outline);
+            opacity: 0.35;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bc-ind-dot.active {
+            width: 12px;
+            border-radius: 3px;
+            background: var(--primary);
+            opacity: 1;
+        }
+
+        /* Chart 2 bars — secondary color */
+        .bc-bar-fill.bc-bar-2 {
+            background: linear-gradient(0deg, #FF9100 0%, color-mix(in srgb, #FF9100 60%, white) 100%);
+            box-shadow: 0 0 8px rgba(255,145,0,0.25);
+        }
+
+        /* Sparkline (chart 3) */
+        .bc-sparkline-panel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .bc-spark-svg {
+            width: 100%;
+            flex: 1;
+            overflow: visible;
+        }
+        .bc-spark-legend {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            padding-top: 2px;
+            flex-shrink: 0;
+        }
+        .bc-spark-leg-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-family: var(--font-display);
+            font-size: 0.42rem;
+            font-weight: 800;
+            color: var(--on-surface-variant);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .bc-spark-leg-swatch {
+            width: 12px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .bc-spark-tooltip {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(22,28,40,0.92);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 3px 7px;
+            font-family: var(--font-display);
+            font-size: 0.48rem;
+            font-weight: 800;
+            color: var(--on-surface);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+            z-index: 50;
+        }
+        [data-theme="light"] .bc-spark-tooltip {
+            background: rgba(255,255,255,0.95);
+            border-color: rgba(0,0,0,0.12);
+        }
+
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
             border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
@@ -1338,14 +1322,20 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS — now embedded in maint bottom dock ── */
+        /* ── STATION PILLS ── */
         #station-pills-dock {
+            position: fixed;
+            bottom: 56px; 
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            gap: 6px;
-            pointer-events: auto;
+            gap: 8px;
+            z-index: 1004;
+            pointer-events: none; /* Let clicks pass through empty gaps */
             justify-content: center;
             flex-wrap: wrap;
-            max-width: 100%;
+            max-width: 60vw;
+            padding-bottom: 8px;
         }
         .st-pill {
             pointer-events: auto;
@@ -1374,8 +1364,8 @@
         .st-pill:hover { transform: translateY(-2px); }
 
         .st-remark-bubble {
-            position: fixed;
-            bottom: auto;
+            position: absolute;
+            bottom: calc(100% + 8px);
             left: 50%;
             transform: translateX(-50%) translateY(10px) scale(0.95);
             background: var(--primary);
@@ -1385,17 +1375,12 @@
             font-size: 0.75rem;
             font-family: var(--font-body);
             font-weight: 700;
-            white-space: normal;
-            word-break: break-word;
-            max-width: min(260px, 80vw);
-            width: max-content;
+            white-space: nowrap;
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 1100;
+            z-index: 10;
             box-shadow: var(--shadow-2);
-            text-align: center;
-            line-height: 1.4;
         }
         .st-remark-bubble::after {
             content: ''; position: absolute;
@@ -1407,7 +1392,7 @@
         .st-pill:hover .st-remark-bubble,
         .st-pill.auto-popup .st-remark-bubble {
             opacity: 1;
-            transform: none;
+            transform: translateX(-50%) translateY(0) scale(1);
         }
         
         #st-pills-toggle-btn { display: none; }
@@ -1535,7 +1520,50 @@
             #maint-counts-dock { margin-top: 8px; }
             .mcd-val { font-size: 1.5rem; }
             
-            #st-pills-toggle-btn { display: none !important; }
+            #st-pills-toggle-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 100px;
+                right: 10px;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background: var(--surface-variant);
+                border: 1.5px solid var(--outline);
+                color: var(--on-surface);
+                box-shadow: var(--shadow-2);
+                z-index: 1005;
+                cursor: pointer;
+                transition: transform 0.2s, background 0.3s, border-color 0.3s;
+            }
+            #st-pills-toggle-btn:active {
+                transform: scale(0.95);
+            }
+            #st-pills-toggle-btn.has-updates {
+                border-color: var(--success);
+                color: var(--success);
+                background: var(--success-container);
+            }
+            #st-pills-toggle-btn .material-symbols-rounded { font-size: 22px !important; }
+            
+            #station-pills-dock {
+                bottom: 156px;
+                left: 10px;
+                right: 10px;
+                transform: translateY(15px);
+                max-width: none;
+                justify-content: flex-end;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            }
+            #station-pills-dock.expanded {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
             .st-pill { padding: 4px 10px; font-size: 0.8rem; }
             .st-announce-card { padding: 20px 40px; }
             .st-announce-name { font-size: 2.5rem; }
@@ -1596,8 +1624,8 @@
         </div>
     </div>
 
-    <!-- station-pills-dock moved into #maint-bottom-dock -->
-    <button id="st-pills-toggle-btn" style="display:none!important" title="Station Status">
+    <div id="station-pills-dock"></div>
+    <button id="st-pills-toggle-btn" onclick="toggleStationPills(event)" title="Station Status">
         <span class="material-symbols-rounded">ev_station</span>
         <span id="st-pills-badge" class="st-pills-badge"></span>
     </button>
@@ -1747,83 +1775,71 @@
                 
                 <div id="maint-list" class="maint-list"></div>
                 
-                <!-- maint-progress-footer contents moved to #maint-bottom-dock -->
+                <div class="maint-progress-footer">
+                    <div class="maint-progress-popup">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
+                    <div class="maint-progress-right">
+                        <div id="maint-counts-dock">
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-preventive-val">—</div>
+                                <div class="mcd-label">Preventive<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-corrective-val">—</div>
+                                <div class="mcd-label">Corrective<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-activity-val">—</div>
+                                <div class="mcd-label">Activities<br>Jobcards</div>
+                            </div>
+                        </div>
+                        <div class="maint-circ-wrap">
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-1">—</div>
+                                </div>
+                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                            </div>
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-2">—</div>
+                                </div>
+                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                            </div>
+                        </div>
+                        <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+                                <div class="bc-rotator" id="bc-rotator">
+                                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                                    <div class="bc-panel" id="bc-panel-2"></div>
+                                    <div class="bc-panel" id="bc-panel-3" style="padding:4px 6px 2px;"></div>
+                                </div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                                <div class="bc-indicator-dots" id="bc-indicator-dots">
+                                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                                    <div class="bc-ind-dot" id="bc-dot-1"></div>
+                                    <div class="bc-ind-dot" id="bc-dot-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </main>
-
-    <!-- Chart Zoom Overlay -->
-    <div id="chart-zoom-overlay" onclick="closeChartZoom()">
-        <div class="chart-zoom-card" onclick="event.stopPropagation()">
-            <div class="chart-zoom-title" id="cz-title">—</div>
-            <div class="chart-zoom-bars" id="cz-bars"></div>
-            <div class="chart-zoom-legend" id="cz-legend">
-                <div class="czl-item"><div class="czl-dot czl-dot-a"></div><span id="cz-label-a">—</span></div>
-                <div class="czl-item"><div class="czl-dot czl-dot-b"></div><span id="cz-label-b">—</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Maintenance Bottom Dock -->
-    <div id="maint-bottom-dock">
-        <div class="dock-main-row" style="position:relative;">
-            <div class="maint-progress-popup">
-                <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-            </div>
-            <div id="maint-counts-dock">
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-preventive-val">—</div>
-                    <div class="mcd-label">Preventive<br>Maint.</div>
-                </div>
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-corrective-val">—</div>
-                    <div class="mcd-label">Corrective<br>Maint.</div>
-                </div>
-                <div class="mcd-item">
-                    <div class="mcd-val" id="maint-activity-val">—</div>
-                    <div class="mcd-label">Activities<br>Jobcards</div>
-                </div>
-            </div>
-            <div class="maint-circ-wrap">
-                <div class="maint-circ-item">
-                    <div class="circ-svg-wrap">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-1">—</div>
-                    </div>
-                    <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                </div>
-                <div class="maint-circ-item">
-                    <div class="circ-svg-wrap">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-2">—</div>
-                    </div>
-                    <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                </div>
-            </div>
-            <div class="maint-barchart-wrap" onclick="toggleChartSparkline(event)" title="Click to toggle sparkline / tap to zoom">
-                <div class="maint-barchart-container" id="maint-barchart-container">
-                    <svg id="bc-sparkline-svg" preserveAspectRatio="none"></svg>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                    <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                    <div class="bc-legend" id="bc-legend" style="display:none;">
-                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-a"></div><span id="bc-legend-a-text">Series A</span></div>
-                        <div class="bc-legend-item"><div class="bc-legend-dot bc-legend-dot-b"></div><span id="bc-legend-b-text">Series B</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="dock-divider"></div>
-        <div id="station-pills-dock" class="dock-station-pills-row"></div>
-    </div>
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
@@ -2041,38 +2057,6 @@
             const dock = document.getElementById('station-pills-dock');
             if (dock) dock.classList.toggle('expanded');
         }
-
-        // ── Station Pills: position fixed remark bubbles above pill, no viewport overflow ──
-        document.addEventListener('mouseover', function(e) {
-            const pill = e.target.closest('.st-pill');
-            if (!pill) return;
-            const bubble = pill.querySelector('.st-remark-bubble');
-            if (!bubble) return;
-            const pr = pill.getBoundingClientRect();
-            // Position above pill
-            let top = pr.top - 8; // will shift up by bubble height after show
-            let left = pr.left + pr.width / 2;
-            bubble.style.top = '';
-            bubble.style.bottom = '';
-            bubble.style.left = '';
-            // Show to measure
-            bubble.style.visibility = 'hidden';
-            bubble.style.opacity = '0';
-            bubble.style.transform = 'translateX(-50%) scale(1)';
-            requestAnimationFrame(() => {
-                const bh = bubble.offsetHeight, bw = bubble.offsetWidth;
-                let finalTop = pr.top - bh - 8;
-                let finalLeft = left - bw / 2;
-                // Clamp to viewport
-                if (finalLeft < 8) finalLeft = 8;
-                if (finalLeft + bw > window.innerWidth - 8) finalLeft = window.innerWidth - bw - 8;
-                if (finalTop < 8) finalTop = pr.bottom + 8; // flip below if no room above
-                bubble.style.top = finalTop + 'px';
-                bubble.style.left = finalLeft + 'px';
-                bubble.style.transform = 'none';
-                bubble.style.visibility = '';
-            });
-        });
 
         document.addEventListener('click', function(e) {
             const menu = document.getElementById('hamburger-menu');
@@ -2527,226 +2511,207 @@
             }
         }
 
-        // ── DUAL BAR CHART STATE ──
-        let _bcRawA = '', _bcRawB = '', _bcLabelA = '—', _bcLabelB = '—', _bcChartTitle = '—';
-        let _bcSparklineMode = false;
-        let _bcSparklineTimer = null;
-        const BC_SPARKLINE_AUTO_INTERVAL = 10 * 60 * 1000; // 10 minutes
-        const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-        const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+        // ── Chart Rotator State ──
+        let _bcChart1Data = null, _bcChart2Data = null;
+        let _bcChart1Name = '—', _bcChart2Name = '—';
+        let _bcRotateInterval = 6000; // default 6s, overridden by r2c53
+        let _bcRotateTimer = null;
+        let _bcCurrentPanel = 0; // 0=chart1, 1=chart2, 2=combo sparkline
 
-        function parseChartData(raw) {
-            if (!raw || raw.trim() === '') return [];
+        function _parseChartRaw(raw) {
+            if (!raw || raw.trim() === '') return null;
             const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return [];
+            if (matches.length === 0) return null;
             const dataMap = {};
             matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
+            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+            const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
             const currentFyIdx = fyOrder.indexOf(monthNames[new Date().getMonth()]);
-            const result = [];
-            for (let i = 0; i <= currentFyIdx; i++) {
-                const m = fyOrder[i];
-                result.push({ month: m, val: dataMap[m] || 0 });
-            }
-            return result;
-        }
-
-        function renderMaintBarChart(rawA, rawB, labelA, labelB, chartTitle) {
-            // Accept either old single-arg call or new multi-arg
-            if (rawB !== undefined) { _bcRawA = rawA || ''; _bcRawB = rawB || ''; }
-            else { _bcRawA = rawA || ''; }
-            if (labelA !== undefined) _bcLabelA = labelA || '—';
-            if (labelB !== undefined) _bcLabelB = labelB || '—';
-            if (chartTitle !== undefined) _bcChartTitle = chartTitle || '—';
-            _renderBarChartInternal(true);
-        }
-
-        function _renderBarChartInternal(isUpdate) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            const svgEl = document.getElementById('bc-sparkline-svg');
-            const legendEl = document.getElementById('bc-legend');
-
-            const dataA = parseChartData(_bcRawA);
-            const dataB = parseChartData(_bcRawB);
-            const hasDual = dataB.length > 0;
-
-            if (dataA.length === 0 && dataB.length === 0) { 
-                // Keep sparkline svg but clear bars
-                container.querySelectorAll('.bc-col').forEach(c => c.remove());
-                return; 
-            }
-
+            const chartData = [];
             let maxVal = 0;
-            dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-            dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
+            for (let i = 0; i <= currentFyIdx; i++) {
+                const m = fyOrder[i], v = dataMap[m] || 0;
+                chartData.push({ month: m, val: v });
+                if (v > maxVal) maxVal = v;
+            }
+            return { chartData, maxVal };
+        }
 
-            const months = dataA.length > 0 ? dataA : dataB;
-
-            // Remove old bars
-            container.querySelectorAll('.bc-col').forEach(c => c.remove());
-
-            months.forEach((d, i) => {
-                const vA = (dataA[i] ? dataA[i].val : 0);
-                const vB = (hasDual && dataB[i] ? dataB[i].val : null);
-                const hA = maxVal > 0 ? (vA / maxVal) * 100 : 0;
-                const hB = (vB !== null && maxVal > 0) ? (vB / maxVal) * 100 : 0;
-                const col = document.createElement('div');
-                col.className = 'bc-col';
-                col.innerHTML = `
+        function _buildBarPanelHTML(parsed, colorClass) {
+            if (!parsed) return '';
+            const { chartData, maxVal } = parsed;
+            return chartData.map(d => `
+                <div class="bc-col">
                     <div class="bc-bar-bg">
-                        <div class="bc-bar-fill" style="height:0%"><div class="bc-value">${vA}</div></div>
-                        ${hasDual ? `<div class="bc-bar-fill-b" style="height:0%"></div>` : ''}
+                        <div class="bc-bar-fill ${colorClass}" data-val="${maxVal > 0 ? (d.val / maxVal) * 100 : 0}" style="height:0%;">
+                            <div class="bc-value">${d.val}</div>
+                        </div>
                     </div>
-                    <div class="bc-label">${d.month}</div>`;
-                container.appendChild(col);
-                setTimeout(() => {
-                    const fills = col.querySelectorAll('.bc-bar-fill, .bc-bar-fill-b');
-                    if (fills[0]) fills[0].style.height = hA + '%';
-                    if (fills[1]) fills[1].style.height = hB + '%';
-                }, 120);
-            });
-
-            // Legend
-            if (legendEl) {
-                if (hasDual) {
-                    legendEl.style.display = 'flex';
-                    const aText = document.getElementById('bc-legend-a-text');
-                    const bText = document.getElementById('bc-legend-b-text');
-                    if (aText) aText.textContent = _bcLabelA;
-                    if (bText) bText.textContent = _bcLabelB;
-                } else {
-                    legendEl.style.display = 'none';
-                }
-            }
-
-            // Sparkline
-            if (_bcSparklineMode) {
-                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 150);
-            }
-
-            // Zoom overlay with animation if data changed
-            if (isUpdate) {
-                _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months);
-            }
+                    <div class="bc-label">${d.month}</div>
+                </div>`).join('');
         }
 
-        function _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl) {
-            if (!svgEl) return;
-            const W = container.clientWidth, H = container.clientHeight;
-            if (W === 0 || H === 0) return;
-            const n = dataA.length || dataB.length;
-            if (n === 0) { svgEl.innerHTML = ''; return; }
-            const pad = 4;
-            function pts(data, color, opacity) {
-                if (data.length === 0) return '';
-                const step = (W - pad*2) / (n - 1 || 1);
-                const points = data.map((d, i) => {
-                    const x = pad + i * step;
-                    const y = H - pad - (maxVal > 0 ? (d.val / maxVal) * (H - pad*2) : 0);
-                    return `${x},${y}`;
-                }).join(' ');
-                return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
+        function _buildSparklinePanel(parsed1, parsed2, name1, name2) {
+            if (!parsed1 && !parsed2) return '';
+            const COLOR1 = '#7DBEFF', COLOR2 = '#FF9100';
+            // Merge months
+            const months = parsed1 ? parsed1.chartData.map(d => d.month) : parsed2.chartData.map(d => d.month);
+            const d1Map = {}, d2Map = {};
+            if (parsed1) parsed1.chartData.forEach(d => d1Map[d.month] = d.val);
+            if (parsed2) parsed2.chartData.forEach(d => d2Map[d.month] = d.val);
+            const allVals = [...Object.values(d1Map), ...Object.values(d2Map)];
+            const maxV = allVals.length ? Math.max(...allVals) : 1;
+            const n = months.length;
+            const W = 100, H = 100;
+            const pad = { left: 2, right: 2, top: 8, bottom: 12 };
+            const aw = W - pad.left - pad.right, ah = H - pad.top - pad.bottom;
+            function xPos(i) { return pad.left + (n <= 1 ? aw / 2 : (i / (n - 1)) * aw); }
+            function yPos(v) { return pad.top + ah - (maxV > 0 ? (v / maxV) * ah : 0); }
+
+            function makePath(dMap) {
+                if (!Object.keys(dMap).length) return '';
+                return months.map((m, i) => `${i === 0 ? 'M' : 'L'}${xPos(i).toFixed(1)},${yPos(dMap[m] || 0).toFixed(1)}`).join(' ');
             }
-            svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-            svgEl.innerHTML = pts(dataA, 'var(--primary)', '0.85') + (hasDual ? pts(dataB, 'var(--secondary,#A8BDD4)', '0.7') : '');
-        }
 
-        // ── SPARKLINE TOGGLE ──
-        function toggleChartSparkline(e) {
-            if (e) e.stopPropagation();
-            _bcSparklineMode = !_bcSparklineMode;
-            const container = document.getElementById('maint-barchart-container');
-            const svgEl = document.getElementById('bc-sparkline-svg');
-            if (!container) return;
-            container.classList.toggle('sparkline-mode', _bcSparklineMode);
-            if (_bcSparklineMode) {
-                const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
-                const hasDual = dataB.length > 0;
-                let maxVal = 0;
-                dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
-            } else {
-                if (svgEl) svgEl.innerHTML = '';
+            const path1 = makePath(d1Map), path2 = makePath(d2Map);
+
+            // Dots + hover data
+            function dotGroup(dMap, color, series) {
+                return months.map((m, i) => {
+                    const v = dMap[m] || 0;
+                    return `<circle class="bc-spark-dot" cx="${xPos(i).toFixed(1)}" cy="${yPos(v).toFixed(1)}" r="2.5"
+                        fill="${color}" stroke="var(--surface)" stroke-width="1.2"
+                        data-month="${m}" data-val="${v}" data-series="${series}"
+                        style="cursor:pointer;transition:r 0.2s;"/>`;
+                }).join('');
             }
-            // Reset auto-sparkline timer
-            _restartSparklineAutoTimer();
-        }
 
-        function _restartSparklineAutoTimer() {
-            if (_bcSparklineTimer) clearTimeout(_bcSparklineTimer);
-            _bcSparklineTimer = setTimeout(() => {
-                _bcSparklineMode = !_bcSparklineMode;
-                const container = document.getElementById('maint-barchart-container');
-                const svgEl = document.getElementById('bc-sparkline-svg');
-                if (container) container.classList.toggle('sparkline-mode', _bcSparklineMode);
-                if (_bcSparklineMode) {
-                    const dataA = parseChartData(_bcRawA), dataB = parseChartData(_bcRawB);
-                    const hasDual = dataB.length > 0;
-                    let maxVal = 0;
-                    dataA.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                    dataB.forEach(d => { if (d.val > maxVal) maxVal = d.val; });
-                    setTimeout(() => _drawSparkline(dataA, dataB, hasDual, maxVal, container, svgEl), 50);
-                } else { if (svgEl) svgEl.innerHTML = ''; }
-                _restartSparklineAutoTimer();
-            }, BC_SPARKLINE_AUTO_INTERVAL);
-        }
-        _restartSparklineAutoTimer();
-
-        // ── CHART ZOOM OVERLAY ──
-        let _czTimer = null;
-        let _czPrevHashA = '', _czPrevHashB = '';
-        function _showChartZoomBrief(dataA, dataB, hasDual, maxVal, months) {
-            const hashA = _bcRawA, hashB = _bcRawB;
-            if (hashA === _czPrevHashA && hashB === _czPrevHashB) return;
-            _czPrevHashA = hashA; _czPrevHashB = hashB;
-            if (!dataA.length && !dataB.length) return;
-
-            const overlay = document.getElementById('chart-zoom-overlay');
-            const barsEl = document.getElementById('cz-bars');
-            const titleEl = document.getElementById('cz-title');
-            const czLabelA = document.getElementById('cz-label-a');
-            const czLabelB = document.getElementById('cz-label-b');
-            const czLegend = document.getElementById('cz-legend');
-            if (!overlay || !barsEl) return;
-
-            if (titleEl) titleEl.textContent = _bcChartTitle || 'MONTHLY TREND';
-            if (czLabelA) czLabelA.textContent = _bcLabelA;
-            if (czLabelB) czLabelB.textContent = _bcLabelB;
-            if (czLegend) czLegend.style.display = hasDual ? 'flex' : 'none';
-
-            barsEl.innerHTML = months.map((d, i) => {
-                const vA = dataA[i] ? dataA[i].val : 0;
-                const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
-                return `<div class="czb-col">
-                    <div class="czb-bar-bg">
-                        <div class="czb-bar-a" style="height:0%"></div>
-                        ${hasDual ? `<div class="czb-bar-b" style="height:0%"></div>` : ''}
-                    </div>
-                    <div class="czb-label">${d.month}</div>
-                </div>`;
+            // Month labels (abbreviated)
+            const labelGroup = months.map((m, i) => {
+                if (n > 8 && i % 2 !== 0) return '';
+                return `<text x="${xPos(i).toFixed(1)}" y="${(H - 1).toFixed(1)}"
+                    text-anchor="middle" font-family="Outfit,sans-serif" font-size="5.5" font-weight="800"
+                    fill="var(--on-surface-variant)" opacity="0.6">${m}</text>`;
             }).join('');
 
-            overlay.classList.add('visible');
-            setTimeout(() => {
-                months.forEach((d, i) => {
-                    const vA = dataA[i] ? dataA[i].val : 0;
-                    const vB = (hasDual && dataB[i]) ? dataB[i].val : null;
-                    const col = barsEl.children[i];
-                    if (!col) return;
-                    const fills = col.querySelectorAll('.czb-bar-a, .czb-bar-b');
-                    if (fills[0]) fills[0].style.height = (maxVal > 0 ? vA/maxVal*100 : 0) + '%';
-                    if (fills[1] && vB !== null) fills[1].style.height = (maxVal > 0 ? vB/maxVal*100 : 0) + '%';
-                });
-            }, 120);
-
-            if (_czTimer) clearTimeout(_czTimer);
-            _czTimer = setTimeout(() => closeChartZoom(), 5000);
+            return `<div class="bc-sparkline-panel">
+                <svg class="bc-spark-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" id="bc-spark-svg">
+                    ${parsed1 && path1 ? `<path d="${path1}" fill="none" stroke="${COLOR1}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>` : ''}
+                    ${parsed2 && path2 ? `<path d="${path2}" fill="none" stroke="${COLOR2}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>` : ''}
+                    ${labelGroup}
+                    ${parsed1 ? dotGroup(d1Map, COLOR1, name1) : ''}
+                    ${parsed2 ? dotGroup(d2Map, COLOR2, name2) : ''}
+                </svg>
+                <div class="bc-spark-legend">
+                    ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR1}"></div>${name1}</div>` : ''}
+                    ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR2}"></div>${name2}</div>` : ''}
+                </div>
+                <div class="bc-spark-tooltip" id="bc-spark-tooltip"></div>
+            </div>`;
         }
-        function closeChartZoom() {
-            const overlay = document.getElementById('chart-zoom-overlay');
-            if (overlay) overlay.classList.remove('visible');
-            if (_czTimer) clearTimeout(_czTimer);
+
+        function _attachSparkTooltips() {
+            const svg = document.getElementById('bc-spark-svg');
+            const tip = document.getElementById('bc-spark-tooltip');
+            if (!svg || !tip) return;
+            svg.querySelectorAll('.bc-spark-dot').forEach(dot => {
+                dot.addEventListener('mouseenter', function() {
+                    const m = this.getAttribute('data-month'), v = this.getAttribute('data-val'), s = this.getAttribute('data-series');
+                    tip.textContent = `${s}: ${m} · ${v}`;
+                    tip.style.opacity = '1';
+                });
+                dot.addEventListener('mouseleave', function() { tip.style.opacity = '0'; });
+            });
+        }
+
+        function _renderAllBcPanels() {
+            const p1 = document.getElementById('bc-panel-1');
+            const p2 = document.getElementById('bc-panel-2');
+            const p3 = document.getElementById('bc-panel-3');
+            if (!p1 || !p2 || !p3) return;
+
+            p1.innerHTML = _buildBarPanelHTML(_bcChart1Data, '');
+            p2.innerHTML = _buildBarPanelHTML(_bcChart2Data, 'bc-bar-2');
+            p3.innerHTML = _buildSparklinePanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
+
+            // Animate bars after paint
+            setTimeout(() => {
+                [p1, p2].forEach(panel => {
+                    panel.querySelectorAll('.bc-bar-fill').forEach(f => {
+                        f.style.height = (f.dataset.val || 0) + '%';
+                    });
+                });
+                _attachSparkTooltips();
+            }, 120);
+        }
+
+        function _bcGoToPanel(idx) {
+            const panels = [
+                document.getElementById('bc-panel-1'),
+                document.getElementById('bc-panel-2'),
+                document.getElementById('bc-panel-3')
+            ];
+            const dots = [
+                document.getElementById('bc-dot-0'),
+                document.getElementById('bc-dot-1'),
+                document.getElementById('bc-dot-2')
+            ];
+            const labelEl = document.getElementById('maint-barchart-label');
+
+            const prev = _bcCurrentPanel;
+            _bcCurrentPanel = idx;
+
+            // Transition: exit current, enter next
+            panels.forEach((p, i) => {
+                if (!p) return;
+                if (i === prev && i !== idx) {
+                    p.classList.add('bc-exit');
+                    p.classList.remove('bc-active');
+                    setTimeout(() => p.classList.remove('bc-exit'), 700);
+                } else if (i === idx) {
+                    p.classList.remove('bc-exit');
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => p.classList.add('bc-active'));
+                    });
+                } else {
+                    p.classList.remove('bc-active', 'bc-exit');
+                }
+            });
+
+            // Update dots
+            dots.forEach((d, i) => { if (d) d.classList.toggle('active', i === idx); });
+
+            // Update label
+            if (labelEl) {
+                const labels = [_bcChart1Name, _bcChart2Name, `${_bcChart1Name} + ${_bcChart2Name}`];
+                labelEl.textContent = labels[idx] || '—';
+            }
+        }
+
+        function _startBcRotation() {
+            if (_bcRotateTimer) clearInterval(_bcRotateTimer);
+            _bcRotateTimer = setInterval(() => {
+                const next = (_bcCurrentPanel + 1) % 3;
+                _bcGoToPanel(next);
+            }, _bcRotateInterval);
+        }
+
+        // Render bar chart function (chart 1, called from draw)
+        function renderMaintBarChart(raw) {
+            _bcChart1Data = _parseChartRaw(raw);
+            _renderAllBcPanels();
+            if (!_bcRotateTimer) _startBcRotation();
+        }
+
+        // Render bar chart 2 (called from draw)
+        function renderMaintBarChart2(raw, name) {
+            _bcChart2Data = _parseChartRaw(raw);
+            if (name) _bcChart2Name = name;
+            _renderAllBcPanels();
+        }
+
+        function setChart1Name(name) {
+            if (name) _bcChart1Name = name;
         }
 
         window.draw = function(data) {
@@ -2875,32 +2840,25 @@
                 if (unit === 'sheetab') {
                     if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
                     if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
-                    if (param === 'sheetab_R1C45') { 
-                        _bcLabelA = val || 'Series A'; 
-                        const el = document.getElementById('maint-barchart-label'); 
-                        if(el) el.innerText = _bcChartTitle || val || 'MONTHLY TREND'; 
-                    }
-                    if (param === 'sheetab_R1C46') {
-                        _bcLabelB = val || 'Series B';
-                        _bcChartTitle = val || 'MONTHLY TREND';
-                        const el = document.getElementById('maint-barchart-label');
-                        if (el) el.innerText = _bcChartTitle;
-                        const czTitle = document.getElementById('cz-title');
-                        if (czTitle) czTitle.textContent = _bcChartTitle;
-                    }
+                    if (param === 'sheetab_R1C45') { setChart1Name(val || 'MONTHLY TREND'); }
+                    if (param === 'sheetab_R1C46') { _bcChart2Name = val || 'CHART 2'; }
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
-                    if (param === 'sheetab_R2C45') { _bcRawA = val || ''; }
-                    if (param === 'sheetab_R2C46') { _bcRawB = val || ''; }
+                    if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
+                    if (param === 'sheetab_R2C46') { renderMaintBarChart2(val, null); }
+                    if (param === 'sheetab_R2C53') {
+                        const secs = parseFloat(val);
+                        if (!isNaN(secs) && secs > 0) {
+                            _bcRotateInterval = secs * 1000;
+                            _startBcRotation();
+                        }
+                    }
                 }
             });
             
             // Execute Station Pills Handling
             handleStationPills(statPillsRaw, statPillsIntervalRaw);
-
-            // Render dual bar chart with both series after all data is processed
-            renderMaintBarChart(_bcRawA, _bcRawB, _bcLabelA, _bcLabelB, _bcChartTitle);
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
