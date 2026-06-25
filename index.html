@@ -896,7 +896,7 @@
             display: flex;
             align-items: flex-end;
             gap: 2px;
-            padding: 4px 6px;
+            padding: 1px 1px;
         }
         .bc-panel.bc-active {
             opacity: 1;
@@ -949,10 +949,10 @@
         }
         .bc-combo-legend {
             display: flex;
-            gap: 6px;
+            gap: 1px;
             justify-content: center;
             align-items: center;
-            padding: 2px 4px 0;
+            padding: 1px 1px 0;
             flex-shrink: 0;
             width: 100%;
         }
@@ -1195,9 +1195,10 @@
         }
         .ticker-head {
             background: var(--primary); color: var(--surface);
-            height: 100%; padding: 0 20px; display: flex; align-items: center;
-            font-family: var(--font-display); font-weight: 900; font-size: 0.8rem;
-            letter-spacing: 1px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
+            height: 100%; padding: 0 16px; display: flex; align-items: center;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.78rem;
+            letter-spacing: 0.5px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
+            white-space: nowrap;
         }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
         .ticker-scroll { white-space: nowrap; font-size: 0.95rem; font-weight: 700; color: var(--on-surface); padding: 0 20px; flex-shrink: 0; }
@@ -1412,24 +1413,29 @@
         .st-pill:hover { transform: translateY(-2px); }
 
         .st-remark-bubble {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%) translateY(10px) scale(0.95);
-            background: var(--primary);
-            color: var(--surface);
-            padding: 6px 12px;
-            border-radius: var(--radius-m);
-            font-size: 0.75rem;
-            font-family: var(--font-body);
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 10;
-            box-shadow: var(--shadow-2);
-        }
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    background: var(--primary);
+    color: var(--surface);
+    padding: 6px 12px;
+    border-radius: var(--radius-m);
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+    box-shadow: var(--shadow-2);
+
+    /* --- The Fix --- */
+    white-space: normal;  /* Removes the nowrap so text can flow to a new line */
+    width: 220px;         /* A fixed width that fits nicely on mobile screens */
+    max-width: 85vw;      /* A safety net just in case the screen is extremely narrow */
+    text-align: center;   /* Keeps multi-line text looking balanced */
+}
         .st-remark-bubble::after {
             content: ''; position: absolute;
             bottom: -4px; left: 50%;
@@ -1598,8 +1604,8 @@
             
             #station-pills-dock {
                 bottom: 156px;
-                left: 10px;
-                right: 10px;
+                left: 60px;
+                right: 90px;
                 transform: translateY(15px);
                 max-width: none;
                 justify-content: flex-end;
@@ -1874,7 +1880,6 @@
                                 <div class="bc-rotator" id="bc-rotator">
                                     <div class="bc-panel bc-active" id="bc-panel-1"></div>
                                     <div class="bc-panel" id="bc-panel-2"></div>
-                                    <div class="bc-panel" id="bc-panel-3" style="flex-direction:column;align-items:stretch;padding:4px 6px 2px;gap:0;overflow:hidden;"></div>
                                 </div>
                             </div>
                             <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
@@ -1882,7 +1887,6 @@
                                 <div class="bc-indicator-dots" id="bc-indicator-dots">
                                     <div class="bc-ind-dot active" id="bc-dot-0"></div>
                                     <div class="bc-ind-dot" id="bc-dot-1"></div>
-                                    <div class="bc-ind-dot" id="bc-dot-2"></div>
                                 </div>
                             </div>
                         </div>
@@ -2027,7 +2031,7 @@
     </div>
 
     <footer class="ticker-bar">
-        <div id="ticker-head" class="ticker-head">IMPORTANT NOTICE</div>
+        <div id="ticker-head" class="ticker-head"></div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
         </div>
@@ -2363,9 +2367,20 @@
             }).join('');
         }
 
+        function _updateTickerHeadDate() {
+            const head = document.getElementById('ticker-head');
+            if (!head) return;
+            const now = new Date();
+            const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+            const day = DAYS[now.getDay()];
+            const date = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            head.textContent = day + '  ' + date;
+        }
+        _updateTickerHeadDate();
+        setInterval(_updateTickerHeadDate, 60000);
+
         function updateTickerBar(badge, names, rawText = null) {
-            const head = document.getElementById('ticker-head'), text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
-            head.innerText = badge.toUpperCase();
+            const text = document.getElementById('ticker-text'), body = document.getElementById('ticker-body');
             text.classList.remove('scrolling-active');
             text.innerText = names;
             const popup = document.getElementById('ticker-popup');
@@ -2670,12 +2685,10 @@
         function _renderAllBcPanels() {
             const p1 = document.getElementById('bc-panel-1');
             const p2 = document.getElementById('bc-panel-2');
-            const p3 = document.getElementById('bc-panel-3');
-            if (!p1 || !p2 || !p3) return;
+            if (!p1 || !p2) return;
 
             p1.innerHTML = _buildBarPanelHTML(_bcChart1Data, '');
             p2.innerHTML = _buildBarPanelHTML(_bcChart2Data, 'bc-bar-2');
-            p3.innerHTML = _buildComboPctBarPanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
 
             // Animate all panels after one paint frame
             setTimeout(() => {
@@ -2684,20 +2697,17 @@
                         f.style.height = (f.dataset.val || 0) + '%';
                     });
                 });
-                _animateComboBars(p3);
             }, 120);
         }
 
         function _bcGoToPanel(idx) {
             const panels = [
                 document.getElementById('bc-panel-1'),
-                document.getElementById('bc-panel-2'),
-                document.getElementById('bc-panel-3')
+                document.getElementById('bc-panel-2')
             ];
             const dots = [
                 document.getElementById('bc-dot-0'),
-                document.getElementById('bc-dot-1'),
-                document.getElementById('bc-dot-2')
+                document.getElementById('bc-dot-1')
             ];
             const labelEl = document.getElementById('maint-barchart-label');
 
@@ -2716,15 +2726,6 @@
                     requestAnimationFrame(() => {
                         requestAnimationFrame(() => {
                             p.classList.add('bc-active');
-                            // Re-animate combo bars each time panel 3 becomes visible
-                            if (idx === 2) {
-                                const p3 = document.getElementById('bc-panel-3');
-                                if (p3) {
-                                    // reset then animate
-                                    p3.querySelectorAll('.bc-combo-stack').forEach(s => { s.style.height = '0%'; s.querySelectorAll('.bc-combo-seg1,.bc-combo-seg2').forEach(sg => sg.style.height = '0%'); });
-                                    setTimeout(() => _animateComboBars(p3), 80);
-                                }
-                            }
                         });
                     });
                 } else {
@@ -2737,7 +2738,7 @@
 
             // Update label
             if (labelEl) {
-                const labels = [_bcChart1Name, _bcChart2Name, ' '];
+                const labels = [_bcChart1Name, _bcChart2Name];
                 labelEl.textContent = labels[idx] || '—';
             }
         }
@@ -2745,7 +2746,7 @@
         function _startBcRotation() {
             if (_bcRotateTimer) clearInterval(_bcRotateTimer);
             _bcRotateTimer = setInterval(() => {
-                const next = (_bcCurrentPanel + 1) % 3;
+                const next = (_bcCurrentPanel + 1) % 2;
                 _bcGoToPanel(next);
             }, _bcRotateInterval);
         }
@@ -3222,7 +3223,6 @@
         function initInfoRotator(weatherRaw, irRowItems, irRowImages) {
             const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
             let currentSlides = [];
-            currentSlides.push({ iconType: 'material', icon: 'calendar_today', headline: DAYS[new Date().getDay()], label: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) });
 
             const rowNums = Object.keys(irRowItems || {}).map(Number).sort((a, b) => a - b);
             rowNums.forEach(rowNum => {
