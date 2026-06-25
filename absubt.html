@@ -896,7 +896,7 @@
             display: flex;
             align-items: flex-end;
             gap: 2px;
-            padding: 4px 6px;
+            padding: 1px 1px;
         }
         .bc-panel.bc-active {
             opacity: 1;
@@ -949,10 +949,10 @@
         }
         .bc-combo-legend {
             display: flex;
-            gap: 6px;
+            gap: 2px;
             justify-content: center;
             align-items: center;
-            padding: 2px 4px 0;
+            padding: 2px 2px 0;
             flex-shrink: 0;
             width: 100%;
         }
@@ -1412,24 +1412,29 @@
         .st-pill:hover { transform: translateY(-2px); }
 
         .st-remark-bubble {
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%) translateY(10px) scale(0.95);
-            background: var(--primary);
-            color: var(--surface);
-            padding: 6px 12px;
-            border-radius: var(--radius-m);
-            font-size: 0.75rem;
-            font-family: var(--font-body);
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 10;
-            box-shadow: var(--shadow-2);
-        }
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
+    background: var(--primary);
+    color: var(--surface);
+    padding: 6px 12px;
+    border-radius: var(--radius-m);
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+    box-shadow: var(--shadow-2);
+
+    /* --- The Fix --- */
+    white-space: normal;  /* Removes the nowrap so text can flow to a new line */
+    width: 220px;         /* A fixed width that fits nicely on mobile screens */
+    max-width: 85vw;      /* A safety net just in case the screen is extremely narrow */
+    text-align: center;   /* Keeps multi-line text looking balanced */
+}
         .st-remark-bubble::after {
             content: ''; position: absolute;
             bottom: -4px; left: 50%;
@@ -2646,12 +2651,12 @@
                     <div class="bc-label">${c.m}</div>
                 </div>`).join('');
 
-            //const legendHTML = `<div class="bc-combo-legend">
-                //${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 60%,white))"></div>${name1}</div>` : ''}
-                //${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,#FF9100,color-mix(in srgb,#FF9100 60%,white))"></div>${name2}</div>` : ''}
-            //</div>`;
+            const legendHTML = `<div class="bc-combo-legend">
+                ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 60%,white))"></div>${name1}</div>` : ''}
+                ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,#FF9100,color-mix(in srgb,#FF9100 60%,white))"></div>${name2}</div>` : ''}
+            </div>`;
 
-            //return '<div class="bc-combo-barrow">' + colsHTML + '</div>' + legendHTML;
+            return '<div class="bc-combo-barrow">' + colsHTML + '</div>' + legendHTML;
         }
 
         function _animateComboBars(panel) {
