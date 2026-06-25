@@ -880,6 +880,101 @@
         }
         [data-theme="light"] .bc-value { text-shadow: 0 1px 3px rgba(255,255,255,0.8), 0 0 2px rgba(255,255,255,0.8); }
         
+        /* ── BARCHART ROTATOR ── */
+        .bc-rotator {
+            width: 100%; height: 100%;
+            position: relative;
+        }
+        .bc-panel {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(6px) scale(0.98);
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            padding: 4px 6px;
+        }
+        .bc-panel.bc-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+        .bc-panel.bc-exit {
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Chart type indicator dots */
+        .bc-indicator-dots {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .bc-ind-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--outline);
+            opacity: 0.35;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bc-ind-dot.active {
+            width: 12px;
+            border-radius: 3px;
+            background: var(--primary);
+            opacity: 1;
+        }
+
+        /* Chart 2 bars — secondary color */
+        .bc-bar-fill.bc-bar-2 {
+            background: linear-gradient(0deg, #FF9100 0%, color-mix(in srgb, #FF9100 60%, white) 100%);
+            box-shadow: 0 0 8px rgba(255,145,0,0.25);
+        }
+
+        /* Combo % barchart (chart 3) */
+        .bc-combo-barrow {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+        .bc-combo-legend {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 4px 0;
+            flex-shrink: 0;
+            width: 100%;
+        }
+        .bc-spark-leg-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-family: var(--font-display);
+            font-size: 0.42rem;
+            font-weight: 800;
+            color: var(--on-surface-variant);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .bc-spark-leg-swatch {
+            width: 10px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
             border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
@@ -891,6 +986,78 @@
         .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
         .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
+
+        /* ── STOCK HEADER BTN (mobile) ── */
+        #stock-header-btn {
+            display: none;
+        }
+        @media (max-width: 900px) {
+            #stock-header-btn {
+                display: flex; align-items: center; justify-content: center;
+                width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+                background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
+                color: var(--primary); cursor: pointer;
+                transition: background 0.2s ease;
+                position: relative;
+            }
+            #stock-header-btn .material-symbols-rounded { font-size: 18px !important; }
+            #stock-header-btn.has-low {
+                background: rgba(255,80,60,0.12);
+                border-color: rgba(255,80,60,0.45);
+                color: #ff5e3a;
+                animation: warn-pulse 2s infinite;
+            }
+            #stock-header-btn-badge {
+                position: absolute; top: -3px; right: -3px;
+                background: linear-gradient(135deg,#ff3c28,#ff7a00);
+                color: #fff; font-family: var(--font-display); font-weight: 900;
+                font-size: 0.38rem; letter-spacing: 0.4px;
+                padding: 1px 4px; border-radius: var(--radius-full);
+                display: none; white-space: nowrap;
+                box-shadow: 0 1px 4px rgba(255,60,40,0.5);
+            }
+            #stock-header-btn.has-low #stock-header-btn-badge { display: block; }
+        }
+
+        /* ── STOCK DOCK COMPACT (desktop fallback when no data) ── */
+        #stock-dock.sdock-compact {
+            width: auto;
+            min-width: 0;
+            border-radius: 50%;
+            padding: 0;
+        }
+        #stock-dock.sdock-compact .sdock-accent,
+        #stock-dock.sdock-compact .sdock-header .sdock-title,
+        #stock-dock.sdock-compact .sdock-header .sdock-low-badge,
+        #stock-dock.sdock-compact .sdock-body { display: none !important; }
+        #stock-dock.sdock-compact .sdock-header {
+            padding: 10px;
+            border-bottom: none;
+            border-radius: 50%;
+        }
+        #stock-dock.sdock-compact .sdock-header-icon { font-size: 20px !important; }
+
+        /* ── CONS OVERLAY LINK BUTTON ── */
+        #cons-link-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin: 10px 16px 4px;
+            padding: 8px 14px;
+            background: rgba(125,190,255,0.08);
+            border: 1.5px solid rgba(125,190,255,0.22);
+            border-radius: var(--radius-m);
+            font-family: var(--font-display); font-weight: 800;
+            font-size: 0.72rem; letter-spacing: 0.5px;
+            color: var(--primary); cursor: pointer;
+            text-decoration: none;
+            transition: background 0.18s ease, transform 0.15s ease;
+            flex-shrink: 0;
+        }
+        #cons-link-btn:hover { background: rgba(125,190,255,0.16); transform: translateY(-1px); }
+        #cons-link-btn .material-symbols-rounded { font-size: 16px !important; }
+        [data-theme="light"] #cons-link-btn { background: rgba(0,97,164,0.06); border-color: rgba(0,97,164,0.18); }
 
         /* ── DRIVER CARD ── */
         .driver-card {
@@ -1541,6 +1708,10 @@
             <button class="driver-header-btn" id="driver-header-btn" onclick="toggleDriverCard(event)" aria-label="Driver Info">
                 <span class="material-symbols-rounded">directions_car</span>
             </button>
+            <button id="stock-header-btn" onclick="openConsOverlay(event)" aria-label="Stock Availability">
+                <span class="material-symbols-rounded" style="font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 20;">inventory_2</span>
+                <span id="stock-header-btn-badge"></span>
+            </button>
             <button class="icon-btn" id="hamburger-btn" onclick="toggleHamburger(event)" aria-label="Menu">
                 <span class="material-symbols-rounded" id="hamburger-icon">menu</span>
             </button>
@@ -1699,8 +1870,21 @@
                             </div>
                         </div>
                         <div class="maint-barchart-wrap">
-                            <div class="maint-barchart-container" id="maint-barchart-container"></div>
-                            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+                                <div class="bc-rotator" id="bc-rotator">
+                                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                                    <div class="bc-panel" id="bc-panel-2"></div>
+                                    <div class="bc-panel" id="bc-panel-3" style="flex-direction:column;align-items:stretch;padding:4px 6px 2px;gap:0;overflow:hidden;"></div>
+                                </div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                                <div class="bc-indicator-dots" id="bc-indicator-dots">
+                                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                                    <div class="bc-ind-dot" id="bc-dot-1"></div>
+                                    <div class="bc-ind-dot" id="bc-dot-2"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1818,6 +2002,10 @@
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
+            <a id="cons-link-btn" href="#" target="_blank" rel="noopener">
+                <span class="material-symbols-rounded">open_in_new</span>
+                <span id="cons-link-text">View Details</span>
+            </a>
             <div class="cons-panel-list" id="cons-panel-list">
                 <div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items loaded</div>
             </div>
@@ -2379,51 +2567,205 @@
             }
         }
 
-        // Render bar chart function
-        function renderMaintBarChart(raw) {
-            const container = document.getElementById('maint-barchart-container');
-            if (!container) return;
-            if (!raw || raw.trim() === '') { container.innerHTML = ''; return; }
+        // ── Chart Rotator State ──
+        let _bcChart1Data = null, _bcChart2Data = null;
+        let _bcChart1Name = '—', _bcChart2Name = '—';
+        let _bcRotateInterval = 6000; // default 6s, overridden by r2c53
+        let _bcRotateTimer = null;
+        let _bcCurrentPanel = 0; // 0=chart1, 1=chart2, 2=combo sparkline
 
+        function _parseChartRaw(raw) {
+            if (!raw || raw.trim() === '') return null;
             const matches = [...raw.matchAll(/([A-Z]{3})\s*[,\|]\s*(\d+)/gi)];
-            if (matches.length === 0) return;
-
+            if (matches.length === 0) return null;
             const dataMap = {};
             matches.forEach(m => { dataMap[m[1].toUpperCase()] = parseInt(m[2], 10); });
-
             const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-            const currentMonthIdx = new Date().getMonth();
             const monthNames = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-            const currentMonthName = monthNames[currentMonthIdx];
-            const currentFyIdx = fyOrder.indexOf(currentMonthName);
-
-            let maxVal = 0;
+            const currentFyIdx = fyOrder.indexOf(monthNames[new Date().getMonth()]);
             const chartData = [];
+            let maxVal = 0;
             for (let i = 0; i <= currentFyIdx; i++) {
-                const m = fyOrder[i];
-                const v = dataMap[m] || 0;
+                const m = fyOrder[i], v = dataMap[m] || 0;
                 chartData.push({ month: m, val: v });
                 if (v > maxVal) maxVal = v;
             }
+            return { chartData, maxVal };
+        }
 
-            container.innerHTML = chartData.map(d => {
-                return `
+        function _buildBarPanelHTML(parsed, colorClass) {
+            if (!parsed) return '';
+            const { chartData, maxVal } = parsed;
+            return chartData.map(d => `
                 <div class="bc-col">
                     <div class="bc-bar-bg">
-                        <div class="bc-bar-fill" style="height: 0%;">
+                        <div class="bc-bar-fill ${colorClass}" data-val="${maxVal > 0 ? (d.val / maxVal) * 100 : 0}" style="height:0%;">
                             <div class="bc-value">${d.val}</div>
                         </div>
                     </div>
                     <div class="bc-label">${d.month}</div>
-                </div>`;
-            }).join('');
+                </div>`).join('');
+        }
 
+        function _buildComboPctBarPanel(parsed1, parsed2, name1, name2) {
+            if (!parsed1 && !parsed2) return '';
+            const COLOR1 = 'var(--primary)', COLOR2 = '#FF9100';
+            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+            const allMonths = new Set();
+            if (parsed1) parsed1.chartData.forEach(d => allMonths.add(d.month));
+            if (parsed2) parsed2.chartData.forEach(d => allMonths.add(d.month));
+            const months = fyOrder.filter(m => allMonths.has(m));
+            const d1Map = {}, d2Map = {};
+            if (parsed1) parsed1.chartData.forEach(d => d1Map[d.month] = d.val);
+            if (parsed2) parsed2.chartData.forEach(d => d2Map[d.month] = d.val);
+
+            // Bar height = (v1+v2) / maxTotal; segment split = proportion within that bar
+            let maxTotal = 0;
+            months.forEach(m => { const t = (d1Map[m]||0)+(d2Map[m]||0); if(t>maxTotal) maxTotal=t; });
+            if (maxTotal === 0) maxTotal = 1;
+
+            const cols = months.map(m => {
+                const v1 = d1Map[m]||0, v2 = d2Map[m]||0, total = v1+v2;
+                const barPct = (total/maxTotal)*100;
+                const seg1Pct = total > 0 ? (v1/total)*100 : 0; // % of bar height for chart1 (bottom)
+                const seg2Pct = total > 0 ? (v2/total)*100 : 0; // % of bar height for chart2 (top)
+                return { m, v1, v2, barPct, seg1Pct, seg2Pct };
+            });
+
+            // Build HTML using IDENTICAL bc-col/bc-bar-bg structure as charts 1 & 2
+            // The bc-bar-bg is a flex column; we put two segments inside using absolute positioning
+            const colsHTML = cols.map(c => `
+                <div class="bc-col">
+                    <div class="bc-bar-bg" style="overflow:hidden;">
+                        <div class="bc-combo-stack" data-bar="${c.barPct.toFixed(2)}" data-s1="${c.seg1Pct.toFixed(2)}" data-s2="${c.seg2Pct.toFixed(2)}"
+                            style="width:100%;height:0%;display:flex;flex-direction:column;justify-content:flex-end;transition:height 0.85s cubic-bezier(0.4,0,0.2,1);">
+                            <div class="bc-combo-seg2" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,#FF9100 0%,color-mix(in srgb,#FF9100 60%,white) 100%);box-shadow:0 0 6px rgba(255,145,0,0.25);transition:height 0.75s cubic-bezier(0.4,0,0.2,1) 0.08s;height:0%;"></div>
+                            <div class="bc-combo-seg1" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,var(--primary) 0%,color-mix(in srgb,var(--primary) 60%,white) 100%);box-shadow:0 0 8px rgba(125,190,255,0.2);transition:height 0.75s cubic-bezier(0.4,0,0.2,1);height:0%;"></div>
+                        </div>
+                    </div>
+                    <div class="bc-label">${c.m}</div>
+                </div>`).join('');
+
+            const legendHTML = `<div class="bc-combo-legend">
+                ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 60%,white))"></div>${name1}</div>` : ''}
+                ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,#FF9100,color-mix(in srgb,#FF9100 60%,white))"></div>${name2}</div>` : ''}
+            </div>`;
+
+            return '<div class="bc-combo-barrow">' + colsHTML + '</div>' + legendHTML;
+        }
+
+        function _animateComboBars(panel) {
+            panel.querySelectorAll('.bc-combo-stack').forEach(stack => {
+                const barH = parseFloat(stack.dataset.bar) || 0;
+                const s1H  = parseFloat(stack.dataset.s1)  || 0;
+                const s2H  = parseFloat(stack.dataset.s2)  || 0;
+                stack.style.height = barH + '%';
+                const seg1 = stack.querySelector('.bc-combo-seg1');
+                const seg2 = stack.querySelector('.bc-combo-seg2');
+                if (seg1) seg1.style.height = s1H + '%';
+                if (seg2) seg2.style.height = s2H + '%';
+            });
+        }
+
+        function _renderAllBcPanels() {
+            const p1 = document.getElementById('bc-panel-1');
+            const p2 = document.getElementById('bc-panel-2');
+            const p3 = document.getElementById('bc-panel-3');
+            if (!p1 || !p2 || !p3) return;
+
+            p1.innerHTML = _buildBarPanelHTML(_bcChart1Data, '');
+            p2.innerHTML = _buildBarPanelHTML(_bcChart2Data, 'bc-bar-2');
+            p3.innerHTML = _buildComboPctBarPanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
+
+            // Animate all panels after one paint frame
             setTimeout(() => {
-                const fills = container.querySelectorAll('.bc-bar-fill');
-                chartData.forEach((d, i) => {
-                    if (fills[i]) fills[i].style.height = (maxVal > 0 ? (d.val / maxVal) * 100 : 0) + '%';
+                [p1, p2].forEach(panel => {
+                    panel.querySelectorAll('.bc-bar-fill').forEach(f => {
+                        f.style.height = (f.dataset.val || 0) + '%';
+                    });
                 });
-            }, 100);
+                _animateComboBars(p3);
+            }, 120);
+        }
+
+        function _bcGoToPanel(idx) {
+            const panels = [
+                document.getElementById('bc-panel-1'),
+                document.getElementById('bc-panel-2'),
+                document.getElementById('bc-panel-3')
+            ];
+            const dots = [
+                document.getElementById('bc-dot-0'),
+                document.getElementById('bc-dot-1'),
+                document.getElementById('bc-dot-2')
+            ];
+            const labelEl = document.getElementById('maint-barchart-label');
+
+            const prev = _bcCurrentPanel;
+            _bcCurrentPanel = idx;
+
+            // Transition: exit current, enter next
+            panels.forEach((p, i) => {
+                if (!p) return;
+                if (i === prev && i !== idx) {
+                    p.classList.add('bc-exit');
+                    p.classList.remove('bc-active');
+                    setTimeout(() => p.classList.remove('bc-exit'), 700);
+                } else if (i === idx) {
+                    p.classList.remove('bc-exit');
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            p.classList.add('bc-active');
+                            // Re-animate combo bars each time panel 3 becomes visible
+                            if (idx === 2) {
+                                const p3 = document.getElementById('bc-panel-3');
+                                if (p3) {
+                                    // reset then animate
+                                    p3.querySelectorAll('.bc-combo-stack').forEach(s => { s.style.height = '0%'; s.querySelectorAll('.bc-combo-seg1,.bc-combo-seg2').forEach(sg => sg.style.height = '0%'); });
+                                    setTimeout(() => _animateComboBars(p3), 80);
+                                }
+                            }
+                        });
+                    });
+                } else {
+                    p.classList.remove('bc-active', 'bc-exit');
+                }
+            });
+
+            // Update dots
+            dots.forEach((d, i) => { if (d) d.classList.toggle('active', i === idx); });
+
+            // Update label
+            if (labelEl) {
+                const labels = [_bcChart1Name, _bcChart2Name, '% SPLIT COMPARISON'];
+                labelEl.textContent = labels[idx] || '—';
+            }
+        }
+
+        function _startBcRotation() {
+            if (_bcRotateTimer) clearInterval(_bcRotateTimer);
+            _bcRotateTimer = setInterval(() => {
+                const next = (_bcCurrentPanel + 1) % 3;
+                _bcGoToPanel(next);
+            }, _bcRotateInterval);
+        }
+
+        // Render bar chart function (chart 1, called from draw)
+        function renderMaintBarChart(raw) {
+            _bcChart1Data = _parseChartRaw(raw);
+            _renderAllBcPanels();
+            if (!_bcRotateTimer) _startBcRotation();
+        }
+
+        // Render bar chart 2 (called from draw)
+        function renderMaintBarChart2(raw, name) {
+            _bcChart2Data = _parseChartRaw(raw);
+            if (name) _bcChart2Name = name;
+            _renderAllBcPanels();
+        }
+
+        function setChart1Name(name) {
+            if (name) _bcChart1Name = name;
         }
 
         window.draw = function(data) {
@@ -2552,11 +2894,22 @@
                 if (unit === 'sheetab') {
                     if (param === 'sheetab_R1C27') { const el = document.getElementById('maint-progress-label-1'); if(el) el.innerText = val || 'MAINT PROGRESS'; }
                     if (param === 'sheetab_R1C44') { const el = document.getElementById('maint-progress-label-2'); if(el) el.innerText = val || 'SEC PROGRESS'; }
-                    if (param === 'sheetab_R1C45') { const el = document.getElementById('maint-barchart-label'); if(el) el.innerText = val || 'MONTHLY TREND'; }
+                    if (param === 'sheetab_R1C45') { setChart1Name(val || 'MONTHLY TREND'); }
+                    if (param === 'sheetab_R1C46') { _bcChart2Name = val || 'CHART 2'; }
+                    if (param === 'sheetab_R1C54') { _consLinkText = val || ''; }
+                    if (param === 'sheetab_R2C54') { _consLinkUrl  = val || ''; }
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
                     if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
+                    if (param === 'sheetab_R2C46') { renderMaintBarChart2(val, null); }
+                    if (param === 'sheetab_R2C53') {
+                        const secs = parseFloat(val);
+                        if (!isNaN(secs) && secs > 0) {
+                            _bcRotateInterval = secs * 1000;
+                            _startBcRotation();
+                        }
+                    }
                 }
             });
             
@@ -2602,6 +2955,7 @@
             if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
 
             buildAppDock(dockRows);
+            _updateConsLink();
             initInfoRotator(irWeather, irRowItems, irRowImages);
 
             if (opsScheduleLines !== null) {
@@ -2644,13 +2998,51 @@
         };
 
         let _consPillTimer = null, _consPillIdx = 0, _consRows = [];
+        let _consLinkText = '', _consLinkUrl = '';
+
+        function _updateConsLink() {
+            const btn = document.getElementById('cons-link-btn');
+            const txt = document.getElementById('cons-link-text');
+            if (!btn) return;
+            const hasLink = _consLinkUrl && _consLinkUrl.trim() !== '';
+            btn.style.display = hasLink ? 'flex' : 'none';
+            if (hasLink) {
+                btn.href = _consLinkUrl.trim();
+                if (txt) txt.textContent = (_consLinkText && _consLinkText.trim()) ? _consLinkText.trim() : 'View Details';
+            }
+        }
+
+        function _updateStockHeaderBtn(hasItems, hasLow, lowCount) {
+            const btn = document.getElementById('stock-header-btn');
+            const badge = document.getElementById('stock-header-btn-badge');
+            if (!btn) return;
+            btn.style.display = hasItems ? '' : 'none'; // hide if no items on mobile too
+            btn.classList.toggle('has-low', hasLow);
+            if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
+        }
+
         function buildAppDock(dockRows) {
             const rows = Object.keys(dockRows).map(Number).sort((a, b) => a - b).filter(r => dockRows[r].label || dockRows[r].icon);
             _consRows = rows.map(r => dockRows[r]);
-            if (rows.length === 0) { _buildConsOverlayEmpty(); return; }
+
+            // Update link button whenever dock is rebuilt
+            _updateConsLink();
+
+            const dock = document.getElementById('stock-dock');
+            if (rows.length === 0) {
+                _buildConsOverlayEmpty();
+                // Fallback: compact icon on desktop
+                if (dock) dock.classList.add('sdock-compact');
+                _updateStockHeaderBtn(false, false, 0);
+                return;
+            }
+            if (dock) dock.classList.remove('sdock-compact');
 
             const RADIUS = 17, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
             _buildStockDock(_consRows);
+
+            const lowCount = _consRows.filter(r => (parseFloat(r.pct)||0) < 20).length;
+            _updateStockHeaderBtn(true, lowCount > 0, lowCount);
 
             const listEl = document.getElementById('cons-panel-list');
             if (listEl) {
