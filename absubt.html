@@ -965,6 +965,24 @@
             flex-shrink: 0;
             width: 100%;
         }
+        .bc-spark-leg-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-family: var(--font-display);
+            font-size: 0.42rem;
+            font-weight: 800;
+            color: var(--on-surface-variant);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .bc-spark-leg-swatch {
+            width: 10px;
+            height: 3px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
 
         .maint-progress-popup {
             position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
@@ -1789,7 +1807,7 @@
                                 <div class="bc-rotator" id="bc-rotator">
                                     <div class="bc-panel bc-active" id="bc-panel-1"></div>
                                     <div class="bc-panel" id="bc-panel-2"></div>
-                                    <div class="bc-panel" id="bc-panel-3" style="padding:4px 6px 2px;flex-direction:column;justify-content:flex-end;align-items:stretch;"></div>
+                                    <div class="bc-panel" id="bc-panel-3" style="flex-direction:column;align-items:stretch;justify-content:flex-start;padding:3px 5px 2px;overflow:hidden;"></div>
                                 </div>
                             </div>
                             <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
@@ -2521,7 +2539,6 @@
         function _buildComboPctBarPanel(parsed1, parsed2, name1, name2) {
             if (!parsed1 && !parsed2) return '';
             const COLOR1 = '#7DBEFF', COLOR2 = '#FF9100';
-            // Build a unified month list in FY order
             const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
             const allMonths = new Set();
             if (parsed1) parsed1.chartData.forEach(d => allMonths.add(d.month));
@@ -2531,32 +2548,51 @@
             if (parsed1) parsed1.chartData.forEach(d => d1Map[d.month] = d.val);
             if (parsed2) parsed2.chartData.forEach(d => d2Map[d.month] = d.val);
 
-            // Each month: pct1 = v1/(v1+v2)*100, pct2 = v2/(v1+v2)*100
-            // Bars are stacked segments filling 100% height together
+            let maxTotal = 0;
+            months.forEach(m => { const t = (d1Map[m]||0)+(d2Map[m]||0); if(t>maxTotal) maxTotal=t; });
+            if (maxTotal === 0) maxTotal = 1;
+
             const cols = months.map(m => {
-                const v1 = d1Map[m] || 0, v2 = d2Map[m] || 0;
-                const total = v1 + v2;
-                const pct1 = total > 0 ? (v1 / total) * 100 : (parsed1 ? 50 : 0);
-                const pct2 = total > 0 ? (v2 / total) * 100 : (parsed2 ? 50 : 0);
-                return { m, v1, v2, pct1, pct2, total };
+                const v1 = d1Map[m]||0, v2 = d2Map[m]||0, total = v1+v2;
+                const totalPct = (total/maxTotal)*100;
+                const seg1Pct = total>0 ? (v1/total)*totalPct : 0;
+                const seg2Pct = total>0 ? (v2/total)*totalPct : 0;
+                return { m, v1, v2, total, totalPct, seg1Pct, seg2Pct };
             });
 
-            const colsHTML = cols.map(c => `
-                <div class="bc-col bc-combo-col" title="${c.m}: ${name1} ${c.v1} | ${name2} ${c.v2}">
-                    <div class="bc-bar-bg" style="flex:1;display:flex;flex-direction:column;align-items:stretch;border-radius:3px 3px 0 0;overflow:hidden;background:var(--surface-dim);justify-content:flex-end;">
-                        <div class="bc-combo-seg bc-combo-seg-2" data-pct="${c.pct2.toFixed(1)}" style="width:100%;height:0%;background:linear-gradient(0deg,#FF9100 0%,color-mix(in srgb,#FF9100 60%,white) 100%);transition:height 0.85s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;"></div>
-                        <div class="bc-combo-seg bc-combo-seg-1" data-pct="${c.pct1.toFixed(1)}" style="width:100%;height:0%;background:linear-gradient(0deg,#7DBEFF 0%,color-mix(in srgb,#7DBEFF 60%,white) 100%);transition:height 0.85s cubic-bezier(0.4,0,0.2,1) 0.06s;flex-shrink:0;"></div>
-                    </div>
-                    <div class="bc-label">${c.m}</div>
-                </div>`).join('');
+            const n = cols.length || 1;
+            const SVG_W = 100, SVG_H = 100;
+            const LABEL_H = 12, BAR_AREA_H = SVG_H - LABEL_H;
+            const barW = Math.max(2, (SVG_W / n) * 0.65);
+            const gap = SVG_W / n;
 
-            const legendHTML = `
-                <div class="bc-combo-legend">
-                    ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR1}"></div>${name1}</div>` : ''}
-                    ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR2}"></div>${name2}</div>` : ''}
-                </div>`;
+            const rects = cols.map((c, i) => {
+                const cx = gap * i + gap / 2;
+                const x = cx - barW / 2;
+                const h1 = (c.seg1Pct / 100) * BAR_AREA_H;
+                const h2 = (c.seg2Pct / 100) * BAR_AREA_H;
+                const y1 = BAR_AREA_H - h1;
+                const y2 = BAR_AREA_H - h1 - h2;
+                const label_y = SVG_H - 1;
+                const showLabel = n <= 9 || i % 2 === 0;
+                return [
+                    '<g class="bc-combo-bar-g">',
+                    '<rect x="' + x.toFixed(1) + '" y="0" width="' + barW.toFixed(1) + '" height="' + BAR_AREA_H + '" rx="2" fill="var(--surface-dim)"/>',
+                    '<rect class="bc-combo-rect bc-combo-r1" x="' + x.toFixed(1) + '" y="' + BAR_AREA_H + '" width="' + barW.toFixed(1) + '" height="0" rx="2" fill="' + COLOR1 + '" fill-opacity="0.9" data-y="' + y1.toFixed(2) + '" data-h="' + h1.toFixed(2) + '"/>',
+                    '<rect class="bc-combo-rect bc-combo-r2" x="' + x.toFixed(1) + '" y="' + BAR_AREA_H + '" width="' + barW.toFixed(1) + '" height="0" fill="' + COLOR2 + '" fill-opacity="0.9" data-y="' + y2.toFixed(2) + '" data-h="' + h2.toFixed(2) + '" data-dep="' + h1.toFixed(2) + '"/>',
+                    (showLabel ? '<text x="' + cx.toFixed(1) + '" y="' + label_y + '" text-anchor="middle" font-family="Outfit,sans-serif" font-size="5" font-weight="800" fill="var(--on-surface-variant)" opacity="0.7">' + c.m + '</text>' : ''),
+                    (h1 > 8 ? '<text x="' + cx.toFixed(1) + '" y="' + (BAR_AREA_H - h1/2 + 1.8).toFixed(1) + '" text-anchor="middle" font-family="Outfit,sans-serif" font-size="4.8" font-weight="900" fill="var(--surface)" opacity="0.95">' + c.v1 + '</text>' : ''),
+                    (h2 > 8 ? '<text x="' + cx.toFixed(1) + '" y="' + (BAR_AREA_H - h1 - h2/2 + 1.8).toFixed(1) + '" text-anchor="middle" font-family="Outfit,sans-serif" font-size="4.8" font-weight="900" fill="var(--surface)" opacity="0.95">' + c.v2 + '</text>' : ''),
+                    '</g>'
+                ].join('');
+            }).join('');
 
-            return `<div class="bc-combo-wrap">${colsHTML}</div>${legendHTML}`;
+            const legend = '<div class="bc-combo-legend">'
+                + (parsed1 ? '<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:' + COLOR1 + '"></div>' + name1 + '</div>' : '')
+                + (parsed2 ? '<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:' + COLOR2 + '"></div>' + name2 + '</div>' : '')
+                + '</div>';
+
+            return '<svg id="bc-combo-svg" viewBox="0 0 ' + SVG_W + ' ' + SVG_H + '" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:calc(100% - 14px);display:block;">' + rects + '</svg>' + legend;
         }
 
         function _renderAllBcPanels() {
@@ -2569,17 +2605,35 @@
             p2.innerHTML = _buildBarPanelHTML(_bcChart2Data, 'bc-bar-2');
             p3.innerHTML = _buildComboPctBarPanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
 
-            // Animate bars after paint
+            // Animate bar chart panels 1 & 2
             setTimeout(() => {
                 [p1, p2].forEach(panel => {
                     panel.querySelectorAll('.bc-bar-fill').forEach(f => {
                         f.style.height = (f.dataset.val || 0) + '%';
                     });
                 });
-                // Animate stacked combo bars
-                p3.querySelectorAll('.bc-combo-seg').forEach(seg => {
-                    seg.style.height = (seg.dataset.pct || 0) + '%';
-                });
+                // Animate SVG stacked rects in combo panel
+                const svg = document.getElementById('bc-combo-svg');
+                if (svg) {
+                    // Add CSS transitions to SVG rects
+                    const style = svg.querySelector('style') || (() => {
+                        const s = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+                        svg.insertBefore(s, svg.firstChild);
+                        return s;
+                    })();
+                    style.textContent = '.bc-combo-rect{transition:y 0.85s cubic-bezier(0.4,0,0.2,1),height 0.85s cubic-bezier(0.4,0,0.2,1);}';
+                    svg.querySelectorAll('.bc-combo-r1').forEach(r => {
+                        r.setAttribute('y', r.dataset.y);
+                        r.setAttribute('height', r.dataset.h);
+                    });
+                    svg.querySelectorAll('.bc-combo-r2').forEach(r => {
+                        // r2 sits on top of r1; only animate after r1's y is set
+                        setTimeout(() => {
+                            r.setAttribute('y', r.dataset.y);
+                            r.setAttribute('height', r.dataset.h);
+                        }, 60);
+                    });
+                }
             }, 120);
         }
 
@@ -2609,7 +2663,23 @@
                 } else if (i === idx) {
                     p.classList.remove('bc-exit');
                     requestAnimationFrame(() => {
-                        requestAnimationFrame(() => p.classList.add('bc-active'));
+                        requestAnimationFrame(() => {
+                            p.classList.add('bc-active');
+                            // Re-animate combo bars each time panel 3 becomes visible
+                            if (idx === 2) {
+                                const svg = document.getElementById('bc-combo-svg');
+                                if (svg) {
+                                    svg.querySelectorAll('.bc-combo-r1,.bc-combo-r2').forEach(r => {
+                                        r.setAttribute('y', r.closest('svg').viewBox.baseVal.height - 12);
+                                        r.setAttribute('height', '0');
+                                    });
+                                    setTimeout(() => {
+                                        svg.querySelectorAll('.bc-combo-r1').forEach(r => { r.setAttribute('y', r.dataset.y); r.setAttribute('height', r.dataset.h); });
+                                        setTimeout(() => { svg.querySelectorAll('.bc-combo-r2').forEach(r => { r.setAttribute('y', r.dataset.y); r.setAttribute('height', r.dataset.h); }); }, 60);
+                                    }, 80);
+                                }
+                            }
+                        });
                     });
                 } else {
                     p.classList.remove('bc-active', 'bc-exit');
