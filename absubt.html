@@ -937,66 +937,33 @@
             box-shadow: 0 0 8px rgba(255,145,0,0.25);
         }
 
-        /* Sparkline (chart 3) */
-        .bc-sparkline-panel {
-            width: 100%;
-            height: 100%;
-            position: relative;
+        /* Combo % barchart (chart 3) */
+        .bc-combo-wrap {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-        .bc-spark-svg {
+            align-items: flex-end;
+            gap: 2px;
             width: 100%;
             flex: 1;
-            overflow: visible;
+            min-height: 0;
         }
-        .bc-spark-legend {
+        .bc-combo-col {
+            flex: 1;
             display: flex;
-            gap: 8px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 3px;
+            height: 100%;
+            min-width: 0;
+        }
+        .bc-combo-legend {
+            display: flex;
+            gap: 6px;
             justify-content: center;
             align-items: center;
-            padding-top: 2px;
+            padding: 2px 4px 0;
             flex-shrink: 0;
-        }
-        .bc-spark-leg-item {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            font-family: var(--font-display);
-            font-size: 0.42rem;
-            font-weight: 800;
-            color: var(--on-surface-variant);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        .bc-spark-leg-swatch {
-            width: 12px;
-            height: 3px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-        .bc-spark-tooltip {
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(22,28,40,0.92);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 6px;
-            padding: 3px 7px;
-            font-family: var(--font-display);
-            font-size: 0.48rem;
-            font-weight: 800;
-            color: var(--on-surface);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-            z-index: 50;
-        }
-        [data-theme="light"] .bc-spark-tooltip {
-            background: rgba(255,255,255,0.95);
-            border-color: rgba(0,0,0,0.12);
+            width: 100%;
         }
 
         .maint-progress-popup {
@@ -1822,7 +1789,7 @@
                                 <div class="bc-rotator" id="bc-rotator">
                                     <div class="bc-panel bc-active" id="bc-panel-1"></div>
                                     <div class="bc-panel" id="bc-panel-2"></div>
-                                    <div class="bc-panel" id="bc-panel-3" style="padding:4px 6px 2px;"></div>
+                                    <div class="bc-panel" id="bc-panel-3" style="padding:4px 6px 2px;flex-direction:column;justify-content:flex-end;align-items:stretch;"></div>
                                 </div>
                             </div>
                             <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
@@ -2551,77 +2518,45 @@
                 </div>`).join('');
         }
 
-        function _buildSparklinePanel(parsed1, parsed2, name1, name2) {
+        function _buildComboPctBarPanel(parsed1, parsed2, name1, name2) {
             if (!parsed1 && !parsed2) return '';
             const COLOR1 = '#7DBEFF', COLOR2 = '#FF9100';
-            // Merge months
-            const months = parsed1 ? parsed1.chartData.map(d => d.month) : parsed2.chartData.map(d => d.month);
+            // Build a unified month list in FY order
+            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
+            const allMonths = new Set();
+            if (parsed1) parsed1.chartData.forEach(d => allMonths.add(d.month));
+            if (parsed2) parsed2.chartData.forEach(d => allMonths.add(d.month));
+            const months = fyOrder.filter(m => allMonths.has(m));
             const d1Map = {}, d2Map = {};
             if (parsed1) parsed1.chartData.forEach(d => d1Map[d.month] = d.val);
             if (parsed2) parsed2.chartData.forEach(d => d2Map[d.month] = d.val);
-            const allVals = [...Object.values(d1Map), ...Object.values(d2Map)];
-            const maxV = allVals.length ? Math.max(...allVals) : 1;
-            const n = months.length;
-            const W = 100, H = 100;
-            const pad = { left: 2, right: 2, top: 8, bottom: 12 };
-            const aw = W - pad.left - pad.right, ah = H - pad.top - pad.bottom;
-            function xPos(i) { return pad.left + (n <= 1 ? aw / 2 : (i / (n - 1)) * aw); }
-            function yPos(v) { return pad.top + ah - (maxV > 0 ? (v / maxV) * ah : 0); }
 
-            function makePath(dMap) {
-                if (!Object.keys(dMap).length) return '';
-                return months.map((m, i) => `${i === 0 ? 'M' : 'L'}${xPos(i).toFixed(1)},${yPos(dMap[m] || 0).toFixed(1)}`).join(' ');
-            }
+            // Each month: pct1 = v1/(v1+v2)*100, pct2 = v2/(v1+v2)*100
+            // Bars are stacked segments filling 100% height together
+            const cols = months.map(m => {
+                const v1 = d1Map[m] || 0, v2 = d2Map[m] || 0;
+                const total = v1 + v2;
+                const pct1 = total > 0 ? (v1 / total) * 100 : (parsed1 ? 50 : 0);
+                const pct2 = total > 0 ? (v2 / total) * 100 : (parsed2 ? 50 : 0);
+                return { m, v1, v2, pct1, pct2, total };
+            });
 
-            const path1 = makePath(d1Map), path2 = makePath(d2Map);
+            const colsHTML = cols.map(c => `
+                <div class="bc-col bc-combo-col" title="${c.m}: ${name1} ${c.v1} | ${name2} ${c.v2}">
+                    <div class="bc-bar-bg" style="flex:1;display:flex;flex-direction:column;align-items:stretch;border-radius:3px 3px 0 0;overflow:hidden;background:var(--surface-dim);justify-content:flex-end;">
+                        <div class="bc-combo-seg bc-combo-seg-2" data-pct="${c.pct2.toFixed(1)}" style="width:100%;height:0%;background:linear-gradient(0deg,#FF9100 0%,color-mix(in srgb,#FF9100 60%,white) 100%);transition:height 0.85s cubic-bezier(0.4,0,0.2,1);flex-shrink:0;"></div>
+                        <div class="bc-combo-seg bc-combo-seg-1" data-pct="${c.pct1.toFixed(1)}" style="width:100%;height:0%;background:linear-gradient(0deg,#7DBEFF 0%,color-mix(in srgb,#7DBEFF 60%,white) 100%);transition:height 0.85s cubic-bezier(0.4,0,0.2,1) 0.06s;flex-shrink:0;"></div>
+                    </div>
+                    <div class="bc-label">${c.m}</div>
+                </div>`).join('');
 
-            // Dots + hover data
-            function dotGroup(dMap, color, series) {
-                return months.map((m, i) => {
-                    const v = dMap[m] || 0;
-                    return `<circle class="bc-spark-dot" cx="${xPos(i).toFixed(1)}" cy="${yPos(v).toFixed(1)}" r="2.5"
-                        fill="${color}" stroke="var(--surface)" stroke-width="1.2"
-                        data-month="${m}" data-val="${v}" data-series="${series}"
-                        style="cursor:pointer;transition:r 0.2s;"/>`;
-                }).join('');
-            }
-
-            // Month labels (abbreviated)
-            const labelGroup = months.map((m, i) => {
-                if (n > 8 && i % 2 !== 0) return '';
-                return `<text x="${xPos(i).toFixed(1)}" y="${(H - 1).toFixed(1)}"
-                    text-anchor="middle" font-family="Outfit,sans-serif" font-size="5.5" font-weight="800"
-                    fill="var(--on-surface-variant)" opacity="0.6">${m}</text>`;
-            }).join('');
-
-            return `<div class="bc-sparkline-panel">
-                <svg class="bc-spark-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" id="bc-spark-svg">
-                    ${parsed1 && path1 ? `<path d="${path1}" fill="none" stroke="${COLOR1}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>` : ''}
-                    ${parsed2 && path2 ? `<path d="${path2}" fill="none" stroke="${COLOR2}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>` : ''}
-                    ${labelGroup}
-                    ${parsed1 ? dotGroup(d1Map, COLOR1, name1) : ''}
-                    ${parsed2 ? dotGroup(d2Map, COLOR2, name2) : ''}
-                </svg>
-                <div class="bc-spark-legend">
+            const legendHTML = `
+                <div class="bc-combo-legend">
                     ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR1}"></div>${name1}</div>` : ''}
                     ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:${COLOR2}"></div>${name2}</div>` : ''}
-                </div>
-                <div class="bc-spark-tooltip" id="bc-spark-tooltip"></div>
-            </div>`;
-        }
+                </div>`;
 
-        function _attachSparkTooltips() {
-            const svg = document.getElementById('bc-spark-svg');
-            const tip = document.getElementById('bc-spark-tooltip');
-            if (!svg || !tip) return;
-            svg.querySelectorAll('.bc-spark-dot').forEach(dot => {
-                dot.addEventListener('mouseenter', function() {
-                    const m = this.getAttribute('data-month'), v = this.getAttribute('data-val'), s = this.getAttribute('data-series');
-                    tip.textContent = `${s}: ${m} · ${v}`;
-                    tip.style.opacity = '1';
-                });
-                dot.addEventListener('mouseleave', function() { tip.style.opacity = '0'; });
-            });
+            return `<div class="bc-combo-wrap">${colsHTML}</div>${legendHTML}`;
         }
 
         function _renderAllBcPanels() {
@@ -2632,7 +2567,7 @@
 
             p1.innerHTML = _buildBarPanelHTML(_bcChart1Data, '');
             p2.innerHTML = _buildBarPanelHTML(_bcChart2Data, 'bc-bar-2');
-            p3.innerHTML = _buildSparklinePanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
+            p3.innerHTML = _buildComboPctBarPanel(_bcChart1Data, _bcChart2Data, _bcChart1Name, _bcChart2Name);
 
             // Animate bars after paint
             setTimeout(() => {
@@ -2641,7 +2576,10 @@
                         f.style.height = (f.dataset.val || 0) + '%';
                     });
                 });
-                _attachSparkTooltips();
+                // Animate stacked combo bars
+                p3.querySelectorAll('.bc-combo-seg').forEach(seg => {
+                    seg.style.height = (seg.dataset.pct || 0) + '%';
+                });
             }, 120);
         }
 
@@ -2683,7 +2621,7 @@
 
             // Update label
             if (labelEl) {
-                const labels = [_bcChart1Name, _bcChart2Name, `${_bcChart1Name} + ${_bcChart2Name}`];
+                const labels = [_bcChart1Name, _bcChart2Name, '% SPLIT COMPARISON'];
                 labelEl.textContent = labels[idx] || '—';
             }
         }
