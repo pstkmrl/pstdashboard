@@ -1874,7 +1874,6 @@
                                 <div class="bc-rotator" id="bc-rotator">
                                     <div class="bc-panel bc-active" id="bc-panel-1"></div>
                                     <div class="bc-panel" id="bc-panel-2"></div>
-                                    <div class="bc-panel" id="bc-panel-3" style="flex-direction:column;align-items:stretch;padding:4px 6px 2px;gap:0;overflow:hidden;"></div>
                                 </div>
                             </div>
                             <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
@@ -1882,7 +1881,6 @@
                                 <div class="bc-indicator-dots" id="bc-indicator-dots">
                                     <div class="bc-ind-dot active" id="bc-dot-0"></div>
                                     <div class="bc-ind-dot" id="bc-dot-1"></div>
-                                    <div class="bc-ind-dot" id="bc-dot-2"></div>
                                 </div>
                             </div>
                         </div>
@@ -2605,66 +2603,6 @@
                     </div>
                     <div class="bc-label">${d.month}</div>
                 </div>`).join('');
-        }
-
-        function _buildComboPctBarPanel(parsed1, parsed2, name1, name2) {
-            if (!parsed1 && !parsed2) return '';
-            const COLOR1 = 'var(--primary)', COLOR2 = '#FF9100';
-            const fyOrder = ['APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC','JAN','FEB','MAR'];
-            const allMonths = new Set();
-            if (parsed1) parsed1.chartData.forEach(d => allMonths.add(d.month));
-            if (parsed2) parsed2.chartData.forEach(d => allMonths.add(d.month));
-            const months = fyOrder.filter(m => allMonths.has(m));
-            const d1Map = {}, d2Map = {};
-            if (parsed1) parsed1.chartData.forEach(d => d1Map[d.month] = d.val);
-            if (parsed2) parsed2.chartData.forEach(d => d2Map[d.month] = d.val);
-
-            // Bar height = (v1+v2) / maxTotal; segment split = proportion within that bar
-            let maxTotal = 0;
-            months.forEach(m => { const t = (d1Map[m]||0)+(d2Map[m]||0); if(t>maxTotal) maxTotal=t; });
-            if (maxTotal === 0) maxTotal = 1;
-
-            const cols = months.map(m => {
-                const v1 = d1Map[m]||0, v2 = d2Map[m]||0, total = v1+v2;
-                const barPct = (total/maxTotal)*100;
-                const seg1Pct = total > 0 ? (v1/total)*100 : 0; // % of bar height for chart1 (bottom)
-                const seg2Pct = total > 0 ? (v2/total)*100 : 0; // % of bar height for chart2 (top)
-                return { m, v1, v2, barPct, seg1Pct, seg2Pct };
-            });
-
-            // Build HTML using IDENTICAL bc-col/bc-bar-bg structure as charts 1 & 2
-            // The bc-bar-bg is a flex column; we put two segments inside using absolute positioning
-            const colsHTML = cols.map(c => `
-                <div class="bc-col">
-                    <div class="bc-bar-bg" style="overflow:hidden;">
-                        <div class="bc-combo-stack" data-bar="${c.barPct.toFixed(2)}" data-s1="${c.seg1Pct.toFixed(2)}" data-s2="${c.seg2Pct.toFixed(2)}"
-                            style="width:100%;height:0%;display:flex;flex-direction:column;justify-content:flex-end;transition:height 0.85s cubic-bezier(0.4,0,0.2,1);">
-                            <div class="bc-combo-seg2" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,#FF9100 0%,color-mix(in srgb,#FF9100 60%,white) 100%);box-shadow:0 0 6px rgba(255,145,0,0.25);transition:height 0.75s cubic-bezier(0.4,0,0.2,1) 0.08s;height:0%;"></div>
-                            <div class="bc-combo-seg1" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,var(--primary) 0%,color-mix(in srgb,var(--primary) 60%,white) 100%);box-shadow:0 0 8px rgba(125,190,255,0.2);transition:height 0.75s cubic-bezier(0.4,0,0.2,1);height:0%;"></div>
-                        </div>
-                    </div>
-                    <div class="bc-label">${c.m}</div>
-                </div>`).join('');
-
-            const legendHTML = `<div class="bc-combo-legend">
-                ${parsed1 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 60%,white))"></div>${name1}</div>` : ''}
-                ${parsed2 ? `<div class="bc-spark-leg-item"><div class="bc-spark-leg-swatch" style="background:linear-gradient(135deg,#FF9100,color-mix(in srgb,#FF9100 60%,white))"></div>${name2}</div>` : ''}
-            </div>`;
-
-            return '<div class="bc-combo-barrow">' + colsHTML + '</div>' + legendHTML;
-        }
-
-        function _animateComboBars(panel) {
-            panel.querySelectorAll('.bc-combo-stack').forEach(stack => {
-                const barH = parseFloat(stack.dataset.bar) || 0;
-                const s1H  = parseFloat(stack.dataset.s1)  || 0;
-                const s2H  = parseFloat(stack.dataset.s2)  || 0;
-                stack.style.height = barH + '%';
-                const seg1 = stack.querySelector('.bc-combo-seg1');
-                const seg2 = stack.querySelector('.bc-combo-seg2');
-                if (seg1) seg1.style.height = s1H + '%';
-                if (seg2) seg2.style.height = s2H + '%';
-            });
         }
 
         function _renderAllBcPanels() {
