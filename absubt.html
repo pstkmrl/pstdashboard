@@ -422,8 +422,9 @@
             50%      { background: rgba(255,60,40,0.32); border-color: rgba(255,80,50,1);   box-shadow: 0 0 14px 2px rgba(255,60,40,0.35); }
         }
         .cons-list-item.alert-low {
-            border: 1.5px solid rgba(255,80,50,0.6);
+            border: 1.5px solid rgba(255,80,50,0.65);
             animation: cons-low-flash 1.2s ease-in-out infinite;
+            order: -1;
         }
         .cons-list-item.alert-low .cons-list-name { color: #ff8060; }
         .cons-list-item.alert-low .cons-list-sub { color: #ff8060 !important; opacity: 1 !important; font-weight: 900 !important; letter-spacing: 0.5px; }
@@ -1240,8 +1241,8 @@
         }
         .cons-overlay-panel {
             position: relative; z-index: 1;
-            width: min(580px, calc(100vw - 32px));
-            max-height: calc(100vh - 60px);
+            width: min(440px, calc(100vw - 32px));
+            max-height: calc(100vh - 80px);
             background: var(--surface);
             border: 1px solid rgba(255,255,255,0.14);
             border-radius: var(--radius-l);
@@ -1264,125 +1265,122 @@
             transform: scale(1) translateY(0);
         }
         .cons-panel-header {
-            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
-            gap: 8px 14px;
-            padding: 12px 20px; border-bottom: 1px solid var(--surface-variant);
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px 10px; border-bottom: 1px solid var(--surface-variant);
         }
         .cons-panel-title {
             font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
-            letter-spacing: 0.6px; text-transform: uppercase; color: var(--primary);
-            display: flex; align-items: center; gap: 7px; flex-shrink: 0;
+            letter-spacing: 1px; text-transform: uppercase; color: var(--primary);
+            display: flex; align-items: center; gap: 7px;
         }
-        .cons-panel-title .material-symbols-rounded { font-size: 19px !important; }
+        .cons-panel-title .material-symbols-rounded { font-size: 18px !important; }
         .cons-panel-close {
             width: 30px; height: 30px; border-radius: 50%;
             background: var(--surface-variant); border: none;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease, transform 0.2s ease;
-            flex-shrink: 0;
+            cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease;
         }
-        .cons-panel-close:hover { background: var(--surface-dim); transform: rotate(90deg); }
+        .cons-panel-close:hover { background: var(--surface-dim); }
         .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
-
-        /* ── STOCK SUMMARY CHIPS (inline in header) ── */
-        .stx-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; flex: 1; justify-content: center; }
-        .stx-chip {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-family: var(--font-body); font-size: 0.6rem; font-weight: 700;
-            letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.85;
-            white-space: nowrap;
-        }
-        .stx-chip b { font-family: var(--font-display); font-weight: 900; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
-        .stx-chip.tone-total b { color: var(--on-surface); }
-        .stx-chip.tone-out b { color: var(--error); }
-        .stx-chip.tone-low b { color: #ff8a3c; }
-        .stx-chip.tone-mid b { color: var(--warning, #d9a441); }
-        .stx-chip.tone-good b { color: var(--success); }
-
-        /* ── FILTER BAR ── */
-        .stx-filterbar {
-            display: flex; flex-wrap: wrap; gap: 6px;
-            padding: 10px 20px; flex-shrink: 0;
-            border-bottom: 1px solid var(--surface-variant);
-        }
-        .stx-filter-btn {
-            font-family: var(--font-body); font-size: 0.66rem; font-weight: 700;
-            letter-spacing: 0.4px; text-transform: uppercase;
-            color: var(--on-surface-variant); background: var(--surface-variant);
-            border: 1.5px solid transparent; border-radius: var(--radius-full);
-            padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;
-            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
-        }
-        .stx-filter-btn:hover { transform: translateY(-1px); }
-        .stx-filter-btn .stx-fcount {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.68rem;
-            background: rgba(128,128,128,0.25); border-radius: var(--radius-full);
-            padding: 1px 6px; min-width: 16px; text-align: center;
-        }
-        .stx-filter-btn.active { color: #fff; border-color: transparent; }
-        .stx-filter-btn[data-filter="all"].active { background: var(--primary); color: var(--on-primary-container, #001D36); }
-        .stx-filter-btn[data-filter="out"].active { background: var(--error); color: #2a0000; }
-        .stx-filter-btn[data-filter="low"].active { background: #ff8a3c; color: #2a1400; }
-        .stx-filter-btn[data-filter="moderate"].active { background: #d9a441; color: #2a1e00; }
-        .stx-filter-btn[data-filter="good"].active { background: var(--success); color: #002107; }
-        .stx-filterbar-sep { width: 1px; align-self: stretch; background: var(--outline); opacity: 0.3; margin: 2px 2px; }
-        .stx-filter-btn[data-loc].active { background: var(--secondary); color: #fff; }
-
         .cons-panel-list {
-            flex: 1 1 auto; min-height: 200px; max-height: min(58vh, 480px);
             overflow-y: auto; padding: 10px 14px 14px;
-            display: flex; flex-direction: column; gap: 6px;
+            display: flex; flex-direction: column; gap: 9px;
             scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent;
         }
+        /* ── Apple-Watch-style liquid-glass menu row ── */
+        .cons-list-item {
+            display: flex; align-items: center; gap: 13px;
+            position: relative;
+            background: linear-gradient(155deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 65%);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 20px;
+            padding: 10px 14px 10px 10px;
+            backdrop-filter: blur(24px) saturate(1.8);
+            -webkit-backdrop-filter: blur(24px) saturate(1.8);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.14);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .cons-list-item::before {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+            background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 32%);
+        }
+        [data-theme="light"] .cons-list-item {
+            background: linear-gradient(155deg, rgba(255,255,255,0.82), rgba(255,255,255,0.34) 65%);
+            border-color: rgba(255,255,255,0.75);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+        .cons-list-icon-ring { position: relative; width: 46px; height: 46px; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+        .cons-list-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 3.4; }
+        [data-theme="light"] .cons-list-icon-ring svg .ring-track { stroke: rgba(0,0,0,0.1); }
+        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3.4; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
+        .cons-list-icon-ring svg .ring-fill.ring-high { stroke: #4ade80; }
+        .cons-list-icon-ring svg .ring-fill.ring-mid  { stroke: var(--primary); }
+        .cons-list-icon-ring svg .ring-fill.ring-low  { stroke: #ff5e3a; }
+        .cons-list-img-wrap {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 34px; height: 34px; border-radius: 11px;
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.75); }
+        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; }
+        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.85rem; color: var(--primary); text-transform: uppercase; }
+        .cons-list-body { flex: 1; min-width: 0; }
+        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.86rem; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
+        .cons-list-sub { font-family: var(--font-body); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.75; margin-top: 2px; }
+        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1.05rem; letter-spacing: 0.3px; flex-shrink: 0; min-width: 46px; text-align: right; }
+        .cons-list-pct.pct-high { color: #4ade80; }
+        .cons-list-pct.pct-mid  { color: var(--primary); }
+        .cons-list-pct.pct-low  { color: #ff5e3a; }
+        .cons-list-warn { font-size: 15px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
 
-        /* ── REDESIGNED STOCK ROW ── */
-        .cons-list-item.stx-item {
-            display: grid; grid-template-columns: 4px 1fr auto; align-items: stretch;
-            gap: 0; background: var(--surface-variant); border-radius: var(--radius-m);
-            padding: 0; overflow: hidden; border: 1px solid transparent;
-            transition: transform 0.15s ease, border-color 0.2s ease;
-            flex: 0 0 auto; min-height: 58px;
+        /* ── AUTO-OPEN DASHBOARD MODE: fullscreen tool-board overlay ── */
+        .cons-overlay.auto-mode .cons-overlay-backdrop {
+            background: rgba(4,7,13,0.82);
+            backdrop-filter: blur(46px) saturate(1.3);
+            -webkit-backdrop-filter: blur(46px) saturate(1.3);
         }
-        .cons-list-item.stx-item:hover { transform: translateX(2px); }
-        .stx-rank-bar { background: var(--outline); opacity: 0.5; }
-        .stx-item.stx-status-out .stx-rank-bar { background: var(--error); opacity: 1; }
-        .stx-item.stx-status-low .stx-rank-bar { background: #ff8a3c; opacity: 1; }
-        .stx-item.stx-status-moderate .stx-rank-bar { background: #d9a441; opacity: 0.9; }
-        .stx-item.stx-status-good .stx-rank-bar { background: var(--success); opacity: 0.9; }
-        .stx-main { padding: 9px 12px; min-width: 0; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
-        .stx-top-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
-        .cons-list-name.stx-name {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.86rem;
-            color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            letter-spacing: 0.1px; flex: 1; min-width: 0;
+        [data-theme="light"] .cons-overlay.auto-mode .cons-overlay-backdrop {
+            background: rgba(220,230,242,0.88);
         }
-        .stx-loc-badge {
-            flex-shrink: 0; font-family: var(--font-body); font-weight: 800; font-size: 0.56rem;
-            letter-spacing: 0.6px; padding: 2px 7px; border-radius: var(--radius-full);
-            background: var(--secondary-container); color: var(--secondary);
-            text-transform: uppercase; white-space: nowrap;
+        .cons-overlay.auto-mode .cons-overlay-panel {
+            width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh;
+            border-radius: 0; border: none; background: transparent;
+            box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none;
+            transform: none !important;
         }
-        .stx-bottom-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .cons-list-sub.stx-status-chip {
-            font-family: var(--font-body); font-size: 0.6rem; font-weight: 800;
-            letter-spacing: 0.5px; margin-top: 0; opacity: 1;
+        .cons-overlay.auto-mode .cons-panel-header {
+            padding: clamp(20px, 4vw, 36px) clamp(20px, 5vw, 48px) 16px;
+            border-bottom: none; position: relative; flex-shrink: 0;
         }
-        .stx-item.stx-status-out .stx-status-chip { color: var(--error); }
-        .stx-item.stx-status-low .stx-status-chip { color: #ff8a3c; }
-        .stx-item.stx-status-moderate .stx-status-chip { color: #d9a441; }
-        .stx-item.stx-status-good .stx-status-chip { color: var(--success); }
-        .stx-qty { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; color: var(--on-surface-variant); font-variant-numeric: tabular-nums; }
-        .stx-side { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 14px; border-left: 1px solid rgba(128,128,128,0.15); flex-shrink: 0; }
-        .cons-list-pct.stx-pct { font-family: var(--font-display); font-weight: 900; font-size: 1.18rem; letter-spacing: 0.2px; line-height: 1; }
-        .stx-item.stx-status-out .stx-pct { color: var(--error); }
-        .stx-item.stx-status-low .stx-pct { color: #ff8a3c; }
-        .stx-item.stx-status-moderate .stx-pct { color: #d9a441; }
-        .stx-item.stx-status-good .stx-pct { color: var(--success); }
-        .cons-list-warn.stx-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
-        .stx-empty-state {
-            text-align: center; padding: 34px 16px; color: var(--on-surface-variant);
-            font-family: var(--font-display); font-size: 0.8rem; opacity: 0.5;
+        .cons-overlay.auto-mode .cons-panel-header::after {
+            content: ''; position: absolute; left: clamp(20px, 5vw, 48px); right: clamp(20px, 5vw, 48px); bottom: 4px;
+            height: 3px; border-radius: var(--radius-full);
+            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 25%, transparent));
+        }
+        .cons-overlay.auto-mode .cons-panel-title { font-size: clamp(1.1rem, 2.4vw, 1.7rem); gap: 12px; }
+        .cons-overlay.auto-mode .cons-panel-title .material-symbols-rounded { font-size: clamp(22px, 3vw, 30px) !important; }
+        .cons-overlay.auto-mode .cons-panel-close { width: 40px; height: 40px; }
+        .cons-overlay.auto-mode #cons-link-btn { margin-left: clamp(20px, 5vw, 48px); margin-right: clamp(20px, 5vw, 48px); }
+        .cons-overlay.auto-mode .cons-panel-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            padding: 8px clamp(20px, 5vw, 48px) clamp(20px, 5vw, 48px);
+            align-content: start;
+            flex: 1;
+        }
+        .cons-overlay.auto-mode .cons-list-item { padding: 18px 20px; border-radius: 26px; }
+        .cons-overlay.auto-mode .cons-list-icon-ring { width: 54px; height: 54px; }
+        .cons-overlay.auto-mode .cons-list-img-wrap { width: 40px; height: 40px; border-radius: 13px; }
+        .cons-overlay.auto-mode .cons-list-name { font-size: 1rem; }
+        .cons-overlay.auto-mode .cons-list-sub { font-size: 0.68rem; }
+        .cons-overlay.auto-mode .cons-list-pct { font-size: 1.3rem; }
+        .cons-overlay.auto-mode .cons-list-item.alert-low {
+            animation: sdock-low-pulse 2.2s ease-in-out infinite, cons-low-flash 1.2s ease-in-out infinite;
+            transform: scale(1.03);
         }
 
         .app-dock, .dock-toggle-btn { display: none !important; }
@@ -2083,14 +2081,7 @@
             <div class="cons-panel-header">
                 <div class="cons-panel-title">
                     <span class="material-symbols-rounded">inventory_2</span>
-                    STOCK
-                </div>
-                <div class="stx-summary" id="stx-summary" style="display:none;">
-                    <span class="stx-chip tone-total"><b id="stx-sum-all">0</b>TOTAL</span>
-                    <span class="stx-chip tone-out"><b id="stx-sum-out">0</b>OUT</span>
-                    <span class="stx-chip tone-low"><b id="stx-sum-low">0</b>LOW</span>
-                    <span class="stx-chip tone-mid"><b id="stx-sum-moderate">0</b>MOD</span>
-                    <span class="stx-chip tone-good"><b id="stx-sum-good">0</b>GOOD</span>
+                    STOCK AVAILABILITY
                 </div>
                 <button class="cons-panel-close" onclick="closeConsOverlay()">
                     <span class="material-symbols-rounded">close</span>
@@ -2100,19 +2091,8 @@
                 <span class="material-symbols-rounded">open_in_new</span>
                 <span id="cons-link-text">View Details</span>
             </a>
-            <div class="stx-filterbar" id="stx-filterbar" style="display:none;">
-                <button class="stx-filter-btn active" data-filter="all" onclick="_setConsFilter('status','all')">All <span class="stx-fcount" id="stx-fcount-all">0</span></button>
-                <button class="stx-filter-btn" data-filter="out" onclick="_setConsFilter('status','out')">Out of Stock <span class="stx-fcount" id="stx-fcount-out">0</span></button>
-                <button class="stx-filter-btn" data-filter="low" onclick="_setConsFilter('status','low')">Low Stock <span class="stx-fcount" id="stx-fcount-low">0</span></button>
-                <button class="stx-filter-btn" data-filter="moderate" onclick="_setConsFilter('status','moderate')">Moderate <span class="stx-fcount" id="stx-fcount-moderate">0</span></button>
-                <button class="stx-filter-btn" data-filter="good" onclick="_setConsFilter('status','good')">Good <span class="stx-fcount" id="stx-fcount-good">0</span></button>
-                <span class="stx-filterbar-sep"></span>
-                <button class="stx-filter-btn active" data-loc="all" onclick="_setConsFilter('loc','all')">All Locations</button>
-                <button class="stx-filter-btn" data-loc="MTRS" onclick="_setConsFilter('loc','MTRS')">MTRS <span class="stx-fcount" id="stx-fcount-loc-mtrs">0</span></button>
-                <button class="stx-filter-btn" data-loc="TKRS" onclick="_setConsFilter('loc','TKRS')">TKRS <span class="stx-fcount" id="stx-fcount-loc-tkrs">0</span></button>
-            </div>
             <div class="cons-panel-list" id="cons-panel-list">
-                <div class="stx-empty-state">No items loaded</div>
+                <div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items loaded</div>
             </div>
         </div>
     </div>
@@ -3123,22 +3103,6 @@
             if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
         }
 
-        /* Parse "<name> -MTRS (123)" / "<name>-TKRS(4No.s)" into { name, loc, qty, qtyText } */
-        function _parseStockLabel(label) {
-            const m = String(label || '').match(/-\s*(MTRS|TKRS)\s*\(\s*([^)]*?)\s*\)\s*$/i);
-            if (m) {
-                const qtyText = m[2].trim();
-                const numMatch = qtyText.match(/[\d.]+/);
-                const qty = numMatch ? parseFloat(numMatch[0]) : null;
-                return { name: label.slice(0, m.index).trim(), loc: m[1].toUpperCase(), qty, qtyText };
-            }
-            return { name: label, loc: '', qty: null, qtyText: '' };
-        }
-
-        let _consParsedItems = [];
-        let _consFilterStatus = 'all';
-        let _consFilterLoc = 'all';
-
         function buildAppDock(dockRows) {
             const rows = Object.keys(dockRows).map(Number).sort((a, b) => a - b).filter(r => dockRows[r].label || dockRows[r].icon);
             _consRows = rows.map(r => dockRows[r]);
@@ -3147,113 +3111,48 @@
             _updateConsLink();
 
             const dock = document.getElementById('stock-dock');
-            const filterBar = document.getElementById('stx-filterbar');
-            const summary = document.getElementById('stx-summary');
             if (rows.length === 0) {
                 _buildConsOverlayEmpty();
-                if (filterBar) filterBar.style.display = 'none';
-                if (summary) summary.style.display = 'none';
                 // Fallback: compact icon on desktop
                 if (dock) dock.classList.add('sdock-compact');
                 _updateStockHeaderBtn(false, false, 0);
                 return;
             }
             if (dock) dock.classList.remove('sdock-compact');
-            if (filterBar) filterBar.style.display = 'flex';
-            if (summary) summary.style.display = 'flex';
 
+            const RADIUS = 17, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
             _buildStockDock(_consRows);
 
-            // Parse every row into { name, loc, qty, pct, icon, status } then sort low-stock-first
-            _consParsedItems = _consRows.map(item => {
-                const { label = '', pct = '', icon = '' } = item;
-                const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
-                const { name, loc, qty, qtyText } = _parseStockLabel(label);
-                let status;
-                if ((qty !== null && qty <= 0) || pctNum <= 0) status = 'out';
-                else if (pctNum < 20) status = 'low';
-                else if (pctNum < 75) status = 'moderate';
-                else status = 'good';
-                return { label, name, loc, qty, qtyText, pct: pctNum, icon, status };
-            }).sort((a, b) => a.pct - b.pct || (a.qty ?? 0) - (b.qty ?? 0));
-
-            const lowCount = _consParsedItems.filter(r => r.status === 'low' || r.status === 'out').length;
+            const lowCount = _consRows.filter(r => (parseFloat(r.pct)||0) < 20).length;
             _updateStockHeaderBtn(true, lowCount > 0, lowCount);
 
-            _updateConsCounts();
-            _renderConsList();
-        }
-
-        function _updateConsCounts() {
-            const counts = { all: _consParsedItems.length, out: 0, low: 0, moderate: 0, good: 0 };
-            const locCounts = { MTRS: 0, TKRS: 0 };
-            _consParsedItems.forEach(it => {
-                counts[it.status]++;
-                if (it.loc && locCounts[it.loc] !== undefined) locCounts[it.loc]++;
-            });
-            ['all', 'out', 'low', 'moderate', 'good'].forEach(k => {
-                const el = document.getElementById('stx-fcount-' + k);
-                if (el) el.textContent = counts[k];
-                const sumEl = document.getElementById('stx-sum-' + k);
-                if (sumEl) sumEl.textContent = counts[k];
-            });
-            const mtrsEl = document.getElementById('stx-fcount-loc-mtrs'); if (mtrsEl) mtrsEl.textContent = locCounts.MTRS;
-            const tkrsEl = document.getElementById('stx-fcount-loc-tkrs'); if (tkrsEl) tkrsEl.textContent = locCounts.TKRS;
-        }
-
-        function _setConsFilter(kind, value) {
-            if (kind === 'status') _consFilterStatus = value; else _consFilterLoc = value;
-            document.querySelectorAll('#stx-filterbar .stx-filter-btn[data-filter]').forEach(b => b.classList.toggle('active', kind === 'status' && b.dataset.filter === value));
-            document.querySelectorAll('#stx-filterbar .stx-filter-btn[data-loc]').forEach(b => b.classList.toggle('active', kind === 'loc' && b.dataset.loc === value));
-            _renderConsList();
-        }
-
-        const STATUS_LABELS = { out: '⚠ OUT OF STOCK', low: '⚠ LOW STOCK', moderate: 'MODERATE STOCK', good: 'GOOD STOCK' };
-
-        function _renderConsList() {
             const listEl = document.getElementById('cons-panel-list');
-            if (!listEl) return;
-            const filtered = _consParsedItems.filter(it =>
-                (_consFilterStatus === 'all' || it.status === _consFilterStatus) &&
-                (_consFilterLoc === 'all' || it.loc === _consFilterLoc)
-            );
-            if (filtered.length === 0) {
-                listEl.innerHTML = '<div class="stx-empty-state">No items match this filter</div>';
-                return;
+            if (listEl) {
+                // Prioritise 0 stock first, then ascending to max
+                const sortedRows = _consRows.slice().sort((a, b) => (parseFloat(a.pct) || 0) - (parseFloat(b.pct) || 0));
+                listEl.innerHTML = sortedRows.map(item => {
+                    const { label = '', pct = '', icon = '' } = item;
+                    const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0)), offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE, cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
+                    const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cons-list-fallback" style="display:none;">${label.charAt(0) || '?'}</span>` : `<span class="cons-list-fallback">${label.charAt(0) || '?'}</span>`;
+                    const warnIcon = pctNum < 20 ? `<span class="material-symbols-rounded cons-list-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
+                    return `<div class="cons-list-item" data-pct="${pctNum}"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
+                }).join('');
             }
-            listEl.innerHTML = filtered.map(it => {
-                const { name, loc, qty, qtyText, pct, icon, status, label } = it;
-                const warnIcon = (status === 'out' || status === 'low') ? `<span class="material-symbols-rounded cons-list-warn stx-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
-                const locBadge = loc ? `<span class="stx-loc-badge">${loc}</span>` : '';
-                const qtyHtml = qtyText ? qtyText : (qty !== null ? String(qty) : '—');
-                return `<div class="cons-list-item stx-item stx-status-${status}" data-pct="${pct}" data-status="${status}" data-loc="${loc}">
-                    <div class="stx-rank-bar"></div>
-                    <div class="stx-main">
-                        <div class="stx-top-row">
-                            <span class="cons-list-name stx-name" title="${name}">${name}</span>
-                            ${locBadge}
-                        </div>
-                        <div class="stx-bottom-row">
-                            <span class="cons-list-sub stx-status-chip">${STATUS_LABELS[status]}</span>
-                            <span class="stx-qty">${qtyHtml}</span>
-                        </div>
-                    </div>
-                    <div class="stx-side">
-                        ${warnIcon}
-                        <span class="cons-list-pct stx-pct">${pct.toFixed(0)}%</span>
-                    </div>
-                </div>`;
-            }).join('');
         }
 
         function _buildConsOverlayEmpty() {
-            _consParsedItems = [];
             const listEl = document.getElementById('cons-panel-list');
-            if (listEl) listEl.innerHTML = '<div class="stx-empty-state">No items</div>';
+            if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items</div>';
         }
 
-        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.add('visible'); }
-        function closeConsOverlay() { const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.remove('visible'); }
+        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) { ov.classList.remove('auto-mode'); ov.classList.add('visible'); } }
+        function closeConsOverlay() {
+            const ov = document.getElementById('cons-overlay');
+            if (ov) {
+                ov.classList.remove('visible', 'auto-mode');
+                document.querySelectorAll('#cons-panel-list .cons-list-item.alert-low').forEach(el => el.classList.remove('alert-low'));
+            }
+        }
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeConsOverlay(); } });
 
         const _mcdPrevVals = {};
@@ -3279,47 +3178,28 @@
         let _consAutoCloseTimer = null, _cons30minTimer = null;
 
         /* ─── AUTO-OPEN helpers ─── */
+        /* Auto-popup renders as a fullscreen tool-board dashboard overlay (see .auto-mode CSS).
+           Auto-scroll is intentionally disabled here — the full, sorted (low → high) list is
+           shown at once as a grid, with low-stock items pulsing/emphasised for the whole duration. */
         function _consAutoOpen(autoClose) {
             const ov = document.getElementById('cons-overlay');
             if (!ov) return;
-            ov.classList.add('visible');
+            ov.classList.add('visible', 'auto-mode');
 
-            // 1. Auto-scroll the list over 5 s
             const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                setTimeout(() => {
-                    const maxScroll = listEl.scrollHeight - listEl.clientHeight;
-                    if (maxScroll > 0) {
-                        listEl.style.scrollBehavior = 'smooth';
-                        listEl.scrollTop = 0;
-                        const steps = 60, stepTime = 5000 / steps, perStep = maxScroll / steps;
-                        let step = 0;
-                        const scrollInterval = setInterval(() => {
-                            step++;
-                            listEl.scrollTop = Math.min(step * perStep, maxScroll);
-                            if (step >= steps) clearInterval(scrollInterval);
-                        }, stepTime);
-                    }
-                }, 400);
-            }
+            if (listEl) listEl.scrollTop = 0;
 
-            // 2. After 5 s of scroll → highlight low-stock items for 3 s, then remove
-            setTimeout(() => {
-                const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
-                const lowItems = [];
-                items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) { el.classList.add('alert-low'); lowItems.push(el); } });
-                if (lowItems.length) {
-                    setTimeout(() => { lowItems.forEach(el => el.classList.remove('alert-low')); }, 3000);
-                }
-            }, 5400);
+            // Highlight low-stock items immediately and keep them emphasised for the whole display
+            const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
+            items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) el.classList.add('alert-low'); });
 
-            // 3. Auto-close after scroll + highlight + buffer
+            // Auto-close after a dwell period
             if (autoClose) {
                 if (_consAutoCloseTimer) clearTimeout(_consAutoCloseTimer);
                 _consAutoCloseTimer = setTimeout(() => {
                     closeConsOverlay();
                     _consAutoCloseTimer = null;
-                }, 10000); // 5s scroll + 3s highlight + 2s buffer
+                }, 10000);
             }
         }
 
