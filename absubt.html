@@ -1240,8 +1240,8 @@
         }
         .cons-overlay-panel {
             position: relative; z-index: 1;
-            width: min(440px, calc(100vw - 32px));
-            max-height: calc(100vh - 80px);
+            width: min(580px, calc(100vw - 32px));
+            max-height: calc(100vh - 60px);
             background: var(--surface);
             border: 1px solid rgba(255,255,255,0.14);
             border-radius: var(--radius-l);
@@ -1265,42 +1265,132 @@
         }
         .cons-panel-header {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 18px 10px; border-bottom: 1px solid var(--surface-variant);
+            padding: 16px 20px 12px; border-bottom: 1px solid var(--surface-variant);
+            flex-shrink: 0;
         }
         .cons-panel-title {
-            font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
-            letter-spacing: 1px; text-transform: uppercase; color: var(--primary);
-            display: flex; align-items: center; gap: 7px;
+            font-family: var(--font-display); font-weight: 900; font-size: 1rem;
+            letter-spacing: 0.6px; text-transform: uppercase; color: var(--primary);
+            display: flex; align-items: center; gap: 8px;
         }
-        .cons-panel-title .material-symbols-rounded { font-size: 18px !important; }
+        .cons-panel-title .material-symbols-rounded { font-size: 20px !important; }
         .cons-panel-close {
-            width: 30px; height: 30px; border-radius: 50%;
+            width: 32px; height: 32px; border-radius: 50%;
             background: var(--surface-variant); border: none;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease;
+            cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease, transform 0.2s ease;
         }
-        .cons-panel-close:hover { background: var(--surface-dim); }
+        .cons-panel-close:hover { background: var(--surface-dim); transform: rotate(90deg); }
         .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
+
+        /* ── STOCK SUMMARY STRIP ── */
+        .stx-summary {
+            display: flex; align-items: stretch; gap: 0;
+            padding: 10px 20px; flex-shrink: 0;
+            border-bottom: 1px solid var(--surface-variant);
+            background: var(--surface-dim);
+        }
+        .stx-summary-cell { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 2px 4px; position: relative; }
+        .stx-summary-cell + .stx-summary-cell::before {
+            content: ''; position: absolute; left: 0; top: 15%; height: 70%; width: 1px; background: var(--outline); opacity: 0.25;
+        }
+        .stx-summary-val { font-family: var(--font-display); font-weight: 900; font-size: 1.18rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+        .stx-summary-lbl { font-family: var(--font-body); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.75; }
+        .stx-summary-cell.tone-total .stx-summary-val { color: var(--on-surface); }
+        .stx-summary-cell.tone-out .stx-summary-val { color: var(--error); }
+        .stx-summary-cell.tone-low .stx-summary-val { color: #ff8a3c; }
+        .stx-summary-cell.tone-mid .stx-summary-val { color: var(--warning, #d9a441); }
+        .stx-summary-cell.tone-good .stx-summary-val { color: var(--success); }
+
+        /* ── FILTER BAR ── */
+        .stx-filterbar {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            padding: 10px 20px; flex-shrink: 0;
+            border-bottom: 1px solid var(--surface-variant);
+        }
+        .stx-filter-btn {
+            font-family: var(--font-body); font-size: 0.66rem; font-weight: 700;
+            letter-spacing: 0.4px; text-transform: uppercase;
+            color: var(--on-surface-variant); background: var(--surface-variant);
+            border: 1.5px solid transparent; border-radius: var(--radius-full);
+            padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+        }
+        .stx-filter-btn:hover { transform: translateY(-1px); }
+        .stx-filter-btn .stx-fcount {
+            font-family: var(--font-display); font-weight: 900; font-size: 0.68rem;
+            background: rgba(128,128,128,0.25); border-radius: var(--radius-full);
+            padding: 1px 6px; min-width: 16px; text-align: center;
+        }
+        .stx-filter-btn.active { color: #fff; border-color: transparent; }
+        .stx-filter-btn[data-filter="all"].active { background: var(--primary); color: var(--on-primary-container, #001D36); }
+        .stx-filter-btn[data-filter="out"].active { background: var(--error); color: #2a0000; }
+        .stx-filter-btn[data-filter="low"].active { background: #ff8a3c; color: #2a1400; }
+        .stx-filter-btn[data-filter="moderate"].active { background: #d9a441; color: #2a1e00; }
+        .stx-filter-btn[data-filter="good"].active { background: var(--success); color: #002107; }
+        .stx-filterbar-sep { width: 1px; align-self: stretch; background: var(--outline); opacity: 0.3; margin: 2px 2px; }
+        .stx-filter-btn[data-loc].active { background: var(--secondary); color: #fff; }
+
         .cons-panel-list {
             overflow-y: auto; padding: 10px 14px 14px;
-            display: flex; flex-direction: column; gap: 7px;
+            display: flex; flex-direction: column; gap: 6px;
             scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent;
         }
-        .cons-list-item { display: flex; align-items: center; gap: 12px; background: var(--surface-variant); border-radius: var(--radius-m); padding: 9px 14px; }
-        .cons-list-icon-ring { position: relative; width: 42px; height: 42px; flex-shrink: 0; }
-        .cons-list-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3; }
-        [data-theme="light"] .cons-list-icon-ring svg .ring-track { stroke: rgba(0,0,0,0.1); }
-        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
-        .cons-list-img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.6); }
-        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.82rem; color: var(--primary); text-transform: uppercase; }
-        .cons-list-body { flex: 1; min-width: 0; }
-        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
-        .cons-list-sub { font-family: var(--font-body); font-size: 0.62rem; font-weight: 600; color: var(--on-surface-variant); opacity: 0.7; margin-top: 1px; }
-        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1rem; letter-spacing: 0.3px; flex-shrink: 0; }
-        .cons-list-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
+
+        /* ── REDESIGNED STOCK ROW ── */
+        .cons-list-item.stx-item {
+            display: grid; grid-template-columns: 4px 1fr auto; align-items: stretch;
+            gap: 0; background: var(--surface-variant); border-radius: var(--radius-m);
+            padding: 0; overflow: hidden; border: 1px solid transparent;
+            transition: transform 0.15s ease, border-color 0.2s ease;
+        }
+        .cons-list-item.stx-item:hover { transform: translateX(2px); }
+        .stx-rank-bar { background: var(--outline); opacity: 0.5; }
+        .stx-item.stx-status-out .stx-rank-bar { background: var(--error); opacity: 1; }
+        .stx-item.stx-status-low .stx-rank-bar { background: #ff8a3c; opacity: 1; }
+        .stx-item.stx-status-moderate .stx-rank-bar { background: #d9a441; opacity: 0.9; }
+        .stx-item.stx-status-good .stx-rank-bar { background: var(--success); opacity: 0.9; }
+        .stx-main { padding: 9px 12px; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+        .stx-top-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .cons-list-name.stx-name {
+            font-family: var(--font-display); font-weight: 800; font-size: 0.86rem;
+            color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            letter-spacing: 0.1px; flex: 1; min-width: 0;
+        }
+        .stx-loc-badge {
+            flex-shrink: 0; font-family: var(--font-body); font-weight: 800; font-size: 0.56rem;
+            letter-spacing: 0.6px; padding: 2px 7px; border-radius: var(--radius-full);
+            background: var(--secondary-container); color: var(--secondary);
+            text-transform: uppercase; white-space: nowrap;
+        }
+        .stx-bar-track { height: 5px; border-radius: var(--radius-full); background: rgba(128,128,128,0.22); overflow: hidden; }
+        .stx-bar-fill { height: 100%; border-radius: var(--radius-full); transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+        .stx-item.stx-status-out .stx-bar-fill { background: var(--error); }
+        .stx-item.stx-status-low .stx-bar-fill { background: #ff8a3c; }
+        .stx-item.stx-status-moderate .stx-bar-fill { background: #d9a441; }
+        .stx-item.stx-status-good .stx-bar-fill { background: var(--success); }
+        .stx-bottom-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .cons-list-sub.stx-status-chip {
+            font-family: var(--font-body); font-size: 0.6rem; font-weight: 800;
+            letter-spacing: 0.5px; margin-top: 0; opacity: 1;
+        }
+        .stx-item.stx-status-out .stx-status-chip { color: var(--error); }
+        .stx-item.stx-status-low .stx-status-chip { color: #ff8a3c; }
+        .stx-item.stx-status-moderate .stx-status-chip { color: #d9a441; }
+        .stx-item.stx-status-good .stx-status-chip { color: var(--success); }
+        .stx-qty { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; color: var(--on-surface-variant); font-variant-numeric: tabular-nums; }
+        .stx-qty small { font-size: 0.55rem; font-weight: 700; opacity: 0.65; letter-spacing: 0.5px; margin-left: 2px; }
+        .stx-side { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 14px; border-left: 1px solid rgba(128,128,128,0.15); flex-shrink: 0; }
+        .cons-list-pct.stx-pct { font-family: var(--font-display); font-weight: 900; font-size: 1.18rem; letter-spacing: 0.2px; line-height: 1; }
+        .stx-item.stx-status-out .stx-pct { color: var(--error); }
+        .stx-item.stx-status-low .stx-pct { color: #ff8a3c; }
+        .stx-item.stx-status-moderate .stx-pct { color: #d9a441; }
+        .stx-item.stx-status-good .stx-pct { color: var(--success); }
+        .cons-list-warn.stx-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
+        .stx-empty-state {
+            text-align: center; padding: 34px 16px; color: var(--on-surface-variant);
+            font-family: var(--font-display); font-size: 0.8rem; opacity: 0.5;
+        }
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
@@ -2010,8 +2100,26 @@
                 <span class="material-symbols-rounded">open_in_new</span>
                 <span id="cons-link-text">View Details</span>
             </a>
+            <div class="stx-summary" id="stx-summary" style="display:none;">
+                <div class="stx-summary-cell tone-total"><span class="stx-summary-val" id="stx-sum-all">0</span><span class="stx-summary-lbl">Total</span></div>
+                <div class="stx-summary-cell tone-out"><span class="stx-summary-val" id="stx-sum-out">0</span><span class="stx-summary-lbl">Out</span></div>
+                <div class="stx-summary-cell tone-low"><span class="stx-summary-val" id="stx-sum-low">0</span><span class="stx-summary-lbl">Low</span></div>
+                <div class="stx-summary-cell tone-mid"><span class="stx-summary-val" id="stx-sum-moderate">0</span><span class="stx-summary-lbl">Moderate</span></div>
+                <div class="stx-summary-cell tone-good"><span class="stx-summary-val" id="stx-sum-good">0</span><span class="stx-summary-lbl">Good</span></div>
+            </div>
+            <div class="stx-filterbar" id="stx-filterbar" style="display:none;">
+                <button class="stx-filter-btn active" data-filter="all" onclick="_setConsFilter('status','all')">All <span class="stx-fcount" id="stx-fcount-all">0</span></button>
+                <button class="stx-filter-btn" data-filter="out" onclick="_setConsFilter('status','out')">Out of Stock <span class="stx-fcount" id="stx-fcount-out">0</span></button>
+                <button class="stx-filter-btn" data-filter="low" onclick="_setConsFilter('status','low')">Low Stock <span class="stx-fcount" id="stx-fcount-low">0</span></button>
+                <button class="stx-filter-btn" data-filter="moderate" onclick="_setConsFilter('status','moderate')">Moderate <span class="stx-fcount" id="stx-fcount-moderate">0</span></button>
+                <button class="stx-filter-btn" data-filter="good" onclick="_setConsFilter('status','good')">Good <span class="stx-fcount" id="stx-fcount-good">0</span></button>
+                <span class="stx-filterbar-sep"></span>
+                <button class="stx-filter-btn active" data-loc="all" onclick="_setConsFilter('loc','all')">All Locations</button>
+                <button class="stx-filter-btn" data-loc="MTRS" onclick="_setConsFilter('loc','MTRS')">MTRS <span class="stx-fcount" id="stx-fcount-loc-mtrs">0</span></button>
+                <button class="stx-filter-btn" data-loc="TKRS" onclick="_setConsFilter('loc','TKRS')">TKRS <span class="stx-fcount" id="stx-fcount-loc-tkrs">0</span></button>
+            </div>
             <div class="cons-panel-list" id="cons-panel-list">
-                <div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items loaded</div>
+                <div class="stx-empty-state">No items loaded</div>
             </div>
         </div>
     </div>
@@ -3022,6 +3130,19 @@
             if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
         }
 
+        /* Parse "<name> -MTRS (123)" / "<name>-TKRS(45)" into { name, loc, qty } */
+        function _parseStockLabel(label) {
+            const m = String(label || '').match(/-\s*(MTRS|TKRS)\s*\(\s*(\d+)\s*\)\s*$/i);
+            if (m) {
+                return { name: label.slice(0, m.index).trim(), loc: m[1].toUpperCase(), qty: parseInt(m[2], 10) };
+            }
+            return { name: label, loc: '', qty: null };
+        }
+
+        let _consParsedItems = [];
+        let _consFilterStatus = 'all';
+        let _consFilterLoc = 'all';
+
         function buildAppDock(dockRows) {
             const rows = Object.keys(dockRows).map(Number).sort((a, b) => a - b).filter(r => dockRows[r].label || dockRows[r].icon);
             _consRows = rows.map(r => dockRows[r]);
@@ -3030,36 +3151,110 @@
             _updateConsLink();
 
             const dock = document.getElementById('stock-dock');
+            const filterBar = document.getElementById('stx-filterbar');
+            const summary = document.getElementById('stx-summary');
             if (rows.length === 0) {
                 _buildConsOverlayEmpty();
+                if (filterBar) filterBar.style.display = 'none';
+                if (summary) summary.style.display = 'none';
                 // Fallback: compact icon on desktop
                 if (dock) dock.classList.add('sdock-compact');
                 _updateStockHeaderBtn(false, false, 0);
                 return;
             }
             if (dock) dock.classList.remove('sdock-compact');
+            if (filterBar) filterBar.style.display = 'flex';
+            if (summary) summary.style.display = 'flex';
 
-            const RADIUS = 17, CIRCUMFERENCE = 2 * Math.PI * RADIUS;
             _buildStockDock(_consRows);
 
-            const lowCount = _consRows.filter(r => (parseFloat(r.pct)||0) < 20).length;
+            // Parse every row into { name, loc, qty, pct, icon, status } then sort low-stock-first
+            _consParsedItems = _consRows.map(item => {
+                const { label = '', pct = '', icon = '' } = item;
+                const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
+                const { name, loc, qty } = _parseStockLabel(label);
+                let status;
+                if ((qty !== null && qty <= 0) || pctNum <= 0) status = 'out';
+                else if (pctNum < 20) status = 'low';
+                else if (pctNum < 75) status = 'moderate';
+                else status = 'good';
+                return { label, name, loc, qty, pct: pctNum, icon, status };
+            }).sort((a, b) => a.pct - b.pct || (a.qty ?? 0) - (b.qty ?? 0));
+
+            const lowCount = _consParsedItems.filter(r => r.status === 'low' || r.status === 'out').length;
             _updateStockHeaderBtn(true, lowCount > 0, lowCount);
 
+            _updateConsCounts();
+            _renderConsList();
+        }
+
+        function _updateConsCounts() {
+            const counts = { all: _consParsedItems.length, out: 0, low: 0, moderate: 0, good: 0 };
+            const locCounts = { MTRS: 0, TKRS: 0 };
+            _consParsedItems.forEach(it => {
+                counts[it.status]++;
+                if (it.loc && locCounts[it.loc] !== undefined) locCounts[it.loc]++;
+            });
+            ['all', 'out', 'low', 'moderate', 'good'].forEach(k => {
+                const el = document.getElementById('stx-fcount-' + k);
+                if (el) el.textContent = counts[k];
+                const sumEl = document.getElementById('stx-sum-' + k);
+                if (sumEl) sumEl.textContent = counts[k];
+            });
+            const mtrsEl = document.getElementById('stx-fcount-loc-mtrs'); if (mtrsEl) mtrsEl.textContent = locCounts.MTRS;
+            const tkrsEl = document.getElementById('stx-fcount-loc-tkrs'); if (tkrsEl) tkrsEl.textContent = locCounts.TKRS;
+        }
+
+        function _setConsFilter(kind, value) {
+            if (kind === 'status') _consFilterStatus = value; else _consFilterLoc = value;
+            document.querySelectorAll('#stx-filterbar .stx-filter-btn[data-filter]').forEach(b => b.classList.toggle('active', kind === 'status' && b.dataset.filter === value));
+            document.querySelectorAll('#stx-filterbar .stx-filter-btn[data-loc]').forEach(b => b.classList.toggle('active', kind === 'loc' && b.dataset.loc === value));
+            _renderConsList();
+        }
+
+        const STATUS_LABELS = { out: '⚠ OUT OF STOCK', low: '⚠ LOW STOCK', moderate: 'MODERATE STOCK', good: 'GOOD STOCK' };
+
+        function _renderConsList() {
             const listEl = document.getElementById('cons-panel-list');
-            if (listEl) {
-                listEl.innerHTML = _consRows.map(item => {
-                    const { label = '', pct = '', icon = '' } = item;
-                    const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0)), offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE, cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
-                    const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cons-list-fallback" style="display:none;">${label.charAt(0) || '?'}</span>` : `<span class="cons-list-fallback">${label.charAt(0) || '?'}</span>`;
-                    const warnIcon = pctNum < 20 ? `<span class="material-symbols-rounded cons-list-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
-                    return `<div class="cons-list-item"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
-                }).join('');
+            if (!listEl) return;
+            const filtered = _consParsedItems.filter(it =>
+                (_consFilterStatus === 'all' || it.status === _consFilterStatus) &&
+                (_consFilterLoc === 'all' || it.loc === _consFilterLoc)
+            );
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<div class="stx-empty-state">No items match this filter</div>';
+                return;
             }
+            listEl.innerHTML = filtered.map(it => {
+                const { name, loc, qty, pct, icon, status, label } = it;
+                const warnIcon = (status === 'out' || status === 'low') ? `<span class="material-symbols-rounded cons-list-warn stx-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
+                const locBadge = loc ? `<span class="stx-loc-badge">${loc}</span>` : '';
+                const qtyHtml = qty !== null ? `${qty}<small>UNITS</small>` : '—';
+                return `<div class="cons-list-item stx-item stx-status-${status}" data-pct="${pct}" data-status="${status}" data-loc="${loc}">
+                    <div class="stx-rank-bar"></div>
+                    <div class="stx-main">
+                        <div class="stx-top-row">
+                            <span class="cons-list-name stx-name" title="${name}">${name}</span>
+                            ${locBadge}
+                        </div>
+                        <div class="stx-bar-track"><div class="stx-bar-fill" style="width:${pct}%"></div></div>
+                        <div class="stx-bottom-row">
+                            <span class="cons-list-sub stx-status-chip">${STATUS_LABELS[status]}</span>
+                            <span class="stx-qty">${qtyHtml}</span>
+                        </div>
+                    </div>
+                    <div class="stx-side">
+                        ${warnIcon}
+                        <span class="cons-list-pct stx-pct">${pct.toFixed(0)}%</span>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function _buildConsOverlayEmpty() {
+            _consParsedItems = [];
             const listEl = document.getElementById('cons-panel-list');
-            if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items</div>';
+            if (listEl) listEl.innerHTML = '<div class="stx-empty-state">No items</div>';
         }
 
         function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.add('visible'); }
