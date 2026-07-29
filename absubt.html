@@ -1264,43 +1264,41 @@
             transform: scale(1) translateY(0);
         }
         .cons-panel-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 20px 12px; border-bottom: 1px solid var(--surface-variant);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+            gap: 8px 14px;
+            padding: 12px 20px; border-bottom: 1px solid var(--surface-variant);
             flex-shrink: 0;
         }
         .cons-panel-title {
-            font-family: var(--font-display); font-weight: 900; font-size: 1rem;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.88rem;
             letter-spacing: 0.6px; text-transform: uppercase; color: var(--primary);
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 7px; flex-shrink: 0;
         }
-        .cons-panel-title .material-symbols-rounded { font-size: 20px !important; }
+        .cons-panel-title .material-symbols-rounded { font-size: 19px !important; }
         .cons-panel-close {
-            width: 32px; height: 32px; border-radius: 50%;
+            width: 30px; height: 30px; border-radius: 50%;
             background: var(--surface-variant); border: none;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--on-surface-variant); transition: background 0.2s ease, transform 0.2s ease;
+            flex-shrink: 0;
         }
         .cons-panel-close:hover { background: var(--surface-dim); transform: rotate(90deg); }
         .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
 
-        /* ── STOCK SUMMARY STRIP ── */
-        .stx-summary {
-            display: flex; align-items: stretch; gap: 0;
-            padding: 10px 20px; flex-shrink: 0;
-            border-bottom: 1px solid var(--surface-variant);
-            background: var(--surface-dim);
+        /* ── STOCK SUMMARY CHIPS (inline in header) ── */
+        .stx-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; flex: 1; justify-content: center; }
+        .stx-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: var(--font-body); font-size: 0.6rem; font-weight: 700;
+            letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.85;
+            white-space: nowrap;
         }
-        .stx-summary-cell { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 2px 4px; position: relative; }
-        .stx-summary-cell + .stx-summary-cell::before {
-            content: ''; position: absolute; left: 0; top: 15%; height: 70%; width: 1px; background: var(--outline); opacity: 0.25;
-        }
-        .stx-summary-val { font-family: var(--font-display); font-weight: 900; font-size: 1.18rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
-        .stx-summary-lbl { font-family: var(--font-body); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.75; }
-        .stx-summary-cell.tone-total .stx-summary-val { color: var(--on-surface); }
-        .stx-summary-cell.tone-out .stx-summary-val { color: var(--error); }
-        .stx-summary-cell.tone-low .stx-summary-val { color: #ff8a3c; }
-        .stx-summary-cell.tone-mid .stx-summary-val { color: var(--warning, #d9a441); }
-        .stx-summary-cell.tone-good .stx-summary-val { color: var(--success); }
+        .stx-chip b { font-family: var(--font-display); font-weight: 900; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+        .stx-chip.tone-total b { color: var(--on-surface); }
+        .stx-chip.tone-out b { color: var(--error); }
+        .stx-chip.tone-low b { color: #ff8a3c; }
+        .stx-chip.tone-mid b { color: var(--warning, #d9a441); }
+        .stx-chip.tone-good b { color: var(--success); }
 
         /* ── FILTER BAR ── */
         .stx-filterbar {
@@ -1332,6 +1330,7 @@
         .stx-filter-btn[data-loc].active { background: var(--secondary); color: #fff; }
 
         .cons-panel-list {
+            flex: 1 1 auto; min-height: 200px; max-height: min(58vh, 480px);
             overflow-y: auto; padding: 10px 14px 14px;
             display: flex; flex-direction: column; gap: 6px;
             scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent;
@@ -1350,7 +1349,7 @@
         .stx-item.stx-status-low .stx-rank-bar { background: #ff8a3c; opacity: 1; }
         .stx-item.stx-status-moderate .stx-rank-bar { background: #d9a441; opacity: 0.9; }
         .stx-item.stx-status-good .stx-rank-bar { background: var(--success); opacity: 0.9; }
-        .stx-main { padding: 9px 12px; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+        .stx-main { padding: 9px 12px; min-width: 0; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
         .stx-top-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
         .cons-list-name.stx-name {
             font-family: var(--font-display); font-weight: 800; font-size: 0.86rem;
@@ -1363,12 +1362,6 @@
             background: var(--secondary-container); color: var(--secondary);
             text-transform: uppercase; white-space: nowrap;
         }
-        .stx-bar-track { height: 5px; border-radius: var(--radius-full); background: rgba(128,128,128,0.22); overflow: hidden; }
-        .stx-bar-fill { height: 100%; border-radius: var(--radius-full); transition: width 1s cubic-bezier(0.4,0,0.2,1); }
-        .stx-item.stx-status-out .stx-bar-fill { background: var(--error); }
-        .stx-item.stx-status-low .stx-bar-fill { background: #ff8a3c; }
-        .stx-item.stx-status-moderate .stx-bar-fill { background: #d9a441; }
-        .stx-item.stx-status-good .stx-bar-fill { background: var(--success); }
         .stx-bottom-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .cons-list-sub.stx-status-chip {
             font-family: var(--font-body); font-size: 0.6rem; font-weight: 800;
@@ -1379,7 +1372,6 @@
         .stx-item.stx-status-moderate .stx-status-chip { color: #d9a441; }
         .stx-item.stx-status-good .stx-status-chip { color: var(--success); }
         .stx-qty { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; color: var(--on-surface-variant); font-variant-numeric: tabular-nums; }
-        .stx-qty small { font-size: 0.55rem; font-weight: 700; opacity: 0.65; letter-spacing: 0.5px; margin-left: 2px; }
         .stx-side { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 14px; border-left: 1px solid rgba(128,128,128,0.15); flex-shrink: 0; }
         .cons-list-pct.stx-pct { font-family: var(--font-display); font-weight: 900; font-size: 1.18rem; letter-spacing: 0.2px; line-height: 1; }
         .stx-item.stx-status-out .stx-pct { color: var(--error); }
@@ -2090,7 +2082,14 @@
             <div class="cons-panel-header">
                 <div class="cons-panel-title">
                     <span class="material-symbols-rounded">inventory_2</span>
-                    STOCK AVAILABILITY
+                    STOCK
+                </div>
+                <div class="stx-summary" id="stx-summary" style="display:none;">
+                    <span class="stx-chip tone-total"><b id="stx-sum-all">0</b>TOTAL</span>
+                    <span class="stx-chip tone-out"><b id="stx-sum-out">0</b>OUT</span>
+                    <span class="stx-chip tone-low"><b id="stx-sum-low">0</b>LOW</span>
+                    <span class="stx-chip tone-mid"><b id="stx-sum-moderate">0</b>MOD</span>
+                    <span class="stx-chip tone-good"><b id="stx-sum-good">0</b>GOOD</span>
                 </div>
                 <button class="cons-panel-close" onclick="closeConsOverlay()">
                     <span class="material-symbols-rounded">close</span>
@@ -2100,13 +2099,6 @@
                 <span class="material-symbols-rounded">open_in_new</span>
                 <span id="cons-link-text">View Details</span>
             </a>
-            <div class="stx-summary" id="stx-summary" style="display:none;">
-                <div class="stx-summary-cell tone-total"><span class="stx-summary-val" id="stx-sum-all">0</span><span class="stx-summary-lbl">Total</span></div>
-                <div class="stx-summary-cell tone-out"><span class="stx-summary-val" id="stx-sum-out">0</span><span class="stx-summary-lbl">Out</span></div>
-                <div class="stx-summary-cell tone-low"><span class="stx-summary-val" id="stx-sum-low">0</span><span class="stx-summary-lbl">Low</span></div>
-                <div class="stx-summary-cell tone-mid"><span class="stx-summary-val" id="stx-sum-moderate">0</span><span class="stx-summary-lbl">Moderate</span></div>
-                <div class="stx-summary-cell tone-good"><span class="stx-summary-val" id="stx-sum-good">0</span><span class="stx-summary-lbl">Good</span></div>
-            </div>
             <div class="stx-filterbar" id="stx-filterbar" style="display:none;">
                 <button class="stx-filter-btn active" data-filter="all" onclick="_setConsFilter('status','all')">All <span class="stx-fcount" id="stx-fcount-all">0</span></button>
                 <button class="stx-filter-btn" data-filter="out" onclick="_setConsFilter('status','out')">Out of Stock <span class="stx-fcount" id="stx-fcount-out">0</span></button>
@@ -3130,13 +3122,16 @@
             if (badge) badge.textContent = hasLow ? lowCount + ' LOW' : '';
         }
 
-        /* Parse "<name> -MTRS (123)" / "<name>-TKRS(45)" into { name, loc, qty } */
+        /* Parse "<name> -MTRS (123)" / "<name>-TKRS(4No.s)" into { name, loc, qty, qtyText } */
         function _parseStockLabel(label) {
-            const m = String(label || '').match(/-\s*(MTRS|TKRS)\s*\(\s*(\d+)\s*\)\s*$/i);
+            const m = String(label || '').match(/-\s*(MTRS|TKRS)\s*\(\s*([^)]*?)\s*\)\s*$/i);
             if (m) {
-                return { name: label.slice(0, m.index).trim(), loc: m[1].toUpperCase(), qty: parseInt(m[2], 10) };
+                const qtyText = m[2].trim();
+                const numMatch = qtyText.match(/[\d.]+/);
+                const qty = numMatch ? parseFloat(numMatch[0]) : null;
+                return { name: label.slice(0, m.index).trim(), loc: m[1].toUpperCase(), qty, qtyText };
             }
-            return { name: label, loc: '', qty: null };
+            return { name: label, loc: '', qty: null, qtyText: '' };
         }
 
         let _consParsedItems = [];
@@ -3172,13 +3167,13 @@
             _consParsedItems = _consRows.map(item => {
                 const { label = '', pct = '', icon = '' } = item;
                 const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0));
-                const { name, loc, qty } = _parseStockLabel(label);
+                const { name, loc, qty, qtyText } = _parseStockLabel(label);
                 let status;
                 if ((qty !== null && qty <= 0) || pctNum <= 0) status = 'out';
                 else if (pctNum < 20) status = 'low';
                 else if (pctNum < 75) status = 'moderate';
                 else status = 'good';
-                return { label, name, loc, qty, pct: pctNum, icon, status };
+                return { label, name, loc, qty, qtyText, pct: pctNum, icon, status };
             }).sort((a, b) => a.pct - b.pct || (a.qty ?? 0) - (b.qty ?? 0));
 
             const lowCount = _consParsedItems.filter(r => r.status === 'low' || r.status === 'out').length;
@@ -3226,10 +3221,10 @@
                 return;
             }
             listEl.innerHTML = filtered.map(it => {
-                const { name, loc, qty, pct, icon, status, label } = it;
+                const { name, loc, qty, qtyText, pct, icon, status, label } = it;
                 const warnIcon = (status === 'out' || status === 'low') ? `<span class="material-symbols-rounded cons-list-warn stx-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
                 const locBadge = loc ? `<span class="stx-loc-badge">${loc}</span>` : '';
-                const qtyHtml = qty !== null ? `${qty}<small>UNITS</small>` : '—';
+                const qtyHtml = qtyText ? qtyText : (qty !== null ? String(qty) : '—');
                 return `<div class="cons-list-item stx-item stx-status-${status}" data-pct="${pct}" data-status="${status}" data-loc="${loc}">
                     <div class="stx-rank-bar"></div>
                     <div class="stx-main">
@@ -3237,7 +3232,6 @@
                             <span class="cons-list-name stx-name" title="${name}">${name}</span>
                             ${locBadge}
                         </div>
-                        <div class="stx-bar-track"><div class="stx-bar-fill" style="width:${pct}%"></div></div>
                         <div class="stx-bottom-row">
                             <span class="cons-list-sub stx-status-chip">${STATUS_LABELS[status]}</span>
                             <span class="stx-qty">${qtyHtml}</span>
