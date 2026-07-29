@@ -415,6 +415,223 @@
             animation: warn-pulse 1.2s infinite;
             font-variation-settings: 'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 20;
         }
+        /* --- Apple Watch style stock list & full-screen autopopup overlay (insert after #stock-dock styles) --- */
+
+/* Apple Watch-like list styling for sdock body */
+.apple-watch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  margin: 0;
+  list-style: none;
+  max-height: 56vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.18) transparent;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 14px;
+  padding-right: 6px; /* allow room for scrollbar */
+}
+
+/* Each item: rounded pill with icon left and stacked text */
+.apple-watch-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  min-width: 0;
+}
+
+/* Liquid glass feel */
+.apple-watch-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 40px rgba(0,0,0,0.55);
+  border-color: rgba(125,190,255,0.28);
+}
+
+/* Icon circle (left) */
+.apple-watch-item .awi-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.05);
+  font-variation-settings: 'FILL' 1,'wght' 500;
+  flex-shrink: 0;
+}
+
+/* Main text area (center) */
+.apple-watch-item .awi-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Primary name */
+.apple-watch-item .awi-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: var(--on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Subtext / meta */
+.apple-watch-item .awi-sub {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  color: var(--on-surface-variant);
+  opacity: 0.9;
+  line-height: 1;
+  margin-top: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Stock badge on right */
+.apple-watch-item .awi-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  border: 1px solid rgba(255,255,255,0.04);
+  color: var(--on-surface);
+}
+
+/* Emphasize zero stock strongly */
+.apple-watch-item.zero {
+  border: 1.5px solid rgba(255,80,60,0.9);
+  background: linear-gradient(180deg, rgba(255,80,60,0.08), rgba(255,80,60,0.03));
+  box-shadow: 0 12px 32px rgba(255,80,60,0.08);
+}
+.apple-watch-item.zero .awi-badge {
+  background: linear-gradient(90deg, #ff5e3a, #ff8a00);
+  color: white;
+  box-shadow: 0 6px 18px rgba(255,80,60,0.25);
+}
+.apple-watch-item.low {
+  border: 1px solid rgba(255,140,60,0.42);
+}
+
+/* Full-screen autopopup overlay (liquid glass tool board) */
+#stock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 36px;
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* visible */
+#stock-overlay.open { display: flex; }
+
+/* Centered board */
+#stock-overlay .board {
+  width: min(1200px, 96vw);
+  max-height: calc(100vh - 120px);
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  gap: 18px;
+  background: linear-gradient(180deg, rgba(18,22,30,0.82), rgba(22,28,37,0.76));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 40px 120px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.02);
+}
+
+/* Left column: big list */
+#stock-overlay .board .board-list {
+  flex: 1 1 60%;
+  min-width: 260px;
+  max-height: calc(100vh - 200px);
+  overflow: auto;
+  padding-right: 8px;
+}
+
+/* Right column: summary / tools */
+#stock-overlay .board .board-tools {
+  width: 320px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Big header */
+#stock-overlay .board-header {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--on-surface);
+  letter-spacing: 0.6px;
+}
+
+/* Prominent low-stock banner in tools column */
+.board-tools .low-summary {
+  background: linear-gradient(90deg, rgba(255,70,40,0.12), rgba(255,70,40,0.04));
+  border: 1px solid rgba(255,80,60,0.22);
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 900;
+  color: var(--on-surface);
+}
+
+/* close button */
+#stock-overlay .overlay-close {
+  position: absolute;
+  top: 20px;
+  right: 36px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 900;
+  color: var(--on-surface);
+}
+
+/* ensure sdock-body doesn't auto-scroll while overlay open (override) */
+#stock-overlay.open ~ #stock-dock .station-track,
+#stock-overlay.open #stock-dock .station-track,
+#stock-overlay.open .station-track {
+  animation-play-state: paused !important;
+}
+
+/* small responsive tweaks */
+@media (max-width: 900px) {
+  #stock-overlay .board { flex-direction: column; width: 94vw; max-height: 92vh; padding: 16px; }
+  #stock-overlay .board .board-tools { width: 100%; }
+  .apple-watch-item { padding: 10px; }
+}
 
         /* ── CONS OVERLAY: low-stock alert highlighting ── */
         @keyframes cons-low-flash {
@@ -2110,7 +2327,28 @@
             </div>
         </div>
     </div>
+<!-- Stock full-screen autopopup overlay (add near #stock-dock or before </body>) -->
+<div id="stock-overlay" aria-hidden="true" role="dialog" aria-label="Stock tool board">
+  <div class="board-header">Stock — Tool Board</div>
+  <button class="overlay-close" aria-label="Close stock overlay">Close ✕</button>
 
+  <div class="board">
+    <div class="board-list" id="overlay-stock-list" aria-live="polite" role="list"></div>
+
+    <aside class="board-tools" aria-hidden="false">
+      <div class="low-summary" id="overlay-low-summary">
+        <div style="font-size:0.78rem; opacity:0.9;">Low / Zero Stock</div>
+        <div id="overlay-low-count" style="font-size:1.6rem; margin-top:6px;">0 items</div>
+        <div style="font-size:0.86rem; opacity:0.8; margin-top:8px;">Items with 0 stock are prioritized at the top of the list for immediate attention.</div>
+      </div>
+
+      <div style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04);">
+        <div style="font-weight:800; font-size:0.78rem; color:var(--on-surface-variant); margin-bottom:6px;">Quick actions</div>
+        <button class="icon-btn" style="width:100%; justify-content:flex-start;" id="overlay-refresh">Refresh list</button>
+      </div>
+    </aside>
+  </div>
+</div>
     <footer class="ticker-bar">
         <div id="ticker-head" class="ticker-head"></div>
         <div id="ticker-body" class="ticker-body">
@@ -3463,5 +3701,181 @@
         }
 
     </script>
+    <script>
+/*
+  Stock overlay behaviour:
+  - Sorts sdock rows by stock (ascending) so 0-stock first.
+  - Builds Apple-watch style list for overlay.
+  - Disables auto-scrolling while overlay open.
+  - Click stock dock to open overlay; Esc or close button closes it.
+  - Non-invasive: only touches elements under #stock-dock/.sdock-body/.sdock-row
+*/
+
+(function () {
+  function parseStockFromRow(row) {
+    // prefer explicit data-stock attribute
+    if (row.dataset && row.dataset.stock) {
+      var v = parseInt(row.dataset.stock, 10);
+      if (!isNaN(v)) return v;
+    }
+    // fallback: .sdock-row-pct or badge text
+    var pct = row.querySelector('.sdock-row-pct');
+    if (pct) {
+      var found = pct.textContent.replace(/[^\d-]/g, '');
+      var n = parseInt(found || '', 10);
+      if (!isNaN(n)) return n;
+    }
+    // fallback: look for numeric content in row text
+    var num = row.textContent.replace(/[^\d-]/g, '');
+    var n2 = parseInt(num || '', 10);
+    if (!isNaN(n2)) return n2;
+    return 0;
+  }
+
+  function buildAppleItemFromRow(row) {
+    var nameEl = row.querySelector('.sdock-row-name');
+    var name = nameEl ? nameEl.textContent.trim() : row.textContent.trim();
+    var sub = row.querySelector('.sdock-sub') ? row.querySelector('.sdock-sub').textContent.trim() : '';
+    var iconEl = row.querySelector('.sdock-row-icon');
+    var iconHtml = iconEl ? iconEl.outerHTML : '<span class="material-symbols-rounded sdock-row-icon">inventory_2</span>';
+    var stockVal = parseStockFromRow(row);
+
+    var li = document.createElement('div');
+    li.className = 'apple-watch-item';
+    if (stockVal === 0) li.classList.add('zero');
+    else if (stockVal < 5) li.classList.add('low');
+
+    li.innerHTML = ''
+      + '<div class="awi-icon">' + iconHtml + '</div>'
+      + '<div class="awi-body">'
+      +   '<div class="awi-title">' + escapeHtml(name) + '</div>'
+      +   (sub ? ('<div class="awi-sub">' + escapeHtml(sub) + '</div>') : '')
+      + '</div>'
+      + '<div class="awi-badge" aria-label="stock">' + stockVal + '</div>';
+
+    // copy dataset (item id etc.) to the new element for reference
+    if (row.dataset) {
+      for (var k in row.dataset) {
+        try { li.dataset[k] = row.dataset[k]; } catch(e) {}
+      }
+    }
+    return li;
+  }
+
+  function escapeHtml(s) {
+    return (s+'').replace(/[&<>"']/g, function (m) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+    });
+  }
+
+  function sortAndReorderSdock() {
+    var sdockBody = document.querySelector('#stock-dock .sdock-body');
+    if (!sdockBody) return;
+    var rows = Array.from(sdockBody.querySelectorAll('.sdock-row'));
+    if (!rows.length) return;
+
+    rows.sort(function(a,b){
+      return parseStockFromRow(a) - parseStockFromRow(b);
+    });
+
+    // detach and re-append in sorted order
+    rows.forEach(function(r){ sdockBody.appendChild(r); });
+  }
+
+  function openOverlay() {
+    var overlay = document.getElementById('stock-overlay');
+    var overlayList = document.getElementById('overlay-stock-list');
+    if (!overlay || !overlayList) return;
+
+    // build list from sdock rows (sorted ascending)
+    var sdockBody = document.querySelector('#stock-dock .sdock-body');
+    if (!sdockBody) return;
+
+    var rows = Array.from(sdockBody.querySelectorAll('.sdock-row'));
+    rows.sort(function(a,b){ return parseStockFromRow(a) - parseStockFromRow(b); });
+
+    overlayList.innerHTML = '';
+    var zeroCount = 0;
+    rows.forEach(function(r){
+      var it = buildAppleItemFromRow(r);
+      overlayList.appendChild(it);
+      if (parseStockFromRow(r) === 0) zeroCount++;
+    });
+
+    // update summary
+    var lowCountEl = document.getElementById('overlay-low-count');
+    if (lowCountEl) lowCountEl.textContent = zeroCount + ' item' + (zeroCount === 1 ? '' : 's');
+
+    // show overlay
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+
+    // disable auto-scrolling classes if present
+    var consPanel = document.getElementById('cons-panel-list');
+    if (consPanel && consPanel.classList.contains('auto-scrolling')) {
+      consPanel.classList.remove('auto-scrolling');
+      consPanel.dataset._wasAutoScrolling = '1';
+    }
+    // pause other animated tracks to keep view stable
+    document.querySelectorAll('.station-track, .maint-scroll-track, .tech-scroll-track').forEach(function(el){
+      el.style.animationPlayState = 'paused';
+    });
+  }
+
+  function closeOverlay() {
+    var overlay = document.getElementById('stock-overlay');
+    if (!overlay) return;
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+
+    // restore auto-scrolling if we removed it earlier
+    var consPanel = document.getElementById('cons-panel-list');
+    if (consPanel && consPanel.dataset._wasAutoScrolling === '1') {
+      consPanel.classList.add('auto-scrolling');
+      delete consPanel.dataset._wasAutoScrolling;
+    }
+    // resume animations
+    document.querySelectorAll('.station-track, .maint-scroll-track, .tech-scroll-track').forEach(function(el){
+      el.style.animationPlayState = '';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // initial sort so 0-stock items show first in dock as well
+    sortAndReorderSdock();
+
+    var stockDock = document.getElementById('stock-dock');
+    if (stockDock) {
+      stockDock.addEventListener('click', function (e) {
+        // open overlay when user clicks dock (but ignore clicks on small actions if needed)
+        openOverlay();
+      });
+    }
+
+    var overlay = document.getElementById('stock-overlay');
+    if (overlay) {
+      overlay.addEventListener('click', function (ev) {
+        if (ev.target === overlay) closeOverlay();
+      });
+      var closeBtn = overlay.querySelector('.overlay-close');
+      if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
+    }
+
+    // ESC to close
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') {
+        closeOverlay();
+      }
+    });
+
+    // refresh button if present
+    var refBtn = document.getElementById('overlay-refresh');
+    if (refBtn) refBtn.addEventListener('click', function(){
+      sortAndReorderSdock();
+      openOverlay();
+    });
+  });
+})();
+</script>
 </body>
 </html>
