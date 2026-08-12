@@ -422,9 +422,8 @@
             50%      { background: rgba(255,60,40,0.32); border-color: rgba(255,80,50,1);   box-shadow: 0 0 14px 2px rgba(255,60,40,0.35); }
         }
         .cons-list-item.alert-low {
-            border: 1.5px solid rgba(255,80,50,0.65);
+            border: 1.5px solid rgba(255,80,50,0.6);
             animation: cons-low-flash 1.2s ease-in-out infinite;
-            order: -1;
         }
         .cons-list-item.alert-low .cons-list-name { color: #ff8060; }
         .cons-list-item.alert-low .cons-list-sub { color: #ff8060 !important; opacity: 1 !important; font-weight: 900 !important; letter-spacing: 0.5px; }
@@ -1284,104 +1283,24 @@
         .cons-panel-close .material-symbols-rounded { font-size: 18px !important; }
         .cons-panel-list {
             overflow-y: auto; padding: 10px 14px 14px;
-            display: flex; flex-direction: column; gap: 9px;
+            display: flex; flex-direction: column; gap: 7px;
             scrollbar-width: thin; scrollbar-color: var(--surface-variant) transparent;
         }
-        /* ── Apple-Watch-style liquid-glass menu row ── */
-        .cons-list-item {
-            display: flex; align-items: center; gap: 13px;
-            position: relative;
-            background: linear-gradient(155deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02) 65%);
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 20px;
-            padding: 12px 14px 12px 10px;
-            backdrop-filter: blur(24px) saturate(1.8);
-            -webkit-backdrop-filter: blur(24px) saturate(1.8);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.14);
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-        }
-        .cons-list-item::before {
-            content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-            background: linear-gradient(120deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 32%);
-        }
-        [data-theme="light"] .cons-list-item {
-            background: linear-gradient(155deg, rgba(255,255,255,0.82), rgba(255,255,255,0.34) 65%);
-            border-color: rgba(255,255,255,0.75);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-        .cons-list-icon-ring { position: relative; width: 46px; height: 46px; flex-shrink: 0; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+        .cons-list-item { display: flex; align-items: center; gap: 12px; background: var(--surface-variant); border-radius: var(--radius-m); padding: 9px 14px; }
+        .cons-list-icon-ring { position: relative; width: 42px; height: 42px; flex-shrink: 0; }
         .cons-list-icon-ring svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 3.4; }
+        .cons-list-icon-ring svg .ring-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3; }
         [data-theme="light"] .cons-list-icon-ring svg .ring-track { stroke: rgba(0,0,0,0.1); }
-        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3.4; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
-        .cons-list-icon-ring svg .ring-fill.ring-high { stroke: #4ade80; }
-        .cons-list-icon-ring svg .ring-fill.ring-mid  { stroke: var(--primary); }
-        .cons-list-icon-ring svg .ring-fill.ring-low  { stroke: #ff5e3a; }
-        .cons-list-img-wrap {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            width: 34px; height: 34px; border-radius: 11px;
-            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24);
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.75); }
-        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 11px; }
-        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.85rem; color: var(--primary); text-transform: uppercase; }
-        .cons-list-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
-        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.86rem; line-height: 1.3; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
-        .cons-list-sub { font-family: var(--font-body); font-size: 0.6rem; line-height: 1.4; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.75; }
-        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1.05rem; letter-spacing: 0.3px; flex-shrink: 0; min-width: 46px; text-align: right; }
-        .cons-list-pct.pct-high { color: #4ade80; }
-        .cons-list-pct.pct-mid  { color: var(--primary); }
-        .cons-list-pct.pct-low  { color: #ff5e3a; }
-        .cons-list-warn { font-size: 15px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
-
-        /* ── AUTO-OPEN DASHBOARD MODE: fullscreen tool-board overlay ── */
-        .cons-overlay.auto-mode .cons-overlay-backdrop {
-            background: rgba(4,7,13,0.82);
-            backdrop-filter: blur(46px) saturate(1.3);
-            -webkit-backdrop-filter: blur(46px) saturate(1.3);
-        }
-        [data-theme="light"] .cons-overlay.auto-mode .cons-overlay-backdrop {
-            background: rgba(220,230,242,0.88);
-        }
-        .cons-overlay.auto-mode .cons-overlay-panel {
-            width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh;
-            border-radius: 0; border: none; background: transparent;
-            box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none;
-            transform: none !important;
-        }
-        .cons-overlay.auto-mode .cons-panel-header {
-            padding: clamp(20px, 4vw, 36px) clamp(20px, 5vw, 48px) 16px;
-            border-bottom: none; position: relative; flex-shrink: 0;
-        }
-        .cons-overlay.auto-mode .cons-panel-header::after {
-            content: ''; position: absolute; left: clamp(20px, 5vw, 48px); right: clamp(20px, 5vw, 48px); bottom: 4px;
-            height: 3px; border-radius: var(--radius-full);
-            background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 25%, transparent));
-        }
-        .cons-overlay.auto-mode .cons-panel-title { font-size: clamp(1.1rem, 2.4vw, 1.7rem); gap: 12px; }
-        .cons-overlay.auto-mode .cons-panel-title .material-symbols-rounded { font-size: clamp(22px, 3vw, 30px) !important; }
-        .cons-overlay.auto-mode .cons-panel-close { width: 40px; height: 40px; }
-        .cons-overlay.auto-mode #cons-link-btn { margin-left: clamp(20px, 5vw, 48px); margin-right: clamp(20px, 5vw, 48px); }
-        .cons-overlay.auto-mode .cons-panel-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-            padding: 8px clamp(20px, 5vw, 48px) clamp(20px, 5vw, 48px);
-            align-content: start;
-            flex: 1;
-        }
-        .cons-overlay.auto-mode .cons-list-item { padding: 18px 20px; border-radius: 26px; }
-        .cons-overlay.auto-mode .cons-list-icon-ring { width: 54px; height: 54px; }
-        .cons-overlay.auto-mode .cons-list-img-wrap { width: 40px; height: 40px; border-radius: 13px; }
-        .cons-overlay.auto-mode .cons-list-name { font-size: 1rem; }
-        .cons-overlay.auto-mode .cons-list-sub { font-size: 0.68rem; }
-        .cons-overlay.auto-mode .cons-list-pct { font-size: 1.3rem; }
-        .cons-overlay.auto-mode .cons-list-item.alert-low {
-            animation: sdock-low-pulse 2.2s ease-in-out infinite, cons-low-flash 1.2s ease-in-out infinite;
-            transform: scale(1.03);
-        }
+        .cons-list-icon-ring svg .ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1); }
+        .cons-list-img-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        [data-theme="light"] .cons-list-img-wrap { background: rgba(255,255,255,0.6); }
+        .cons-list-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .cons-list-fallback { font-family: var(--font-display); font-weight: 900; font-size: 0.82rem; color: var(--primary); text-transform: uppercase; }
+        .cons-list-body { flex: 1; min-width: 0; }
+        .cons-list-name { font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; color: var(--on-surface); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.2px; }
+        .cons-list-sub { font-family: var(--font-body); font-size: 0.62rem; font-weight: 600; color: var(--on-surface-variant); opacity: 0.7; margin-top: 1px; }
+        .cons-list-pct { font-family: var(--font-display); font-weight: 900; font-size: 1rem; letter-spacing: 0.3px; flex-shrink: 0; }
+        .cons-list-warn { font-size: 14px !important; color: var(--error); flex-shrink: 0; animation: warn-pulse 2s infinite; }
 
         .app-dock, .dock-toggle-btn { display: none !important; }
 
@@ -1745,6 +1664,28 @@
             .clock-unit { min-width: 30px; padding: 1px 4px; }
             .clock-val { font-size: 0.85rem; }
             .ops-inline-container { flex-wrap: wrap; }
+        }
+        /* ── MEDIA OVERLAY (invisible 20px grid for placing media via sheet data) ── */
+        #media-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .media-overlay-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            max-width: none;
+            pointer-events: none;
+            transform-origin: top left;
+            will-change: transform, left, top;
         }
     </style>
 </head>
@@ -2850,6 +2791,55 @@
             if (name) _bcChart1Name = name;
         }
 
+        // ── MEDIA OVERLAY: places jpg/png/gif media on an invisible full-screen 20px grid ──
+        // Sheet params per row: C55 = "x,y" grid square (1 = first square), C56 = media URL,
+        // C57 = scale factor, C58 = rotation angle in degrees.
+        const MEDIA_GRID_SIZE = 20; // px per square
+        function renderMediaOverlay(mediaRows) {
+            const overlay = document.getElementById('media-overlay');
+            if (!overlay) return;
+
+            const keptIds = new Set();
+
+            Object.keys(mediaRows || {}).forEach(row => {
+                const entry = mediaRows[row];
+                if (!entry || !entry.link || !entry.pos) return;
+
+                const coords = entry.pos.split(',').map(s => parseFloat(String(s).trim()));
+                const gx = coords[0], gy = coords[1];
+                if (isNaN(gx) || isNaN(gy)) return;
+
+                const scale = parseFloat(entry.scale);
+                const angle = parseFloat(entry.angle);
+                const scaleVal = isNaN(scale) ? 1 : scale;
+                const angleVal = isNaN(angle) ? 0 : angle;
+
+                const id = 'media-item-' + row;
+                keptIds.add(id);
+
+                let el = document.getElementById(id);
+                if (!el) {
+                    el = document.createElement('img');
+                    el.id = id;
+                    el.className = 'media-overlay-item';
+                    el.alt = '';
+                    el.onerror = function () { this.style.display = 'none'; };
+                    overlay.appendChild(el);
+                }
+
+                if (el.getAttribute('src') !== entry.link) el.src = entry.link;
+                el.style.display = '';
+                el.style.left = ((gx - 1) * MEDIA_GRID_SIZE) + 'px';
+                el.style.top  = ((gy - 1) * MEDIA_GRID_SIZE) + 'px';
+                el.style.transform = `scale(${scaleVal}) rotate(${angleVal}deg)`;
+            });
+
+            // Remove media items whose row data disappeared from the feed
+            overlay.querySelectorAll('.media-overlay-item').forEach(el => {
+                if (!keptIds.has(el.id)) el.remove();
+            });
+        }
+
         window.draw = function(data) {
             const timeEl = document.getElementById('refresh-time');
             if (timeEl) timeEl.innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
@@ -2866,6 +2856,7 @@
             let statPillsRaw = '', statPillsIntervalRaw = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
+            const mediaRows = {};
 
             data.forEach(item => {
                 const unit  = (item.Unit      || '').trim(), param = (item.Parameter || '').trim(), val   = (item.Value     || '').trim();
@@ -2968,6 +2959,17 @@
                     if (col === 29) dockRows[row].label = val; if (col === 30) dockRows[row].pct = val; if (col === 31) dockRows[row].icon = val;
                 }
 
+                /* Media Overlay Parameters: C55 = grid position "x,y", C56 = media URL, C57 = scale, C58 = rotation angle (deg) */
+                const mediaMatch = param.match(/^sheetab_R(\d+)C(55|56|57|58)$/);
+                if (mediaMatch && unit === 'sheetab') {
+                    const row = parseInt(mediaMatch[1], 10), col = parseInt(mediaMatch[2], 10);
+                    if (!mediaRows[row]) mediaRows[row] = {};
+                    if (col === 55) mediaRows[row].pos   = val;
+                    if (col === 56) mediaRows[row].link  = val;
+                    if (col === 57) mediaRows[row].scale = val;
+                    if (col === 58) mediaRows[row].angle = val;
+                }
+
                 if (param === 'sheetab_R2C28') {
                     const popupEl = document.getElementById('maint-progress-popup-body');
                     if (popupEl) popupEl.innerText = val && val.trim() !== '' ? val.trim() : '—';
@@ -2997,6 +2999,9 @@
             
             // Execute Station Pills Handling
             handleStationPills(statPillsRaw, statPillsIntervalRaw);
+
+            // Execute Media Overlay Handling
+            renderMediaOverlay(mediaRows);
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
@@ -3128,14 +3133,12 @@
 
             const listEl = document.getElementById('cons-panel-list');
             if (listEl) {
-                // Prioritise 0 stock first, then ascending to max
-                const sortedRows = _consRows.slice().sort((a, b) => (parseFloat(a.pct) || 0) - (parseFloat(b.pct) || 0));
-                listEl.innerHTML = sortedRows.map(item => {
+                listEl.innerHTML = _consRows.map(item => {
                     const { label = '', pct = '', icon = '' } = item;
                     const pctNum = Math.min(100, Math.max(0, parseFloat(pct) || 0)), offset = CIRCUMFERENCE - (pctNum / 100) * CIRCUMFERENCE, cls = pctNum >= 75 ? 'high' : pctNum >= 40 ? 'mid' : 'low';
                     const iconHtml = icon && icon.startsWith('http') ? `<img src="${icon}" alt="${label}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="cons-list-fallback" style="display:none;">${label.charAt(0) || '?'}</span>` : `<span class="cons-list-fallback">${label.charAt(0) || '?'}</span>`;
                     const warnIcon = pctNum < 20 ? `<span class="material-symbols-rounded cons-list-warn" style="font-variation-settings:'FILL' 1">warning</span>` : '';
-                    return `<div class="cons-list-item" data-pct="${pctNum}"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
+                    return `<div class="cons-list-item"><div class="cons-list-icon-ring"><svg viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg"><circle class="ring-track" cx="21" cy="21" r="${RADIUS}"/><circle class="ring-fill ring-${cls}" cx="21" cy="21" r="${RADIUS}" stroke-dasharray="${CIRCUMFERENCE.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"/></svg><div class="cons-list-img-wrap">${iconHtml}</div></div><div class="cons-list-body"><div class="cons-list-name" title="${label}">${label}</div><div class="cons-list-sub">${pctNum < 20 ? '⚠ LOW STOCK' : pctNum >= 75 ? 'GOOD STOCK' : 'MODERATE STOCK'}</div></div>${warnIcon}<div class="cons-list-pct pct-${cls}">${pctNum.toFixed(0)}%</div></div>`;
                 }).join('');
             }
         }
@@ -3145,14 +3148,8 @@
             if (listEl) listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--on-surface-variant);font-family:var(--font-display);font-size:0.8rem;opacity:0.5;">No items</div>';
         }
 
-        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) { ov.classList.remove('auto-mode'); ov.classList.add('visible'); } }
-        function closeConsOverlay() {
-            const ov = document.getElementById('cons-overlay');
-            if (ov) {
-                ov.classList.remove('visible', 'auto-mode');
-                document.querySelectorAll('#cons-panel-list .cons-list-item.alert-low').forEach(el => el.classList.remove('alert-low'));
-            }
-        }
+        function openConsOverlay(e) { if (e) e.stopPropagation(); const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.add('visible'); }
+        function closeConsOverlay() { const ov = document.getElementById('cons-overlay'); if (ov) ov.classList.remove('visible'); }
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeConsOverlay(); } });
 
         const _mcdPrevVals = {};
@@ -3178,28 +3175,47 @@
         let _consAutoCloseTimer = null, _cons30minTimer = null;
 
         /* ─── AUTO-OPEN helpers ─── */
-        /* Auto-popup renders as a fullscreen tool-board dashboard overlay (see .auto-mode CSS).
-           Auto-scroll is intentionally disabled here — the full, sorted (low → high) list is
-           shown at once as a grid, with low-stock items pulsing/emphasised for the whole duration. */
         function _consAutoOpen(autoClose) {
             const ov = document.getElementById('cons-overlay');
             if (!ov) return;
-            ov.classList.add('visible', 'auto-mode');
+            ov.classList.add('visible');
 
+            // 1. Auto-scroll the list over 5 s
             const listEl = document.getElementById('cons-panel-list');
-            if (listEl) listEl.scrollTop = 0;
+            if (listEl) {
+                setTimeout(() => {
+                    const maxScroll = listEl.scrollHeight - listEl.clientHeight;
+                    if (maxScroll > 0) {
+                        listEl.style.scrollBehavior = 'smooth';
+                        listEl.scrollTop = 0;
+                        const steps = 60, stepTime = 5000 / steps, perStep = maxScroll / steps;
+                        let step = 0;
+                        const scrollInterval = setInterval(() => {
+                            step++;
+                            listEl.scrollTop = Math.min(step * perStep, maxScroll);
+                            if (step >= steps) clearInterval(scrollInterval);
+                        }, stepTime);
+                    }
+                }, 400);
+            }
 
-            // Highlight low-stock items immediately and keep them emphasised for the whole display
-            const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
-            items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) el.classList.add('alert-low'); });
+            // 2. After 5 s of scroll → highlight low-stock items for 3 s, then remove
+            setTimeout(() => {
+                const items = document.querySelectorAll('#cons-panel-list .cons-list-item');
+                const lowItems = [];
+                items.forEach(el => { if (el.dataset.pct !== undefined && parseFloat(el.dataset.pct) <= 20) { el.classList.add('alert-low'); lowItems.push(el); } });
+                if (lowItems.length) {
+                    setTimeout(() => { lowItems.forEach(el => el.classList.remove('alert-low')); }, 3000);
+                }
+            }, 5400);
 
-            // Auto-close after a dwell period
+            // 3. Auto-close after scroll + highlight + buffer
             if (autoClose) {
                 if (_consAutoCloseTimer) clearTimeout(_consAutoCloseTimer);
                 _consAutoCloseTimer = setTimeout(() => {
                     closeConsOverlay();
                     _consAutoCloseTimer = null;
-                }, 10000);
+                }, 10000); // 5s scroll + 3s highlight + 2s buffer
             }
         }
 
@@ -3463,5 +3479,6 @@
         }
 
     </script>
+    <div id="media-overlay" aria-hidden="true"></div>
 </body>
 </html>
