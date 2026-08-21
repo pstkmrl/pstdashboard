@@ -972,11 +972,38 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
             transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
         }
-        .maint-progress-right:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-remarks-trigger {
+            position: relative; display: inline-flex; align-items: center; gap: 6px;
+            font-family: var(--font-display); font-weight: 800; font-size: 0.68rem;
+            letter-spacing: 0.4px; text-transform: uppercase;
+            color: var(--on-surface-variant); opacity: 0.8; cursor: default;
+        }
+        .maint-remarks-trigger .material-symbols-rounded { font-size: 14px !important; opacity: 0.75; }
+        .maint-remarks-trigger:hover { opacity: 1; }
+        .maint-remarks-trigger:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
         .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
         .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
         .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
+
+        /* ── BAR CHART — floating panel, bottom-center, above the ticker bar (25% larger) ── */
+        #maint-barchart-float {
+            position: fixed;
+            bottom: 54px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1002;
+            background: var(--surface);
+            border: 1px solid var(--surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-2);
+            padding: 10px 20px 8px;
+            width: min(92vw, 375px);
+        }
+        #maint-barchart-float .maint-barchart-container { height: 67.5px; }
+        #maint-barchart-float .circ-label { font-size: 0.6rem; }
+        #maint-barchart-float .bc-label { font-size: 0.56rem; }
+        #maint-barchart-float .bc-value { font-size: 0.65rem; }
 
         /* ── STOCK HEADER BTN (mobile) ── */
         #stock-header-btn {
@@ -1362,20 +1389,24 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS ── */
+        /* ── STATION PILLS (moved to side, vertical stack) ── */
         #station-pills-dock {
             position: fixed;
-            bottom: 56px; 
-            left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            right: 8px;
+            left: auto;
+            transform: translateY(-50%);
             display: flex;
+            flex-direction: column;
+            align-items: flex-end;
             gap: 8px;
             z-index: 1004;
             pointer-events: none; /* Let clicks pass through empty gaps */
             justify-content: center;
-            flex-wrap: wrap;
-            max-width: 60vw;
-            padding-bottom: 8px;
+            max-width: 170px;
+            max-height: 72vh;
+            overflow: visible;
+            padding-bottom: 0;
         }
         .st-pill {
             pointer-events: auto;
@@ -2056,25 +2087,12 @@
                 <div id="maint-list" class="maint-list"></div>
                 
                 <div class="maint-progress-footer">
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
-                    <div class="maint-progress-right">
-                        <div class="maint-barchart-wrap">
-                            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
-                                <div class="bc-rotator" id="bc-rotator">
-                                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
-                                    <div class="bc-panel" id="bc-panel-2"></div>
-                                </div>
-                            </div>
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                                <div class="bc-indicator-dots" id="bc-indicator-dots">
-                                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
-                                    <div class="bc-ind-dot" id="bc-dot-1"></div>
-                                </div>
-                            </div>
+                    <div class="maint-remarks-trigger">
+                        <span class="material-symbols-rounded">info</span>
+                        <span>Remarks</span>
+                        <div class="maint-progress-popup">
+                            <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                            <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
                         </div>
                     </div>
                 </div>
@@ -2094,25 +2112,6 @@
         <div class="st-announce-card" id="st-announce-card">
             <div class="st-announce-title">CHECKLIST UPDATED</div>
             <div class="st-announce-name" id="st-announce-name">---</div>
-        </div>
-    </div>
-
-    <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
-        <div class="sdock-accent"></div>
-        <div class="sdock-header">
-            <span class="material-symbols-rounded sdock-header-icon">inventory_2</span>
-            <span class="sdock-title">Stock Availability</span>
-            <span class="sdock-low-badge" id="sdock-low-badge">LOW</span>
-        </div>
-        <div class="sdock-body" style="position:relative;">
-            <div id="sdock-slide-wrap" style="position:relative;height:2.4rem;overflow:hidden;">
-                <div id="sdock-row-a" class="sdock-row"><span class="sdock-sub">Loading…</span></div>
-                <div id="sdock-row-b" class="sdock-row" style="position:absolute;top:1.2rem;left:0;right:0;opacity:0;"></div>
-            </div>
-            <div class="sdock-notice" id="sdock-notice">
-                <span class="material-symbols-rounded">notifications_active</span>
-                <span class="sdock-notice-text">Stock Updated</span>
-            </div>
         </div>
     </div>
 
@@ -2212,6 +2211,22 @@
                 <div class="ir-headline" id="ir-headline">—</div>
                 <div class="ir-label"   id="ir-label"></div>
                 <div class="ir-dots-row" id="ir-dots"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="maint-barchart-float" class="maint-barchart-wrap">
+        <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+            <div class="bc-rotator" id="bc-rotator">
+                <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                <div class="bc-panel" id="bc-panel-2"></div>
+            </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+            <div class="bc-indicator-dots" id="bc-indicator-dots">
+                <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                <div class="bc-ind-dot" id="bc-dot-1"></div>
             </div>
         </div>
     </div>
