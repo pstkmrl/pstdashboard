@@ -701,20 +701,11 @@
         .tech-label-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
         .tech-label { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; }
         .tech-label-icon { font-size: 13px !important; color: var(--primary); }
-        .tech-scroll-wrap {
-            overflow: hidden; border-radius: var(--radius-s);
-            background: var(--tech-bg); border: 1px solid var(--tech-border);
-            padding: 5px 0; position: relative;
-        }
-        .tech-scroll-track { display: flex; gap: 0; width: max-content; animation: tech-scroll 18s linear infinite; }
-        .tech-scroll-track:hover { animation-play-state: paused; }
-        @keyframes tech-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .tech-name-chip {
             display: inline-flex; align-items: center; gap: 5px; padding: 3px 14px;
             font-family: var(--font-display); font-size: 1.025rem; font-weight: 800;
-            color: var(--tech-name-color); white-space: nowrap; border-right: 1.5px solid var(--tech-border);
+            color: var(--tech-name-color); white-space: nowrap;
         }
-        .tech-name-chip:last-child { border-right: none; }
         .tech-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--primary); opacity: 0.6; flex-shrink: 0; }
         .tech-static { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0; }
         .tech-static .tech-name-chip { background: var(--tech-bg); border: 1px solid var(--tech-border); border-radius: var(--radius-full); padding: 3px 10px; }
@@ -1740,7 +1731,14 @@
             .hero-val { font-size: 1.6rem !important; }
         }
 
-        /* ── COMPACT DEPLOYMENT (active shift expanded, rest collapsed) ── */
+        /* ── FULL DEPLOYMENT VIEW (Today) — all shifts fully visible, active one highlighted ── */
+        .full-roster .roster-grid { grid-template-columns: 1fr; gap: 8px; }
+        .full-roster .m3-shift-card { padding: 12px 14px; }
+        .full-roster .m3-shift-card.m3-shift-active {
+            background: color-mix(in srgb, var(--success-container) 22%, var(--surface-variant));
+        }
+
+        /* ── COMPACT DEPLOYMENT (Tomorrow — active-shift concept not yet applicable) ── */
         .compact-roster .roster-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .compact-roster .m3-shift-card { padding: 9px 10px; }
         .compact-roster .m3-shift-card .shift-header-row { margin-bottom: 0; }
@@ -1896,7 +1894,7 @@
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div class="compact-roster">
+                <div class="full-roster">
                     <div id="roster-today" class="roster-grid"></div>
                 </div>
             </div>
@@ -2492,21 +2490,7 @@
             const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
             if (names.length === 0) return '';
             const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
-            const allChips = names.map(chipHtml).join('');
-            const doubledChips = allChips + allChips; 
-            if (names.length >= 3) {
-                return `
-                <div class="tech-section">
-                    <div class="tech-label-row">
-                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
-                        <span class="tech-label">Technicians On Duty</span>
-                    </div>
-                    <div class="tech-scroll-wrap">
-                        <div class="tech-scroll-track">${doubledChips}</div>
-                    </div>
-                </div>`;
-            } else {
-                return `
+            return `
                 <div class="tech-section">
                     <div class="tech-label-row">
                         <span class="material-symbols-rounded tech-label-icon">engineering</span>
@@ -2514,7 +2498,6 @@
                     </div>
                     <div class="tech-static">${names.map(chipHtml).join('')}</div>
                 </div>`;
-            }
         }
 
         function isShiftActive(shiftName) {
