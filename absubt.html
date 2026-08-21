@@ -1915,28 +1915,28 @@
                 <div class="card-header"><span class="material-symbols-rounded">insights</span> MANAGEMENT OVERVIEW</div>
                 <div class="mgmt-placeholder-grid">
                     <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">train</span>
-                        <div class="mgmt-ph-label">Fleet Availability</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
+                        <span class="material-symbols-rounded mgmt-ph-icon">task_alt</span>
+                        <div class="mgmt-ph-label">PM Completion (MTD)</div>
+                        <div class="mgmt-ph-val" id="mgmt-pm-completion-val">—</div>
+                        <div class="mgmt-ph-tag">Current month</div>
                     </div>
                     <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">schedule</span>
-                        <div class="mgmt-ph-label">Punctuality / SLA</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
+                        <span class="material-symbols-rounded mgmt-ph-icon">build_circle</span>
+                        <div class="mgmt-ph-label">Preventive Maint.</div>
+                        <div class="mgmt-ph-val" id="mgmt-avg-preventive-val">—</div>
+                        <div class="mgmt-ph-tag">Daily average</div>
                     </div>
                     <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">payments</span>
-                        <div class="mgmt-ph-label">Budget Utilization</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
+                        <span class="material-symbols-rounded mgmt-ph-icon">assignment_turned_in</span>
+                        <div class="mgmt-ph-label">Activities &amp; Jobcards</div>
+                        <div class="mgmt-ph-val" id="mgmt-avg-activity-val">—</div>
+                        <div class="mgmt-ph-tag">Daily average</div>
                     </div>
                     <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">health_and_safety</span>
-                        <div class="mgmt-ph-label">Safety Incidents</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
+                        <span class="material-symbols-rounded mgmt-ph-icon">handyman</span>
+                        <div class="mgmt-ph-label">Corrective Maint.</div>
+                        <div class="mgmt-ph-val" id="mgmt-avg-corrective-val">—</div>
+                        <div class="mgmt-ph-tag">Daily average</div>
                     </div>
                     <div class="mgmt-placeholder-card">
                         <span class="material-symbols-rounded mgmt-ph-icon">bolt</span>
@@ -3089,6 +3089,10 @@
                     if (param === 'sheetab_R2C54') { _consLinkUrl  = val || ''; }
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
+                    if (param === 'sheetab_R2C27') { const el = document.getElementById('mgmt-pm-completion-val'); if (el) { const p = parseFloat(val); el.textContent = isNaN(p) ? '—' : Math.min(100, Math.max(0, p)).toFixed(0) + '%'; } }
+                    if (param === 'sheetab_R2C59') { const el = document.getElementById('mgmt-avg-preventive-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
+                    if (param === 'sheetab_R2C60') { const el = document.getElementById('mgmt-avg-activity-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
+                    if (param === 'sheetab_R2C61') { const el = document.getElementById('mgmt-avg-corrective-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
                     if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
                     if (param === 'sheetab_R2C46') { renderMaintBarChart2(val, null); }
