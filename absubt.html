@@ -986,25 +986,6 @@
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
         .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
-        /* ── BAR CHART — floating panel, bottom-center, above the ticker bar (25% larger) ── */
-        #maint-barchart-float {
-            position: fixed;
-            bottom: 54px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1002;
-            background: var(--surface);
-            border: 1px solid var(--surface-variant);
-            border-radius: var(--radius-l);
-            box-shadow: var(--shadow-2);
-            padding: 10px 20px 8px;
-            width: min(92vw, 375px);
-        }
-        #maint-barchart-float .maint-barchart-container { height: 67.5px; }
-        #maint-barchart-float .circ-label { font-size: 0.6rem; }
-        #maint-barchart-float .bc-label { font-size: 0.56rem; }
-        #maint-barchart-float .bc-value { font-size: 0.65rem; }
-
         /* ── STOCK HEADER BTN (mobile) ── */
         #stock-header-btn {
             display: none;
@@ -1762,14 +1743,7 @@
             .hero-val { font-size: 1.6rem !important; }
         }
 
-        /* ── FULL DEPLOYMENT VIEW (Today) — all shifts fully visible, active one highlighted ── */
-        .full-roster .roster-grid { grid-template-columns: 1fr; gap: 8px; }
-        .full-roster .m3-shift-card { padding: 12px 14px; }
-        .full-roster .m3-shift-card.m3-shift-active {
-            background: color-mix(in srgb, var(--success-container) 22%, var(--surface-variant));
-        }
-
-        /* ── COMPACT DEPLOYMENT (Tomorrow — active-shift concept not yet applicable) ── */
+        /* ── COMPACT DEPLOYMENT (Today active shift highlighted; others collapsed & expandable; Tomorrow same pattern) ── */
         .compact-roster .roster-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .compact-roster .m3-shift-card { padding: 9px 10px; }
         .compact-roster .m3-shift-card .shift-header-row { margin-bottom: 0; }
@@ -1828,6 +1802,132 @@
 
         /* ── shared section card spacing tweak for left column stack ── */
         .mgmt-section-card .deploy-header { margin-bottom: 10px; }
+
+        /* ── COMPACT ROSTER: click-to-expand for non-active shift cards ── */
+        .compact-roster .m3-shift-card:not(.m3-shift-active) { cursor: pointer; }
+        .compact-roster .m3-shift-card.manually-expanded { padding: 12px 12px 10px; }
+        .compact-roster .m3-shift-card.manually-expanded .shift-header-row { margin-bottom: 10px; }
+        .compact-roster .m3-shift-card.manually-expanded .staff-list { display: grid; }
+        .compact-roster .m3-shift-card.manually-expanded .tech-section { display: block; }
+        .compact-roster .m3-shift-card:not(.m3-shift-active) .shift-header-row::after {
+            content: 'expand_more';
+            font-family: 'Material Symbols Rounded';
+            font-size: 15px;
+            margin-left: auto;
+            opacity: 0.45;
+        }
+        .compact-roster .m3-shift-card.manually-expanded .shift-header-row::after { content: 'expand_less'; }
+
+        /* ── MAINTENANCE SIDE PANE ── */
+        .side-pane-hint {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface); border: 1px solid var(--outline);
+            border-radius: var(--radius-m); padding: 10px 14px;
+            cursor: pointer; transition: background 0.2s ease;
+            font-family: var(--font-display); font-weight: 700; font-size: 0.78rem;
+            color: var(--on-surface-variant);
+        }
+        .side-pane-hint:hover { background: var(--primary-container); color: var(--primary); }
+        .side-pane-hint .material-symbols-rounded:first-child { color: var(--primary); font-size: 18px !important; }
+        .side-pane-hint-arrow { margin-left: auto !important; font-size: 16px !important; opacity: 0.6; }
+
+        #maint-pane-toggle-btn {
+            position: fixed; top: 50%; right: 0; transform: translateY(-50%);
+            z-index: 1006; background: var(--primary); color: var(--on-primary);
+            border: none; border-radius: var(--radius-m) 0 0 var(--radius-m);
+            padding: 14px 8px; display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-2); cursor: pointer;
+        }
+        #maint-pane-toggle-btn .material-symbols-rounded { font-size: 20px !important; }
+        body.maint-pane-open #maint-pane-toggle-btn { display: none; }
+
+        #maint-pane-backdrop {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+            z-index: 1008; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        body.maint-pane-open #maint-pane-backdrop { opacity: 1; pointer-events: auto; }
+
+        #maint-side-pane {
+            position: fixed; top: 0; right: 0; height: 100vh;
+            width: min(420px, 92vw);
+            background: var(--surface); box-shadow: -6px 0 28px rgba(0,0,0,0.22);
+            z-index: 1009; transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column;
+        }
+        body.maint-pane-open #maint-side-pane { transform: translateX(0); }
+        .maint-pane-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 18px; border-bottom: 1px solid var(--outline);
+            flex-shrink: 0;
+        }
+        .maint-pane-close {
+            background: var(--surface-variant); border: none; border-radius: var(--radius-full);
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            color: var(--on-surface-variant); cursor: pointer;
+        }
+        .maint-pane-body { padding: 16px 18px 24px; overflow-y: auto; flex: 1; }
+
+        /* ── BOTTOM-CENTER DOCK STACK (Management Overview + Bar Chart) ── */
+        #bottom-dock-stack {
+            position: fixed;
+            bottom: 54px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            max-width: 92vw;
+        }
+        #mgmt-overview-dock {
+            background: var(--surface);
+            border: 1px solid var(--surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-2);
+            padding: 10px 16px;
+            width: min(92vw, 680px);
+        }
+        .mgmt-dock-label {
+            font-family: var(--font-display); font-weight: 800; font-size: 0.58rem;
+            letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant);
+            opacity: 0.65; margin-bottom: 6px; text-align: center;
+        }
+        .mgmt-dock-row {
+            display: flex; gap: 8px; overflow-x: auto; justify-content: center;
+            scrollbar-width: none;
+        }
+        .mgmt-dock-row::-webkit-scrollbar { display: none; }
+        .mgmt-dock-chip {
+            display: flex; align-items: center; gap: 8px;
+            background: var(--surface-variant); border-radius: var(--radius-m);
+            padding: 6px 12px; flex-shrink: 0; min-width: max-content;
+        }
+        .mgmt-dock-chip .material-symbols-rounded { font-size: 16px !important; color: var(--primary); opacity: 0.85; }
+        .mgmt-dock-chip-body { display: flex; flex-direction: column; gap: 0; }
+        .mgmt-dock-chip-val { font-family: var(--font-display); font-weight: 900; font-size: 0.95rem; line-height: 1.15; color: var(--on-surface); }
+        .mgmt-dock-chip-lbl { font-family: var(--font-display); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); white-space: nowrap; }
+        .mgmt-dock-chip.is-placeholder { opacity: 0.62; border: 1px dashed var(--outline); background: transparent; }
+
+        #maint-barchart-float {
+            background: var(--surface);
+            border: 1px solid var(--surface-variant);
+            border-radius: var(--radius-l);
+            box-shadow: var(--shadow-2);
+            padding: 10px 20px 8px;
+            width: min(92vw, 375px);
+        }
+        #maint-barchart-float .maint-barchart-container { height: 67.5px; }
+        #maint-barchart-float .circ-label { font-size: 0.6rem; }
+        #maint-barchart-float .bc-label { font-size: 0.56rem; }
+        #maint-barchart-float .bc-value { font-size: 0.65rem; }
+
+        @media (max-width: 900px) {
+            #mgmt-overview-dock { padding: 8px 10px; }
+            .mgmt-dock-row { justify-content: flex-start; }
+            #maint-pane-toggle-btn { padding: 12px 6px; }
+        }
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -1920,12 +2020,12 @@
         <div class="left-column">
             <div class="m3-card mgmt-section-card">
                 <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">groups</span> ACTIVE DEPLOYMENT</div>
+                    <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
                     <div class="general-info-pill" id="today-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div class="full-roster">
+                <div class="compact-roster">
                     <div id="roster-today" class="roster-grid"></div>
                 </div>
             </div>
@@ -1938,47 +2038,6 @@
                 </div>
                 <div class="compact-roster">
                     <div id="roster-tomorrow" class="roster-grid"></div>
-                </div>
-            </div>
-            <div class="m3-card mgmt-section-card">
-                <div class="card-header"><span class="material-symbols-rounded">insights</span> MANAGEMENT OVERVIEW</div>
-                <div class="mgmt-placeholder-grid">
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">task_alt</span>
-                        <div class="mgmt-ph-label">PM Completion (MTD)</div>
-                        <div class="mgmt-ph-val" id="mgmt-pm-completion-val">—</div>
-                        <div class="mgmt-ph-tag">Current month</div>
-                    </div>
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">build_circle</span>
-                        <div class="mgmt-ph-label">Preventive Maint.</div>
-                        <div class="mgmt-ph-val" id="mgmt-avg-preventive-val">—</div>
-                        <div class="mgmt-ph-tag">Daily average</div>
-                    </div>
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">assignment_turned_in</span>
-                        <div class="mgmt-ph-label">Activities &amp; Jobcards</div>
-                        <div class="mgmt-ph-val" id="mgmt-avg-activity-val">—</div>
-                        <div class="mgmt-ph-tag">Daily average</div>
-                    </div>
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">handyman</span>
-                        <div class="mgmt-ph-label">Corrective Maint.</div>
-                        <div class="mgmt-ph-val" id="mgmt-avg-corrective-val">—</div>
-                        <div class="mgmt-ph-tag">Daily average</div>
-                    </div>
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">bolt</span>
-                        <div class="mgmt-ph-label">Energy Consumption</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
-                    </div>
-                    <div class="mgmt-placeholder-card">
-                        <span class="material-symbols-rounded mgmt-ph-icon">groups_2</span>
-                        <div class="mgmt-ph-label">Manpower Utilization</div>
-                        <div class="mgmt-ph-val">—</div>
-                        <div class="mgmt-ph-tag">Awaiting data source</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -2028,78 +2087,91 @@
                     <div class="circ-label hero-circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
                 </div>
             </div>
-
-            <div class="m3-card unified-unit">
-                <div class="maint-header-wrapper">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
-                        <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE DETAIL</div>
-                        <div class="ops-inline-container">
-                        <div id="box-mainline" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
-                            <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="mainline-slide">
-                                    <span class="ops-rot-label">MAINLINE</span>
-                                    <span class="ops-rot-status" id="mainline-status-val">---</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="box-depot" class="ops-rot-pill ok">
-                            <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
-                            <div class="ops-rot-pill-text">
-                                <div class="ops-rot-pill-slide" id="depot-slide">
-                                    <span class="ops-rot-label">DEPOT</span>
-                                    <span class="ops-rot-status" id="depot-status-val">---</span>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="maint-divider"></div>
-                <div id="checklist-dual" class="checklist-dual-row">
-                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-mtrs-slide">
-                                <span class="chk-d-label">MTRS</span>
-                                <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
-                    </div>
-                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
-                        <div class="chk-d-check-wrap">
-                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
-                        </div>
-                        <div class="chk-d-body">
-                            <div class="chk-d-slide" id="chk-tkrs-slide">
-                                <span class="chk-d-label">TKRS</span>
-                                <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
-                            </div>
-                        </div>
-                        <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
-                    </div>
-                </div>
-                
-                <div id="maint-list" class="maint-list"></div>
-                
-                <div class="maint-progress-footer">
-                    <div class="maint-remarks-trigger">
-                        <span class="material-symbols-rounded">info</span>
-                        <span>Remarks</span>
-                        <div class="maint-progress-popup">
-                            <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                            <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="side-pane-hint" onclick="toggleMaintPane(event)">
+                <span class="material-symbols-rounded">construction</span>
+                <span>Open Maintenance Schedule</span>
+                <span class="material-symbols-rounded side-pane-hint-arrow">chevron_right</span>
             </div>
         </div>
     </main>
+
+    <button id="maint-pane-toggle-btn" onclick="toggleMaintPane(event)" aria-label="Maintenance Schedule" title="Maintenance Schedule">
+        <span class="material-symbols-rounded">construction</span>
+    </button>
+    <div id="maint-pane-backdrop" onclick="toggleMaintPane(event)"></div>
+    <aside id="maint-side-pane">
+        <div class="maint-pane-header">
+            <div class="card-header" style="margin-bottom:0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
+            <button class="maint-pane-close" onclick="toggleMaintPane(event)" aria-label="Close">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        <div class="maint-pane-body">
+            <div class="maint-header-wrapper">
+                <div class="ops-inline-container" style="width:100%;">
+                <div id="box-mainline" class="ops-rot-pill ok">
+                    <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
+                    <div class="ops-rot-pill-text">
+                        <div class="ops-rot-pill-slide" id="mainline-slide">
+                            <span class="ops-rot-label">MAINLINE</span>
+                            <span class="ops-rot-status" id="mainline-status-val">---</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="box-depot" class="ops-rot-pill ok">
+                    <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
+                    <div class="ops-rot-pill-text">
+                        <div class="ops-rot-pill-slide" id="depot-slide">
+                            <span class="ops-rot-label">DEPOT</span>
+                            <span class="ops-rot-status" id="depot-status-val">---</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="maint-divider"></div>
+            <div id="checklist-dual" class="checklist-dual-row">
+                <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
+                    <div class="chk-d-check-wrap">
+                        <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                    </div>
+                    <div class="chk-d-body">
+                        <div class="chk-d-slide" id="chk-mtrs-slide">
+                            <span class="chk-d-label">MTRS</span>
+                            <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
+                        </div>
+                    </div>
+                    <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
+                </div>
+                <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
+                    <div class="chk-d-check-wrap">
+                        <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
+                    </div>
+                    <div class="chk-d-body">
+                        <div class="chk-d-slide" id="chk-tkrs-slide">
+                            <span class="chk-d-label">TKRS</span>
+                            <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
+                        </div>
+                    </div>
+                    <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
+                </div>
+            </div>
+
+            <div id="maint-list" class="maint-list"></div>
+
+            <div class="maint-progress-footer">
+                <div class="maint-remarks-trigger">
+                    <span class="material-symbols-rounded">info</span>
+                    <span>Remarks</span>
+                    <div class="maint-progress-popup">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
@@ -2215,18 +2287,68 @@
         </div>
     </div>
 
-    <div id="maint-barchart-float" class="maint-barchart-wrap">
-        <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
-            <div class="bc-rotator" id="bc-rotator">
-                <div class="bc-panel bc-active" id="bc-panel-1"></div>
-                <div class="bc-panel" id="bc-panel-2"></div>
+    <div id="bottom-dock-stack">
+        <div id="mgmt-overview-dock">
+            <div class="mgmt-dock-label"><span class="material-symbols-rounded" style="font-size:11px!important;vertical-align:-1px;">insights</span> Management Overview</div>
+            <div class="mgmt-dock-row">
+                <div class="mgmt-dock-chip">
+                    <span class="material-symbols-rounded">task_alt</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val" id="mgmt-pm-completion-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">PM Completion (MTD)</div>
+                    </div>
+                </div>
+                <div class="mgmt-dock-chip">
+                    <span class="material-symbols-rounded">build_circle</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val" id="mgmt-avg-preventive-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">Preventive Maint. (Daily Avg)</div>
+                    </div>
+                </div>
+                <div class="mgmt-dock-chip">
+                    <span class="material-symbols-rounded">assignment_turned_in</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val" id="mgmt-avg-activity-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">Activities &amp; Jobcards (Daily Avg)</div>
+                    </div>
+                </div>
+                <div class="mgmt-dock-chip">
+                    <span class="material-symbols-rounded">handyman</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val" id="mgmt-avg-corrective-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">Corrective Maint. (Daily Avg)</div>
+                    </div>
+                </div>
+                <div class="mgmt-dock-chip is-placeholder">
+                    <span class="material-symbols-rounded">bolt</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">Energy Consumption</div>
+                    </div>
+                </div>
+                <div class="mgmt-dock-chip is-placeholder">
+                    <span class="material-symbols-rounded">groups_2</span>
+                    <div class="mgmt-dock-chip-body">
+                        <div class="mgmt-dock-chip-val">—</div>
+                        <div class="mgmt-dock-chip-lbl">Manpower Utilization</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-            <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-            <div class="bc-indicator-dots" id="bc-indicator-dots">
-                <div class="bc-ind-dot active" id="bc-dot-0"></div>
-                <div class="bc-ind-dot" id="bc-dot-1"></div>
+
+        <div id="maint-barchart-float" class="maint-barchart-wrap">
+            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+                <div class="bc-rotator" id="bc-rotator">
+                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                    <div class="bc-panel" id="bc-panel-2"></div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                <div class="bc-indicator-dots" id="bc-indicator-dots">
+                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                    <div class="bc-ind-dot" id="bc-dot-1"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -2280,6 +2402,18 @@
             const dc = document.querySelector('.dashboard-content');
             if(dc) dc.setAttribute('data-active-tab', tabId);
             document.body.classList.toggle('maint-tab-active', tabId === 'maint');
+        }
+
+        // ── Deployment shift cards: click a non-active (collapsed) shift to expand it ──
+        function toggleShiftCard(el) {
+            if (!el) return;
+            el.classList.toggle('manually-expanded');
+        }
+
+        // ── Maintenance Schedule side pane ──
+        function toggleMaintPane(event) {
+            if (event) event.stopPropagation();
+            document.body.classList.toggle('maint-pane-open');
         }
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
@@ -2535,7 +2669,7 @@
             const countBadge = (staffCount > 0 || techCount > 0) ? `<span class="shift-count-badge"><span class="material-symbols-rounded">group</span><span class="cnt-staff">${staffCount}</span><span class="cnt-sep">+</span><span class="cnt-tech">${techCount}</span></span>` : '';
 
             return `
-            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
+            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}" onclick="toggleShiftCard(this)">
                 <div class="shift-header-row">
                     <div class="m3-shift-label"><span class="shift-active-dot"></span>${title}${countBadge}</div>
                     ${tpcHtml}
