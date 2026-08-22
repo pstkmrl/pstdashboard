@@ -277,6 +277,7 @@
             color: var(--primary);
             letter-spacing: -2px;
         }
+        .mcd-burst-icon { font-size: 22px !important; color: var(--success); opacity: 0.85; }
         .mcd-burst-label {
             font-family: var(--font-display);
             font-size: 0.75rem;
@@ -449,6 +450,7 @@
             cursor: pointer; transition: all 0.2s ease;
         }
         .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
+        .icon-btn:active { transform: scale(0.94); }
         .btn-grid-active { background: var(--primary); color: var(--surface); }
         .btn-off { background: var(--error-container); color: var(--on-error-container); }
         /* Hamburger menu panel */
@@ -488,6 +490,7 @@
             transition: background 0.15s ease;
         }
         .hm-item:hover { background: var(--surface-variant); }
+        .hm-item:active { transform: scale(0.98); }
         .hm-item .material-symbols-rounded { font-size: 18px !important; color: var(--primary); flex-shrink: 0; }
         .hm-item.hm-danger { color: var(--error); }
         .hm-item.hm-danger .material-symbols-rounded { color: var(--error); }
@@ -979,8 +982,9 @@
             color: var(--on-surface-variant); opacity: 0.8; cursor: default;
         }
         .maint-remarks-trigger .material-symbols-rounded { font-size: 14px !important; opacity: 0.75; }
-        .maint-remarks-trigger:hover { opacity: 1; }
-        .maint-remarks-trigger:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-remarks-trigger:hover, .maint-remarks-trigger.touched { opacity: 1; }
+        .maint-remarks-trigger:hover .maint-progress-popup,
+        .maint-remarks-trigger.touched .maint-progress-popup { opacity: 1; transform: translateY(0); pointer-events: auto; }
         .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
         .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
         .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
@@ -1159,6 +1163,15 @@
         #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
         .flash-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px) saturate(0.6); -webkit-backdrop-filter: blur(6px) saturate(0.6); }
         .flash-panel { position: relative; z-index: 1; width: min(820px, calc(100vw - 32px)); background: rgba(10,14,20,0.88); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-l); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); overflow: hidden; transform: scale(0.93) translateY(20px); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
+        .flash-close-x {
+            position: absolute; top: 10px; right: 10px; z-index: 2;
+            width: 26px; height: 26px; border-radius: 50%; border: none;
+            background: rgba(255,255,255,0.12); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: background 0.2s ease;
+        }
+        .flash-close-x:hover { background: rgba(255,255,255,0.28); }
+        .flash-close-x .material-symbols-rounded { font-size: 15px !important; }
         [data-theme="light"] .flash-panel { background: rgba(240,244,248,0.9); border-color: rgba(255,255,255,0.8); }
         #flash-news-overlay.visible .flash-panel { transform: scale(1) translateY(0); }
         .flash-banner { display: flex; align-items: center; gap: 10px; background: #CC0000; padding: 7px 20px; }
@@ -1360,7 +1373,14 @@
         .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
 
         /* ── BLACKOUT ── */
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
+        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+        .blackout-hint {
+            margin-top: 22px; font-family: var(--font-display); font-size: 0.7rem;
+            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            animation: blackout-hint-fade 3s ease-in-out infinite;
+        }
+        @keyframes blackout-hint-fade { 0%,100% { opacity: 0.35; } 50% { opacity: 0.8; } }
         .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
         .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
@@ -1413,7 +1433,7 @@
             border-color: var(--success);
             box-shadow: 0 4px 12px rgba(20, 108, 46, 0.25);
         }
-        .st-pill:hover { transform: translateY(-2px); }
+        .st-pill:hover { transform: translateX(-3px) scale(1.04); box-shadow: var(--shadow-2); }
 
         .st-remark-bubble {
     position: absolute;
@@ -1495,6 +1515,7 @@
             font-family: var(--font-display); font-size: 0.8rem;
             font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
         }
+        .st-announce-icon { font-size: 26px !important; color: var(--primary); opacity: 0.85; }
         .st-announce-name {
             font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
             color: var(--on-surface); letter-spacing: 2px; line-height: 1;
@@ -1516,6 +1537,7 @@
                 transition: all 0.3s ease; cursor: pointer;
             }
             .m-tab.active { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+            .m-tab:active { transform: scale(0.95); }
             .m-tab .material-symbols-rounded { font-size: 16px !important; }
 
             .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
@@ -1703,7 +1725,9 @@
             min-height: 78px;
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+        .hero-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
         .hero-stat-card::before {
             content: '';
             position: absolute; top: 0; left: 0; width: 4px; height: 100%;
@@ -1905,6 +1929,8 @@
             padding: 6px 12px; flex-shrink: 0; min-width: max-content;
         }
         .mgmt-dock-chip .material-symbols-rounded { font-size: 16px !important; color: var(--primary); opacity: 0.85; }
+        .mgmt-dock-chip { transition: transform 0.2s ease; }
+        .mgmt-dock-chip:hover { transform: translateY(-2px); }
         .mgmt-dock-chip-body { display: flex; flex-direction: column; gap: 0; }
         .mgmt-dock-chip-val { font-family: var(--font-display); font-weight: 900; font-size: 0.95rem; line-height: 1.15; color: var(--on-surface); }
         .mgmt-dock-chip-lbl { font-family: var(--font-display); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); white-space: nowrap; }
@@ -1928,6 +1954,85 @@
             .mgmt-dock-row { justify-content: flex-start; }
             #maint-pane-toggle-btn { padding: 12px 6px; }
         }
+
+        /* ══════════════════════════════════════════════════════════
+           GENERAL POLISH PASS
+           ══════════════════════════════════════════════════════════ */
+
+        /* ── Accessibility: visible focus ring for keyboard users ── */
+        button:focus-visible, a:focus-visible, [tabindex]:focus-visible,
+        .m3-shift-card:focus-visible, .side-pane-hint:focus-visible {
+            outline: 2.5px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: var(--radius-s);
+        }
+
+        /* ── Header: live-status dot beside logo ── */
+        .logo-section { display: flex; align-items: center; gap: 8px; }
+        .live-status-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 0 0 rgba(60, 180, 100, 0.6);
+            animation: live-dot-pulse 2s ease-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes live-dot-pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(60, 180, 100, 0.55); }
+            70%  { box-shadow: 0 0 0 6px rgba(60, 180, 100, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(60, 180, 100, 0); }
+        }
+
+        /* ── Header: date under the clock ── */
+        .clock-date {
+            font-family: var(--font-display); font-weight: 700; font-size: 0.58rem;
+            letter-spacing: 0.5px; color: var(--on-surface-variant); opacity: 0.7;
+            margin-left: 6px; white-space: nowrap; align-self: center;
+        }
+        @media (max-width: 900px) { .clock-date { display: none; } }
+
+        /* ── Failures pill: subtle warning ring when open failures exist ── */
+        #failures-pill.has-open-failures {
+            box-shadow: 0 0 0 1.5px var(--error) inset, var(--shadow-1);
+        }
+
+        /* ── Deployment cards: total headcount badge ── */
+        .deploy-total-badge {
+            font-family: var(--font-display); font-weight: 800; font-size: 0.62rem;
+            letter-spacing: 0.3px; color: var(--primary);
+            background: var(--primary-container);
+            padding: 3px 9px; border-radius: var(--radius-full);
+            white-space: nowrap; margin-right: 4px;
+        }
+
+        /* ── Management dock: fade edges hinting horizontal scroll ── */
+        .mgmt-dock-row {
+            mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+        }
+
+        /* ── Bar chart panel: accent top edge to match hero cards ── */
+        #maint-barchart-float { border-top: 3px solid var(--primary); }
+
+        /* ── Ticker head: gentle icon breathing ── */
+        .ticker-head { position: relative; }
+        .ticker-live-dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+            flex-shrink: 0; margin: 0 0 0 12px;
+            animation: live-dot-pulse 2s ease-out infinite;
+        }
+
+        /* ── Driver card: slightly lift on hover for affordance ── */
+        .driver-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .driver-card:hover { transform: translateY(-2px); }
+
+        /* ── Maintenance list: friendly empty state ── */
+        .maint-list-empty {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; height: 100%; min-height: 70px;
+            color: var(--on-surface-variant); opacity: 0.55;
+            font-family: var(--font-display); font-weight: 700; font-size: 0.78rem;
+        }
+        .maint-list-empty .material-symbols-rounded { font-size: 26px !important; color: var(--success); opacity: 0.8; }
     </style>
 </head>
 <body onclick="wakeUp()">
@@ -1939,6 +2044,7 @@
             <div id="ana-s" class="hand h-sec"></div>
             <div class="center-dot"></div>
         </div>
+        <div class="blackout-hint">Tap anywhere to wake</div>
     </div>
 
     <div id="station-pills-dock"></div>
@@ -1948,7 +2054,10 @@
     </button>
 
     <header class="app-bar">
-        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
+        <div class="logo-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
+            <span class="live-status-dot" title="Live data connection"></span>
+        </div>
         <div class="middle-module">
             <div id="checklist-container" class="checklist-container">
                 <div id="station-track" class="station-track"></div>
@@ -1957,6 +2066,7 @@
                 <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
+                <div class="clock-date" id="clock-date">—</div>
             </div>
             <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
                 <div class="fail-title">Failures</div>
@@ -2021,6 +2131,7 @@
             <div class="m3-card mgmt-section-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
+                    <span class="deploy-total-badge" id="today-total-badge" title="Total staff + technicians rostered today">—</span>
                     <div class="general-info-pill" id="today-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
@@ -2032,6 +2143,7 @@
             <div class="m3-card mgmt-section-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW (PLANNED)</div>
+                    <span class="deploy-total-badge" id="tomorrow-total-badge" title="Total staff + technicians planned for tomorrow">—</span>
                     <div class="general-info-pill" id="tomorrow-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
@@ -2045,21 +2157,21 @@
         <div class="right-column">
             <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">construction</span> Maintenance Counts &amp; Stats</div>
             <div class="mgmt-hero-row">
-                <div class="hero-stat-card">
+                <div class="hero-stat-card" title="Count of scheduled preventive maintenance jobs">
                     <span class="material-symbols-rounded hero-stat-icon-plain">build_circle</span>
                     <div class="hero-stat-body">
                         <div class="mcd-val hero-val" id="maint-preventive-val">—</div>
                         <div class="mcd-label hero-lbl">Preventive<br>Maint.</div>
                     </div>
                 </div>
-                <div class="hero-stat-card">
+                <div class="hero-stat-card" title="Count of scheduled corrective / breakdown maintenance jobs">
                     <span class="material-symbols-rounded hero-stat-icon-plain">handyman</span>
                     <div class="hero-stat-body">
                         <div class="mcd-val hero-val" id="maint-corrective-val">—</div>
                         <div class="mcd-label hero-lbl">Corrective<br>Maint.</div>
                     </div>
                 </div>
-                <div class="hero-stat-card">
+                <div class="hero-stat-card" title="Count of general activities and open jobcards">
                     <span class="material-symbols-rounded hero-stat-icon-plain">assignment_turned_in</span>
                     <div class="hero-stat-body">
                         <div class="mcd-val hero-val" id="maint-activity-val">—</div>
@@ -2109,7 +2221,7 @@
         <div class="maint-pane-body">
             <div class="maint-header-wrapper">
                 <div class="ops-inline-container" style="width:100%;">
-                <div id="box-mainline" class="ops-rot-pill ok">
+                <div id="box-mainline" class="ops-rot-pill ok" title="Mainline power/traction status">
                     <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
                     <div class="ops-rot-pill-text">
                         <div class="ops-rot-pill-slide" id="mainline-slide">
@@ -2118,7 +2230,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="box-depot" class="ops-rot-pill ok">
+                <div id="box-depot" class="ops-rot-pill ok" title="Depot power/traction status">
                     <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
                     <div class="ops-rot-pill-text">
                         <div class="ops-rot-pill-slide" id="depot-slide">
@@ -2161,7 +2273,7 @@
             <div id="maint-list" class="maint-list"></div>
 
             <div class="maint-progress-footer">
-                <div class="maint-remarks-trigger">
+                <div class="maint-remarks-trigger" onclick="this.classList.toggle('touched')" tabindex="0">
                     <span class="material-symbols-rounded">info</span>
                     <span>Remarks</span>
                     <div class="maint-progress-popup">
@@ -2175,6 +2287,7 @@
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
+            <span class="material-symbols-rounded mcd-burst-icon">trending_up</span>
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
             <div class="mcd-burst-label" id="mcd-burst-label">—</div>
         </div>
@@ -2182,6 +2295,7 @@
 
     <div id="st-announce-overlay">
         <div class="st-announce-card" id="st-announce-card">
+            <span class="material-symbols-rounded st-announce-icon">fact_check</span>
             <div class="st-announce-title">CHECKLIST UPDATED</div>
             <div class="st-announce-name" id="st-announce-name">---</div>
         </div>
@@ -2226,6 +2340,9 @@
     <div id="flash-news-overlay">
         <div class="flash-backdrop" onclick="dismissFlash()"></div>
         <div class="flash-panel">
+            <button class="flash-close-x" onclick="dismissFlash()" aria-label="Dismiss notice">
+                <span class="material-symbols-rounded">close</span>
+            </button>
             <div class="flash-banner">
                 <div class="flash-banner-live">
                     <div class="flash-live-dot"></div>
@@ -2259,7 +2376,7 @@
                     <span class="material-symbols-rounded">inventory_2</span>
                     STOCK AVAILABILITY
                 </div>
-                <button class="cons-panel-close" onclick="closeConsOverlay()">
+                <button class="cons-panel-close" onclick="closeConsOverlay()" aria-label="Close stock availability panel">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
@@ -2354,6 +2471,7 @@
     </div>
 
     <footer class="ticker-bar">
+        <span class="ticker-live-dot" title="Live"></span>
         <div id="ticker-head" class="ticker-head"></div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
@@ -2415,6 +2533,11 @@
             if (event) event.stopPropagation();
             document.body.classList.toggle('maint-pane-open');
         }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.body.classList.contains('maint-pane-open')) {
+                document.body.classList.remove('maint-pane-open');
+            }
+        });
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
         let _opsPillTimer = null;
@@ -2492,6 +2615,7 @@
 
             openEl.textContent   = openCount;
             closedEl.textContent = closedCount;
+            pill.classList.toggle('has-open-failures', openCount > 0);
 
             if (_failuresLastRaw !== raw) {
                 _failuresLastRaw = raw;
@@ -3279,6 +3403,16 @@
             if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
             if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
 
+            const countLines = s => (s && s.trim() !== '') ? s.split('\n').filter(l => l.trim() !== '').length : 0;
+            const todayTotal = countLines(staff.today.morn) + countLines(staff.today.eve) + countLines(staff.today.night)
+                + countLines(staff.today.techMorn) + countLines(staff.today.techEve) + countLines(staff.today.techNight);
+            const tomorrowTotal = countLines(staff.tomorrow.morn) + countLines(staff.tomorrow.eve) + countLines(staff.tomorrow.night)
+                + countLines(staff.tomorrow.techMorn) + countLines(staff.tomorrow.techEve) + countLines(staff.tomorrow.techNight);
+            const tdBadge = document.getElementById('today-total-badge');
+            const tmBadge = document.getElementById('tomorrow-total-badge');
+            if (tdBadge) tdBadge.textContent = todayTotal + ' on duty';
+            if (tmBadge) tmBadge.textContent = tomorrowTotal + ' planned';
+
             buildAppDock(dockRows);
             _updateConsLink();
             initInfoRotator(irWeather, irRowItems, irRowImages);
@@ -3286,7 +3420,7 @@
             if (opsScheduleLines !== null) {
                 const listEl = document.getElementById('maint-list');
                 if (opsScheduleLines.length === 0) {
-                    listEl.innerHTML = '';
+                    listEl.innerHTML = `<div class="maint-list-empty"><span class="material-symbols-rounded">task_alt</span>No scheduled items right now</div>`;
                 } else {
                     const itemsHtml = opsScheduleLines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
                     listEl.innerHTML = `
@@ -3527,6 +3661,8 @@
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
+            const dateEl = document.getElementById('clock-date');
+            if (dateEl) dateEl.textContent = n.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
             document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
             document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
             document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
