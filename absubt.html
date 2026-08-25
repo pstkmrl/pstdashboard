@@ -7,89 +7,101 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
         :root {
             --transition-speed: 0.3s;
-            --radius-s: 10px;
-            --radius-m: 18px;
-            --radius-l: 26px;
-            --radius-full: 999px;
-            --font-display: 'Outfit', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --radius-s: 2px;
+            --radius-m: 3px;
+            --radius-l: 4px;
+            --radius-full: 3px;
+            --font-display: 'Rajdhani', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'Space Mono', monospace;
             --accent-gradient: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 130%);
         }
 
         [data-theme="light"] {
-            --bg-color: #F2F7F6;
+            --bg-color: #E8ECEE;
             --surface: #FFFFFF;
-            --surface-variant: #E2EDEC;
-            --surface-dim: #D2E4E2;
-            --on-bg: #10201E;
-            --on-surface: #10201E;
-            --on-surface-variant: #40504D;
-            --outline: #6E7C79;
-            --primary: #00696D;
-            --primary-container: #A9EFEF;
-            --on-primary-container: #001F21;
-            --secondary: #8A5F00;
-            --secondary-container: #FFDEA1;
-            --on-secondary-container: #2A1800;
-            --error: #BA1B1B;
-            --error-container: #FFDAD4;
-            --on-error-container: #410001;
-            --success: #146C43;
-            --success-container: #B8EFC9;
+            --surface-variant: #DDE3E6;
+            --surface-dim: #CBD3D7;
+            --on-bg: #0A0E12;
+            --on-surface: #0A0E12;
+            --on-surface-variant: #3C464C;
+            --outline: #8B969C;
+            --primary: #0091D5;
+            --primary-container: #C8E9FA;
+            --on-primary-container: #002A3D;
+            --secondary: #B54D00;
+            --secondary-container: #FFE0C7;
+            --on-secondary-container: #331700;
+            --error: #C4001F;
+            --error-container: #FFD9DC;
+            --on-error-container: #400008;
+            --success: #007A3D;
+            --success-container: #C0F0D2;
             --on-success-container: #002109;
             --warning: #8A5300;
             --warning-container: #FFDDAF;
             --on-warning-container: #2B1700;
-            --shadow-1: 0 2px 6px rgba(6,38,37,0.07), 0 6px 16px rgba(6,38,37,0.06);
-            --shadow-2: 0 6px 16px rgba(6,38,37,0.12), 0 14px 36px rgba(6,38,37,0.12);
-            --tech-bg: rgba(0, 105, 109, 0.06);
-            --tech-border: rgba(0, 105, 109, 0.2);
-            --tech-name-color: #00494C;
+            --shadow-1: 0 1px 0 rgba(10,20,26,0.10);
+            --shadow-2: 0 2px 12px rgba(10,20,26,0.16);
+            --tech-bg: rgba(0, 145, 213, 0.06);
+            --tech-border: rgba(0, 145, 213, 0.25);
+            --tech-name-color: #005E8A;
         }
 
         [data-theme="dark"] {
-            --bg-color: #08130F;
-            --surface: #0F211E;
-            --surface-variant: #15332F;
-            --surface-dim: #0B1B18;
-            --on-bg: #E1F3EE;
-            --on-surface: #E1F3EE;
-            --on-surface-variant: #A7C6C0;
-            --outline: #5C7B75;
-            --primary: #4DE8DE;
-            --primary-container: #00504E;
-            --on-primary-container: #B0FFF6;
-            --secondary: #F2C065;
-            --secondary-container: #4E3900;
-            --on-secondary-container: #FFDEA1;
-            --error: #FFB4A9;
-            --error-container: #7A0500;
-            --on-error-container: #FFDAD4;
-            --success: #6EE099;
-            --success-container: #00521F;
-            --on-success-container: #B8EFC9;
-            --warning: #FFCB80;
-            --warning-container: #5B3F00;
+            --bg-color: #000000;
+            --surface: #0A0D10;
+            --surface-variant: #14181D;
+            --surface-dim: #060809;
+            --on-bg: #EAF2F5;
+            --on-surface: #EAF2F5;
+            --on-surface-variant: #8FA3AC;
+            --outline: #2C363C;
+            --primary: #00D1FF;
+            --primary-container: #003546;
+            --on-primary-container: #B8ECFF;
+            --secondary: #FF7A1A;
+            --secondary-container: #4A2400;
+            --on-secondary-container: #FFCFA3;
+            --error: #FF3B4E;
+            --error-container: #4A0009;
+            --on-error-container: #FFD3D8;
+            --success: #16E38F;
+            --success-container: #003D22;
+            --on-success-container: #B0F5D4;
+            --warning: #FFC13D;
+            --warning-container: #3D2900;
             --on-warning-container: #FFDDAF;
-            --shadow-1: 0 2px 6px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35);
-            --shadow-2: 0 8px 20px rgba(0,0,0,0.55), 0 18px 44px rgba(0,0,0,0.55);
-            --tech-bg: rgba(77, 232, 222, 0.08);
-            --tech-border: rgba(77, 232, 222, 0.2);
-            --tech-name-color: #9BF3EA;
+            --shadow-1: 0 0 0 1px rgba(0,209,255,0.06), 0 2px 10px rgba(0,0,0,0.6);
+            --shadow-2: 0 0 0 1px rgba(0,209,255,0.1), 0 4px 24px rgba(0,0,0,0.75), 0 0 32px rgba(0,209,255,0.06);
+            --tech-bg: rgba(0, 209, 255, 0.06);
+            --tech-border: rgba(0, 209, 255, 0.22);
+            --tech-name-color: #7DEBFF;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+        /* ── Telemetry / numeric readouts use monospace ── */
+        .clock-val, .hero-val, .mcd-val, .mgmt-dock-chip-val, .circ-val,
+        .fail-val, .deploy-total-badge, #refresh-time, .bc-value,
+        .m3-badge, .chk-d-status, .ops-rot-status, .clock-date,
+        .mcd-burst-val {
+            font-family: var(--font-mono);
+        }
+
         body {
             background: var(--bg-color);
-            background-image: radial-gradient(circle at 12% -10%, color-mix(in srgb, var(--primary) 10%, transparent) 0%, transparent 45%),
-                               radial-gradient(circle at 100% 110%, color-mix(in srgb, var(--secondary) 8%, transparent) 0%, transparent 40%);
+            background-image:
+                linear-gradient(color-mix(in srgb, var(--primary) 6%, transparent) 1px, transparent 1px),
+                linear-gradient(90deg, color-mix(in srgb, var(--primary) 6%, transparent) 1px, transparent 1px),
+                radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--primary) 8%, transparent) 0%, transparent 55%);
+            background-size: 42px 42px, 42px 42px, 100% 100%;
             background-attachment: fixed;
             color: var(--on-bg);
             font-family: var(--font-body);
@@ -987,26 +999,14 @@
             flex-shrink: 0;
         }
 
-        .maint-progress-popup {
-            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
-            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
-            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
+        .maint-remarks-panel {
+            border: 1px solid var(--outline); border-radius: var(--radius-m);
+            padding: 10px 12px; background: var(--surface-variant);
+            width: 100%;
         }
-        .maint-remarks-trigger {
-            position: relative; display: inline-flex; align-items: center; gap: 6px;
-            font-family: var(--font-display); font-weight: 800; font-size: 0.68rem;
-            letter-spacing: 0.4px; text-transform: uppercase;
-            color: var(--on-surface-variant); opacity: 0.8; cursor: default;
-        }
-        .maint-remarks-trigger .material-symbols-rounded { font-size: 14px !important; opacity: 0.75; }
-        .maint-remarks-trigger:hover, .maint-remarks-trigger.touched { opacity: 1; }
-        .maint-remarks-trigger:hover .maint-progress-popup,
-        .maint-remarks-trigger.touched .maint-progress-popup { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
-        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
-        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.6rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--primary); opacity: 0.85; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.9; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 500; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
 
         /* ── STOCK HEADER BTN (mobile) ── */
         #stock-header-btn {
@@ -1224,10 +1224,10 @@
             display: flex; align-items: center; z-index: 1001; cursor: pointer;
         }
         .ticker-head {
-            background: var(--primary); color: var(--surface);
+            background: var(--primary); color: var(--bg-color);
             height: 100%; padding: 0 16px; display: flex; align-items: center;
-            font-family: var(--font-display); font-weight: 900; font-size: 0.78rem;
-            letter-spacing: 0.5px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
+            font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem;
+            letter-spacing: 1px; text-transform: uppercase; border-radius: 0; z-index: 2; flex-shrink: 0;
             white-space: nowrap;
         }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
@@ -1786,27 +1786,16 @@
             .hero-val { font-size: 1.6rem !important; }
         }
 
-        /* ── COMPACT DEPLOYMENT (Today active shift highlighted; others collapsed & expandable; Tomorrow same pattern) ── */
-        .compact-roster .roster-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .compact-roster .m3-shift-card { padding: 9px 10px; }
-        .compact-roster .m3-shift-card .shift-header-row { margin-bottom: 0; }
+        /* ── FULL-VISIBILITY DEPLOYMENT: all shifts fully expanded, active one highlighted ── */
+        .compact-roster .roster-grid { grid-template-columns: 1fr; gap: 8px; }
+        .compact-roster .m3-shift-card { padding: 11px 13px; }
         .compact-roster .m3-shift-card .staff-list,
         .compact-roster .m3-shift-card .tech-section {
-            display: none;
+            display: block;
         }
-        .compact-roster .m3-shift-card.m3-shift-active {
-            padding: 12px 12px 10px;
-        }
-        .compact-roster .m3-shift-card.m3-shift-active .shift-header-row { margin-bottom: 10px; }
-        .compact-roster .m3-shift-card.m3-shift-active .staff-list { display: grid; }
-        .compact-roster .m3-shift-card.m3-shift-active .tech-section { display: block; }
-        .compact-roster .m3-shift-card:not(.m3-shift-active) { opacity: 0.72; }
-        .compact-roster .m3-shift-card:not(.m3-shift-active) .m3-shift-label { font-size: 0.85rem; }
-        @media (max-width: 900px) {
-            .compact-roster .roster-grid { grid-template-columns: 1fr 1fr 1fr; }
-        }
-        @media (max-width: 560px) {
-            .compact-roster .roster-grid { grid-template-columns: 1fr; }
+        .compact-roster .m3-shift-card .staff-list { display: grid; }
+        @media (min-width: 1300px) {
+            .compact-roster .roster-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         /* ── MANAGEMENT OVERVIEW PLACEHOLDER WIDGETS ── */
@@ -1845,21 +1834,6 @@
 
         /* ── shared section card spacing tweak for left column stack ── */
         .mgmt-section-card .deploy-header { margin-bottom: 10px; }
-
-        /* ── COMPACT ROSTER: click-to-expand for non-active shift cards ── */
-        .compact-roster .m3-shift-card:not(.m3-shift-active) { cursor: pointer; }
-        .compact-roster .m3-shift-card.manually-expanded { padding: 12px 12px 10px; }
-        .compact-roster .m3-shift-card.manually-expanded .shift-header-row { margin-bottom: 10px; }
-        .compact-roster .m3-shift-card.manually-expanded .staff-list { display: grid; }
-        .compact-roster .m3-shift-card.manually-expanded .tech-section { display: block; }
-        .compact-roster .m3-shift-card:not(.m3-shift-active) .shift-header-row::after {
-            content: 'expand_more';
-            font-family: 'Material Symbols Rounded';
-            font-size: 15px;
-            margin-left: auto;
-            opacity: 0.45;
-        }
-        .compact-roster .m3-shift-card.manually-expanded .shift-header-row::after { content: 'expand_less'; }
 
         /* ── MAINTENANCE SIDE PANE ── */
         .side-pane-hint {
@@ -1915,6 +1889,21 @@
             color: var(--on-surface-variant); cursor: pointer;
         }
         .maint-pane-body { padding: 16px 18px 24px; overflow-y: auto; flex: 1; }
+
+        /* ── FULL VISIBILITY: dock the maintenance pane permanently on wide screens ── */
+        .content-row { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+        @media (min-width: 1300px) {
+            .content-row { flex-direction: row; gap: 10px; align-items: flex-start; }
+            .content-row .dashboard-content { flex: 1; min-width: 0; }
+            #maint-side-pane {
+                position: static; transform: none !important; height: auto;
+                width: min(30vw, 400px); flex-shrink: 0;
+                box-shadow: var(--shadow-1);
+                max-height: calc(100vh - var(--app-bar-h, 64px) - 30px);
+                margin-top: 0;
+            }
+            #maint-pane-toggle-btn, #maint-pane-backdrop, .side-pane-hint { display: none !important; }
+        }
 
         /* ── BOTTOM-CENTER DOCK STACK (Management Overview + Bar Chart) ── */
         #bottom-dock-stack {
@@ -2152,6 +2141,7 @@
         </button>
     </div>
 
+    <div class="content-row">
     <main class="dashboard-content" data-active-tab="maint">
         <div class="left-column">
             <div class="m3-card mgmt-section-card">
@@ -2233,10 +2223,6 @@
         </div>
     </main>
 
-    <button id="maint-pane-toggle-btn" onclick="toggleMaintPane(event)" aria-label="Maintenance Schedule" title="Maintenance Schedule">
-        <span class="material-symbols-rounded">construction</span>
-    </button>
-    <div id="maint-pane-backdrop" onclick="toggleMaintPane(event)"></div>
     <aside id="maint-side-pane">
         <div class="maint-pane-header">
             <div class="card-header" style="margin-bottom:0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
@@ -2299,17 +2285,19 @@
             <div id="maint-list" class="maint-list"></div>
 
             <div class="maint-progress-footer">
-                <div class="maint-remarks-trigger" onclick="this.classList.toggle('touched')" tabindex="0">
-                    <span class="material-symbols-rounded">info</span>
-                    <span>Remarks</span>
-                    <div class="maint-progress-popup">
-                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                    </div>
+                <div class="maint-remarks-panel">
+                    <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                    <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
                 </div>
             </div>
         </div>
     </aside>
+    </div>
+
+    <button id="maint-pane-toggle-btn" onclick="toggleMaintPane(event)" aria-label="Maintenance Schedule" title="Maintenance Schedule (mobile)">
+        <span class="material-symbols-rounded">construction</span>
+    </button>
+    <div id="maint-pane-backdrop" onclick="toggleMaintPane(event)"></div>
 
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
