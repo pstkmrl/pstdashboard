@@ -566,34 +566,22 @@
 
         /* ── DASHBOARD LAYOUT ── */
         .dashboard-content {
-            display: grid;
-            grid-template-columns: 2fr 3fr;
-            gap: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
             padding: 10px 10px 80px 10px;
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--surface-variant) transparent;
         }
-        .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
-        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; position: relative; }
-        
+        .cluster-row { display: flex; flex-direction: column; gap: 8px; position: relative; }
+        .left-column { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
+        .left-column > .mgmt-section-card { flex: 1 1 320px; }
+        .center-column { display: flex; flex-direction: column; gap: 10px; }
+
         @media (min-width: 901px) {
-            .dashboard-content { align-items: flex-start; overflow-y: auto; }
-            .left-column { height: auto; }
-            .right-column { align-self: flex-start; }
-            .unified-unit {
-                max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 20px - 108px);
-            }
-            .maint-progress-right {
-                flex-wrap: nowrap;
-            }
-            #maint-counts-dock {
-                flex-shrink: 1;
-            }
-            .maint-barchart-wrap {
-                min-width: 90px;
-            }
+            .dashboard-content { align-items: stretch; overflow-y: auto; }
         }
 
         .m3-card {
@@ -1569,31 +1557,12 @@
             .m-tab:active { transform: scale(0.95); }
             .m-tab .material-symbols-rounded { font-size: 16px !important; }
 
-            .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
+            .dashboard-content[data-active-tab="overview"] .cluster-row,
+            .dashboard-content[data-active-tab="overview"] .center-column { display: none !important; }
             .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
 
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-            
-            /* Enhanced Mobile Flex locking for Maint tab perfect fit */
-            .dashboard-content[data-active-tab="maint"] {
-                display: flex;
-                flex-direction: column;
-                overflow: hidden !important; 
-                padding-bottom: env(safe-area-inset-bottom, 0px);
-            }
-            .dashboard-content[data-active-tab="maint"] .right-column {
-                display: flex;
-                flex: 1;
-                min-height: 0;
-                width: 100%;
-            }
-            .unified-unit { 
-                flex: 1; 
-                height: auto !important; 
-                max-height: none !important; 
-                width: 100%; 
-                margin: 0; 
-            }
+
             .ops-inline-container { flex-wrap: wrap; }
 
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
@@ -1776,12 +1745,16 @@
             background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 0%, var(--surface) 75%);
         }
         .hero-stat-icon-plain {
-            width: 48px; height: 48px; border-radius: var(--radius-m);
-            background: var(--primary-container); color: var(--primary);
+            width: 48px; height: 48px; border-radius: 50%;
+            background:
+                repeating-conic-gradient(color-mix(in srgb, var(--primary) 55%, transparent) 0deg 3deg, transparent 3deg 30deg),
+                var(--primary-container);
+            color: var(--primary);
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
             font-size: 24px !important;
             font-variation-settings: 'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;
+            box-shadow: inset 0 0 0 5px var(--primary-container), inset 0 0 0 6px color-mix(in srgb, var(--primary) 35%, transparent);
         }
         .hero-stat-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
         .hero-val {
@@ -1796,6 +1769,19 @@
         .hero-circ-card { justify-content: center; }
         .hero-circ-svg { width: 78px; height: 78px; flex-shrink: 0; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--primary) 40%, transparent)); }
         .hero-circ-svg .circ-val { font-size: 1.25rem; }
+        .gauge-ticks line { stroke: var(--outline); stroke-width: 0.8; }
+        .gauge-needle {
+            stroke: var(--secondary); stroke-width: 1.4; stroke-linecap: round;
+            transform-origin: 22px 22px; transform: rotate(-132deg);
+            transition: transform 0.7s cubic-bezier(0.34,1.2,0.4,1);
+            filter: drop-shadow(0 0 2px color-mix(in srgb, var(--secondary) 70%, transparent));
+            animation: needle-glow-pulse 2.6s ease-in-out infinite;
+        }
+        .gauge-hub { fill: var(--secondary); }
+        @keyframes needle-glow-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; }
+        }
         .hero-circ-label {
             font-size: 0.6rem !important;
             max-width: none !important;
@@ -1930,71 +1916,74 @@
         }
 
         /* ── BOTTOM-CENTER DOCK STACK (Management Overview + Bar Chart) ── */
+        /* ── INFOTAINMENT SCREEN: dark bezel + glass screen housing mgmt overview + bar chart ── */
         #bottom-dock-stack {
-            position: fixed;
-            bottom: 54px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1002;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            max-width: 92vw;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: stretch;
+            gap: 14px;
+            background: var(--surface-dim);
+            border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+            border-radius: 22px;
+            padding: 14px;
+            box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4);
+            animation: screen-power-glow 4s ease-in-out infinite;
+        }
+        @keyframes screen-power-glow {
+            0%, 100% { box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4), 0 0 0 rgba(0,0,0,0); }
+            50% { box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4), 0 0 22px color-mix(in srgb, var(--primary) 12%, transparent); }
         }
         #mgmt-overview-dock {
-            background: color-mix(in srgb, var(--surface) 92%, transparent);
-            backdrop-filter: blur(16px) saturate(1.4);
-            -webkit-backdrop-filter: blur(16px) saturate(1.4);
-            border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-            box-shadow: var(--shadow-2);
-            padding: 8px 14px;
-            width: min(92vw, 680px);
+            background: color-mix(in srgb, var(--surface) 96%, transparent);
+            border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+            border-radius: 14px;
+            box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 10%, transparent) inset;
+            padding: 10px 16px;
+            flex: 2 1 380px;
         }
         .mgmt-dock-label {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.58rem;
-            letter-spacing: 1.2px; text-transform: uppercase; color: var(--on-surface-variant);
-            opacity: 0.65; margin-bottom: 6px; text-align: center;
+            font-family: var(--font-display); font-weight: 800; font-size: 0.6rem;
+            letter-spacing: 1.2px; text-transform: uppercase; color: var(--primary);
+            opacity: 0.85; margin-bottom: 8px; text-align: left;
+            display: flex; align-items: center; gap: 6px;
         }
         .mgmt-dock-row {
-            display: flex; gap: 8px; overflow-x: auto; justify-content: center;
+            display: flex; gap: 8px; flex-wrap: wrap; overflow-x: visible; justify-content: flex-start;
             scrollbar-width: none;
         }
         .mgmt-dock-row::-webkit-scrollbar { display: none; }
         .mgmt-dock-chip {
             display: flex; align-items: center; gap: 8px;
-            background: var(--surface-variant); border-radius: 0;
-            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-            border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
-            padding: 6px 12px; flex-shrink: 0; min-width: max-content;
+            background: var(--surface-variant); border-radius: 10px;
+            border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
+            padding: 8px 12px; flex: 1 1 150px; min-width: 140px;
         }
-        .mgmt-dock-chip .material-symbols-rounded { font-size: 16px !important; color: var(--primary); opacity: 0.85; }
-        .mgmt-dock-chip { transition: transform 0.2s ease; }
-        .mgmt-dock-chip:hover { transform: translateY(-2px); }
+        .mgmt-dock-chip .material-symbols-rounded { font-size: 17px !important; color: var(--primary); opacity: 0.9; }
+        .mgmt-dock-chip { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .mgmt-dock-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 18%, transparent); }
         .mgmt-dock-chip-body { display: flex; flex-direction: column; gap: 0; }
-        .mgmt-dock-chip-val { font-family: var(--font-display); font-weight: 900; font-size: 0.95rem; line-height: 1.15; color: var(--on-surface); }
-        .mgmt-dock-chip-lbl { font-family: var(--font-display); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); white-space: nowrap; }
-        .mgmt-dock-chip.is-placeholder { opacity: 0.62; border: 1px dashed var(--outline); background: transparent; }
+        .mgmt-dock-chip-val { font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; line-height: 1.15; color: var(--on-surface); }
+        .mgmt-dock-chip-lbl { font-family: var(--font-display); font-weight: 700; font-size: 0.52rem; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); white-space: nowrap; }
+        .mgmt-dock-chip.is-placeholder { opacity: 0.55; border-style: dashed; background: transparent; }
 
         #maint-barchart-float {
-            background: var(--surface);
-            border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-            border-radius: 0;
-            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-            box-shadow: var(--shadow-2);
-            padding: 10px 20px 8px;
-            width: min(92vw, 375px);
+            background: color-mix(in srgb, var(--surface) 96%, transparent);
+            border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+            border-radius: 14px;
+            box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 10%, transparent) inset;
+            padding: 10px 20px 10px;
+            flex: 1 1 260px;
+            display: flex; flex-direction: column; justify-content: center;
         }
-        #maint-barchart-float .maint-barchart-container { height: 67.5px; }
-        #maint-barchart-float .circ-label { font-size: 0.6rem; }
-        #maint-barchart-float .bc-label { font-size: 0.56rem; }
-        #maint-barchart-float .bc-value { font-size: 0.65rem; }
+        #maint-barchart-float .maint-barchart-container { height: 80px; }
+        #maint-barchart-float .circ-label { font-size: 0.62rem; }
+        #maint-barchart-float .bc-label { font-size: 0.58rem; }
+        #maint-barchart-float .bc-value { font-size: 0.68rem; }
 
         @media (max-width: 900px) {
-            #mgmt-overview-dock { padding: 8px 10px; }
+            #bottom-dock-stack { flex-direction: column; padding: 10px; }
             .mgmt-dock-row { justify-content: flex-start; }
-            #maint-pane-toggle-btn { padding: 12px 6px; }
         }
 
         /* ══════════════════════════════════════════════════════════
@@ -2214,6 +2203,84 @@
 
     <div class="content-row">
     <main class="dashboard-content" data-active-tab="maint">
+        <div class="cluster-row">
+            <svg class="radar-decor" viewBox="0 0 400 400" aria-hidden="true">
+                <circle cx="200" cy="200" r="70" class="radar-ring" />
+                <circle cx="200" cy="200" r="140" class="radar-ring" />
+                <circle cx="200" cy="200" r="198" class="radar-ring" />
+                <line x1="200" y1="2" x2="200" y2="398" class="radar-cross" />
+                <line x1="2" y1="200" x2="398" y2="200" class="radar-cross" />
+                <g class="radar-sweep">
+                    <path d="M200,200 L200,2 A198,198 0 0,1 340,60 Z" fill="url(#radarGrad)" />
+                </g>
+                <defs>
+                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">speed</span> Instrument Cluster — Maintenance Counts &amp; Stats</div>
+            <div class="mgmt-hero-row">
+                <div class="hero-stat-card" title="Count of scheduled preventive maintenance jobs">
+                    <span class="material-symbols-rounded hero-stat-icon-plain">build_circle</span>
+                    <div class="hero-stat-body">
+                        <div class="mcd-val hero-val" id="maint-preventive-val">—</div>
+                        <div class="mcd-label hero-lbl">Preventive<br>Maint.</div>
+                    </div>
+                </div>
+                <div class="hero-stat-card" title="Count of scheduled corrective / breakdown maintenance jobs">
+                    <span class="material-symbols-rounded hero-stat-icon-plain">handyman</span>
+                    <div class="hero-stat-body">
+                        <div class="mcd-val hero-val" id="maint-corrective-val">—</div>
+                        <div class="mcd-label hero-lbl">Corrective<br>Maint.</div>
+                    </div>
+                </div>
+                <div class="hero-stat-card" title="Count of general activities and open jobcards">
+                    <span class="material-symbols-rounded hero-stat-icon-plain">assignment_turned_in</span>
+                    <div class="hero-stat-body">
+                        <div class="mcd-val hero-val" id="maint-activity-val">—</div>
+                        <div class="mcd-label hero-lbl">Activities<br>Jobcards</div>
+                    </div>
+                </div>
+                <div class="hero-stat-card hero-circ-card">
+                    <div class="circ-svg-wrap hero-circ-svg">
+                        <svg viewBox="0 0 44 44">
+                            <g class="gauge-ticks">
+                                <line x1="22" y1="2" x2="22" y2="5" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(30 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(60 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(90 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(120 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(150 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(180 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(210 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(240 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(270 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(300 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(330 22 22)" />
+                            </g>
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                            <line class="gauge-needle" id="maint-progress-needle-1" x1="22" y1="22" x2="22" y2="8" />
+                            <circle class="gauge-hub" cx="22" cy="22" r="2" />
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-1">—</div>
+                    </div>
+                    <div class="circ-label hero-circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                </div>
+                <div class="hero-stat-card hero-circ-card">
+                    <div class="circ-svg-wrap hero-circ-svg">
+                        <svg viewBox="0 0 44 44">
+                            <g class="gauge-ticks">
+                                <line x1="22" y1="2" x2="22" y2="5" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(30 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(60 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(90 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(120 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(150 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(180 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(210 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(240 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(270 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(300 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(330 22 22)" />
+                            </g>
+                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                            <line class="gauge-needle" id="maint-progress-needle-2" x1="22" y1="22" x2="22" y2="8" />
+                            <circle class="gauge-hub" cx="22" cy="22" r="2" />
+                        </svg>
+                        <div class="circ-val" id="maint-progress-value-2">—</div>
+                    </div>
+                    <div class="circ-label hero-circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                </div>
+            </div>
+            <div class="side-pane-hint" onclick="toggleMaintPane(event)">
+                <span class="material-symbols-rounded">construction</span>
+                <span>Open Maintenance Schedule</span>
+                <span class="material-symbols-rounded side-pane-hint-arrow">chevron_right</span>
+            </div>
+        </div>
+
         <div class="left-column">
             <div class="m3-card mgmt-section-card">
                 <div class="deploy-header">
@@ -2241,71 +2308,72 @@
             </div>
         </div>
 
-        <div class="right-column">
-            <svg class="radar-decor" viewBox="0 0 400 400" aria-hidden="true">
-                <circle cx="200" cy="200" r="70" class="radar-ring" />
-                <circle cx="200" cy="200" r="140" class="radar-ring" />
-                <circle cx="200" cy="200" r="198" class="radar-ring" />
-                <line x1="200" y1="2" x2="200" y2="398" class="radar-cross" />
-                <line x1="2" y1="200" x2="398" y2="200" class="radar-cross" />
-                <g class="radar-sweep">
-                    <path d="M200,200 L200,2 A198,198 0 0,1 340,60 Z" fill="url(#radarGrad)" />
-                </g>
-                <defs>
-                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.35" />
-                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">construction</span> Maintenance Counts &amp; Stats</div>
-            <div class="mgmt-hero-row">
-                <div class="hero-stat-card" title="Count of scheduled preventive maintenance jobs">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">build_circle</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-preventive-val">—</div>
-                        <div class="mcd-label hero-lbl">Preventive<br>Maint.</div>
+        <div class="center-column">
+            <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">tv</span> Infotainment &amp; Management Overview</div>
+            <div id="bottom-dock-stack">
+                <div id="mgmt-overview-dock">
+                    <div class="mgmt-dock-label"><span class="material-symbols-rounded" style="font-size:11px!important;vertical-align:-1px;">insights</span> Management Overview</div>
+                    <div class="mgmt-dock-row">
+                        <div class="mgmt-dock-chip">
+                            <span class="material-symbols-rounded">task_alt</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val" id="mgmt-pm-completion-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">PM Completion (MTD)</div>
+                            </div>
+                        </div>
+                        <div class="mgmt-dock-chip">
+                            <span class="material-symbols-rounded">build_circle</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val" id="mgmt-avg-preventive-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">Preventive Maint. (Daily Avg)</div>
+                            </div>
+                        </div>
+                        <div class="mgmt-dock-chip">
+                            <span class="material-symbols-rounded">assignment_turned_in</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val" id="mgmt-avg-activity-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">Activities &amp; Jobcards (Daily Avg)</div>
+                            </div>
+                        </div>
+                        <div class="mgmt-dock-chip">
+                            <span class="material-symbols-rounded">handyman</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val" id="mgmt-avg-corrective-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">Corrective Maint. (Daily Avg)</div>
+                            </div>
+                        </div>
+                        <div class="mgmt-dock-chip is-placeholder">
+                            <span class="material-symbols-rounded">bolt</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">Energy Consumption</div>
+                            </div>
+                        </div>
+                        <div class="mgmt-dock-chip is-placeholder">
+                            <span class="material-symbols-rounded">groups_2</span>
+                            <div class="mgmt-dock-chip-body">
+                                <div class="mgmt-dock-chip-val">—</div>
+                                <div class="mgmt-dock-chip-lbl">Manpower Utilization</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="hero-stat-card" title="Count of scheduled corrective / breakdown maintenance jobs">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">handyman</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-corrective-val">—</div>
-                        <div class="mcd-label hero-lbl">Corrective<br>Maint.</div>
+
+                <div id="maint-barchart-float" class="maint-barchart-wrap">
+                    <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+                        <div class="bc-rotator" id="bc-rotator">
+                            <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                            <div class="bc-panel" id="bc-panel-2"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                        <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                        <div class="bc-indicator-dots" id="bc-indicator-dots">
+                            <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                            <div class="bc-ind-dot" id="bc-dot-1"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="hero-stat-card" title="Count of general activities and open jobcards">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">assignment_turned_in</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-activity-val">—</div>
-                        <div class="mcd-label hero-lbl">Activities<br>Jobcards</div>
-                    </div>
-                </div>
-                <div class="hero-stat-card hero-circ-card">
-                    <div class="circ-svg-wrap hero-circ-svg">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-1">—</div>
-                    </div>
-                    <div class="circ-label hero-circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                </div>
-                <div class="hero-stat-card hero-circ-card">
-                    <div class="circ-svg-wrap hero-circ-svg">
-                        <svg viewBox="0 0 44 44">
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-2">—</div>
-                    </div>
-                    <div class="circ-label hero-circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                </div>
-            </div>
-            <div class="side-pane-hint" onclick="toggleMaintPane(event)">
-                <span class="material-symbols-rounded">construction</span>
-                <span>Open Maintenance Schedule</span>
-                <span class="material-symbols-rounded side-pane-hint-arrow">chevron_right</span>
             </div>
         </div>
     </main>
@@ -2501,72 +2569,6 @@
                 <div class="ir-headline" id="ir-headline">—</div>
                 <div class="ir-label"   id="ir-label"></div>
                 <div class="ir-dots-row" id="ir-dots"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="bottom-dock-stack">
-        <div id="mgmt-overview-dock">
-            <div class="mgmt-dock-label"><span class="material-symbols-rounded" style="font-size:11px!important;vertical-align:-1px;">insights</span> Management Overview</div>
-            <div class="mgmt-dock-row">
-                <div class="mgmt-dock-chip">
-                    <span class="material-symbols-rounded">task_alt</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val" id="mgmt-pm-completion-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">PM Completion (MTD)</div>
-                    </div>
-                </div>
-                <div class="mgmt-dock-chip">
-                    <span class="material-symbols-rounded">build_circle</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val" id="mgmt-avg-preventive-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">Preventive Maint. (Daily Avg)</div>
-                    </div>
-                </div>
-                <div class="mgmt-dock-chip">
-                    <span class="material-symbols-rounded">assignment_turned_in</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val" id="mgmt-avg-activity-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">Activities &amp; Jobcards (Daily Avg)</div>
-                    </div>
-                </div>
-                <div class="mgmt-dock-chip">
-                    <span class="material-symbols-rounded">handyman</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val" id="mgmt-avg-corrective-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">Corrective Maint. (Daily Avg)</div>
-                    </div>
-                </div>
-                <div class="mgmt-dock-chip is-placeholder">
-                    <span class="material-symbols-rounded">bolt</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">Energy Consumption</div>
-                    </div>
-                </div>
-                <div class="mgmt-dock-chip is-placeholder">
-                    <span class="material-symbols-rounded">groups_2</span>
-                    <div class="mgmt-dock-chip-body">
-                        <div class="mgmt-dock-chip-val">—</div>
-                        <div class="mgmt-dock-chip-lbl">Manpower Utilization</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="maint-barchart-float" class="maint-barchart-wrap">
-            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
-                <div class="bc-rotator" id="bc-rotator">
-                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
-                    <div class="bc-panel" id="bc-panel-2"></div>
-                </div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                <div class="bc-indicator-dots" id="bc-indicator-dots">
-                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
-                    <div class="bc-ind-dot" id="bc-dot-1"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -3104,12 +3106,17 @@
             const fillEl = document.getElementById(fillId);
             const valEl = document.getElementById(valId);
             if (!fillEl || !valEl) return;
+            const needleEl = document.getElementById(fillId.replace('-fill-', '-needle-'));
             const CIRCUMFERENCE = 113.1;
             if (!isNaN(pct)) {
                 const clamped = Math.min(100, Math.max(0, pct)); 
                 valEl.innerText = clamped.toFixed(0) + '%';
                 const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
                 setTimeout(() => { fillEl.style.strokeDashoffset = offset; }, 80);
+                if (needleEl) {
+                    const angle = -132 + (clamped / 100) * 264;
+                    setTimeout(() => { needleEl.style.transform = `rotate(${angle}deg)`; }, 80);
+                }
                 
                 if (clamped >= 80) { 
                     fillEl.style.stroke = 'var(--success)';
