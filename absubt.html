@@ -7,102 +7,84 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
         :root {
             --transition-speed: 0.3s;
-            --radius-s: 2px;
-            --radius-m: 3px;
-            --radius-l: 4px;
-            --radius-full: 3px;
-            --font-display: 'Rajdhani', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            --font-mono: 'Space Mono', monospace;
-            --accent-gradient: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 130%);
+            --radius-s: 8px;
+            --radius-m: 16px;
+            --radius-l: 24px;
+            --radius-full: 999px;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         [data-theme="light"] {
-            --bg-color: #E8ECEE;
+            --bg-color: #F0F4F8;
             --surface: #FFFFFF;
-            --surface-variant: #DDE3E6;
-            --surface-dim: #CBD3D7;
-            --on-bg: #0A0E12;
-            --on-surface: #0A0E12;
-            --on-surface-variant: #3C464C;
-            --outline: #8B969C;
-            --primary: #0091D5;
-            --primary-container: #C8E9FA;
-            --on-primary-container: #002A3D;
-            --secondary: #B54D00;
-            --secondary-container: #FFE0C7;
-            --on-secondary-container: #331700;
-            --error: #C4001F;
-            --error-container: #FFD9DC;
-            --on-error-container: #400008;
-            --success: #007A3D;
-            --success-container: #C0F0D2;
-            --on-success-container: #002109;
-            --warning: #8A5300;
-            --warning-container: #FFDDAF;
-            --on-warning-container: #2B1700;
-            --shadow-1: 0 1px 0 rgba(10,20,26,0.10);
-            --shadow-2: 0 2px 12px rgba(10,20,26,0.16);
-            --tech-bg: rgba(0, 145, 213, 0.06);
-            --tech-border: rgba(0, 145, 213, 0.25);
-            --tech-name-color: #005E8A;
+            --surface-variant: #E4EBF2;
+            --surface-dim: #D8E2EE;
+            --on-bg: #1A1C1E;
+            --on-surface: #1A1C1E;
+            --on-surface-variant: #44474F;
+            --outline: #74777F;
+            --primary: #0061A4;
+            --primary-container: #D1E4FF;
+            --on-primary-container: #001D36;
+            --secondary: #535F70;
+            --secondary-container: #D7E3F7;
+            --error: #BA1A1A;
+            --error-container: #FFDAD6;
+            --on-error-container: #410002;
+            --success: #146C2E;
+            --success-container: #C4EED0;
+            --on-success-container: #002107;
+            --warning: #7D5260;
+            --warning-container: #FFD8E4;
+            --on-warning-container: #31111D;
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.1);
+            --tech-bg: rgba(0, 97, 164, 0.06);
+            --tech-border: rgba(0, 97, 164, 0.2);
+            --tech-name-color: #003D6B;
         }
 
         [data-theme="dark"] {
-            --bg-color: #000000;
-            --surface: #0A0D10;
-            --surface-variant: #14181D;
-            --surface-dim: #060809;
-            --on-bg: #EAF2F5;
-            --on-surface: #EAF2F5;
-            --on-surface-variant: #8FA3AC;
-            --outline: #2C363C;
-            --primary: #00D1FF;
-            --primary-container: #003546;
-            --on-primary-container: #B8ECFF;
-            --secondary: #FF7A1A;
-            --secondary-container: #4A2400;
-            --on-secondary-container: #FFCFA3;
-            --error: #FF3B4E;
-            --error-container: #4A0009;
-            --on-error-container: #FFD3D8;
-            --success: #16E38F;
-            --success-container: #003D22;
-            --on-success-container: #B0F5D4;
-            --warning: #FFC13D;
-            --warning-container: #3D2900;
-            --on-warning-container: #FFDDAF;
-            --shadow-1: 0 0 0 1px rgba(0,209,255,0.06), 0 2px 10px rgba(0,0,0,0.6);
-            --shadow-2: 0 0 0 1px rgba(0,209,255,0.1), 0 4px 24px rgba(0,0,0,0.75), 0 0 32px rgba(0,209,255,0.06);
-            --tech-bg: rgba(0, 209, 255, 0.06);
-            --tech-border: rgba(0, 209, 255, 0.22);
-            --tech-name-color: #7DEBFF;
+            --bg-color: #0D1117;
+            --surface: #161C25;
+            --surface-variant: #1F2836;
+            --surface-dim: #131920;
+            --on-bg: #E2E6EC;
+            --on-surface: #E2E6EC;
+            --on-surface-variant: #B8C4D4;
+            --outline: #6E7A8A;
+            --primary: #7DBEFF;
+            --primary-container: #003D6B;
+            --on-primary-container: #D1E4FF;
+            --secondary: #A8BDD4;
+            --secondary-container: #2C3D52;
+            --error: #FFB4AB;
+            --error-container: #7A0009;
+            --on-error-container: #FFDAD6;
+            --success: #72D48A;
+            --success-container: #003D17;
+            --on-success-container: #C4EED0;
+            --warning: #FFB1C8;
+            --warning-container: #4A2234;
+            --on-warning-container: #FFD8E4;
+            --shadow-1: 0 2px 4px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-2: 0 4px 8px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.6);
+            --tech-bg: rgba(125, 190, 255, 0.07);
+            --tech-border: rgba(125, 190, 255, 0.18);
+            --tech-name-color: #9ECAFF;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* ── Telemetry / numeric readouts use monospace ── */
-        .clock-val, .hero-val, .mcd-val, .mgmt-dock-chip-val, .circ-val,
-        .fail-val, .deploy-total-badge, #refresh-time, .bc-value,
-        .m3-badge, .chk-d-status, .ops-rot-status, .clock-date,
-        .mcd-burst-val {
-            font-family: var(--font-mono);
-        }
-
         body {
             background: var(--bg-color);
-            background-image:
-                linear-gradient(color-mix(in srgb, var(--primary) 6%, transparent) 1px, transparent 1px),
-                linear-gradient(90deg, color-mix(in srgb, var(--primary) 6%, transparent) 1px, transparent 1px),
-                radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--primary) 8%, transparent) 0%, transparent 55%);
-            background-size: 42px 42px, 42px 42px, 100% 100%;
-            background-attachment: fixed;
             color: var(--on-bg);
             font-family: var(--font-body);
             margin: 0;
@@ -126,12 +108,6 @@
             box-shadow: var(--shadow-1);
             z-index: 100;
             flex-shrink: 0;
-            position: relative;
-        }
-        .app-bar::after {
-            content: '';
-            position: absolute; left: 24px; right: 24px; bottom: 2px; height: 2px;
-            background: var(--accent-gradient); opacity: 0.5; border-radius: var(--radius-full);
         }
         .logo-section img { height: 34px; object-fit: contain; }
         .middle-module {
@@ -301,7 +277,6 @@
             color: var(--primary);
             letter-spacing: -2px;
         }
-        .mcd-burst-icon { font-size: 22px !important; color: var(--success); opacity: 0.85; }
         .mcd-burst-label {
             font-family: var(--font-display);
             font-size: 0.75rem;
@@ -333,7 +308,7 @@
             z-index: 1000;
             width: 300px;
             background: rgba(14, 20, 34, 0.82);
-            border: 1.5px solid rgba(77,232,222,0.22);
+            border: 1.5px solid rgba(125,190,255,0.22);
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3),
                         inset 0 1.5px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.2);
@@ -346,7 +321,7 @@
         }
         [data-theme="light"] #stock-dock {
             background: rgba(240,246,255,0.85);
-            border-color: rgba(0,105,109,0.22);
+            border-color: rgba(0,97,164,0.22);
             box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.07),
                         inset 0 1.5px 0 rgba(255,255,255,0.9);
         }
@@ -474,7 +449,6 @@
             cursor: pointer; transition: all 0.2s ease;
         }
         .icon-btn:hover { background: var(--secondary-container); transform: scale(1.05); }
-        .icon-btn:active { transform: scale(0.94); }
         .btn-grid-active { background: var(--primary); color: var(--surface); }
         .btn-off { background: var(--error-container); color: var(--on-error-container); }
         /* Hamburger menu panel */
@@ -514,7 +488,6 @@
             transition: background 0.15s ease;
         }
         .hm-item:hover { background: var(--surface-variant); }
-        .hm-item:active { transform: scale(0.98); }
         .hm-item .material-symbols-rounded { font-size: 18px !important; color: var(--primary); flex-shrink: 0; }
         .hm-item.hm-danger { color: var(--error); }
         .hm-item.hm-danger .material-symbols-rounded { color: var(--error); }
@@ -566,43 +539,40 @@
 
         /* ── DASHBOARD LAYOUT ── */
         .dashboard-content {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+            display: grid;
+            grid-template-columns: 5fr 3fr;
+            gap: 10px;
             padding: 10px 10px 80px 10px;
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: var(--surface-variant) transparent;
         }
-        .cluster-row { display: flex; flex-direction: column; gap: 8px; position: relative; }
-        .left-column { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
-        .left-column > .mgmt-section-card { flex: 1 1 320px; }
-        .center-column { display: flex; flex-direction: column; gap: 10px; }
-
+        .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        
         @media (min-width: 901px) {
-            .dashboard-content { align-items: stretch; overflow-y: auto; }
+            .dashboard-content { align-items: flex-start; overflow-y: auto; }
+            .left-column { height: auto; }
+            .right-column { align-self: flex-start; }
+            .unified-unit {
+                max-height: calc(100vh - var(--app-bar-h, 64px) - 46px - 20px);
+            }
+            .maint-progress-right {
+                flex-wrap: nowrap;
+            }
+            #maint-counts-dock {
+                flex-shrink: 1;
+            }
+            .maint-barchart-wrap {
+                min-width: 90px;
+            }
         }
 
         .m3-card {
-            background: var(--surface);
-            border-radius: 0;
-            clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
-            padding: 18px 18px 20px; box-shadow: var(--shadow-1);
+            background: var(--surface); border-radius: var(--radius-l);
+            padding: 16px; box-shadow: var(--shadow-1);
             display: flex; flex-direction: column; overflow: hidden;
-            position: relative;
-            border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-        }
-        .m3-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: var(--accent-gradient); opacity: 0.85;
-        }
-        .m3-card::after {
-            content: '';
-            position: absolute; bottom: 10px; right: 10px; width: 10px; height: 10px;
-            border-right: 2px solid var(--primary); border-bottom: 2px solid var(--primary);
-            opacity: 0.6;
         }
 
         /* ── DEPLOYMENT CARD HEADER ── */
@@ -664,8 +634,7 @@
         /* ── SHIFT CARD ── */
         .m3-shift-card {
             background: var(--surface-variant);
-            border-radius: 0;
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            border-radius: var(--radius-m);
             padding: 12px;
             display: flex; flex-direction: column; gap: 0;
             border: 2px solid transparent;
@@ -678,7 +647,7 @@
         }
         .m3-shift-active {
             border-color: var(--success);
-            box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px color-mix(in srgb, var(--success) 20%, transparent);
+            box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px rgba(114, 212, 138, 0.15);
         }
         .shift-header-row {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
@@ -732,11 +701,20 @@
         .tech-label-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
         .tech-label { font-family: var(--font-display); font-size: 0.6rem; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; }
         .tech-label-icon { font-size: 13px !important; color: var(--primary); }
+        .tech-scroll-wrap {
+            overflow: hidden; border-radius: var(--radius-s);
+            background: var(--tech-bg); border: 1px solid var(--tech-border);
+            padding: 5px 0; position: relative;
+        }
+        .tech-scroll-track { display: flex; gap: 0; width: max-content; animation: tech-scroll 18s linear infinite; }
+        .tech-scroll-track:hover { animation-play-state: paused; }
+        @keyframes tech-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .tech-name-chip {
             display: inline-flex; align-items: center; gap: 5px; padding: 3px 14px;
             font-family: var(--font-display); font-size: 1.025rem; font-weight: 800;
-            color: var(--tech-name-color); white-space: nowrap;
+            color: var(--tech-name-color); white-space: nowrap; border-right: 1.5px solid var(--tech-border);
         }
+        .tech-name-chip:last-child { border-right: none; }
         .tech-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--primary); opacity: 0.6; flex-shrink: 0; }
         .tech-static { display: flex; flex-wrap: wrap; gap: 4px; padding: 2px 0; }
         .tech-static .tech-name-chip { background: var(--tech-bg); border: 1px solid var(--tech-border); border-radius: var(--radius-full); padding: 3px 10px; }
@@ -754,11 +732,11 @@
         [data-theme="light"] .chk-dual-item {
             background: rgba(255,255,255,0.55); box-shadow: 0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.85);
         }
-        .chk-d-filled { background: color-mix(in srgb, var(--success) 15%, transparent) !important; border-color: color-mix(in srgb, var(--success) 45%, transparent) !important; }
-        .chk-d-empty { background: color-mix(in srgb, var(--warning) 14%, transparent) !important; border-color: color-mix(in srgb, var(--warning) 40%, transparent) !important; }
+        .chk-d-filled { background: rgba(114,212,138,0.15) !important; border-color: rgba(114,212,138,0.45) !important; }
+        .chk-d-empty { background: rgba(255,177,200,0.12) !important; border-color: rgba(255,177,200,0.4) !important; }
         .chk-d-check-wrap { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chk-d-filled .chk-d-check-wrap { background: color-mix(in srgb, var(--success) 20%, transparent); }
-        .chk-d-empty  .chk-d-check-wrap { background: color-mix(in srgb, var(--warning) 18%, transparent); }
+        .chk-d-filled .chk-d-check-wrap { background: rgba(114,212,138,0.2); }
+        .chk-d-empty  .chk-d-check-wrap { background: rgba(255,177,200,0.18); }
         .chk-d-icon { font-size: 13px !important; transition: color 0.3s ease; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20; }
         .chk-d-filled .chk-d-icon { color: var(--success); }
         .chk-d-empty .chk-d-icon  { color: var(--warning); }
@@ -892,7 +870,7 @@
         [data-theme="light"] .maint-barchart-container { background: rgba(0,0,0,0.01); box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); }
         .bc-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; min-width: 0; position: relative; }
         .bc-bar-bg { width: 100%; max-width: 10px; flex: 1; display: flex; align-items: flex-end; background: var(--surface-dim); border-radius: 3px 3px 0 0; position: relative; overflow: visible; }
-        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(77,232,222,0.2); }
+        .bc-bar-fill { width: 100%; position: relative; background: linear-gradient(0deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 60%, white) 100%); border-radius: 3px 3px 0 0; transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(125,190,255,0.2); }
         .bc-label { font-family: var(--font-display); font-size: 0.45rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.8; letter-spacing: 0.2px; text-transform: uppercase; }
         .bc-value {
             position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
@@ -997,14 +975,17 @@
             flex-shrink: 0;
         }
 
-        .maint-remarks-panel {
-            border: 1px solid var(--outline); border-radius: var(--radius-m);
-            padding: 10px 12px; background: var(--surface-variant);
-            width: 100%;
+        .maint-progress-popup {
+            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0; background: var(--surface);
+            border: 1px solid var(--outline); border-radius: var(--radius-m); padding: 14px 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); pointer-events: none; opacity: 0;
+            transform: translateY(6px); transition: opacity 0.22s ease, transform 0.22s ease; z-index: 200;
         }
-        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.6rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--primary); opacity: 0.85; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.9; }
-        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 500; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
+        .maint-progress-right:hover .maint-progress-popup { opacity: 1; transform: translateY(0); }
+        .maint-popup-eyebrow { font-family: var(--font-display); font-size: 0.52rem; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.55; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+        .maint-popup-eyebrow .material-symbols-rounded { font-size: 13px !important; opacity: 0.7; }
+        .maint-popup-body { font-family: var(--font-body); font-size: 0.84rem; font-weight: 600; color: var(--on-surface); line-height: 1.55; white-space: pre-wrap; }
+        .maint-progress-popup::after { content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: var(--surface); border-right: 1px solid var(--outline); border-bottom: 1px solid var(--outline); transform: translateX(-50%) rotate(45deg); }
 
         /* ── STOCK HEADER BTN (mobile) ── */
         #stock-header-btn {
@@ -1014,7 +995,7 @@
             #stock-header-btn {
                 display: flex; align-items: center; justify-content: center;
                 width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-                background: rgba(77,232,222,0.15); border: 1.5px solid rgba(77,232,222,0.35);
+                background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
                 color: var(--primary); cursor: pointer;
                 transition: background 0.2s ease;
                 position: relative;
@@ -1064,8 +1045,8 @@
             gap: 6px;
             margin: 10px 16px 4px;
             padding: 8px 14px;
-            background: rgba(77,232,222,0.08);
-            border: 1.5px solid rgba(77,232,222,0.22);
+            background: rgba(125,190,255,0.08);
+            border: 1.5px solid rgba(125,190,255,0.22);
             border-radius: var(--radius-m);
             font-family: var(--font-display); font-weight: 800;
             font-size: 0.72rem; letter-spacing: 0.5px;
@@ -1074,9 +1055,9 @@
             transition: background 0.18s ease, transform 0.15s ease;
             flex-shrink: 0;
         }
-        #cons-link-btn:hover { background: rgba(77,232,222,0.16); transform: translateY(-1px); }
+        #cons-link-btn:hover { background: rgba(125,190,255,0.16); transform: translateY(-1px); }
         #cons-link-btn .material-symbols-rounded { font-size: 16px !important; }
-        [data-theme="light"] #cons-link-btn { background: rgba(0,105,109,0.06); border-color: rgba(0,105,109,0.18); }
+        [data-theme="light"] #cons-link-btn { background: rgba(0,97,164,0.06); border-color: rgba(0,97,164,0.18); }
 
         /* ── DRIVER CARD ── */
         .driver-card {
@@ -1099,7 +1080,7 @@
             .driver-header-btn {
                 display: flex; align-items: center; justify-content: center;
                 width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-                background: rgba(77,232,222,0.15); border: 1.5px solid rgba(77,232,222,0.35);
+                background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
                 color: var(--primary); cursor: pointer;
                 transition: background 0.2s ease;
             }
@@ -1117,7 +1098,7 @@
         .driver-card.outdated .driver-pill { border-color: rgba(255,100,80,0.55); box-shadow: 0 8px 32px rgba(186,26,26,0.3), 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,180,171,0.2); opacity: 0.5; }
 
         .driver-pill-icon {
-            width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: rgba(77,232,222,0.15); border: 1.5px solid rgba(77,232,222,0.35);
+            width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: rgba(125,190,255,0.15); border: 1.5px solid rgba(125,190,255,0.35);
             display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 17px;
         }
         .driver-card.outdated .driver-pill-icon { background: rgba(255,100,80,0.12); border-color: rgba(255,100,80,0.35); color: var(--error); }
@@ -1140,7 +1121,7 @@
 
         .driver-expanded {
             position: absolute; bottom: calc(100% + 6px); left: 0; min-width: 196px; max-width: 232px;
-            background: rgba(14,20,32,0.90); border: 1px solid rgba(77,232,222,0.16);
+            background: rgba(14,20,32,0.90); border: 1px solid rgba(125,190,255,0.16);
             border-radius: var(--radius-m); box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.13);
             backdrop-filter: blur(36px) saturate(2.2); -webkit-backdrop-filter: blur(36px) saturate(2.2);
             padding: 10px 12px 8px; display: flex; flex-direction: column; gap: 0;
@@ -1152,7 +1133,7 @@
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
             background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 30%, transparent));
         }
-        [data-theme="light"] .driver-expanded { background: rgba(245,250,255,0.92); border-color: rgba(0,105,109,0.18); box-shadow: 0 8px 28px rgba(0,0,0,0.11), 0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.98); }
+        [data-theme="light"] .driver-expanded { background: rgba(245,250,255,0.92); border-color: rgba(0,97,164,0.18); box-shadow: 0 8px 28px rgba(0,0,0,0.11), 0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.98); }
         .driver-card.expanded .driver-expanded { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
         .driver-card.outdated .driver-expanded { border-color: rgba(255,100,80,0.3); }
         .driver-card.outdated .driver-expanded::before { background: linear-gradient(90deg, var(--error), transparent); }
@@ -1166,8 +1147,8 @@
         .driver-exp-phone { font-size: 0.7rem; font-weight: 600; color: var(--on-surface-variant); letter-spacing: 0.3px; }
         .driver-exp-update { font-size: 0.48rem; font-weight: 700; color: var(--outline); letter-spacing: 0.3px; padding-top: 5px; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.07); }
         [data-theme="light"] .driver-exp-update { border-color: rgba(0,0,0,0.07); }
-        .driver-exp-call { display: flex; align-items: center; justify-content: center; gap: 5px; background: rgba(110,224,153,0.11); border: 1px solid rgba(110,224,153,0.32); border-radius: var(--radius-full); padding: 6px 12px; font-family: var(--font-display); font-weight: 900; font-size: 0.68rem; letter-spacing: 0.8px; text-transform: uppercase; color: var(--success); cursor: pointer; transition: all 0.2s ease; margin-top: 6px; }
-        .driver-exp-call:hover { background: rgba(110,224,153,0.2); transform: scale(1.02); }
+        .driver-exp-call { display: flex; align-items: center; justify-content: center; gap: 5px; background: rgba(114,212,138,0.11); border: 1px solid rgba(114,212,138,0.32); border-radius: var(--radius-full); padding: 6px 12px; font-family: var(--font-display); font-weight: 900; font-size: 0.68rem; letter-spacing: 0.8px; text-transform: uppercase; color: var(--success); cursor: pointer; transition: all 0.2s ease; margin-top: 6px; }
+        .driver-exp-call:hover { background: rgba(114,212,138,0.2); transform: scale(1.02); }
         .driver-exp-call .material-symbols-rounded { font-size: 14px !important; }
         .badge-active { background: var(--success-container); color: var(--on-success-container); }
         .badge-outdated { background: var(--error-container); color: var(--on-error-container); }
@@ -1179,15 +1160,6 @@
         #flash-news-overlay.visible { opacity: 1; pointer-events: auto; }
         .flash-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(6px) saturate(0.6); -webkit-backdrop-filter: blur(6px) saturate(0.6); }
         .flash-panel { position: relative; z-index: 1; width: min(820px, calc(100vw - 32px)); background: rgba(10,14,20,0.88); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-l); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2); backdrop-filter: blur(40px) saturate(2); -webkit-backdrop-filter: blur(40px) saturate(2); overflow: hidden; transform: scale(0.93) translateY(20px); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-        .flash-close-x {
-            position: absolute; top: 10px; right: 10px; z-index: 2;
-            width: 26px; height: 26px; border-radius: 50%; border: none;
-            background: rgba(255,255,255,0.12); color: #fff;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: background 0.2s ease;
-        }
-        .flash-close-x:hover { background: rgba(255,255,255,0.28); }
-        .flash-close-x .material-symbols-rounded { font-size: 15px !important; }
         [data-theme="light"] .flash-panel { background: rgba(240,244,248,0.9); border-color: rgba(255,255,255,0.8); }
         #flash-news-overlay.visible .flash-panel { transform: scale(1) translateY(0); }
         .flash-banner { display: flex; align-items: center; gap: 10px; background: #CC0000; padding: 7px 20px; }
@@ -1222,10 +1194,10 @@
             display: flex; align-items: center; z-index: 1001; cursor: pointer;
         }
         .ticker-head {
-            background: var(--primary); color: var(--bg-color);
+            background: var(--primary); color: var(--surface);
             height: 100%; padding: 0 16px; display: flex; align-items: center;
-            font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem;
-            letter-spacing: 1px; text-transform: uppercase; border-radius: 0; z-index: 2; flex-shrink: 0;
+            font-family: var(--font-display); font-weight: 900; font-size: 0.78rem;
+            letter-spacing: 0.5px; border-radius: 0 22px 22px 0; z-index: 2; flex-shrink: 0;
             white-space: nowrap;
         }
         .ticker-body { flex-grow: 1; height: 100%; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
@@ -1337,14 +1309,14 @@
         .ir-slab {
             width: 100%; min-width: 0; height: 96px; border-radius: var(--radius-m);
             background: rgba(14, 20, 32, 0.82);
-            border: 1px solid rgba(77,232,222,0.22);
+            border: 1px solid rgba(125,190,255,0.22);
             box-shadow: 0 20px 52px rgba(0,0,0,0.72), 0 6px 18px rgba(0,0,0,0.5),
                         inset 0 1.5px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.25);
             backdrop-filter: blur(36px) saturate(2.4); -webkit-backdrop-filter: blur(36px) saturate(2.4);
             transform-style: preserve-3d; transform-origin: center center; transform: rotateX(0deg); overflow: hidden;
             display: flex; flex-direction: row; align-items: center; justify-content: flex-start; padding: 10px 16px 10px 10px; gap: 14px; box-sizing: border-box;
         }
-        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,105,109,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
+        [data-theme="light"] .ir-slab { background: rgba(238,246,255,0.9); border-color: rgba(0,97,164,0.22); box-shadow: 0 14px 42px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.09), inset 0 1.5px 0 rgba(255,255,255,0.98); }
         @keyframes ir-flip-out { 0% { transform: rotateX(0deg); opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0.2; } }
         @keyframes ir-flip-in { 0% { transform: rotateX(90deg); opacity: 0.2; } 100% { transform: rotateX(0deg); opacity: 1; } }
         .ir-slab.flipping-out { animation: ir-flip-out 0.36s cubic-bezier(0.4, 0, 1, 1) forwards; }
@@ -1353,18 +1325,18 @@
             position: absolute; top: 0; left: 0; bottom: 0; width: 5px;
             background: linear-gradient(180deg, var(--primary) 0%, color-mix(in srgb, var(--primary) 50%, transparent) 100%);
             border-radius: var(--radius-m) 0 0 var(--radius-m);
-            box-shadow: 2px 0 14px rgba(77,232,222,0.4);
+            box-shadow: 2px 0 14px rgba(125,190,255,0.4);
         }
         
         .ir-icon-wrap {
             width: 64px; height: 64px; border-radius: var(--radius-m); flex-shrink: 0;
-            background: rgba(77,232,222,0.1);
+            background: rgba(125,190,255,0.1);
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.12);
-            border: 1px solid rgba(77,232,222,0.28);
+            border: 1px solid rgba(125,190,255,0.28);
             display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
         [data-theme="light"] .ir-icon-wrap {
-            background: rgba(0,105,109,0.08); border-color: rgba(0,105,109,0.2);
+            background: rgba(0,97,164,0.08); border-color: rgba(0,97,164,0.2);
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.07), 0 1px 0 rgba(255,255,255,0.9);
         }
         .ir-icon-wrap .material-symbols-rounded { font-size: 36px !important; color: var(--primary); font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 48; }
@@ -1389,14 +1361,7 @@
         .ir-dot.ir-dot-active { background: var(--primary); width: 16px; border-radius: 2px; }
 
         /* ── BLACKOUT ── */
-        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .blackout-hint {
-            margin-top: 22px; font-family: var(--font-display); font-size: 0.7rem;
-            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-            color: rgba(255,255,255,0.35);
-            animation: blackout-hint-fade 3s ease-in-out infinite;
-        }
-        @keyframes blackout-hint-fade { 0%,100% { opacity: 0.35; } 50% { opacity: 0.8; } }
+        #blackout { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; align-items: center; justify-content: center; cursor: pointer; }
         .analog-wrap { width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); border: 2px solid #333; position: relative; }
         .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
         .h-hr { width: 6px; height: 28%; background: #fff; margin-left: -3px; }
@@ -1406,43 +1371,38 @@
         .ring-high  { stroke: var(--success); } .ring-mid   { stroke: var(--primary); } .ring-low   { stroke: var(--error); }
         .pct-high   { color: var(--success); } .pct-mid    { color: var(--primary); } .pct-low    { color: var(--error); }
 
-        /* ── STATION PILLS (moved to side, vertical stack) ── */
+        /* ── STATION PILLS ── */
         #station-pills-dock {
             position: fixed;
-            top: 50%;
-            right: 8px;
-            left: auto;
-            transform: translateY(-50%);
+            bottom: 56px; 
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
             gap: 8px;
             z-index: 1004;
             pointer-events: none; /* Let clicks pass through empty gaps */
             justify-content: center;
-            max-width: 170px;
-            max-height: 72vh;
-            overflow: visible;
-            padding-bottom: 0;
+            flex-wrap: wrap;
+            max-width: 60vw;
+            padding-bottom: 8px;
         }
         .st-pill {
             pointer-events: auto;
             background: var(--surface-variant);
             border: 1.5px solid var(--outline);
             color: var(--on-surface);
-            padding: 4px 11px;
+            padding: 5px 14px;
             border-radius: var(--radius-full);
             font-family: var(--font-display);
             font-weight: 800;
-            font-size: 0.76rem;
-            letter-spacing: 0.8px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
             position: relative;
             box-shadow: var(--shadow-1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s, border-color 0.3s;
             cursor: default;
-            opacity: 0.88;
         }
         .st-pill.st-filled {
             background: var(--success-container);
@@ -1450,7 +1410,7 @@
             border-color: var(--success);
             box-shadow: 0 4px 12px rgba(20, 108, 46, 0.25);
         }
-        .st-pill:hover { transform: translateX(-3px) scale(1.04); box-shadow: var(--shadow-2); opacity: 1; }
+        .st-pill:hover { transform: translateY(-2px); }
 
         .st-remark-bubble {
     position: absolute;
@@ -1532,7 +1492,6 @@
             font-family: var(--font-display); font-size: 0.8rem;
             font-weight: 900; color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
         }
-        .st-announce-icon { font-size: 26px !important; color: var(--primary); opacity: 0.85; }
         .st-announce-name {
             font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
             color: var(--on-surface); letter-spacing: 2px; line-height: 1;
@@ -1554,15 +1513,33 @@
                 transition: all 0.3s ease; cursor: pointer;
             }
             .m-tab.active { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-            .m-tab:active { transform: scale(0.95); }
             .m-tab .material-symbols-rounded { font-size: 16px !important; }
 
-            .dashboard-content[data-active-tab="overview"] .cluster-row,
-            .dashboard-content[data-active-tab="overview"] .center-column { display: none !important; }
+            .dashboard-content[data-active-tab="overview"] .right-column { display: none !important; }
             .dashboard-content[data-active-tab="maint"] .left-column { display: none !important; }
 
             .dashboard-content { grid-template-columns: 1fr; padding-bottom: 80px; padding-top: 8px; gap: 8px; }
-
+            
+            /* Enhanced Mobile Flex locking for Maint tab perfect fit */
+            .dashboard-content[data-active-tab="maint"] {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden !important; 
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            .dashboard-content[data-active-tab="maint"] .right-column {
+                display: flex;
+                flex: 1;
+                min-height: 0;
+                width: 100%;
+            }
+            .unified-unit { 
+                flex: 1; 
+                height: auto !important; 
+                max-height: none !important; 
+                width: 100%; 
+                margin: 0; 
+            }
             .ops-inline-container { flex-wrap: wrap; }
 
             .app-bar { flex-wrap: wrap; padding: 8px 12px; margin: 6px 6px 0 6px; gap: 6px; justify-content: space-between; border-radius: var(--radius-l); }
@@ -1688,429 +1665,9 @@
             .clock-val { font-size: 0.85rem; }
             .ops-inline-container { flex-wrap: wrap; }
         }
-
-        /* ══════════════════════════════════════════════════════════
-           MANAGEMENT-FOCUSED RESTRUCTURE
-           Hero KPI row / compact deployment / placeholder widgets
-           ══════════════════════════════════════════════════════════ */
-
-        /* ── Section micro-label (used above grouped widgets) ── */
-        .mgmt-section-label {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 0.62rem;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
-            color: var(--on-surface-variant);
-            opacity: 0.75;
-            margin: 2px 2px 2px 4px;
-        }
-
-        /* ── HERO KPI ROW (Maintenance counts + progress) ── */
-        .mgmt-hero-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-        .hero-stat-card {
-            background: var(--surface);
-            border-radius: 0;
-            clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
-            padding: 18px 16px;
-            box-shadow: var(--shadow-1);
-            border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-height: 96px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .hero-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
-        .hero-stat-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; width: 3px; height: 100%;
-            background: var(--accent-gradient); opacity: 0.9;
-        }
-        .hero-stat-card::after {
-            content: '';
-            position: absolute; top: 8px; right: 8px; width: 8px; height: 8px;
-            border-top: 2px solid var(--primary); border-right: 2px solid var(--primary);
-            opacity: 0.55;
-        }
-        .mgmt-hero-row > .hero-stat-card:nth-child(4) { order: -2; }
-        .mgmt-hero-row > .hero-stat-card:nth-child(5) { order: 5; }
-        .hero-circ-card {
-            background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 0%, var(--surface) 75%);
-        }
-        .hero-stat-icon-plain {
-            width: 48px; height: 48px; border-radius: 50%;
-            background:
-                repeating-conic-gradient(color-mix(in srgb, var(--primary) 55%, transparent) 0deg 3deg, transparent 3deg 30deg),
-                var(--primary-container);
-            color: var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-            font-size: 24px !important;
-            font-variation-settings: 'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24;
-            box-shadow: inset 0 0 0 5px var(--primary-container), inset 0 0 0 6px color-mix(in srgb, var(--primary) 35%, transparent);
-        }
-        .hero-stat-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-        .hero-val {
-            font-size: 2.3rem !important;
-            line-height: 1 !important;
-        }
-        .hero-lbl {
-            font-size: 0.62rem !important;
-            white-space: normal !important;
-            line-height: 1.25 !important;
-        }
-        .hero-circ-card { justify-content: center; }
-        .hero-circ-svg { width: 78px; height: 78px; flex-shrink: 0; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--primary) 40%, transparent)); }
-        .hero-circ-svg .circ-val { font-size: 1.25rem; }
-        .gauge-ticks line { stroke: var(--outline); stroke-width: 0.8; }
-        .gauge-needle {
-            stroke: var(--secondary); stroke-width: 1.4; stroke-linecap: round;
-            transform-origin: 22px 22px; transform: rotate(-132deg);
-            transition: transform 0.7s cubic-bezier(0.34,1.2,0.4,1);
-            filter: drop-shadow(0 0 2px color-mix(in srgb, var(--secondary) 70%, transparent));
-            animation: needle-glow-pulse 2.6s ease-in-out infinite;
-        }
-        .gauge-hub { fill: var(--secondary); }
-        @keyframes needle-glow-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.75; }
-        }
-        .hero-circ-label {
-            font-size: 0.6rem !important;
-            max-width: none !important;
-            text-align: left;
-        }
-        @media (max-width: 1400px) and (min-width: 901px) {
-            .mgmt-hero-row { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 900px) {
-            .mgmt-hero-row { grid-template-columns: repeat(2, 1fr); }
-            .hero-val { font-size: 1.6rem !important; }
-        }
-
-        /* ── FULL-VISIBILITY DEPLOYMENT: all shifts fully expanded, active one highlighted ── */
-        .compact-roster .roster-grid { grid-template-columns: 1fr; gap: 8px; }
-        .compact-roster .m3-shift-card { padding: 11px 13px; }
-        .compact-roster .m3-shift-card .staff-list,
-        .compact-roster .m3-shift-card .tech-section {
-            display: block;
-        }
-        .compact-roster .m3-shift-card .staff-list { display: grid; }
-        @media (min-width: 1300px) {
-            .compact-roster .roster-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        /* ── MANAGEMENT OVERVIEW PLACEHOLDER WIDGETS ── */
-        .mgmt-placeholder-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-        .mgmt-placeholder-card {
-            background: var(--surface-variant);
-            border: 1.5px dashed var(--outline);
-            border-radius: var(--radius-m);
-            padding: 12px 10px;
-            display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
-            opacity: 0.88;
-        }
-        .mgmt-ph-icon {
-            font-size: 18px !important;
-            color: var(--primary);
-            opacity: 0.8;
-            margin-bottom: 4px;
-        }
-        .mgmt-ph-label {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.66rem;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            color: var(--on-surface-variant);
-        }
-        .mgmt-ph-val {
-            font-family: var(--font-display); font-weight: 900; font-size: 1.3rem;
-            color: var(--on-surface); opacity: 0.5; line-height: 1.3;
-        }
-        .mgmt-ph-tag {
-            font-family: var(--font-body); font-size: 0.6rem; font-weight: 600;
-            color: var(--on-surface-variant); opacity: 0.65; font-style: italic;
-        }
-
-        /* ── shared section card spacing tweak for left column stack ── */
-        .mgmt-section-card .deploy-header { margin-bottom: 10px; }
-
-        /* ── MAINTENANCE SIDE PANE ── */
-        .side-pane-hint {
-            display: flex; align-items: center; gap: 8px;
-            background: var(--surface); border: 1px solid var(--outline);
-            border-radius: var(--radius-m); padding: 10px 14px;
-            cursor: pointer; transition: background 0.2s ease;
-            font-family: var(--font-display); font-weight: 700; font-size: 0.78rem;
-            color: var(--on-surface-variant);
-        }
-        .side-pane-hint:hover { background: var(--primary-container); color: var(--primary); }
-        .side-pane-hint .material-symbols-rounded:first-child { color: var(--primary); font-size: 18px !important; }
-        .side-pane-hint-arrow { margin-left: auto !important; font-size: 16px !important; opacity: 0.6; }
-
-        #maint-pane-toggle-btn {
-            position: fixed; top: 50%; right: 0; transform: translateY(-50%);
-            z-index: 1006; background: var(--primary); color: var(--on-primary);
-            border: none; border-radius: var(--radius-m) 0 0 var(--radius-m);
-            padding: 14px 8px; display: flex; align-items: center; justify-content: center;
-            box-shadow: var(--shadow-2); cursor: pointer;
-        }
-        #maint-pane-toggle-btn .material-symbols-rounded { font-size: 20px !important; }
-        body.maint-pane-open #maint-pane-toggle-btn { display: none; }
-
-        #maint-pane-backdrop {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.35);
-            z-index: 1008; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        body.maint-pane-open #maint-pane-backdrop { opacity: 1; pointer-events: auto; }
-
-        #maint-side-pane {
-            position: fixed; top: 0; right: 0; height: 100vh;
-            width: min(420px, 92vw);
-            background: var(--surface); box-shadow: -6px 0 28px rgba(0,0,0,0.5);
-            border-left: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
-            z-index: 1009; transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-            display: flex; flex-direction: column;
-        }
-        body.maint-pane-open #maint-side-pane { transform: translateX(0); }
-        .maint-pane-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 18px; border-bottom: 1px solid var(--outline);
-            flex-shrink: 0;
-            position: relative;
-        }
-        .maint-pane-header::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: var(--accent-gradient);
-        }
-        .maint-pane-close {
-            background: var(--surface-variant); border: none; border-radius: var(--radius-full);
-            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            color: var(--on-surface-variant); cursor: pointer;
-        }
-        .maint-pane-body { padding: 16px 18px 24px; overflow-y: auto; flex: 1; }
-
-        /* ── FULL VISIBILITY: dock the maintenance pane permanently on wide screens ── */
-        .content-row { display: flex; flex-direction: column; min-height: 0; flex: 1; }
-        @media (min-width: 1300px) {
-            .content-row { flex-direction: row; gap: 10px; align-items: flex-start; }
-            .content-row .dashboard-content { flex: 1; min-width: 0; }
-            #maint-side-pane {
-                position: static; transform: none !important; height: auto;
-                width: min(30vw, 400px); flex-shrink: 0;
-                box-shadow: var(--shadow-1);
-                max-height: calc(100vh - var(--app-bar-h, 64px) - 30px);
-                margin-top: 0;
-            }
-            #maint-pane-toggle-btn, #maint-pane-backdrop, .side-pane-hint { display: none !important; }
-        }
-
-        /* ── BOTTOM-CENTER DOCK STACK (Management Overview + Bar Chart) ── */
-        /* ── INFOTAINMENT SCREEN: dark bezel + glass screen housing mgmt overview + bar chart ── */
-        #bottom-dock-stack {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: stretch;
-            gap: 14px;
-            background: var(--surface-dim);
-            border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
-            border-radius: 22px;
-            padding: 14px;
-            box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4);
-            animation: screen-power-glow 4s ease-in-out infinite;
-        }
-        @keyframes screen-power-glow {
-            0%, 100% { box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4), 0 0 0 rgba(0,0,0,0); }
-            50% { box-shadow: var(--shadow-2), inset 0 0 40px rgba(0,0,0,0.4), 0 0 22px color-mix(in srgb, var(--primary) 12%, transparent); }
-        }
-        #mgmt-overview-dock {
-            background: color-mix(in srgb, var(--surface) 96%, transparent);
-            border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
-            border-radius: 14px;
-            box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 10%, transparent) inset;
-            padding: 10px 16px;
-            flex: 2 1 380px;
-        }
-        .mgmt-dock-label {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.6rem;
-            letter-spacing: 1.2px; text-transform: uppercase; color: var(--primary);
-            opacity: 0.85; margin-bottom: 8px; text-align: left;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .mgmt-dock-row {
-            display: flex; gap: 8px; flex-wrap: wrap; overflow-x: visible; justify-content: flex-start;
-            scrollbar-width: none;
-        }
-        .mgmt-dock-row::-webkit-scrollbar { display: none; }
-        .mgmt-dock-chip {
-            display: flex; align-items: center; gap: 8px;
-            background: var(--surface-variant); border-radius: 10px;
-            border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
-            padding: 8px 12px; flex: 1 1 150px; min-width: 140px;
-        }
-        .mgmt-dock-chip .material-symbols-rounded { font-size: 17px !important; color: var(--primary); opacity: 0.9; }
-        .mgmt-dock-chip { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .mgmt-dock-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 18%, transparent); }
-        .mgmt-dock-chip-body { display: flex; flex-direction: column; gap: 0; }
-        .mgmt-dock-chip-val { font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; line-height: 1.15; color: var(--on-surface); }
-        .mgmt-dock-chip-lbl { font-family: var(--font-display); font-weight: 700; font-size: 0.52rem; letter-spacing: 0.4px; text-transform: uppercase; color: var(--on-surface-variant); white-space: nowrap; }
-        .mgmt-dock-chip.is-placeholder { opacity: 0.55; border-style: dashed; background: transparent; }
-
-        #maint-barchart-float {
-            background: color-mix(in srgb, var(--surface) 96%, transparent);
-            border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
-            border-radius: 14px;
-            box-shadow: 0 0 24px color-mix(in srgb, var(--primary) 10%, transparent) inset;
-            padding: 10px 20px 10px;
-            flex: 1 1 260px;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-        #maint-barchart-float .maint-barchart-container { height: 80px; }
-        #maint-barchart-float .circ-label { font-size: 0.62rem; }
-        #maint-barchart-float .bc-label { font-size: 0.58rem; }
-        #maint-barchart-float .bc-value { font-size: 0.68rem; }
-
-        @media (max-width: 900px) {
-            #bottom-dock-stack { flex-direction: column; padding: 10px; }
-            .mgmt-dock-row { justify-content: flex-start; }
-        }
-
-        /* ══════════════════════════════════════════════════════════
-           GRAPHICAL / DECORATIVE LAYER — "OUT OF THIS WORLD" PASS
-           ══════════════════════════════════════════════════════════ */
-
-        /* ── Decorative radar behind the hero telemetry row ── */
-        .radar-decor {
-            position: absolute; top: -40px; right: -60px; width: 440px; height: 440px;
-            opacity: 0.08; pointer-events: none; z-index: 0;
-        }
-        .radar-ring { fill: none; stroke: var(--primary); stroke-width: 1; }
-        .radar-cross { stroke: var(--primary); stroke-width: 1; }
-        .radar-sweep { transform-origin: 200px 200px; animation: radar-spin 6s linear infinite; }
-        @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .mgmt-hero-row, .mgmt-section-label { position: relative; z-index: 1; }
-
-        /* ── Full-screen atmospheric scanline sweep ── */
-        .scan-sweep {
-            position: fixed; inset: 0; z-index: 9990; pointer-events: none;
-            background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--primary) 5%, transparent) 48%, transparent 100%);
-            height: 220px; width: 100%;
-            animation: scan-sweep-move 9s linear infinite;
-            mix-blend-mode: screen;
-        }
-        @keyframes scan-sweep-move {
-            0%   { transform: translateY(-220px); opacity: 0; }
-            5%   { opacity: 1; }
-            95%  { opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        /* ── Corner brackets on the app bar, HUD viewfinder style ── */
-        .app-bar { position: relative; }
-        .hud-bracket { position: fixed; width: 22px; height: 22px; z-index: 1050; pointer-events: none; opacity: 0.45; }
-        .hud-bracket.tl { top: 8px; left: 8px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary); }
-        .hud-bracket.tr { top: 8px; right: 8px; border-top: 2px solid var(--primary); border-right: 2px solid var(--primary); }
-        .hud-bracket.bl { bottom: 8px; left: 8px; border-bottom: 2px solid var(--primary); border-left: 2px solid var(--primary); }
-        .hud-bracket.br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary); }
-
-        /* ══════════════════════════════════════════════════════════
-           GENERAL POLISH PASS
-           ══════════════════════════════════════════════════════════ */
-
-        /* ── Accessibility: visible focus ring for keyboard users ── */
-        button:focus-visible, a:focus-visible, [tabindex]:focus-visible,
-        .m3-shift-card:focus-visible, .side-pane-hint:focus-visible {
-            outline: 2.5px solid var(--primary);
-            outline-offset: 2px;
-            border-radius: var(--radius-s);
-        }
-
-        /* ── Header: live-status dot beside logo ── */
-        .logo-section { display: flex; align-items: center; gap: 8px; }
-        .live-status-dot {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 0 0 rgba(60, 180, 100, 0.6);
-            animation: live-dot-pulse 2s ease-out infinite;
-            flex-shrink: 0;
-        }
-        @keyframes live-dot-pulse {
-            0%   { box-shadow: 0 0 0 0 rgba(60, 180, 100, 0.55); }
-            70%  { box-shadow: 0 0 0 6px rgba(60, 180, 100, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(60, 180, 100, 0); }
-        }
-
-        /* ── Header: date under the clock ── */
-        .clock-date {
-            font-family: var(--font-display); font-weight: 700; font-size: 0.58rem;
-            letter-spacing: 0.5px; color: var(--on-surface-variant); opacity: 0.7;
-            margin-left: 6px; white-space: nowrap; align-self: center;
-        }
-        @media (max-width: 900px) { .clock-date { display: none; } }
-
-        /* ── Failures pill: subtle warning ring when open failures exist ── */
-        #failures-pill.has-open-failures {
-            box-shadow: 0 0 0 1.5px var(--error) inset, var(--shadow-1);
-        }
-
-        /* ── Deployment cards: total headcount badge ── */
-        .deploy-total-badge {
-            font-family: var(--font-display); font-weight: 800; font-size: 0.62rem;
-            letter-spacing: 0.3px; color: var(--primary);
-            background: var(--primary-container);
-            padding: 3px 9px; border-radius: var(--radius-full);
-            white-space: nowrap; margin-right: 4px;
-        }
-
-        /* ── Management dock: fade edges hinting horizontal scroll ── */
-        .mgmt-dock-row {
-            mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
-        }
-
-        /* ── Bar chart panel: accent top edge to match hero cards ── */
-        #maint-barchart-float { border-top: 3px solid var(--primary); }
-
-        /* ── Ticker head: gentle icon breathing ── */
-        .ticker-head { position: relative; }
-        .ticker-live-dot {
-            width: 6px; height: 6px; border-radius: 50%; background: var(--success);
-            flex-shrink: 0; margin: 0 0 0 12px;
-            animation: live-dot-pulse 2s ease-out infinite;
-        }
-
-        /* ── Driver card: slightly lift on hover for affordance ── */
-        .driver-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .driver-card:hover { transform: translateY(-2px); }
-
-        /* ── Maintenance list: friendly empty state ── */
-        .maint-list-empty {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 6px; height: 100%; min-height: 70px;
-            color: var(--on-surface-variant); opacity: 0.55;
-            font-family: var(--font-display); font-weight: 700; font-size: 0.78rem;
-        }
-        .maint-list-empty .material-symbols-rounded { font-size: 26px !important; color: var(--success); opacity: 0.8; }
     </style>
 </head>
 <body onclick="wakeUp()">
-
-    <div class="scan-sweep"></div>
-    <div class="hud-bracket tl"></div>
-    <div class="hud-bracket tr"></div>
-    <div class="hud-bracket bl"></div>
-    <div class="hud-bracket br"></div>
 
     <div id="blackout">
         <div class="analog-wrap">
@@ -2119,7 +1676,6 @@
             <div id="ana-s" class="hand h-sec"></div>
             <div class="center-dot"></div>
         </div>
-        <div class="blackout-hint">Tap anywhere to wake</div>
     </div>
 
     <div id="station-pills-dock"></div>
@@ -2129,10 +1685,7 @@
     </button>
 
     <header class="app-bar">
-        <div class="logo-section">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL">
-            <span class="live-status-dot" title="Live data connection"></span>
-        </div>
+        <div class="logo-section"><img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Kochi_Metro_logo.png" alt="KMRL"></div>
         <div class="middle-module">
             <div id="checklist-container" class="checklist-container">
                 <div id="station-track" class="station-track"></div>
@@ -2141,7 +1694,6 @@
                 <div class="clock-unit"><div id="clk-h" class="clock-val">00</div><div class="clock-label">HRS</div></div>
                 <div class="clock-unit"><div id="clk-m" class="clock-val">00</div><div class="clock-label">MIN</div></div>
                 <div class="clock-unit"><div id="clk-s" class="clock-val">00</div><div class="clock-label">SEC</div></div>
-                <div class="clock-date" id="clock-date">—</div>
             </div>
             <div id="failures-pill" class="failures-pill" title="Open / Closed Failures">
                 <div class="fail-title">Failures</div>
@@ -2193,270 +1745,160 @@
     </header>
 
     <div class="mobile-tab-bar">
-        <button class="m-tab" onclick="switchMobileTab('overview')" data-tab="overview">
-            <span class="material-symbols-rounded">groups</span> Deployment
+        <button class="m-tab active" onclick="switchMobileTab('overview')" data-tab="overview">
+            <span class="material-symbols-rounded">dashboard</span> Overview
         </button>
-        <button class="m-tab active" onclick="switchMobileTab('maint')" data-tab="maint">
+        <button class="m-tab" onclick="switchMobileTab('maint')" data-tab="maint">
             <span class="material-symbols-rounded">construction</span> Maintenance
         </button>
     </div>
 
-    <div class="content-row">
-    <main class="dashboard-content" data-active-tab="maint">
-        <div class="cluster-row">
-            <svg class="radar-decor" viewBox="0 0 400 400" aria-hidden="true">
-                <circle cx="200" cy="200" r="70" class="radar-ring" />
-                <circle cx="200" cy="200" r="140" class="radar-ring" />
-                <circle cx="200" cy="200" r="198" class="radar-ring" />
-                <line x1="200" y1="2" x2="200" y2="398" class="radar-cross" />
-                <line x1="2" y1="200" x2="398" y2="200" class="radar-cross" />
-                <g class="radar-sweep">
-                    <path d="M200,200 L200,2 A198,198 0 0,1 340,60 Z" fill="url(#radarGrad)" />
-                </g>
-                <defs>
-                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.35" />
-                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0" />
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">speed</span> Instrument Cluster — Maintenance Counts &amp; Stats</div>
-            <div class="mgmt-hero-row">
-                <div class="hero-stat-card" title="Count of scheduled preventive maintenance jobs">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">build_circle</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-preventive-val">—</div>
-                        <div class="mcd-label hero-lbl">Preventive<br>Maint.</div>
-                    </div>
-                </div>
-                <div class="hero-stat-card" title="Count of scheduled corrective / breakdown maintenance jobs">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">handyman</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-corrective-val">—</div>
-                        <div class="mcd-label hero-lbl">Corrective<br>Maint.</div>
-                    </div>
-                </div>
-                <div class="hero-stat-card" title="Count of general activities and open jobcards">
-                    <span class="material-symbols-rounded hero-stat-icon-plain">assignment_turned_in</span>
-                    <div class="hero-stat-body">
-                        <div class="mcd-val hero-val" id="maint-activity-val">—</div>
-                        <div class="mcd-label hero-lbl">Activities<br>Jobcards</div>
-                    </div>
-                </div>
-                <div class="hero-stat-card hero-circ-card">
-                    <div class="circ-svg-wrap hero-circ-svg">
-                        <svg viewBox="0 0 44 44">
-                            <g class="gauge-ticks">
-                                <line x1="22" y1="2" x2="22" y2="5" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(30 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(60 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(90 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(120 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(150 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(180 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(210 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(240 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(270 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(300 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(330 22 22)" />
-                            </g>
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                            <line class="gauge-needle" id="maint-progress-needle-1" x1="22" y1="22" x2="22" y2="8" />
-                            <circle class="gauge-hub" cx="22" cy="22" r="2" />
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-1">—</div>
-                    </div>
-                    <div class="circ-label hero-circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
-                </div>
-                <div class="hero-stat-card hero-circ-card">
-                    <div class="circ-svg-wrap hero-circ-svg">
-                        <svg viewBox="0 0 44 44">
-                            <g class="gauge-ticks">
-                                <line x1="22" y1="2" x2="22" y2="5" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(30 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(60 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(90 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(120 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(150 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(180 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(210 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(240 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(270 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(300 22 22)" /><line x1="22" y1="2" x2="22" y2="5" transform="rotate(330 22 22)" />
-                            </g>
-                            <circle class="circ-bg" cx="22" cy="22" r="18"/>
-                            <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                            <line class="gauge-needle" id="maint-progress-needle-2" x1="22" y1="22" x2="22" y2="8" />
-                            <circle class="gauge-hub" cx="22" cy="22" r="2" />
-                        </svg>
-                        <div class="circ-val" id="maint-progress-value-2">—</div>
-                    </div>
-                    <div class="circ-label hero-circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
-                </div>
-            </div>
-            <div class="side-pane-hint" onclick="toggleMaintPane(event)">
-                <span class="material-symbols-rounded">construction</span>
-                <span>Open Maintenance Schedule</span>
-                <span class="material-symbols-rounded side-pane-hint-arrow">chevron_right</span>
-            </div>
-        </div>
-
+    <main class="dashboard-content" data-active-tab="overview">
         <div class="left-column">
-            <div class="m3-card mgmt-section-card">
+            <div class="m3-card">
                 <div class="deploy-header">
                     <div class="card-header"><span class="material-symbols-rounded">today</span> TODAY DEPLOYMENT</div>
-                    <span class="deploy-total-badge" id="today-total-badge" title="Total staff + technicians rostered today">—</span>
                     <div class="general-info-pill" id="today-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div class="compact-roster">
-                    <div id="roster-today" class="roster-grid"></div>
-                </div>
+                <div id="roster-today" class="roster-grid"></div>
             </div>
-            <div class="m3-card mgmt-section-card">
+            <div class="m3-card">
                 <div class="deploy-header">
-                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW (PLANNED)</div>
-                    <span class="deploy-total-badge" id="tomorrow-total-badge" title="Total staff + technicians planned for tomorrow">—</span>
+                    <div class="card-header"><span class="material-symbols-rounded">event_upcoming</span> TOMORROW DEPLOYMENT</div>
                     <div class="general-info-pill" id="tomorrow-gen-pills">
                         <span class="gen-label-pill">GENERAL</span>
                     </div>
                 </div>
-                <div class="compact-roster">
-                    <div id="roster-tomorrow" class="roster-grid"></div>
-                </div>
+                <div id="roster-tomorrow" class="roster-grid"></div>
             </div>
         </div>
 
-        <div class="center-column">
-            <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">tv</span> Infotainment &amp; Management Overview</div>
-            <div id="bottom-dock-stack">
-                <div id="mgmt-overview-dock">
-                    <div class="mgmt-dock-label"><span class="material-symbols-rounded" style="font-size:11px!important;vertical-align:-1px;">insights</span> Management Overview</div>
-                    <div class="mgmt-dock-row">
-                        <div class="mgmt-dock-chip">
-                            <span class="material-symbols-rounded">task_alt</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val" id="mgmt-pm-completion-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">PM Completion (MTD)</div>
+        <div class="right-column">
+            <div class="m3-card unified-unit">
+                <div class="maint-header-wrapper">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;">
+                        <div class="card-header" style="margin-bottom: 0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE</div>
+                        <div class="ops-inline-container">
+                        <div id="box-mainline" class="ops-rot-pill ok">
+                            <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
+                            <div class="ops-rot-pill-text">
+                                <div class="ops-rot-pill-slide" id="mainline-slide">
+                                    <span class="ops-rot-label">MAINLINE</span>
+                                    <span class="ops-rot-status" id="mainline-status-val">---</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="mgmt-dock-chip">
-                            <span class="material-symbols-rounded">build_circle</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val" id="mgmt-avg-preventive-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">Preventive Maint. (Daily Avg)</div>
+                        <div id="box-depot" class="ops-rot-pill ok">
+                            <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
+                            <div class="ops-rot-pill-text">
+                                <div class="ops-rot-pill-slide" id="depot-slide">
+                                    <span class="ops-rot-label">DEPOT</span>
+                                    <span class="ops-rot-status" id="depot-status-val">---</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="mgmt-dock-chip">
-                            <span class="material-symbols-rounded">assignment_turned_in</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val" id="mgmt-avg-activity-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">Activities &amp; Jobcards (Daily Avg)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="maint-divider"></div>
+                <div id="checklist-dual" class="checklist-dual-row">
+                    <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-slide" id="chk-mtrs-slide">
+                                <span class="chk-d-label">MTRS</span>
+                                <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
                             </div>
                         </div>
-                        <div class="mgmt-dock-chip">
-                            <span class="material-symbols-rounded">handyman</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val" id="mgmt-avg-corrective-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">Corrective Maint. (Daily Avg)</div>
+                        <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
+                    </div>
+                    <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
+                        <div class="chk-d-check-wrap">
+                            <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
+                        </div>
+                        <div class="chk-d-body">
+                            <div class="chk-d-slide" id="chk-tkrs-slide">
+                                <span class="chk-d-label">TKRS</span>
+                                <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
                             </div>
                         </div>
-                        <div class="mgmt-dock-chip is-placeholder">
-                            <span class="material-symbols-rounded">bolt</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">Energy Consumption</div>
+                        <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
+                    </div>
+                </div>
+                
+                <div id="maint-list" class="maint-list"></div>
+                
+                <div class="maint-progress-footer">
+                    <div class="maint-progress-popup">
+                        <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
+                        <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
+                    </div>
+                    <div class="maint-progress-right">
+                        <div id="maint-counts-dock">
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-preventive-val">—</div>
+                                <div class="mcd-label">Preventive<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-corrective-val">—</div>
+                                <div class="mcd-label">Corrective<br>Maint.</div>
+                            </div>
+                            <div class="mcd-item">
+                                <div class="mcd-val" id="maint-activity-val">—</div>
+                                <div class="mcd-label">Activities<br>Jobcards</div>
                             </div>
                         </div>
-                        <div class="mgmt-dock-chip is-placeholder">
-                            <span class="material-symbols-rounded">groups_2</span>
-                            <div class="mgmt-dock-chip-body">
-                                <div class="mgmt-dock-chip-val">—</div>
-                                <div class="mgmt-dock-chip-lbl">Manpower Utilization</div>
+                        <div class="maint-circ-wrap">
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-1" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-1">—</div>
+                                </div>
+                                <div class="circ-label" id="maint-progress-label-1" title="Maintenance Progress">MAINT PROGRESS</div>
+                            </div>
+                            <div class="maint-circ-item">
+                                <div class="circ-svg-wrap">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle class="circ-bg" cx="22" cy="22" r="18"/>
+                                        <circle class="circ-fill" id="maint-progress-fill-2" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                                    </svg>
+                                    <div class="circ-val" id="maint-progress-value-2">—</div>
+                                </div>
+                                <div class="circ-label" id="maint-progress-label-2" title="Secondary Progress">SEC PROGRESS</div>
+                            </div>
+                        </div>
+                        <div class="maint-barchart-wrap">
+                            <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
+                                <div class="bc-rotator" id="bc-rotator">
+                                    <div class="bc-panel bc-active" id="bc-panel-1"></div>
+                                    <div class="bc-panel" id="bc-panel-2"></div>
+                                </div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+                                <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
+                                <div class="bc-indicator-dots" id="bc-indicator-dots">
+                                    <div class="bc-ind-dot active" id="bc-dot-0"></div>
+                                    <div class="bc-ind-dot" id="bc-dot-1"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="maint-barchart-float" class="maint-barchart-wrap">
-                    <div class="maint-barchart-container" id="maint-barchart-container" style="position:relative;">
-                        <div class="bc-rotator" id="bc-rotator">
-                            <div class="bc-panel bc-active" id="bc-panel-1"></div>
-                            <div class="bc-panel" id="bc-panel-2"></div>
-                        </div>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-                        <div class="circ-label" id="maint-barchart-label" title="Chart Title">—</div>
-                        <div class="bc-indicator-dots" id="bc-indicator-dots">
-                            <div class="bc-ind-dot active" id="bc-dot-0"></div>
-                            <div class="bc-ind-dot" id="bc-dot-1"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </main>
 
-    <aside id="maint-side-pane">
-        <div class="maint-pane-header">
-            <div class="card-header" style="margin-bottom:0;"><span class="material-symbols-rounded">construction</span> MAINTENANCE SCHEDULE</div>
-            <button class="maint-pane-close" onclick="toggleMaintPane(event)" aria-label="Close">
-                <span class="material-symbols-rounded">close</span>
-            </button>
-        </div>
-        <div class="maint-pane-body">
-            <div class="maint-header-wrapper">
-                <div class="ops-inline-container" style="width:100%;">
-                <div id="box-mainline" class="ops-rot-pill ok" title="Mainline power/traction status">
-                    <span class="material-symbols-rounded ops-rot-pill-icon">bolt</span>
-                    <div class="ops-rot-pill-text">
-                        <div class="ops-rot-pill-slide" id="mainline-slide">
-                            <span class="ops-rot-label">MAINLINE</span>
-                            <span class="ops-rot-status" id="mainline-status-val">---</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="box-depot" class="ops-rot-pill ok" title="Depot power/traction status">
-                    <span class="material-symbols-rounded ops-rot-pill-icon">train</span>
-                    <div class="ops-rot-pill-text">
-                        <div class="ops-rot-pill-slide" id="depot-slide">
-                            <span class="ops-rot-label">DEPOT</span>
-                            <span class="ops-rot-status" id="depot-status-val">---</span>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-
-            <div class="maint-divider"></div>
-            <div id="checklist-dual" class="checklist-dual-row">
-                <div id="chk-mtrs" class="chk-dual-item chk-d-empty">
-                    <div class="chk-d-check-wrap">
-                        <span class="material-symbols-rounded chk-d-icon" id="chk-mtrs-icon">check_box_outline_blank</span>
-                    </div>
-                    <div class="chk-d-body">
-                        <div class="chk-d-slide" id="chk-mtrs-slide">
-                            <span class="chk-d-label">MTRS</span>
-                            <span class="chk-d-status" id="chk-mtrs-status">Not Filled</span>
-                        </div>
-                    </div>
-                    <div class="chk-d-pill" id="chk-mtrs-pill" style="display:none">—</div>
-                </div>
-                <div id="chk-tkrs" class="chk-dual-item chk-d-empty">
-                    <div class="chk-d-check-wrap">
-                        <span class="material-symbols-rounded chk-d-icon" id="chk-tkrs-icon">check_box_outline_blank</span>
-                    </div>
-                    <div class="chk-d-body">
-                        <div class="chk-d-slide" id="chk-tkrs-slide">
-                            <span class="chk-d-label">TKRS</span>
-                            <span class="chk-d-status" id="chk-tkrs-status">Not Filled</span>
-                        </div>
-                    </div>
-                    <div class="chk-d-pill" id="chk-tkrs-pill" style="display:none">—</div>
-                </div>
-            </div>
-
-            <div id="maint-list" class="maint-list"></div>
-
-            <div class="maint-progress-footer">
-                <div class="maint-remarks-panel">
-                    <div class="maint-popup-eyebrow"><span class="material-symbols-rounded">info</span> Remarks</div>
-                    <div id="maint-progress-popup-body" class="maint-popup-body">—</div>
-                </div>
-            </div>
-        </div>
-    </aside>
-    </div>
-
-    <button id="maint-pane-toggle-btn" onclick="toggleMaintPane(event)" aria-label="Maintenance Schedule" title="Maintenance Schedule (mobile)">
-        <span class="material-symbols-rounded">construction</span>
-    </button>
-    <div id="maint-pane-backdrop" onclick="toggleMaintPane(event)"></div>
-
     <div id="mcd-burst-overlay">
         <div class="mcd-burst-card">
-            <span class="material-symbols-rounded mcd-burst-icon">trending_up</span>
             <div class="mcd-burst-val" id="mcd-burst-val">—</div>
             <div class="mcd-burst-label" id="mcd-burst-label">—</div>
         </div>
@@ -2464,9 +1906,27 @@
 
     <div id="st-announce-overlay">
         <div class="st-announce-card" id="st-announce-card">
-            <span class="material-symbols-rounded st-announce-icon">fact_check</span>
             <div class="st-announce-title">CHECKLIST UPDATED</div>
             <div class="st-announce-name" id="st-announce-name">---</div>
+        </div>
+    </div>
+
+    <div id="stock-dock" onclick="openConsOverlay(event)" title="Tap to view stock availability">
+        <div class="sdock-accent"></div>
+        <div class="sdock-header">
+            <span class="material-symbols-rounded sdock-header-icon">inventory_2</span>
+            <span class="sdock-title">Stock Availability</span>
+            <span class="sdock-low-badge" id="sdock-low-badge">LOW</span>
+        </div>
+        <div class="sdock-body" style="position:relative;">
+            <div id="sdock-slide-wrap" style="position:relative;height:2.4rem;overflow:hidden;">
+                <div id="sdock-row-a" class="sdock-row"><span class="sdock-sub">Loading…</span></div>
+                <div id="sdock-row-b" class="sdock-row" style="position:absolute;top:1.2rem;left:0;right:0;opacity:0;"></div>
+            </div>
+            <div class="sdock-notice" id="sdock-notice">
+                <span class="material-symbols-rounded">notifications_active</span>
+                <span class="sdock-notice-text">Stock Updated</span>
+            </div>
         </div>
     </div>
 
@@ -2509,9 +1969,6 @@
     <div id="flash-news-overlay">
         <div class="flash-backdrop" onclick="dismissFlash()"></div>
         <div class="flash-panel">
-            <button class="flash-close-x" onclick="dismissFlash()" aria-label="Dismiss notice">
-                <span class="material-symbols-rounded">close</span>
-            </button>
             <div class="flash-banner">
                 <div class="flash-banner-live">
                     <div class="flash-live-dot"></div>
@@ -2545,7 +2002,7 @@
                     <span class="material-symbols-rounded">inventory_2</span>
                     STOCK AVAILABILITY
                 </div>
-                <button class="cons-panel-close" onclick="closeConsOverlay()" aria-label="Close stock availability panel">
+                <button class="cons-panel-close" onclick="closeConsOverlay()">
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </div>
@@ -2574,7 +2031,6 @@
     </div>
 
     <footer class="ticker-bar">
-        <span class="ticker-live-dot" title="Live"></span>
         <div id="ticker-head" class="ticker-head"></div>
         <div id="ticker-body" class="ticker-body">
             <div id="ticker-text" class="ticker-scroll">SYNCING DATA...</div>
@@ -2584,6 +2040,11 @@
         </div>
         <div id="ticker-popup" class="ticker-popup">SYNCING DATA...</div>
     </footer>
+
+    <!-- ── Transparent Graphic Overlay (viewport-fitted, non-interactive) ── -->
+    <div id="graphic-overlay" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:99999; overflow:hidden; background:transparent;">
+        <div id="graphic-overlay-item" style="position:absolute; left:0%; top:0%; transform-origin:center center; display:none; pointer-events:none; will-change:transform;"></div>
+    </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyddUSOQ5nUubR9VBLWgPRJKYrkONJ6LnGxJ6yztzQbPt4VwdNVmyN-7g-9NW8zpdK5xg/exec";
@@ -2624,23 +2085,6 @@
             if(dc) dc.setAttribute('data-active-tab', tabId);
             document.body.classList.toggle('maint-tab-active', tabId === 'maint');
         }
-
-        // ── Deployment shift cards: click a non-active (collapsed) shift to expand it ──
-        function toggleShiftCard(el) {
-            if (!el) return;
-            el.classList.toggle('manually-expanded');
-        }
-
-        // ── Maintenance Schedule side pane ──
-        function toggleMaintPane(event) {
-            if (event) event.stopPropagation();
-            document.body.classList.toggle('maint-pane-open');
-        }
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.body.classList.contains('maint-pane-open')) {
-                document.body.classList.remove('maint-pane-open');
-            }
-        });
 
         // ── Ops rotating pills: alternate label ↔ status every 8s ──
         let _opsPillTimer = null;
@@ -2718,7 +2162,6 @@
 
             openEl.textContent   = openCount;
             closedEl.textContent = closedCount;
-            pill.classList.toggle('has-open-failures', openCount > 0);
 
             if (_failuresLastRaw !== raw) {
                 _failuresLastRaw = raw;
@@ -2866,7 +2309,21 @@
             const names = techRaw.split('\n').map(l => l.trim()).filter(l => l !== '');
             if (names.length === 0) return '';
             const chipHtml = name => `<span class="tech-name-chip"><span class="tech-dot"></span>${name}</span>`;
-            return `
+            const allChips = names.map(chipHtml).join('');
+            const doubledChips = allChips + allChips; 
+            if (names.length >= 3) {
+                return `
+                <div class="tech-section">
+                    <div class="tech-label-row">
+                        <span class="material-symbols-rounded tech-label-icon">engineering</span>
+                        <span class="tech-label">Technicians On Duty</span>
+                    </div>
+                    <div class="tech-scroll-wrap">
+                        <div class="tech-scroll-track">${doubledChips}</div>
+                    </div>
+                </div>`;
+            } else {
+                return `
                 <div class="tech-section">
                     <div class="tech-label-row">
                         <span class="material-symbols-rounded tech-label-icon">engineering</span>
@@ -2874,6 +2331,7 @@
                     </div>
                     <div class="tech-static">${names.map(chipHtml).join('')}</div>
                 </div>`;
+            }
         }
 
         function isShiftActive(shiftName) {
@@ -2896,7 +2354,7 @@
             const countBadge = (staffCount > 0 || techCount > 0) ? `<span class="shift-count-badge"><span class="material-symbols-rounded">group</span><span class="cnt-staff">${staffCount}</span><span class="cnt-sep">+</span><span class="cnt-tech">${techCount}</span></span>` : '';
 
             return `
-            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}" onclick="toggleShiftCard(this)">
+            <div class="m3-shift-card ${active ? 'm3-shift-active' : ''}">
                 <div class="shift-header-row">
                     <div class="m3-shift-label"><span class="shift-active-dot"></span>${title}${countBadge}</div>
                     ${tpcHtml}
@@ -2969,6 +2427,49 @@
                 
                 return { name: text, isFilled, remark };
             }).filter(item => item && item.name);
+        }
+
+        // ── Transparent Graphic Overlay (r2c56 = SVG code, r2c55 = pin % "x,y", r2c57 = scale %, r2c58 = angle °) ──
+        let _lastOverlaySvgRaw = null; // avoid re-parsing/re-injecting identical SVG markup on every poll
+
+        function updateOverlayGraphic(svgRaw, posRaw, scaleRaw, angleRaw) {
+            const item = document.getElementById('graphic-overlay-item');
+            if (!item) return;
+
+            const svg = (svgRaw || '').trim();
+            if (!svg) {
+                // Nothing to show — hide and clear
+                item.style.display = 'none';
+                item.innerHTML = '';
+                _lastOverlaySvgRaw = null;
+                return;
+            }
+
+            // Parse pin point "x,y" — percent of viewport width/height
+            let px = 50, py = 50;
+            const posParts = (posRaw || '').split(',').map(s => parseFloat(s.trim()));
+            if (posParts.length === 2 && !isNaN(posParts[0]) && !isNaN(posParts[1])) {
+                px = posParts[0]; py = posParts[1];
+            }
+
+            // Scale: value is a percent (100 = 1x). Fallback to 100 if blank/invalid.
+            const scalePct = parseFloat(scaleRaw);
+            const scale = (!isNaN(scalePct) && scalePct > 0) ? scalePct / 100 : 1;
+
+            // Rotation angle in degrees. Fallback to 0.
+            const angleVal = parseFloat(angleRaw);
+            const angle = !isNaN(angleVal) ? angleVal : 0;
+
+            // Only re-inject the SVG markup when it actually changes (keeps any inline SVG/CSS animations running smoothly)
+            if (svg !== _lastOverlaySvgRaw) {
+                item.innerHTML = svg;
+                _lastOverlaySvgRaw = svg;
+            }
+
+            item.style.left = px + '%';
+            item.style.top = py + '%';
+            item.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${angle}deg)`;
+            item.style.display = '';
         }
 
         function handleStationPills(r2c50, r2c51) {
@@ -3106,17 +2607,12 @@
             const fillEl = document.getElementById(fillId);
             const valEl = document.getElementById(valId);
             if (!fillEl || !valEl) return;
-            const needleEl = document.getElementById(fillId.replace('-fill-', '-needle-'));
             const CIRCUMFERENCE = 113.1;
             if (!isNaN(pct)) {
                 const clamped = Math.min(100, Math.max(0, pct)); 
                 valEl.innerText = clamped.toFixed(0) + '%';
                 const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
                 setTimeout(() => { fillEl.style.strokeDashoffset = offset; }, 80);
-                if (needleEl) {
-                    const angle = -132 + (clamped / 100) * 264;
-                    setTimeout(() => { needleEl.style.transform = `rotate(${angle}deg)`; }, 80);
-                }
                 
                 if (clamped >= 80) { 
                     fillEl.style.stroke = 'var(--success)';
@@ -3207,7 +2703,7 @@
                         <div class="bc-combo-stack" data-bar="${c.barPct.toFixed(2)}" data-s1="${c.seg1Pct.toFixed(2)}" data-s2="${c.seg2Pct.toFixed(2)}"
                             style="width:100%;height:0%;display:flex;flex-direction:column;justify-content:flex-end;transition:height 0.85s cubic-bezier(0.4,0,0.2,1);">
                             <div class="bc-combo-seg2" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,#FF9100 0%,color-mix(in srgb,#FF9100 60%,white) 100%);box-shadow:0 0 6px rgba(255,145,0,0.25);transition:height 0.75s cubic-bezier(0.4,0,0.2,1) 0.08s;height:0%;"></div>
-                            <div class="bc-combo-seg1" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,var(--primary) 0%,color-mix(in srgb,var(--primary) 60%,white) 100%);box-shadow:0 0 8px rgba(77,232,222,0.2);transition:height 0.75s cubic-bezier(0.4,0,0.2,1);height:0%;"></div>
+                            <div class="bc-combo-seg1" style="width:100%;flex-shrink:0;background:linear-gradient(0deg,var(--primary) 0%,color-mix(in srgb,var(--primary) 60%,white) 100%);box-shadow:0 0 8px rgba(125,190,255,0.2);transition:height 0.75s cubic-bezier(0.4,0,0.2,1);height:0%;"></div>
                         </div>
                     </div>
                     <div class="bc-label">${c.m}</div>
@@ -3335,6 +2831,7 @@
             let opsScheduleLines = null;
             let irWeather = '', irItems = '', irImages = '';
             let statPillsRaw = '', statPillsIntervalRaw = '';
+            let overlaySvgRaw = '', overlayPosRaw = '', overlayScaleRaw = '', overlayAngleRaw = '';
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
@@ -3381,6 +2878,12 @@
                 // Station Pills Parameters
                 if (param === 'sheetab_R2C50' && unit === 'sheetab') statPillsRaw = val;
                 if (param === 'sheetab_R2C51' && unit === 'sheetab') statPillsIntervalRaw = val;
+
+                // Graphic Overlay Parameters (SVG art/animation pinned on top of the dashboard)
+                if (param === 'sheetab_R2C56' && unit === 'sheetab') overlaySvgRaw = val;    // raw SVG markup (plain text)
+                if (param === 'sheetab_R2C55' && unit === 'sheetab') overlayPosRaw = val;    // "x,y" % of viewport (left→right, top→bottom)
+                if (param === 'sheetab_R2C57' && unit === 'sheetab') overlayScaleRaw = val;  // scale, in percent (100 = 1x)
+                if (param === 'sheetab_R2C58' && unit === 'sheetab') overlayAngleRaw = val;  // rotation angle, in degrees
 
                 // Info Rotator Content Parameters
                 if (param === 'sheetab_R2C35') irWeather  = val;
@@ -3453,10 +2956,6 @@
                     if (param === 'sheetab_R2C54') { _consLinkUrl  = val || ''; }
                     
                     if (param === 'sheetab_R2C27') { updateCircularProgress(val, 'maint-progress-fill-1', 'maint-progress-value-1'); }
-                    if (param === 'sheetab_R2C27') { const el = document.getElementById('mgmt-pm-completion-val'); if (el) { const p = parseFloat(val); el.textContent = isNaN(p) ? '—' : Math.min(100, Math.max(0, p)).toFixed(0) + '%'; } }
-                    if (param === 'sheetab_R2C59') { const el = document.getElementById('mgmt-avg-preventive-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
-                    if (param === 'sheetab_R2C60') { const el = document.getElementById('mgmt-avg-activity-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
-                    if (param === 'sheetab_R2C61') { const el = document.getElementById('mgmt-avg-corrective-val'); if (el) el.textContent = (val && val.trim() !== '') ? val.trim() : '—'; }
                     if (param === 'sheetab_R2C44') { updateCircularProgress(val, 'maint-progress-fill-2', 'maint-progress-value-2'); }
                     if (param === 'sheetab_R2C45') { renderMaintBarChart(val); }
                     if (param === 'sheetab_R2C46') { renderMaintBarChart2(val, null); }
@@ -3472,6 +2971,9 @@
             
             // Execute Station Pills Handling
             handleStationPills(statPillsRaw, statPillsIntervalRaw);
+
+            // Execute Graphic Overlay Handling
+            updateOverlayGraphic(overlaySvgRaw, overlayPosRaw, overlayScaleRaw, overlayAngleRaw);
 
             function applyChkDual(id, rawVal) {
                 const item = document.getElementById(id), icon = document.getElementById(id + '-icon'), status = document.getElementById(id + '-status');
@@ -3511,16 +3013,6 @@
             if (tdHtml) document.getElementById('roster-today').innerHTML = tdHtml;
             if (tmHtml) document.getElementById('roster-tomorrow').innerHTML = tmHtml;
 
-            const countLines = s => (s && s.trim() !== '') ? s.split('\n').filter(l => l.trim() !== '').length : 0;
-            const todayTotal = countLines(staff.today.morn) + countLines(staff.today.eve) + countLines(staff.today.night)
-                + countLines(staff.today.techMorn) + countLines(staff.today.techEve) + countLines(staff.today.techNight);
-            const tomorrowTotal = countLines(staff.tomorrow.morn) + countLines(staff.tomorrow.eve) + countLines(staff.tomorrow.night)
-                + countLines(staff.tomorrow.techMorn) + countLines(staff.tomorrow.techEve) + countLines(staff.tomorrow.techNight);
-            const tdBadge = document.getElementById('today-total-badge');
-            const tmBadge = document.getElementById('tomorrow-total-badge');
-            if (tdBadge) tdBadge.textContent = todayTotal + ' on duty';
-            if (tmBadge) tmBadge.textContent = tomorrowTotal + ' planned';
-
             buildAppDock(dockRows);
             _updateConsLink();
             initInfoRotator(irWeather, irRowItems, irRowImages);
@@ -3528,7 +3020,7 @@
             if (opsScheduleLines !== null) {
                 const listEl = document.getElementById('maint-list');
                 if (opsScheduleLines.length === 0) {
-                    listEl.innerHTML = `<div class="maint-list-empty"><span class="material-symbols-rounded">task_alt</span>No scheduled items right now</div>`;
+                    listEl.innerHTML = '';
                 } else {
                     const itemsHtml = opsScheduleLines.map(l => `<div class="m3-sch-item">${l}</div>`).join('');
                     listEl.innerHTML = `
@@ -3769,8 +3261,6 @@
             document.getElementById('clk-h').innerText = String(h).padStart(2, '0');
             document.getElementById('clk-m').innerText = String(m).padStart(2, '0');
             document.getElementById('clk-s').innerText = String(s).padStart(2, '0');
-            const dateEl = document.getElementById('clock-date');
-            if (dateEl) dateEl.textContent = n.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
             document.getElementById('ana-s').style.transform = `translateX(-50%) rotate(${s * 6}deg)`;
             document.getElementById('ana-m').style.transform = `translateX(-50%) rotate(${m * 6}deg)`;
             document.getElementById('ana-h').style.transform = `translateX(-50%) rotate(${h * 30 + m * 0.5}deg)`;
