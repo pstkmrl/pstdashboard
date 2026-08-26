@@ -576,7 +576,7 @@
             scrollbar-color: var(--surface-variant) transparent;
         }
         .left-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
-        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; }
+        .right-column { display: flex; flex-direction: column; gap: 10px; height: max-content; position: relative; }
         
         @media (min-width: 901px) {
             .dashboard-content { align-items: flex-start; overflow-y: auto; }
@@ -597,15 +597,24 @@
         }
 
         .m3-card {
-            background: var(--surface); border-radius: var(--radius-l);
-            padding: 16px; box-shadow: var(--shadow-1);
+            background: var(--surface);
+            border-radius: 0;
+            clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+            padding: 18px 18px 20px; box-shadow: var(--shadow-1);
             display: flex; flex-direction: column; overflow: hidden;
             position: relative;
+            border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
         }
         .m3-card::before {
             content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: var(--accent-gradient); opacity: 0.7;
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--accent-gradient); opacity: 0.85;
+        }
+        .m3-card::after {
+            content: '';
+            position: absolute; bottom: 10px; right: 10px; width: 10px; height: 10px;
+            border-right: 2px solid var(--primary); border-bottom: 2px solid var(--primary);
+            opacity: 0.6;
         }
 
         /* ── DEPLOYMENT CARD HEADER ── */
@@ -667,7 +676,8 @@
         /* ── SHIFT CARD ── */
         .m3-shift-card {
             background: var(--surface-variant);
-            border-radius: var(--radius-m);
+            border-radius: 0;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
             padding: 12px;
             display: flex; flex-direction: column; gap: 0;
             border: 2px solid transparent;
@@ -680,7 +690,7 @@
         }
         .m3-shift-active {
             border-color: var(--success);
-            box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px rgba(114, 212, 138, 0.15);
+            box-shadow: 0 0 0 1px var(--success-container), 0 4px 16px color-mix(in srgb, var(--success) 20%, transparent);
         }
         .shift-header-row {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
@@ -1735,13 +1745,15 @@
         }
         .hero-stat-card {
             background: var(--surface);
-            border-radius: var(--radius-l);
+            border-radius: 0;
+            clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
             padding: 18px 16px;
             box-shadow: var(--shadow-1);
+            border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
             display: flex;
             align-items: center;
             gap: 12px;
-            min-height: 92px;
+            min-height: 96px;
             position: relative;
             overflow: hidden;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1749,8 +1761,19 @@
         .hero-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); }
         .hero-stat-card::before {
             content: '';
-            position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--accent-gradient); opacity: 0.85;
+            position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+            background: var(--accent-gradient); opacity: 0.9;
+        }
+        .hero-stat-card::after {
+            content: '';
+            position: absolute; top: 8px; right: 8px; width: 8px; height: 8px;
+            border-top: 2px solid var(--primary); border-right: 2px solid var(--primary);
+            opacity: 0.55;
+        }
+        .mgmt-hero-row > .hero-stat-card:nth-child(4) { order: -2; }
+        .mgmt-hero-row > .hero-stat-card:nth-child(5) { order: 5; }
+        .hero-circ-card {
+            background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--primary) 8%, var(--surface)) 0%, var(--surface) 75%);
         }
         .hero-stat-icon-plain {
             width: 48px; height: 48px; border-radius: var(--radius-m);
@@ -1771,8 +1794,8 @@
             line-height: 1.25 !important;
         }
         .hero-circ-card { justify-content: center; }
-        .hero-circ-svg { width: 62px; height: 62px; flex-shrink: 0; }
-        .hero-circ-svg .circ-val { font-size: 1.05rem; }
+        .hero-circ-svg { width: 78px; height: 78px; flex-shrink: 0; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--primary) 40%, transparent)); }
+        .hero-circ-svg .circ-val { font-size: 1.25rem; }
         .hero-circ-label {
             font-size: 0.6rem !important;
             max-width: none !important;
@@ -1867,7 +1890,8 @@
         #maint-side-pane {
             position: fixed; top: 0; right: 0; height: 100vh;
             width: min(420px, 92vw);
-            background: var(--surface); box-shadow: -6px 0 28px rgba(0,0,0,0.22);
+            background: var(--surface); box-shadow: -6px 0 28px rgba(0,0,0,0.5);
+            border-left: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
             z-index: 1009; transform: translateX(100%);
             transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
             display: flex; flex-direction: column;
@@ -1922,8 +1946,8 @@
             background: color-mix(in srgb, var(--surface) 92%, transparent);
             backdrop-filter: blur(16px) saturate(1.4);
             -webkit-backdrop-filter: blur(16px) saturate(1.4);
-            border: 1px solid var(--surface-variant);
-            border-radius: var(--radius-l);
+            border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
             box-shadow: var(--shadow-2);
             padding: 8px 14px;
             width: min(92vw, 680px);
@@ -1940,7 +1964,9 @@
         .mgmt-dock-row::-webkit-scrollbar { display: none; }
         .mgmt-dock-chip {
             display: flex; align-items: center; gap: 8px;
-            background: var(--surface-variant); border-radius: var(--radius-m);
+            background: var(--surface-variant); border-radius: 0;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+            border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
             padding: 6px 12px; flex-shrink: 0; min-width: max-content;
         }
         .mgmt-dock-chip .material-symbols-rounded { font-size: 16px !important; color: var(--primary); opacity: 0.85; }
@@ -1953,8 +1979,9 @@
 
         #maint-barchart-float {
             background: var(--surface);
-            border: 1px solid var(--surface-variant);
-            border-radius: var(--radius-l);
+            border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+            border-radius: 0;
+            clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
             box-shadow: var(--shadow-2);
             padding: 10px 20px 8px;
             width: min(92vw, 375px);
@@ -1969,6 +1996,44 @@
             .mgmt-dock-row { justify-content: flex-start; }
             #maint-pane-toggle-btn { padding: 12px 6px; }
         }
+
+        /* ══════════════════════════════════════════════════════════
+           GRAPHICAL / DECORATIVE LAYER — "OUT OF THIS WORLD" PASS
+           ══════════════════════════════════════════════════════════ */
+
+        /* ── Decorative radar behind the hero telemetry row ── */
+        .radar-decor {
+            position: absolute; top: -40px; right: -60px; width: 440px; height: 440px;
+            opacity: 0.08; pointer-events: none; z-index: 0;
+        }
+        .radar-ring { fill: none; stroke: var(--primary); stroke-width: 1; }
+        .radar-cross { stroke: var(--primary); stroke-width: 1; }
+        .radar-sweep { transform-origin: 200px 200px; animation: radar-spin 6s linear infinite; }
+        @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .mgmt-hero-row, .mgmt-section-label { position: relative; z-index: 1; }
+
+        /* ── Full-screen atmospheric scanline sweep ── */
+        .scan-sweep {
+            position: fixed; inset: 0; z-index: 9990; pointer-events: none;
+            background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--primary) 5%, transparent) 48%, transparent 100%);
+            height: 220px; width: 100%;
+            animation: scan-sweep-move 9s linear infinite;
+            mix-blend-mode: screen;
+        }
+        @keyframes scan-sweep-move {
+            0%   { transform: translateY(-220px); opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* ── Corner brackets on the app bar, HUD viewfinder style ── */
+        .app-bar { position: relative; }
+        .hud-bracket { position: fixed; width: 22px; height: 22px; z-index: 1050; pointer-events: none; opacity: 0.45; }
+        .hud-bracket.tl { top: 8px; left: 8px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary); }
+        .hud-bracket.tr { top: 8px; right: 8px; border-top: 2px solid var(--primary); border-right: 2px solid var(--primary); }
+        .hud-bracket.bl { bottom: 8px; left: 8px; border-bottom: 2px solid var(--primary); border-left: 2px solid var(--primary); }
+        .hud-bracket.br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary); }
 
         /* ══════════════════════════════════════════════════════════
            GENERAL POLISH PASS
@@ -2051,6 +2116,12 @@
     </style>
 </head>
 <body onclick="wakeUp()">
+
+    <div class="scan-sweep"></div>
+    <div class="hud-bracket tl"></div>
+    <div class="hud-bracket tr"></div>
+    <div class="hud-bracket bl"></div>
+    <div class="hud-bracket br"></div>
 
     <div id="blackout">
         <div class="analog-wrap">
@@ -2171,6 +2242,22 @@
         </div>
 
         <div class="right-column">
+            <svg class="radar-decor" viewBox="0 0 400 400" aria-hidden="true">
+                <circle cx="200" cy="200" r="70" class="radar-ring" />
+                <circle cx="200" cy="200" r="140" class="radar-ring" />
+                <circle cx="200" cy="200" r="198" class="radar-ring" />
+                <line x1="200" y1="2" x2="200" y2="398" class="radar-cross" />
+                <line x1="2" y1="200" x2="398" y2="200" class="radar-cross" />
+                <g class="radar-sweep">
+                    <path d="M200,200 L200,2 A198,198 0 0,1 340,60 Z" fill="url(#radarGrad)" />
+                </g>
+                <defs>
+                    <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.35" />
+                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
             <div class="mgmt-section-label"><span class="material-symbols-rounded" style="font-size:12px!important;vertical-align:-2px;">construction</span> Maintenance Counts &amp; Stats</div>
             <div class="mgmt-hero-row">
                 <div class="hero-stat-card" title="Count of scheduled preventive maintenance jobs">
