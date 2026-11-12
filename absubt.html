@@ -1120,11 +1120,14 @@
         @keyframes warning-blink { from { opacity: 1; } to { opacity: 0.7; } }
 
         /* ── DRIVER PILL · KM ODOMETER (today + month remaining) ── */
-        .driver-pill.has-km { max-width: 360px; padding-bottom: 8px; }
+        .driver-pill.has-km { max-width: 360px; }
         .driver-pill-km { display: none; align-items: center; gap: 8px; flex-shrink: 0; padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.12); }
         .driver-pill.has-km .driver-pill-km { display: flex; }
         [data-theme="light"] .driver-pill-km { border-left-color: rgba(0,0,0,0.1); }
-        .dpk-block { display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+        .dpk-block { position: relative; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; padding-bottom: 5px; }
+        .dpk-block[hidden] { display: none; }
+        .driver-pill-km.dual .dpk-block + .dpk-block { padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.08); }
+        [data-theme="light"] .driver-pill-km.dual .dpk-block + .dpk-block { border-left-color: rgba(0,0,0,0.07); }
         .dpk-label { font-family: var(--font-display); font-size: 0.4rem; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; color: var(--on-surface-variant); opacity: 0.6; line-height: 1; }
         .dpk-odo { display: flex; align-items: center; gap: 1px; }
         .dpk-digit {
@@ -1140,14 +1143,15 @@
         .dpk-unit { font-family: var(--font-display); font-size: 0.5rem; font-weight: 800; color: var(--on-surface-variant); opacity: 0.75; margin-left: 2px; letter-spacing: 0.4px; }
         .dpk-left-val { font-family: var(--font-display); font-weight: 800; font-size: 0.78rem; line-height: 15px; color: var(--success); white-space: nowrap; letter-spacing: 0.2px; transition: color 0.4s ease; }
         .dpk-left-val small { font-size: 0.5rem; font-weight: 800; opacity: 0.75; margin-left: 2px; letter-spacing: 0.4px; }
+        /* fuel-gauge style tick scale under "Left": lit ticks = share of monthly cap remaining */
+        .dpk-ticks { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; display: flex; gap: 1.5px; }
+        .dpk-ticks i { flex: 1; border-radius: 1px; background: rgba(255,255,255,0.12); transition: background 0.5s ease; }
+        [data-theme="light"] .dpk-ticks i { background: rgba(0,0,0,0.1); }
+        .dpk-ticks i.on { background: var(--success); opacity: 0.75; }
         .driver-pill.km-caution .dpk-left-val { color: #FFC857; }
+        .driver-pill.km-caution .dpk-ticks i.on { background: #FFC857; }
         .driver-pill.km-critical .dpk-left-val { color: var(--error); }
-        .dpk-gauge { position: absolute; left: 14px; right: 14px; bottom: 3px; height: 2px; border-radius: 2px; background: rgba(255,255,255,0.1); overflow: hidden; display: none; }
-        [data-theme="light"] .dpk-gauge { background: rgba(0,0,0,0.08); }
-        .driver-pill.has-km .dpk-gauge { display: block; }
-        .dpk-gauge-fill { height: 100%; width: 0%; border-radius: 2px; background: var(--success); transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease; }
-        .driver-pill.km-caution .dpk-gauge-fill { background: #FFC857; }
-        .driver-pill.km-critical .dpk-gauge-fill { background: var(--error); }
+        .driver-pill.km-critical .dpk-ticks i.on { background: var(--error); }
 
         .driver-expanded {
             position: absolute; bottom: calc(100% + 6px); left: 0; min-width: 196px; max-width: 232px;
@@ -1989,16 +1993,16 @@
                 </div>
             </div>
             <div class="driver-pill-km" id="driver-pill-km" title="Kilometers run today · remaining this month">
-                <div class="dpk-block">
+                <div class="dpk-block" id="dpk-today-block" hidden>
                     <span class="dpk-label">Today</span>
                     <div class="dpk-odo"><span id="dpk-today-odo" style="display:flex;gap:1px"></span><span class="dpk-unit">km</span></div>
                 </div>
-                <div class="dpk-block">
+                <div class="dpk-block" id="dpk-left-block" hidden>
                     <span class="dpk-label" id="dpk-left-label">Left</span>
                     <span class="dpk-left-val" id="dpk-left-val">—</span>
+                    <div class="dpk-ticks" id="dpk-ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
                 </div>
             </div>
-            <div class="dpk-gauge"><div class="dpk-gauge-fill" id="dpk-gauge-fill"></div></div>
             <div class="driver-pill-outdated-badge">
                 <span class="material-symbols-rounded">warning</span>
                 OUTDATED
@@ -2227,41 +2231,52 @@
         function _cabKmNum(v) { const n = parseFloat(String(v).replace(/,/g, '')); return isFinite(n) ? n : null; }
         function updateCabKmPill() {
             const pill = document.querySelector('.driver-pill');
+            const wrap = document.getElementById('driver-pill-km');
             const odo = document.getElementById('dpk-today-odo');
+            const todayBlk = document.getElementById('dpk-today-block');
+            const leftBlk = document.getElementById('dpk-left-block');
             const leftEl = document.getElementById('dpk-left-val');
             const leftLbl = document.getElementById('dpk-left-label');
-            const fill = document.getElementById('dpk-gauge-fill');
-            if (!pill || !odo || !leftEl) return;
+            const ticks = document.querySelectorAll('#dpk-ticks i');
+            if (!pill || !wrap || !odo || !leftEl) return;
             const { month, today, cap } = _cabKm;
-            if (today === null && (month === null || cap === null)) { pill.classList.remove('has-km'); return; }
-            pill.classList.add('has-km');
+            const hasToday = today !== null;
+            const hasLeft = month !== null && cap !== null && cap > 0;
+
+            // Nothing usable → plain driver pill
+            pill.classList.remove('km-caution', 'km-critical');
+            todayBlk.hidden = !hasToday;
+            leftBlk.hidden = !hasLeft;
+            wrap.classList.toggle('dual', hasToday && hasLeft);
+            pill.classList.toggle('has-km', hasToday || hasLeft);
+            if (!hasToday && !hasLeft) return;
 
             // Odometer digits (min 3 cells, leading zeros dimmed, only changed digits roll)
-            const t = Math.max(0, Math.round(today || 0));
-            const str = String(t).padStart(3, '0');
-            const prev = odo.dataset.v || '';
-            if (prev !== str) {
-                if (odo.children.length !== str.length) { odo.innerHTML = ''; for (let i = 0; i < str.length; i++) odo.appendChild(Object.assign(document.createElement('span'), { className: 'dpk-digit' })); }
-                const firstSig = str.search(/[1-9]/);
-                [...odo.children].forEach((d, i) => {
-                    const changed = prev.length === str.length ? prev[i] !== str[i] : prev !== '';
-                    d.textContent = str[i];
-                    d.classList.toggle('lead', firstSig === -1 ? i < str.length - 1 : i < firstSig);
-                    if (changed) { d.classList.remove('roll'); void d.offsetWidth; d.classList.add('roll'); }
-                });
-                odo.dataset.v = str;
+            if (hasToday) {
+                const t = Math.max(0, Math.round(today));
+                const str = String(t).padStart(3, '0');
+                const prev = odo.dataset.v || '';
+                if (prev !== str) {
+                    if (odo.children.length !== str.length) { odo.innerHTML = ''; for (let i = 0; i < str.length; i++) odo.appendChild(Object.assign(document.createElement('span'), { className: 'dpk-digit' })); }
+                    const firstSig = str.search(/[1-9]/);
+                    [...odo.children].forEach((d, i) => {
+                        const changed = prev.length === str.length ? prev[i] !== str[i] : prev !== '';
+                        d.textContent = str[i];
+                        d.classList.toggle('lead', firstSig === -1 ? i < str.length - 1 : i < firstSig);
+                        if (changed) { d.classList.remove('roll'); void d.offsetWidth; d.classList.add('roll'); }
+                    });
+                    odo.dataset.v = str;
+                }
             }
 
-            // Monthly remaining + usage gauge
-            pill.classList.remove('km-caution', 'km-critical');
-            if (month !== null && cap !== null && cap > 0) {
-                const left = cap - month, used = Math.min(Math.max(month / cap, 0), 1);
-                if (left < 0) { leftLbl.textContent = 'Over'; leftEl.innerHTML = Math.round(-left).toLocaleString('en-IN') + '<small>km</small>'; }
-                else { leftLbl.textContent = 'Left'; leftEl.innerHTML = Math.round(left).toLocaleString('en-IN') + '<small>km</small>'; }
+            // Monthly remaining + tick scale (lit ticks = share of cap still available)
+            if (hasLeft) {
+                const left = cap - month, remain = Math.min(Math.max(left / cap, 0), 1), used = 1 - remain;
+                leftLbl.textContent = left < 0 ? 'Over' : 'Left';
+                leftEl.innerHTML = Math.round(Math.abs(left)).toLocaleString('en-IN') + '<small>km</small>';
                 if (used >= 0.95) pill.classList.add('km-critical'); else if (used >= 0.80) pill.classList.add('km-caution');
-                if (fill) fill.style.width = (used * 100).toFixed(1) + '%';
-            } else {
-                leftLbl.textContent = 'Left'; leftEl.textContent = '—'; if (fill) fill.style.width = '0%';
+                const lit = Math.ceil(remain * ticks.length - 1e-9);
+                ticks.forEach((t, i) => t.classList.toggle('on', i < lit));
             }
         }
 
@@ -2870,6 +2885,7 @@
             const dockRows = {};
             const irRowItems = {}, irRowImages = {};
 
+            _cabKm.month = _cabKm.today = _cabKm.cap = null; updateCabKmPill();
             data.forEach(item => {
                 const unit  = (item.Unit      || '').trim(), param = (item.Parameter || '').trim(), val   = (item.Value     || '').trim();
 
